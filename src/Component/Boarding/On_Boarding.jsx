@@ -1129,87 +1129,6 @@ const On_Boarding = () => {
                                   </table>
                                 </div>
                               </div>
-                              <div className="col-md-2">
-                                <div class="form-group">
-                                  <label>HDFC Account Mapped</label>
-                                  <div className="board">
-                                    <span>No</span>
-                                    <label class="switch ms-1 me-1 mt-1">
-                                      <input
-                                        type="checkbox"
-                                        name="hdfc_account_mapped"
-                                        class="form-control form-control-sm"
-                                        onChange={inputEvent}
-                                        checked={inputData?.hdfc_account_mapped}
-                                      />
-                                      <span class="slider round"></span>
-                                    </label>
-                                    <span>Yes</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div class="form-group">
-                                  <label>HDFC Account Initiated</label>
-                                  <div className="board">
-                                    <span>No</span>
-                                    <label class="switch ms-1 me-1 mt-1">
-                                      <input
-                                        type="checkbox"
-                                        name="hdfc_account_initiated"
-                                        class="form-control form-control-sm"
-                                        onChange={inputEvent}
-                                        checked={
-                                          inputData?.hdfc_account_initiated
-                                        }
-                                      />
-                                      <span class="slider round"></span>
-                                    </label>
-                                    <span>Yes</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div class="form-group">
-                                  <label>HDFC Account Opened</label>
-                                  <div className="board">
-                                    <span>No</span>
-                                    <label class="switch ms-1 me-1 mt-1">
-                                      <input
-                                        type="checkbox"
-                                        name="hdfc_account_opened"
-                                        class="form-control form-control-sm"
-                                        onChange={inputEvent}
-                                        checked={inputData?.hdfc_account_opened}
-                                      />
-                                      <span class="slider round"></span>
-                                    </label>
-                                    <span>Yes</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-md-2">
-                                <div class="form-group">
-                                  <label>HDFC Account Benefeciary added</label>
-
-                                  <div className="board">
-                                    <span>No</span>
-                                    <label class="switch ms-1 me-1 mt-1">
-                                      <input
-                                        type="checkbox"
-                                        name="hdfc_account_benefeciary_added"
-                                        class="form-control form-control-sm"
-                                        onChange={inputEvent}
-                                        checked={
-                                          inputData?.hdfc_account_benefeciary_added
-                                        }
-                                      />
-                                      <span class="slider round"></span>
-                                    </label>
-                                    <span>Yes</span>
-                                  </div>
-                                </div>
-                              </div>
                             </div>
                           </>
                         </Step>
@@ -1412,7 +1331,7 @@ const On_Boarding = () => {
                           Previous
                         </button>
                       )}
-                      {(active !== 7 || active !== 1) && (
+                      {active !== 7 && (
                         <>
                           {inputData?._id ? (
                             <button
