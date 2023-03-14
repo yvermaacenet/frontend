@@ -105,23 +105,23 @@ const Sidebar = () => {
               </ul>
             </div>
           </li>
-          <li class="nav-item">
+          {/* <li class="nav-item">
             <a
               class="nav-link"
               data-bs-toggle="collapse"
-              href="#ui-cabin"
+              href="#ui-boarding"
               aria-expanded="false"
               aria-controls="ui-basic"
             >
               <span class="menu-title">Boaring</span>
               <i class="menu-arrow"></i>
-              <i class="mdi mdi-home-modern menu-icon"></i>
+              <i class="mdi mdi-airplane menu-icon"></i>
             </a>
-            <div class="collapse" id="ui-cabin">
+            <div class="collapse" id="ui-boarding">
               <ul class="nav flex-column sub-menu">
                 <ul className="nav flex-column sub-menu">
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="/Multi_Step_Form">
+                    <NavLink className="nav-link" to="/on_boarding">
                       On Boaring
                     </NavLink>
                   </li>
@@ -133,7 +133,7 @@ const Sidebar = () => {
                 </ul>
               </ul>
             </div>
-          </li>
+          </li> */}
         </ul>
       </nav>
     </>

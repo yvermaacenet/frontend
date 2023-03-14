@@ -16,6 +16,7 @@ import Cabin_Update from "./Component/Cabin/Cabin_Update";
 import Department_Add from "./Component/Department/Department_Add";
 import Department_Update from "./Component/Department/Department_Update";
 import Multi_Step_Form from "./Component/Multi_Step_Form";
+import On_Boarding from "./Component/Boarding/On_Boarding";
 
 function App() {
   return (
@@ -51,11 +52,8 @@ function App() {
               element={<Cabin_Slot_Booking />}
             />
             {/* <!================= Boarding ==================> */}
-            <Route
-              exact
-              path="/Multi_Step_Form"
-              element={<Multi_Step_Form />}
-            />
+            <Route exact path="/on_boarding/:_id" element={<On_Boarding />} />
+            {/* <Route exact path="/on_boarding/:_id" element={<First_Day_Formalities />} /> */}
           </Route>
           <Route exact path="/" element={<Sign_In />} />
           <Route exact path="*" element={<Sign_In />} />

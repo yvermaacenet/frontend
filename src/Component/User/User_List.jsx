@@ -110,6 +110,17 @@ const User_List = () => {
                                   </button>
                                 </NavLink>
                               </td>
+                              <td>
+                                <NavLink to={`/on_boarding/${value?._id}`}>
+                                  <button
+                                    type="button"
+                                    class="btn btn-sm btn-inverse-dark btn-icon"
+                                    title="On Boarding"
+                                  >
+                                    <i class="mdi mdi-airplane-takeoff"></i>
+                                  </button>
+                                </NavLink>
+                              </td>
                             </tr>
                           );
                         })}

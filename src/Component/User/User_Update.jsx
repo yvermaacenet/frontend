@@ -5,12 +5,17 @@ import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import { useNavigate, useParams } from "react-router-dom";
+import Multiselect from "multiselect-react-dropdown";
+
 const User_Update = () => {
   const { _id } = useParams();
   const navigate = useNavigate();
-
+  const [selectedRoleValues, setSelectedRoleValues] = useState([]);
   const [inputData, setInputData] = useState([]);
   const [checkedStatus, setCheckedStatus] = useState();
+  const [getDepartmentList, setGetDepartmentList] = useState([]);
+  const [selected, setSelected] = useState([]);
+
   useEffect(() => {
     async function get_user_data() {
       const result_get_user_data = await axios(`/get_user_list_By_Id/${_id}`);
@@ -20,6 +25,18 @@ const User_Update = () => {
       setCheckedStatus(resp_get_user_data.status);
     }
     get_user_data();
+    async function get_department_list() {
+      const result_get_department_list = await axios(`/department_list`);
+      const resp_get_department_list = result_get_department_list?.data;
+      const getSelecterRole = await resp_get_department_list.filter(
+        (val) => val.name !== "Admin" && val.name !== "Employee"
+      );
+
+      setSelectedRoleValues(getSelecterRole);
+      console.log("getSelecterRole", getSelecterRole);
+      setGetDepartmentList(getSelecterRole);
+    }
+    get_department_list();
   }, []);
   const inputEvent = (event) => {
     const { name, value } = event.target;
@@ -28,6 +45,19 @@ const User_Update = () => {
         ...preValue,
         [name]: value,
       };
+    });
+  };
+  const onSelect = (selectedList, selectedItem) => {
+    setInputData({
+      ...inputData,
+      role: selectedList,
+    });
+  };
+
+  const onRemove = (selectedList, removedItem) => {
+    setInputData({
+      ...inputData,
+      role: selectedList,
     });
   };
   const onStatusChange = (status) => {
@@ -73,7 +103,7 @@ const User_Update = () => {
                   <div class="card-body">
                     <form class="forms-sample">
                       <div className="row">
-                        <div className="col-md-3">
+                        <div className="col-md-2">
                           <div class="form-group">
                             <label>Username</label>
                             <input
@@ -84,12 +114,36 @@ const User_Update = () => {
                             />
                           </div>
                         </div>
-                        <div className="col-md-3">
+                        <div className="col-md-4">
                           <div class="form-group">
                             <label>Role</label>
-                            <input
-                              type="text"
-                              class="form-control form-control-sm"
+                            <Multiselect
+                              options={getDepartmentList} // Options to display in the dropdown
+                              selectedValues={inputData?.role} // Preselected value to persist in dropdown
+                              onSelect={onSelect} // Function will trigger on select event
+                              onRemove={onRemove} // Function will trigger on remove event
+                              displayValue="name" // Property name to display in the dropdown options
+                              showCheckbox={true}
+                              // disablePreSelectedValues={
+                              //   inputData?.user_emp_id === 0 ? true : false
+                              // }
+                              // closeIcon
+                              disable={
+                                inputData?.user_emp_id === 0 ? true : false
+                              }
+                              caseSensitiveSearch={false}
+                              avoidHighlightFirstOption={true}
+                              style={{
+                                chips: {
+                                  // To change css chips(Selected options)
+                                  background: "gray",
+                                },
+                                option: {
+                                  // To change css for dropdown options
+                                  color: "gray",
+                                },
+                              }}
+                              // selectionLimit={1}
                             />
                           </div>
                         </div>
