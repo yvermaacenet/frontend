@@ -1,8 +1,22 @@
-import React from "react";
-
+import React, { useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ImportScripts } from "../Utils/ImportScript";
+import ImportScript from "../Utils/ImportScript";
 const Navbar = () => {
+  const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const scriptArray = ["/assets/js/misc.js", "/assets/js/off-canvas.js"];
 
+  // ImportScript("/assets/js/misc.js");
+  // ImportScripts("/assets/js/off-canvas.js");
+  useEffect(() => {
+    async function loadScript(url) {
+      await url.map((val) => ImportScript(val));
+    }
+    // loadScript(scriptArray);
+  }, []);
   return (
     <>
       <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -57,10 +71,28 @@ const Navbar = () => {
                 className="dropdown-menu navbar-dropdown"
                 aria-labelledby="profileDropdown"
               >
-                <a className="dropdown-item" href="#">
-                  <i className="mdi mdi-cached me-2 text-success"></i> Activity
-                  Log
-                </a>
+                <NavLink
+                  className="dropdown-item"
+                  to={`/profile_update/${LocalStorageData?.user_id}`}
+                >
+                  <i className="mdi mdi-account me-2 text-success"></i> Profile
+                </NavLink>
+                <div className="dropdown-divider"></div>
+                <NavLink
+                  className="dropdown-item"
+                  to={`/on_boarding/${LocalStorageData?.user_id}`}
+                >
+                  <i className="mdi mdi-airplane me-2 text-success"></i>
+                  On-Boarding
+                </NavLink>
+                <div className="dropdown-divider"></div>
+                <NavLink
+                  className="dropdown-item"
+                  to={`/off_boarding/${LocalStorageData?.user_id}`}
+                >
+                  <i className="mdi mdi-airplane-off me-2 text-success"></i>
+                  Off-Boarding
+                </NavLink>
                 <div className="dropdown-divider"></div>
                 <a className="dropdown-item" href="#">
                   <i className="mdi mdi-logout me-2 text-primary"></i> Signout
@@ -182,10 +214,7 @@ const Navbar = () => {
                     <h6 className="preview-subject font-weight-normal mb-1">
                       Settings
                     </h6>
-                    <p className="text-gray ellipsis mb-0">
-                      {" "}
-                      Update dashboard{" "}
-                    </p>
+                    <p className="text-gray ellipsis mb-0">Update dashboard</p>
                   </div>
                 </a>
                 <div className="dropdown-divider"></div>
@@ -207,9 +236,18 @@ const Navbar = () => {
               </div>
             </li>
             <li className="nav-item nav-logout d-none d-lg-block">
-              <a className="nav-link" href="#">
+              <NavLink
+                className="nav-link"
+                onClick={() => {
+                  localStorage.clear();
+                  removeCookie("Access_Token");
+                  navigate("/");
+                  // alert("");
+                }}
+                to="/"
+              >
                 <i className="mdi mdi-power"></i>
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item nav-settings d-none d-lg-block">
               <a className="nav-link" href="#">

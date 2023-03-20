@@ -7,17 +7,33 @@ import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 
 const User_List = () => {
+  const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getUserList, setGetUserList] = useState([]);
+  const [roless, setRoless] = useState([]);
+
   useEffect(() => {
-    async function get_user_list() {
-      const result_user_list = await axios.get("user_list");
+    async function get_user_list_by_role_name() {
+      const result = await axios.get(`/get_user_list_by_role_name`);
+      const resp = result.data;
+      setRoless(resp);
+      get_user_list(resp);
+    }
+    get_user_list_by_role_name();
+    async function get_user_list(resp) {
+      const result_user_list = await axios.get(
+        resp?.finance?.includes(LocalStorageData?.user_id)
+          ? "/get_user_list_by_on_boarding_counter/3"
+          : resp?.management?.includes(LocalStorageData?.user_id)
+          ? "/get_user_list_by_on_boarding_counter/5"
+          : "user_list"
+      );
       const resp_user_list = result_user_list.data;
       console.log("resp_user_list", resp_user_list);
       setGetUserList(resp_user_list);
     }
-    get_user_list();
   }, []);
-
+  const dd = roless?.management?.includes(LocalStorageData.user_id);
+  console.log(dd);
   return (
     <>
       <div class="container-scroller">
@@ -38,7 +54,7 @@ const User_List = () => {
                     <table class="table table-striped">
                       <thead>
                         <tr>
-                          <th>User</th>
+                          <th>#</th>
                           <th>Name</th>
                           <th>Username</th>
                           <th>Personal Email</th>
@@ -47,7 +63,7 @@ const User_List = () => {
                           <th>Designation</th>
                           <th>Role</th>
                           <th>Status</th>
-                          <th>Action</th>
+                          <th>Edit/Boarding</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -109,18 +125,32 @@ const User_List = () => {
                                     <i class="mdi mdi-table-edit"></i>
                                   </button>
                                 </NavLink>
-                              </td>
-                              <td>
                                 <NavLink to={`/on_boarding/${value?._id}`}>
                                   <button
                                     type="button"
-                                    class="btn btn-sm btn-inverse-dark btn-icon"
-                                    title="On Boarding"
+                                    class="btn btn-sm btn-inverse-dark btn-icon ms-2"
+                                    title="Onboarding"
                                   >
-                                    <i class="mdi mdi-airplane-takeoff"></i>
+                                    <i class="mdi mdi-airplane"></i>
                                   </button>
                                 </NavLink>
+                                {value?.on_boarding_steper_counter === 7 &&
+                                  (roless?.admin?.includes(
+                                    LocalStorageData?.user_id
+                                  ) ||
+                                    value?.off_boarding_steper_counter > 2) && (
+                                    <NavLink to={`/off_boarding/${value?._id}`}>
+                                      <button
+                                        type="button"
+                                        class="btn btn-sm btn-inverse-dark btn-icon ms-2"
+                                        title="Offboarding"
+                                      >
+                                        <i class="mdi mdi-airplane-off"></i>
+                                      </button>
+                                    </NavLink>
+                                  )}
                               </td>
+                              <td></td>
                             </tr>
                           );
                         })}

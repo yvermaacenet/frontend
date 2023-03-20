@@ -1,7 +1,11 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { ImportScripts } from "../Utils/ImportScript";
+import ImportScript from "../Utils/ImportScript";
 
 const Sidebar = () => {
+  // ImportScript("/assets/js/misc.js");
+  // ImportScripts("/assets/js/off-canvas.js");
   return (
     <>
       <nav className="sidebar sidebar-offcanvas" id="sidebar">

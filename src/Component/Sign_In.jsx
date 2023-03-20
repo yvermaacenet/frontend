@@ -29,7 +29,6 @@ const Sign_In = () => {
     });
   };
   const onSignInButton = () => {
-    // alert();
     async function postData() {
       const result = await axios.post(`sign_in`, inputData);
       const resp = result.data;
