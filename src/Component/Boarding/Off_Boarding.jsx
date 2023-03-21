@@ -13,7 +13,6 @@ import Compliance_Documents from "./Compliance_Documents";
 import Bank from "./Bank";
 import Zoho_Account from "./Zoho_Account";
 import Other_Formalities from "./Other_Formalities";
-import Switch from "react-switch";
 import Supervisor_Clearance from "./Supervisor_Clearance";
 import Admin_Clearance from "./Admin_Clearance";
 import Other_Formalities_Off_Boarding from "./Other_Formalities_Off_Boarding";

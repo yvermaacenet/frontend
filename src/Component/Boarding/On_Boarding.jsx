@@ -13,7 +13,6 @@ import Compliance_Documents from "./Compliance_Documents";
 import Bank from "./Bank";
 import Zoho_Account from "./Zoho_Account";
 import Other_Formalities from "./Other_Formalities";
-import Switch from "react-switch";
 
 const On_Boarding = () => {
   const navigate = useNavigate();
