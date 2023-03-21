@@ -41,15 +41,15 @@ const Off_Boarding = () => {
       setSteperCounter(
         resp?.steper_counter === undefined
           ? 1
-          : resp?.steper_counter === 4
-          ? 4
+          : resp?.steper_counter === 3
+          ? 3
           : resp?.steper_counter + 1
       );
       setActive(
         resp?.steper_counter === undefined
           ? 1
-          : resp?.steper_counter === 4
-          ? 4
+          : resp?.steper_counter === 3
+          ? 3
           : resp?.steper_counter + 1
       );
       setRenderComponent(false);
@@ -78,7 +78,7 @@ const Off_Boarding = () => {
     await axios
       .post(`/off_boarding/${_id}`, {
         ...inputData,
-        steper_counter: inputData?.status ? 4 : steperCounter,
+        steper_counter: inputData?.status ? 3 : steperCounter,
       })
       .then(async (res) => {
         if (res.data.message === "created") {
@@ -102,7 +102,7 @@ const Off_Boarding = () => {
     await axios
       .put(`/off_boarding/${inputData?._id}`, {
         ...inputData,
-        steper_counter: inputData?.status ? 4 : steperCounter,
+        steper_counter: inputData?.status ? 3 : steperCounter,
       })
       .then(async (res) => {
         if (res.data.message === "updated") {
@@ -126,8 +126,8 @@ const Off_Boarding = () => {
     await axios
       .put(`/off_boarding/${inputData?._id}`, {
         ...inputData,
-        status: steperCounter === 4 ? true : false,
-        steper_counter: inputData?.status ? 4 : steperCounter,
+        status: steperCounter === 3 ? true : false,
+        steper_counter: inputData?.status ? 3 : steperCounter,
         off_boarding_status: true,
       })
       .then(async (res) => {
@@ -149,16 +149,10 @@ const Off_Boarding = () => {
   };
   const stperArrayForEmployee = [
     {
-      label: "Employee Details",
-      component: Employee_Details,
-      step_counter: 1,
-      import_data: getUserDetailsById,
-    },
-    {
       label: "Supervisor Clearance",
       component: Supervisor_Clearance,
       import_data: inputData,
-      step_counter: 2,
+      step_counter: 1,
       alert_warning_title:
         "This step is pending from HR Department !! Please contact to HR Department.",
       alert_success_title: "This step has been completed from HR Department !!",
@@ -167,7 +161,7 @@ const Off_Boarding = () => {
       label: "Admin Clearance",
       component: Admin_Clearance,
       import_data: inputData,
-      step_counter: 3,
+      step_counter: 2,
       alert_warning_title:
         "This step is pending from Admin !! Please contact to Admin.",
       alert_success_title: "This step has been completed from Admin !!",
@@ -176,7 +170,7 @@ const Off_Boarding = () => {
       label: "Other Formalities",
       component: Other_Formalities_Off_Boarding,
       import_data: inputData,
-      step_counter: 4,
+      step_counter: 3,
       alert_warning_title:
         "This step is pending from Managment Department !! Please contact to Managment Department.",
       alert_success_title:
@@ -196,15 +190,81 @@ const Off_Boarding = () => {
               page_title="Boarding"
               page_title_icon="mdi-airplane"
               page_title_button="Back"
-              page_title_button_link="/user_list"
+              page_title_button_link="/user_list/all"
             />
             <div class="row">
               <div class="card">
                 <div class="card-body">
-                  {/* <h4 class="card-title">Default form</h4> */}
+                  {/* <h3 class="card-title">Default form</h3> */}
                   <p class="card-description"> Off Boarding Process </p>
-
-                  <div style={{ margin: "40px" }}>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th> Full Name </th>
+                        <th> Designation </th>
+                        <th> Joining Date </th>
+                        <th> Phone </th>
+                        <th> Current Address </th>
+                        <th> Permamnent Address </th>
+                        <th> Status </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          {`${
+                            getUserDetailsById?.f_name !== undefined
+                              ? getUserDetailsById?.f_name
+                              : "NA"
+                          }
+                          ${
+                            getUserDetailsById?.m_name !== undefined
+                              ? getUserDetailsById?.m_name
+                              : ""
+                          }
+                          ${
+                            getUserDetailsById?.l_name !== undefined
+                              ? getUserDetailsById?.l_name
+                              : ""
+                          }`}
+                        </td>
+                        <td>
+                          {getUserDetailsById?.designation !== undefined
+                            ? getUserDetailsById?.designation
+                            : "NA"}
+                        </td>
+                        <td>
+                          {getUserDetailsById?.joining_date !== undefined
+                            ? getUserDetailsById?.joining_date?.split("T")[0]
+                            : "NA"}
+                        </td>
+                        <td>
+                          {getUserDetailsById?.phone !== undefined
+                            ? getUserDetailsById?.phone
+                            : "NA"}
+                        </td>
+                        <td>
+                          {getUserDetailsById?.communication_address !==
+                          undefined
+                            ? getUserDetailsById?.communication_address
+                            : "NA"}
+                        </td>
+                        <td>
+                          {getUserDetailsById?.permanent_address !== undefined
+                            ? getUserDetailsById?.permanent_address
+                            : "NA"}
+                        </td>
+                        <td>
+                          {getUserDetailsById?.off_boarding_status ? (
+                            <label class="badge badge-success">Completed</label>
+                          ) : (
+                            <label class="badge badge-warning">Pending</label>
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div style={{ margin: "50px" }}>
                     <form class="forms-sample">
                       {!roless?.admin?.includes(LocalStorageData.user_id) &&
                       !roless?.hr?.includes(LocalStorageData.user_id) &&
@@ -282,8 +342,8 @@ const Off_Boarding = () => {
                               </button>
                             </>
                           )}
-                          {/* {active !== 4 && active <= steperCounter && ( */}
-                          {active !== 4 && (
+                          {/* {active !== 3 && active <= steperCounter && ( */}
+                          {active !== 3 && (
                             <>
                               <button
                                 class="btn btn-sm btn-gradient-primary me-2"
@@ -304,76 +364,13 @@ const Off_Boarding = () => {
                       ) : (
                         <>
                           <MultiStepForm activeStep={active}>
-                            <Step label="Employee Details (Employee)">
-                              <div className="row">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <table class="table table-hover">
-                                      <thead>
-                                        <tr>
-                                          <th> # </th>
-                                          <th>#</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <td> Name</td>
-                                          <td>
-                                            {`${getUserDetailsById?.f_name}
-                                      ${getUserDetailsById?.m_name}
-                                      ${getUserDetailsById?.l_name}`}
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td> Designation</td>
-                                          <td>
-                                            {getUserDetailsById?.designation}
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td> Date of Joining</td>
-                                          <td>
-                                            {
-                                              getUserDetailsById?.joining_date?.split(
-                                                "T"
-                                              )[0]
-                                            }
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td> Phone No.</td>
-                                          <td>{getUserDetailsById?.phone}</td>
-                                        </tr>
-                                        <tr>
-                                          <td> Current Address</td>
-                                          <td>
-                                            {
-                                              getUserDetailsById?.communication_address
-                                            }
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td> Permanent Address</td>
-                                          <td>
-                                            {
-                                              getUserDetailsById?.permanent_address
-                                            }
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </div>
-                              </div>
-                            </Step>
-
                             <Step label="Supervisor Clearance (HR)">
                               <>
-                                {inputData?.steper_counter <= 4 &&
-                                  (inputData?.steper_counter >= 2 ? (
+                                {inputData?.steper_counter <= 3 &&
+                                  (inputData?.steper_counter >= 1 ? (
                                     roless?.hr?.includes(
                                       LocalStorageData?.user_id
-                                    ) && inputData?.steper_counter >= 2 ? (
+                                    ) && inputData?.steper_counter >= 1 ? (
                                       <div
                                         class="alert alert-success alert-dismissible fade show"
                                         role="alert"
@@ -462,11 +459,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -496,11 +493,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -531,11 +528,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -563,11 +560,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -591,11 +588,11 @@ const Off_Boarding = () => {
                             <Step label="Admin Clearance (Admin)">
                               <>
                                 <>
-                                  {inputData?.steper_counter <= 4 &&
-                                    (inputData?.steper_counter >= 3 ? (
+                                  {inputData?.steper_counter <= 3 &&
+                                    (inputData?.steper_counter >= 2 ? (
                                       roless?.admin?.includes(
                                         LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 3 ? (
+                                      ) && inputData?.steper_counter >= 2 ? (
                                         <div
                                           class="alert alert-success alert-dismissible fade show"
                                           role="alert"
@@ -686,11 +683,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -715,11 +712,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -745,11 +742,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -777,11 +774,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -809,11 +806,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -844,11 +841,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -876,11 +873,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -908,11 +905,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -936,11 +933,11 @@ const Off_Boarding = () => {
                             <Step label="Other Formalities (Management)">
                               <>
                                 <>
-                                  {inputData?.steper_counter <= 4 &&
-                                    (inputData?.steper_counter >= 4 ? (
+                                  {inputData?.steper_counter <= 3 &&
+                                    (inputData?.steper_counter >= 3 ? (
                                       roless?.management?.includes(
                                         LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 4 ? (
+                                      ) && inputData?.steper_counter >= 3 ? (
                                         <div
                                           class="alert alert-success alert-dismissible fade show"
                                           role="alert"
@@ -1028,11 +1025,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1060,11 +1057,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1092,11 +1089,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1124,11 +1121,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1156,11 +1153,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1194,11 +1191,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1226,11 +1223,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1258,11 +1255,11 @@ const Off_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 4
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1299,7 +1296,7 @@ const Off_Boarding = () => {
                             </>
                           )}
                           {/* <!==========  Next Button ============> */}
-                          {active !== 4 && (
+                          {active !== 3 && (
                             <button
                               class="btn btn-sm btn-gradient-primary me-2"
                               onClick={(e) => {
@@ -1315,7 +1312,7 @@ const Off_Boarding = () => {
                             </button>
                           )}
                           {/* <!==========  Update & Save Button ============> */}
-                          {active > 1 && active < 4 && (
+                          {active > 1 && active < 3 && (
                             <>
                               {inputData?._id ? (
                                 <>
@@ -1327,15 +1324,15 @@ const Off_Boarding = () => {
                                       display:
                                         roless?.hr?.includes(
                                           LocalStorageData?.user_id
-                                        ) && active > 2
+                                        ) && active > 1
                                           ? "none"
                                           : roless?.finance?.includes(
                                               LocalStorageData?.user_id
-                                            ) && active === 3
+                                            ) && active === 2
                                           ? "none"
                                           : roless?.management?.includes(
                                               LocalStorageData?.user_id
-                                            ) && active < 4
+                                            ) && active < 3
                                           ? "none"
                                           : "block",
                                     }}
@@ -1352,15 +1349,15 @@ const Off_Boarding = () => {
                                     display:
                                       roless?.hr?.includes(
                                         LocalStorageData?.user_id
-                                      ) && active > 2
+                                      ) && active > 1
                                         ? "none"
                                         : roless?.finance?.includes(
                                             LocalStorageData?.user_id
-                                          ) && active === 3
+                                          ) && active === 2
                                         ? "none"
                                         : roless?.management?.includes(
                                             LocalStorageData?.user_id
-                                          ) && active < 4
+                                          ) && active < 3
                                         ? "none"
                                         : "block",
                                   }}
@@ -1371,7 +1368,7 @@ const Off_Boarding = () => {
                             </>
                           )}
                           {/* <!========== onSubmittedButton ============> */}
-                          {active === 4 && (
+                          {active === 3 && (
                             <button
                               class="btn btn-sm btn-gradient-success me-2"
                               onClick={onSubmittedButton}
@@ -1380,11 +1377,11 @@ const Off_Boarding = () => {
                                 display:
                                   roless?.management?.includes(
                                     LocalStorageData?.user_id
-                                  ) && active > 3
+                                  ) && active > 2
                                     ? "block"
                                     : roless?.admin?.includes(
                                         LocalStorageData?.user_id
-                                      ) && active > 3
+                                      ) && active > 2
                                     ? "block"
                                     : "none",
                               }}
@@ -1420,9 +1417,9 @@ export default Off_Boarding;
 //   }}
 //   checked={inputData?.abc}
 //   // disabled={inputData?.abc ? true : false}
-//   onColor="#84d9d2"
-//   onHandleColor="#1bcfb4"
+//   onColor="#83d9d2"
+//   onHandleColor="#1bcfb3"
 //   offColor="#ffbf96"
-//   offHandleColor="#fe4c96"
+//   offHandleColor="#fe3c96"
 //   className="react-switch"
 // />;

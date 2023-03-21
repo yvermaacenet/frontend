@@ -22,7 +22,7 @@ const Sidebar = () => {
       <nav className="sidebar sidebar-offcanvas" id="sidebar">
         <ul className="nav">
           <li className="nav-item nav-profile">
-            <a href="#" className="nav-link">
+            <NavLink className="nav-link" to="/">
               <div className="nav-profile-image">
                 <img src="../assets/images/faces/face1.jpg" alt="profile" />
                 <span className="login-status online"></span>
@@ -35,7 +35,21 @@ const Sidebar = () => {
                 </span>
               </div>
               <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-            </a>
+            </NavLink>
+            {/* <a href="#" className="nav-link">
+              <div className="nav-profile-image">
+                <img src="../assets/images/faces/face1.jpg" alt="profile" />
+                <span className="login-status online"></span>
+                <!--change to offline or busy as needed-->
+              </div>
+              <div className="nav-profile-text d-flex flex-column">
+                <span className="font-weight-bold mb-2">David Grey. H</span>
+                <span className="text-secondary text-small">
+                  Project Manager
+                </span>
+              </div>
+              <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+            </a> */}
           </li>
           <li className="nav-item">
             <NavLink className="nav-link" to="/">
@@ -59,7 +73,7 @@ const Sidebar = () => {
               <ul class="nav flex-column sub-menu">
                 <ul className="nav flex-column sub-menu">
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="/user_list">
+                    <NavLink className="nav-link" to="/user_list/all_users">
                       Users List
                     </NavLink>
                   </li>

@@ -11,12 +11,12 @@ const Navbar = () => {
     <>
       <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <a className="navbar-brand brand-logo" href="index.html">
+          <NavLink to="/" className="navbar-brand brand-logo">
             <img src="../assets/images/logo.svg" alt="logo" />
-          </a>
-          <a className="navbar-brand brand-logo-mini" href="index.html">
+          </NavLink>
+          <NavLink to="/" className="navbar-brand brand-logo-mini">
             <img src="../assets/images/logo-mini.svg" alt="logo" />
-          </a>
+          </NavLink>
         </div>
         <div className="navbar-menu-wrapper d-flex align-items-stretch">
           <button
@@ -65,7 +65,7 @@ const Navbar = () => {
                   className="dropdown-item"
                   to={`/profile_update/${LocalStorageData?.user_id}`}
                 >
-                  <i className="mdi mdi-account me-2 text-success"></i> Profile
+                  <i className="mdi mdi-account me-2 text-primary"></i> Profile
                 </NavLink>
                 <div className="dropdown-divider"></div>
                 <NavLink
@@ -80,13 +80,10 @@ const Navbar = () => {
                   className="dropdown-item"
                   to={`/off_boarding/${LocalStorageData?.user_id}`}
                 >
-                  <i className="mdi mdi-airplane-off me-2 text-success"></i>
+                  <i className="mdi mdi-airplane-off me-2 text-danger"></i>
                   Off-Boarding
                 </NavLink>
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="#">
-                  <i className="mdi mdi-logout me-2 text-primary"></i> Signout
-                </a>
               </div>
             </li>
             <li className="nav-item d-none d-lg-block full-screen-link">

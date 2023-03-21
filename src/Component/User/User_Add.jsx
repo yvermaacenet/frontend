@@ -41,7 +41,7 @@ const User_Add = () => {
                 page_title="User"
                 page_title_icon="mdi-account-multiple-outline"
                 page_title_button="Back"
-                page_title_button_link="/user_list"
+                page_title_button_link="/user_list/all"
               />
               <div class="row">
                 <div class="card">

@@ -78,8 +78,14 @@ const On_Boarding = () => {
     await axios
       .post(`/on_boarding/${_id}`, {
         ...inputData,
-        steper_counter: inputData?.status ? 6 : steperCounter,
-        updated_by: [{ user_id: _id, updated_data }],
+        steper_counter: inputData?.on_boarding_status ? 6 : steperCounter,
+        updated_by: [
+          {
+            user_id: LocalStorageData?.user_id,
+            user_name: LocalStorageData?.name,
+            updated_data,
+          },
+        ],
       })
       .then(async (res) => {
         if (res.data.message === "created") {
@@ -103,8 +109,15 @@ const On_Boarding = () => {
     await axios
       .put(`/on_boarding/${inputData?._id}`, {
         ...inputData,
-        steper_counter: inputData?.status ? 6 : steperCounter,
-        updated_by: [...inputData?.updated_by, { user_id: _id, updated_data }],
+        steper_counter: inputData?.on_boarding_status ? 6 : steperCounter,
+        updated_by: [
+          ...inputData?.updated_by,
+          {
+            user_id: LocalStorageData?.user_id,
+            user_name: LocalStorageData?.name,
+            updated_data,
+          },
+        ],
       })
       .then(async (res) => {
         if (res.data.message === "updated") {
@@ -130,14 +143,21 @@ const On_Boarding = () => {
       .put(`/on_boarding/${inputData?._id}`, {
         ...inputData,
         status: steperCounter === 6 ? true : false,
-        steper_counter: inputData?.status ? 6 : steperCounter,
-        updated_by: [{ ...inputData?.updated_by, user_id: _id, updated_data }],
+        steper_counter: inputData?.on_boarding_status ? 6 : steperCounter,
+        updated_by: [
+          ...inputData?.updated_by,
+          {
+            user_id: LocalStorageData?.user_id,
+            user_name: LocalStorageData?.name,
+            updated_data,
+          },
+        ],
       })
       .then(async (res) => {
         if (res.data.message === "updated") {
           setActive(1);
           setRenderComponent(true);
-          navigate("/user_list");
+          navigate("/user_list/all");
           await axios
             .put(`/user_update/${_id}`, {
               on_boarding_steper_counter: steperCounter,
@@ -211,8 +231,20 @@ const On_Boarding = () => {
         "This step has been completed from Managment Department !!",
     },
   ];
-  const dd = roless?.admin?.includes(LocalStorageData.user_id);
-  console.log(dd);
+  function convertDateFormate(str) {
+    const date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [day, mnth, date.getFullYear()].join("-");
+  }
+  function capitalize(ss) {
+    const newData = ss.split("_").join(" ");
+    const words = newData.split(" ");
+    const capitalizedWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizedWords.join(" ");
+  }
   return (
     <div class="container-scroller">
       <Navbar />
@@ -224,13 +256,89 @@ const On_Boarding = () => {
               page_title="Boarding"
               page_title_icon="mdi-airplane"
               page_title_button="Back"
-              page_title_button_link="/user_list"
+              page_title_button_link="/user_list/all"
             />
             <div class="row">
               <div class="card">
                 <div class="card-body">
                   {/* <h4 class="card-title">Default form</h4> */}
-                  <p class="card-description"> On Boarding Process </p>
+                  <div className=" d-flex justify-content-between align-items-center">
+                    <span class="card-description">On Boarding Process </span>
+                    <div>
+                      <a
+                        style={{ float: "right" }}
+                        className=" nav-link count-indicator dropdown-toggle mb-4"
+                        id="notificationDropdown"
+                        href="#"
+                        data-bs-toggle="dropdown"
+                        title="updation history"
+                      >
+                        <i className="mdi mdi-bell-outline"></i>
+                        <span className="count-symbol bg-danger"></span>
+                      </a>
+                      <div
+                        style={{ height: "50vh", overflowY: "scroll" }}
+                        className="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                        aria-labelledby="notificationDropdown"
+                      >
+                        <h6
+                          className="mt-0 p-3"
+                          // style={{position:"sticky", top:"0", backgroundColor:"white", margin:"0"}}
+                        >
+                          History
+                        </h6>
+
+                        {inputData?.updated_by?.map((item) => {
+                          return (
+                            <>
+                              <div className="dropdown-divider"></div>
+                              <a className="dropdown-item preview-item">
+                                <div className="preview-thumbnail">
+                                  <div
+                                    className="preview-icon  "
+                                    style={{
+                                      background: `#${Math.random()
+                                        .toString(16)
+                                        .slice(2, 8)
+                                        .padEnd(6, 0)}`,
+                                      color: "#f8f8f8",
+                                    }}
+                                  >
+                                    <i className="mdi mdi-calendar"></i>
+                                  </div>
+                                </div>
+                                <div className="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                                  <span className="preview-subject fw-bold mb-1">
+                                    {`Updated by : ${item?.user_name}`}
+                                  </span>
+                                  <span className="preview-subject fw-bold mb-1">
+                                    {`Updated At : ${convertDateFormate(
+                                      item?.updated_date
+                                    )}`}
+                                  </span>
+
+                                  {Object.entries(item?.updated_data).map(
+                                    ([key, val]) => {
+                                      return val ? (
+                                        <span className="text-success ">
+                                          {capitalize(key)}
+                                        </span>
+                                      ) : (
+                                        <span className="text-danger ">
+                                          {capitalize(key)}
+                                        </span>
+                                      );
+                                    }
+                                  )}
+                                </div>
+                              </a>
+                            </>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
                   <table class="table table-bordered">
                     <thead>
                       <tr>
@@ -298,6 +406,7 @@ const On_Boarding = () => {
                       </tr>
                     </tbody>
                   </table>
+
                   <div style={{ margin: "40px" }}>
                     <form class="forms-sample">
                       {!roless?.admin?.includes(LocalStorageData.user_id) &&

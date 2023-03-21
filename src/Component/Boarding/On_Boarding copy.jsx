@@ -131,7 +131,7 @@ const On_Boarding = () => {
         ...inputData,
         status: steperCounter === 7 ? true : false,
         steper_counter: inputData?.status ? 7 : steperCounter,
-        updated_by: [{ ...inputData?.updated_by, user_id: _id, updated_data }],
+        updated_by: [...inputData?.updated_by, { user_id: _id, updated_data }],
       })
       .then(async (res) => {
         if (res.data.message === "updated") {
