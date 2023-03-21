@@ -5,12 +5,33 @@ import Footer from "../../Partials/Footer";
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
+import * as XLSX from "xlsx";
+import PureModal from "react-pure-modal";
 
 const User_List = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getUserList, setGetUserList] = useState([]);
   const [roless, setRoless] = useState([]);
+  const [uploadData, setUploadData] = useState([]);
+  const [duplcates, setDuplicates] = useState([]);
+  const [show, setShow] = useState(false);
+  const [addEventModal, setAddEventModal] = useState(false);
 
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const data = new Uint8Array(event.target.result);
+      const workbook = XLSX.read(data, { type: "array" });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet);
+
+      setUploadData(rows);
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+  console.log("upload data", uploadData);
   useEffect(() => {
     async function get_user_list_by_role_name() {
       const result = await axios.get(`/get_user_list_by_role_name`);
@@ -48,6 +69,48 @@ const User_List = () => {
                 page_title_button="Add"
                 page_title_button_link="/user_add"
               />
+
+              <div class="row">
+                <div class="card">
+                  <div class="card-body">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-info btn-icon-text"
+                      onClick={() => setAddEventModal(true)}
+                      style={{ float: "right" }}
+                    >
+                      <i class="mdi mdi-upload btn-icon-prepend"></i> Upload
+                      File
+                    </button>
+
+                    {show
+                      ? duplcates?.map((item) => {
+                          return (
+                            <>
+                              <div
+                                class="alert alert-danger alert-dismissible fade show"
+                                role="alert"
+                              >
+                                <span className="text-dark">
+                                  {" "}
+                                  Duplicate Values:{" "}
+                                </span>
+                                <i class="mdi mdi-check-circle-outline me-1"></i>
+                                {item.personal_email}
+                                <button
+                                  type="button"
+                                  class="btn-close"
+                                  data-bs-dismiss="alert"
+                                  aria-label="Close"
+                                ></button>
+                              </div>
+                            </>
+                          );
+                        })
+                      : ""}
+                  </div>
+                </div>
+              </div>
               <div class="row">
                 <div class="card">
                   <div class="card-body">
@@ -159,6 +222,55 @@ const User_List = () => {
                   </div>
                 </div>
               </div>
+
+              {/* ============= Modal =================== */}
+
+              <PureModal
+                header="Upload Users Data"
+                isOpen={addEventModal}
+                onClose={() => {
+                  setAddEventModal(false);
+                  return true;
+                }}
+                width={"40%"}
+              >
+                <form action="">
+                  <input
+                    type="file"
+                    accept=".xlsx"
+                    onChange={handleFileUpload}
+                  />
+                  <h6 style={{ float: "right" }}>
+                    <a
+                      href="../assets/file/users_tbls.csv"
+                      title="Download sample file"
+                    >
+                      <i
+                        className="mdi mdi-download"
+                        style={{ fontSize: "2rem" }}
+                      ></i>
+                    </a>
+                  </h6>
+                  <div class="modal-footer">
+                    <button
+                      onClick={async () => {
+                        const res = await axios
+                          .post("/users_upload_by_file", uploadData)
+                          .then((res) => alert(res.data.message))
+                          .catch((err) => {
+                            console.log(err.response.data.duplicates);
+                            setDuplicates(err.response.data.duplicates);
+                            setShow(true);
+                          });
+                      }}
+                      type="button"
+                      class="btn btn-sm btn-success mt-4"
+                    >
+                      Upload File
+                    </button>
+                  </div>
+                </form>
+              </PureModal>
             </div>
 
             <footer class="footer">

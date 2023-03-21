@@ -2,14 +2,16 @@ import React, { useEffect } from "react";
 
 const ImportScript = (resourceUrl) => {
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = resourceUrl;
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, [resourceUrl]);
+    resourceUrl.map((url) => {
+      const script = document.createElement("script");
+      script.src = url;
+      script.async = true;
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
+    });
+  }, []);
   return <div>ImportScript</div>;
 };
 const ImportScripts = (resourceUrls) => {

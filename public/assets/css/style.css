@@ -19730,7 +19730,7 @@ dl li {
 .main-panel {
   -webkit-transition: width 0.25s ease, margin 0.25s ease;
   transition: width 0.25s ease, margin 0.25s ease;
-  width: calc(100% - 260px);
+  width: calc(100% - 230px);
   min-height: calc(100vh - 70px);
   display: -webkit-box;
   display: -ms-flexbox;
@@ -19831,4 +19831,3 @@ input:checked + .slider:before {
 .multiselect__option--disabled {
   color: red;
 }
- 

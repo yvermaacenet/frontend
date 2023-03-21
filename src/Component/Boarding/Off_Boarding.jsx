@@ -128,6 +128,7 @@ const Off_Boarding = () => {
         ...inputData,
         status: steperCounter === 4 ? true : false,
         steper_counter: inputData?.status ? 4 : steperCounter,
+        off_boarding_status: true,
       })
       .then(async (res) => {
         if (res.data.message === "updated") {

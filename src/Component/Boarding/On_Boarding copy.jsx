@@ -41,15 +41,15 @@ const On_Boarding = () => {
       setSteperCounter(
         resp?.steper_counter === undefined
           ? 1
-          : resp?.steper_counter === 6
-          ? 6
+          : resp?.steper_counter === 7
+          ? 7
           : resp?.steper_counter + 1
       );
       setActive(
         resp?.steper_counter === undefined
           ? 1
-          : resp?.steper_counter === 6
-          ? 6
+          : resp?.steper_counter === 7
+          ? 7
           : resp?.steper_counter + 1
       );
       setRenderComponent(false);
@@ -78,7 +78,7 @@ const On_Boarding = () => {
     await axios
       .post(`/on_boarding/${_id}`, {
         ...inputData,
-        steper_counter: inputData?.status ? 6 : steperCounter,
+        steper_counter: inputData?.status ? 7 : steperCounter,
         updated_by: [{ user_id: _id, updated_data }],
       })
       .then(async (res) => {
@@ -103,7 +103,7 @@ const On_Boarding = () => {
     await axios
       .put(`/on_boarding/${inputData?._id}`, {
         ...inputData,
-        steper_counter: inputData?.status ? 6 : steperCounter,
+        steper_counter: inputData?.status ? 7 : steperCounter,
         updated_by: [...inputData?.updated_by, { user_id: _id, updated_data }],
       })
       .then(async (res) => {
@@ -129,8 +129,8 @@ const On_Boarding = () => {
     await axios
       .put(`/on_boarding/${inputData?._id}`, {
         ...inputData,
-        status: steperCounter === 6 ? true : false,
-        steper_counter: inputData?.status ? 6 : steperCounter,
+        status: steperCounter === 7 ? true : false,
+        steper_counter: inputData?.status ? 7 : steperCounter,
         updated_by: [{ ...inputData?.updated_by, user_id: _id, updated_data }],
       })
       .then(async (res) => {
@@ -153,10 +153,16 @@ const On_Boarding = () => {
   };
   const stperArrayForEmployee = [
     {
+      label: "Employee Detailssasasa",
+      component: Employee_Details,
+      step_counter: 1,
+      import_data: getUserDetailsById,
+    },
+    {
       label: "First Day Formalities",
       component: FirstDayFormalities,
       import_data: inputData,
-      step_counter: 1,
+      step_counter: 2,
       alert_warning_title:
         "This step is pending from HR Department !! Please contact to HR Department.",
       alert_success_title: "This step has been completed from HR Department !!",
@@ -165,7 +171,7 @@ const On_Boarding = () => {
       label: " Documents",
       component: Document,
       import_data: inputData,
-      step_counter: 2,
+      step_counter: 3,
       alert_warning_title:
         "This step is pending from HR Department !! Please contact to HR Department.",
       alert_success_title: "This step has been completed from HR Department !!",
@@ -174,7 +180,7 @@ const On_Boarding = () => {
       label: "Compliance Documents",
       component: Compliance_Documents,
       import_data: inputData,
-      step_counter: 3,
+      step_counter: 4,
       alert_warning_title:
         "This step is pending from Finance Department !! Please contact to Finance Department.",
       alert_success_title:
@@ -184,7 +190,7 @@ const On_Boarding = () => {
       label: "HDFC Bank ",
       component: Bank,
       import_data: inputData,
-      step_counter: 4,
+      step_counter: 5,
       alert_warning_title:
         "This step is pending from Finance Department !! Please contact to Finance Department.",
       alert_success_title:
@@ -194,7 +200,7 @@ const On_Boarding = () => {
       label: "Zoho Account ",
       component: Zoho_Account,
       import_data: inputData,
-      step_counter: 5,
+      step_counter: 6,
       alert_warning_title:
         "This step is pending from Managment Department !! Please contact to Managment Department.",
       alert_success_title:
@@ -204,7 +210,7 @@ const On_Boarding = () => {
       label: " Other Formalities",
       component: Other_Formalities,
       import_data: inputData,
-      step_counter: 6,
+      step_counter: 7,
       alert_warning_title:
         "This step is pending from Managment Department !! Please contact to Managment Department.",
       alert_success_title:
@@ -377,7 +383,7 @@ const On_Boarding = () => {
                             </>
                           )}
                           {/* {active !== 7 && active <= steperCounter && ( */}
-                          {active !== 6 && (
+                          {active !== 7 && (
                             <>
                               <button
                                 class="btn btn-sm btn-gradient-primary me-2"
@@ -398,13 +404,143 @@ const On_Boarding = () => {
                       ) : (
                         <>
                           <MultiStepForm activeStep={active}>
+                            <Step label="Employee Details (Employee)">
+                              <div className="row">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <table class="table table-hover">
+                                      <thead>
+                                        <tr>
+                                          <th> # </th>
+                                          <th>#</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr>
+                                          <td> Name</td>
+                                          <td>
+                                            {`${getUserDetailsById?.f_name}
+                                      ${getUserDetailsById?.m_name}
+                                      ${getUserDetailsById?.l_name}`}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Designation</td>
+                                          <td>
+                                            {getUserDetailsById?.designation}
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Date of Joining</td>
+                                          <td>
+                                            {
+                                              getUserDetailsById?.joining_date?.split(
+                                                "T"
+                                              )[0]
+                                            }
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Phone No.</td>
+                                          <td>{getUserDetailsById?.phone}</td>
+                                        </tr>
+                                        <tr>
+                                          <td> Current Address</td>
+                                          <td>
+                                            {
+                                              getUserDetailsById?.communication_address
+                                            }
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Permanent Address</td>
+                                          <td>
+                                            {
+                                              getUserDetailsById?.permanent_address
+                                            }
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </Step>
+
                             <Step label="First Day Formalities (HR)">
+                              {/* <>
+                              {inputData?.steper_counter === 2 ? (
+                                roless?.hr?.includes(
+                                  LocalStorageData?.user_id
+                                ) && inputData?.steper_counter === 2 ? (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed by You.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                ) : (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed by HR
+                                    Department.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                )
+                              ) : roless?.hr?.includes(
+                                  LocalStorageData?.user_id
+                                ) ? (
+                                <div
+                                  class="alert alert-danger alert-dismissible fade show"
+                                  role="alert"
+                                >
+                                  <i class="mdi mdi-alert-octagon me-1"></i>
+                                  "This step is not completed by you !!"
+                                  <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Close"
+                                  ></button>
+                                </div>
+                              ) : (
+                                <div
+                                  class="alert alert-warning alert-dismissible fade show"
+                                  role="alert"
+                                >
+                                  <i class="mdi mdi-alert-octagon me-1"></i>
+                                  "This step is pending from Admin or HR
+                                  Department !!"
+                                  <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Close"
+                                  ></button>
+                                </div>
+                              )}
+                            </> */}
                               <>
-                                {inputData?.steper_counter <= 6 &&
-                                  (inputData?.steper_counter >= 1 ? (
+                                {inputData?.steper_counter <= 7 &&
+                                  (inputData?.steper_counter >= 2 ? (
                                     roless?.hr?.includes(
                                       LocalStorageData?.user_id
-                                    ) && inputData?.steper_counter >= 1 ? (
+                                    ) && inputData?.steper_counter >= 2 ? (
                                       <div
                                         class="alert alert-success alert-dismissible fade show"
                                         role="alert"
@@ -497,17 +633,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -536,17 +672,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -575,17 +711,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -614,17 +750,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -653,17 +789,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -692,17 +828,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -731,17 +867,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -798,17 +934,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -837,17 +973,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -874,17 +1010,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -911,17 +1047,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -950,17 +1086,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -989,17 +1125,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1087,11 +1223,11 @@ const On_Boarding = () => {
                                 )}
                               </> */}
                                 <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 2 ? (
+                                  {inputData?.steper_counter <= 7 &&
+                                    (inputData?.steper_counter >= 3 ? (
                                       roless?.hr?.includes(
                                         LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 2 ? (
+                                      ) && inputData?.steper_counter >= 3 ? (
                                         <div
                                           class="alert alert-success alert-dismissible fade show"
                                           role="alert"
@@ -1183,17 +1319,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1222,17 +1358,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1261,17 +1397,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1298,17 +1434,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1335,17 +1471,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1374,17 +1510,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1413,17 +1549,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1452,17 +1588,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1495,17 +1631,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1534,17 +1670,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1573,17 +1709,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1612,17 +1748,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1651,17 +1787,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1692,17 +1828,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1731,17 +1867,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1770,17 +1906,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1815,17 +1951,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -1914,11 +2050,11 @@ const On_Boarding = () => {
                                 )}
                               </> */}
                                 <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 3 ? (
+                                  {inputData?.steper_counter <= 7 &&
+                                    (inputData?.steper_counter >= 4 ? (
                                       roless?.finance?.includes(
                                         LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 3 ? (
+                                      ) && inputData?.steper_counter >= 4 ? (
                                         <div
                                           class="alert alert-success alert-dismissible fade show"
                                           role="alert"
@@ -2343,11 +2479,11 @@ const On_Boarding = () => {
                                 )}
                               </> */}
                                 <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 4 ? (
+                                  {inputData?.steper_counter <= 7 &&
+                                    (inputData?.steper_counter >= 5 ? (
                                       roless?.finance?.includes(
                                         LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 4 ? (
+                                      ) && inputData?.steper_counter >= 5 ? (
                                         <div
                                           class="alert alert-success alert-dismissible fade show"
                                           role="alert"
@@ -2567,11 +2703,11 @@ const On_Boarding = () => {
                             <Step label="ZOHO Account (Management)">
                               <>
                                 <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 5 ? (
+                                  {inputData?.steper_counter <= 7 &&
+                                    (inputData?.steper_counter >= 6 ? (
                                       roless?.management?.includes(
                                         LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 5 ? (
+                                      ) && inputData?.steper_counter >= 6 ? (
                                         <div
                                           class="alert alert-success alert-dismissible fade show"
                                           role="alert"
@@ -2839,12 +2975,79 @@ const On_Boarding = () => {
 
                             <Step label="Other Formalities (Management)">
                               <>
+                                {/* <>
+                                {inputData?.steper_counter <= 7 && (
+                                  roless?.management?.includes(
+                                    LocalStorageData?.user_id
+                                  ) && inputData?.steper_counter >= 5 ? (
+                                    <div
+                                      class="alert alert-danger alert-dismissible fade show"
+                                      role="alert"
+                                    >
+                                      <i class="mdi mdi-alert-octagon me-1"></i>
+                                      "This step is not completed by you !!"
+                                      <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                        aria-label="Close"
+                                      ></button>
+                                    </div>
+                                  ) : (
+                                    <div
+                                      class="alert alert-warning alert-dismissible fade show"
+                                      role="alert"
+                                    >
+                                      <i class="mdi mdi-alert-octagon me-1"></i>
+                                      "This step is pending from Admin or
+                                      Management Department !!"
+                                      <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                        aria-label="Close"
+                                      ></button>
+                                    </div>
+                                  )
+                                ) : roless?.management?.includes(
+                                    LocalStorageData?.user_id
+                                  ) ? (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed by You.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                ) : (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed by Management
+                                    Department.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                )}
+                              </> */}
                                 <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 6 ? (
+                                  {inputData?.steper_counter <= 7 &&
+                                    (inputData?.steper_counter >= 7 ? (
                                       roless?.management?.includes(
                                         LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 6 ? (
+                                      ) && inputData?.steper_counter >= 7 ? (
                                         <div
                                           class="alert alert-success alert-dismissible fade show"
                                           role="alert"
@@ -2936,17 +3139,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -2975,17 +3178,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -3014,17 +3217,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -3053,17 +3256,17 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 3
                                                         ? true
                                                         : roless?.finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 4 ||
+                                                            active > 5)
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 6
                                                         ? true
                                                         : false
                                                     }
@@ -3102,7 +3305,7 @@ const On_Boarding = () => {
                           )}
                           {/* <!==========  Next Button ============> */}
 
-                          {active !== 6 && (
+                          {active !== 7 && (
                             <button
                               class="btn btn-sm btn-gradient-primary me-2"
                               onClick={(e) => {
@@ -3119,7 +3322,7 @@ const On_Boarding = () => {
                           )}
                           {/* <!==========  Update & Save Button ============> */}
 
-                          {active >= 1 && active < 6 && (
+                          {active > 1 && active < 7 && (
                             <>
                               {inputData?._id ? (
                                 <>
@@ -3131,16 +3334,16 @@ const On_Boarding = () => {
                                       display:
                                         roless?.hr?.includes(
                                           LocalStorageData?.user_id
-                                        ) && active > 2
+                                        ) && active > 3
                                           ? "none"
                                           : roless?.finance?.includes(
                                               LocalStorageData?.user_id
                                             ) &&
-                                            (active < 3 || active > 4)
+                                            (active < 4 || active > 5)
                                           ? "none"
                                           : roless?.management?.includes(
                                               LocalStorageData?.user_id
-                                            ) && active < 5
+                                            ) && active < 6
                                           ? "none"
                                           : "block",
                                     }}
@@ -3173,17 +3376,17 @@ const On_Boarding = () => {
                                     display:
                                       roless?.hr?.includes(
                                         LocalStorageData?.user_id
-                                      ) && active > 2
+                                      ) && active > 3
                                         ? "none"
                                         : roless?.finance?.includes(
                                             LocalStorageData?.user_id
                                           ) &&
-                                          active < 2 &&
-                                          active > 4
+                                          active < 3 &&
+                                          active > 5
                                         ? "none"
                                         : roless?.management?.includes(
                                             LocalStorageData?.user_id
-                                          ) && active < 5
+                                          ) && active < 6
                                         ? "none"
                                         : "block",
                                   }}
@@ -3211,7 +3414,7 @@ const On_Boarding = () => {
                             </>
                           )}
                           {/* <!========== onSubmittedButton ============> */}
-                          {active === 6 && (
+                          {active === 7 && (
                             <button
                               class="btn btn-sm btn-gradient-success me-2"
                               onClick={onSubmittedButton}
@@ -3220,22 +3423,22 @@ const On_Boarding = () => {
                                 display:
                                   roless?.management?.includes(
                                     LocalStorageData?.user_id
-                                  ) && active > 5
+                                  ) && active > 6
                                     ? "block"
                                     : roless?.admin?.includes(
                                         LocalStorageData?.user_id
-                                      ) && active > 5
+                                      ) && active > 6
                                     ? "block"
                                     : "none",
                               }}
                               disabled={
                                 roless?.management?.includes(
                                   LocalStorageData?.user_id
-                                ) && active > 5
+                                ) && active > 6
                                   ? false
                                   : roless?.admin?.includes(
                                       LocalStorageData?.user_id
-                                    ) && active > 5
+                                    ) && active > 6
                                   ? false
                                   : true
                               }

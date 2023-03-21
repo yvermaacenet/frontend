@@ -1,22 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useCookies } from "react-cookie";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ImportScripts } from "../Utils/ImportScript";
-import ImportScript from "../Utils/ImportScript";
+
 const Navbar = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [cookies, setCookie, removeCookie] = useCookies();
-  const scriptArray = ["/assets/js/misc.js", "/assets/js/off-canvas.js"];
 
-  // ImportScript("/assets/js/misc.js");
-  // ImportScripts("/assets/js/off-canvas.js");
-  useEffect(() => {
-    async function loadScript(url) {
-      await url.map((val) => ImportScript(val));
-    }
-    // loadScript(scriptArray);
-  }, []);
   return (
     <>
       <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">

@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { ImportScripts } from "../Utils/ImportScript";
 import ImportScript from "../Utils/ImportScript";
 
 const Sidebar = () => {
-  // ImportScript("/assets/js/misc.js");
-  // ImportScripts("/assets/js/off-canvas.js");
+  const scriptArrsy = [
+    "assets/js/misc.js",
+    "assets/js/off-canvas.js",
+    "assets/vendors/js/vendor.bundle.base.js",
+    "assets/vendors/chart.js/Chart.min.js",
+    "assets/js/jquery.cookie.js",
+    "assets/js/hoverable-collapse.js",
+    "assets/js/dashboard.js",
+    "assets/js/todolist.js",
+  ];
+  ImportScript(scriptArrsy);
+  // ImportScripts("../assets/js/off-canvas.js");
+
   return (
     <>
       <nav className="sidebar sidebar-offcanvas" id="sidebar">
