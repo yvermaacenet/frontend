@@ -5,12 +5,74 @@ import Footer from "../Partials/Footer";
 import Navbar from "../Partials/Navbar";
 import Page_Header from "../Partials/Page_Header";
 import Sidebar from "../Partials/Sidebar";
-
+import ReactApexChart from "react-apexcharts";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Pie, Doughnut } from "react-chartjs-2";
+ChartJS.register(ArcElement, Tooltip, Legend);
+// import {ReactApexChart} from "react-apexcharts";
 const Dashboard = () => {
+  const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [userCreationDate, setUserCreationDate] = useState();
   const [cabinSlotBookingCreationDate, setCabinSlotBookingCreationDate] =
     useState();
   const [counterList, setCounterList] = useState([]);
+  const [state, setState] = useState({
+    series: [7, 3],
+    options: {
+      chart: {
+        // width: 280,
+        type: "pie",
+        // background: "#fff",
+      },
+      // labels: ["Active", "Deactivated"],
+      fill: {
+        colors: ["rgb(0, 227, 150)", "rgb(255, 69, 96)"],
+      },
+      legend: {
+        show: true,
+        position: "bottom",
+        customLegendItems: ["Active", "Deactivated"],
+        markers: {
+          width: 12,
+          height: 12,
+          fillColors: ["rgb(0, 227, 150)", "rgb(255, 69, 96)"],
+        },
+      },
+      dataLabels: {
+        style: {
+          colors: ["#f8f8f8", "#f8f8f8"],
+        },
+        enabled: true,
+        // textAnchor: "middle",
+        // background: {
+        //   enabled: true,
+        //   opacity: 1,
+        //   dropShadow: {
+        //     enabled: true,
+        //     top: 1,
+        //     left: 1,
+        //     blur: 1,
+        //     color: "red",
+        //     opacity: 0.45,
+        //   },
+        // },
+      },
+      tooltip: {
+        enabled: false,
+      },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              // width: 10,
+              // background: "#fff",
+            },
+          },
+        },
+      ],
+    },
+  });
   function convertDateFormate(str) {
     const date = new Date(str),
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -40,7 +102,71 @@ const Dashboard = () => {
     }
     get_counterList();
   }, []);
-  console.log(counterList);
+  const cardArray = [
+    // {
+    //   card_background: "bg-gradient-info",
+    //   path: "/user_list/all_users",
+    //   card_title: "Total Users",
+    //   card_icon: "mdi-account-multiple-plus",
+    //   card_counter_data: counterList?.Total_Users,
+    //   card_last_update: userCreationDate,
+    //   card_allowed_access: ["Admin", "HR", "Finance", "Management"],
+    // },
+
+    // {
+    //   card_background: "bg-gradient-success",
+    //   path: "/user_list/active_users",
+    //   card_title: "Acrive Users",
+    //   card_icon: "mdi-account-check",
+    //   card_counter_data: counterList?.Active_Users,
+    //   card_last_update: userCreationDate,
+    //   card_allowed_access: ["Admin", "HR", "Finance", "Management"],
+    // },
+    // {
+    //   card_background: "bg-gradient-danger",
+    //   path: "/user_list/deactive_users",
+    //   card_title: "Deacrive Users",
+    //   card_icon: "mdi-account-remove",
+    //   card_counter_data: counterList?.Deactive_Users,
+    //   card_allowed_access: ["Admin", "HR", "Finance", "Management"],
+    // },
+    {
+      card_background: "bg-gradient-primary",
+      path: "/user_list/pending_onboarding_users",
+      card_title: "Pending Onboarding Users",
+      card_icon: "mdi-airplane",
+      card_counter_data: counterList?.Pending_Onboarding,
+      card_allowed_access: ["Admin", "HR", "Finance", "Management"],
+    },
+    {
+      card_background: "bg-gradient-secondary",
+      path: "/",
+      card_title: "Pending Offboarding Users",
+      card_icon: "mdi-airplane-off",
+      card_counter_data: counterList?.Pending_Offboarding,
+      card_allowed_access: ["Admin", "HR", "Finance", "Management"],
+    },
+    {
+      card_background: "bg-gradient-warning",
+      path: "/cabin_slot_booking",
+      card_title: "Cabin Booking",
+      card_icon: "mdi-home-modern",
+      card_counter_data: counterList?.Total_Cabin_Booking,
+      card_allowed_access: ["Employee"],
+    },
+  ];
+  // const data = {
+  //   labels: ["Active", "Deactivated"],
+  //   datasets: [
+  //     {
+  //       label: "# of Votes",
+  //       data: [3, 7],
+  //       backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
+  //       borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+  //       borderWidth: 1,
+  //     },
+  //   ],
+  // };
   return (
     <>
       <div class="container-scroller">
@@ -54,44 +180,44 @@ const Dashboard = () => {
                 page_title_button="Overview"
                 page_title_icon="mdi-home"
               />
+
               <div class="row">
                 <div class="col-md-3 stretch-card grid-margin">
-                  <div class="card bg-gradient-info card-img-holder text-white">
+                  <div class="card   card-img-holder text-white">
                     <div class="card-body">
-                      <NavLink
-                        to="/user_list/all_users"
-                        style={{ color: "#f8f8f8", textDecoration: "none" }}
-                      >
+                      <NavLink to="/user_list/active_users">
                         <div>
-                          <img
-                            src="assets/images/dashboard/circle.svg"
-                            class="card-img-absolute"
-                            alt="circle-image"
-                          />
                           <h4 class="font-weight-normal mb-3 mt-2">
-                            Total Users
+                            <span className="me-4">
+                              Total Users - {counterList?.Total_Users}
+                            </span>
                             <i
                               class="mdi mdi-account-multiple-plus mdi-24px float-right"
                               style={{ float: "right" }}
                             ></i>
                           </h4>
                           <h1 class="mb-4 text-center">
-                            {counterList.Total_Users}
+                            <ReactApexChart
+                              options={state.options}
+                              series={state.series}
+                              type="pie"
+                              // width={380}
+                            />
                           </h1>
-                          <h6 class="card-text">
-                            Last Updated : {userCreationDate}
-                          </h6>
                         </div>
                       </NavLink>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-3 stretch-card grid-margin">
-                  <div class="card bg-gradient-success card-img-holder text-white">
+                  <div class="card bg-gradient-info card-img-holder text-white">
                     <div class="card-body">
                       <NavLink
                         to="/user_list/active_users"
-                        style={{ color: "#f8f8f8", textDecoration: "none" }}
+                        style={{
+                          color: "#f8f8f8",
+                          textDecoration: "none",
+                        }}
                       >
                         <div>
                           <img
@@ -100,142 +226,74 @@ const Dashboard = () => {
                             alt="circle-image"
                           />
                           <h4 class="font-weight-normal mb-3 mt-2">
-                            Acrive Users
+                            <span className="me-4">
+                              Total Users - {counterList?.Total_Users}
+                            </span>
                             <i
-                              class="mdi mdi-account-check mdi-24px float-right"
+                              class="mdi mdi-account-multiple-plus mdi-24px float-right"
                               style={{ float: "right" }}
                             ></i>
                           </h4>
                           <h1 class="mb-4 text-center">
-                            {counterList.Active_Users}
-                          </h1>
-                          <h6 class="card-text">
-                            Last Updated : {userCreationDate}
-                          </h6>
-                        </div>
-                      </NavLink>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 stretch-card grid-margin">
-                  <div class="card bg-gradient-danger card-img-holder text-white">
-                    <div class="card-body">
-                      <NavLink
-                        to="/user_list/deactive_users"
-                        style={{ color: "#f8f8f8", textDecoration: "none" }}
-                      >
-                        <div>
-                          <img
-                            src="assets/images/dashboard/circle.svg"
-                            class="card-img-absolute"
-                            alt="circle-image"
-                          />
-                          <h4 class="font-weight-normal mb-3 mt-2">
-                            Deactive Users
-                            <i
-                              class="mdi mdi-account-remove mdi-24px float-right"
-                              style={{ float: "right" }}
-                            ></i>
-                          </h4>
-                          <h1 class="mb-4 text-center">
-                            {counterList.Deactive_Users}
+                            <ReactApexChart
+                              options={state.options}
+                              series={state.series}
+                              type="pie"
+                              // width={380}
+                            />
                           </h1>
                         </div>
                       </NavLink>
                     </div>
                   </div>
                 </div>
-
-                <div class="col-md-3 stretch-card grid-margin">
-                  <div class="card bg-gradient-primary card-img-holder text-white">
-                    <div class="card-body">
-                      <NavLink
-                        to="/"
-                        style={{ color: "#f8f8f8", textDecoration: "none" }}
-                      >
-                        <div>
-                          <img
-                            src="assets/images/dashboard/circle.svg"
-                            class="card-img-absolute"
-                            alt="circle-image"
-                          />
-                          <h4 class="font-weight-normal mb-3 mt-2">
-                            Pending Onboarding Users
-                            <i
-                              class="mdi mdi mdi-airplane
-                          e mdi-24px float-right"
-                              style={{ float: "right" }}
-                            ></i>
-                          </h4>
-                          <h1 class="mb-4 text-center">
-                            {counterList.Pending_Onboarding}
-                          </h1>
+                {LocalStorageData?.role?.map((val) =>
+                  cardArray?.map(
+                    (result) =>
+                      result?.card_allowed_access.includes(val?.name) && (
+                        <div class="col-md-3 stretch-card grid-margin">
+                          <div
+                            class={`card ${result?.card_background} card-img-holder text-white`}
+                          >
+                            <NavLink
+                              to={result?.path}
+                              style={{
+                                color: "#f8f8f8",
+                                textDecoration: "none",
+                              }}
+                            >
+                              <div class="card-body">
+                                <div>
+                                  <img
+                                    src="assets/images/dashboard/circle.svg"
+                                    class="card-img-absolute"
+                                    alt="circle-image"
+                                  />
+                                  <h4 class="font-weight-normal mb-3 mt-2">
+                                    <span className="me-4">
+                                      {result?.card_title}
+                                    </span>
+                                    <i
+                                      class={`mdi ${result?.card_icon} mdi-24px float-right`}
+                                      style={{ float: "right" }}
+                                    ></i>
+                                  </h4>
+                                  <h1 class="mb-4 text-center">
+                                    {result?.card_counter_data}
+                                  </h1>
+                                  {result?.card_last_update !== undefined && (
+                                    <h6 class="card-text">
+                                      Last Updated : {result?.card_last_update}
+                                    </h6>
+                                  )}
+                                </div>
+                              </div>
+                            </NavLink>
+                          </div>
                         </div>
-                      </NavLink>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 stretch-card grid-margin">
-                  <div class="card bg-gradient-secondary card-img-holder text-white">
-                    <div class="card-body">
-                      <NavLink
-                        to="/"
-                        style={{ color: "#f8f8f8", textDecoration: "none" }}
-                      >
-                        <div>
-                          <img
-                            src="assets/images/dashboard/circle.svg"
-                            class="card-img-absolute"
-                            alt="circle-image"
-                          />
-                          <h4 class="font-weight-normal mb-3 mt-2">
-                            Pending Offboarding Users
-                            <i
-                              class="mdi mdi mdi-airplane-off
-                          e mdi-24px float-right"
-                              style={{ float: "right" }}
-                            ></i>
-                          </h4>
-                          <h1 class="mb-4 text-center">
-                            {counterList.Pending_Offboarding}
-                          </h1>
-                        </div>
-                      </NavLink>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 stretch-card grid-margin">
-                  <div class="card bg-gradient-warning card-img-holder text-white">
-                    <div class="card-body">
-                      <NavLink
-                        to="/cabin_slot_booking"
-                        style={{ color: "#f8f8f8", textDecoration: "none" }}
-                      >
-                        <div>
-                          <img
-                            src="assets/images/dashboard/circle.svg"
-                            class="card-img-absolute"
-                            alt="circle-image"
-                          />
-                          <h4 class="font-weight-normal mb-3 mt-2">
-                            Cabin Booking
-                            <i
-                              class="mdi mdi-home-modern
-                          mdi-24px float-right"
-                              style={{ float: "right" }}
-                            ></i>
-                          </h4>
-                          <h1 class="mb-4 text-center">
-                            {counterList.Total_Cabin_Booking}
-                          </h1>
-                          <h6 class="card-text">
-                            Last Updated : {cabinSlotBookingCreationDate}
-                          </h6>
-                        </div>
-                      </NavLink>
-                    </div>
-                  </div>
-                </div>
+                      )
+                  )
+                )}
               </div>
             </div>
             <footer class="footer">

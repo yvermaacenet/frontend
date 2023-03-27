@@ -43,13 +43,14 @@ const User_List = () => {
     }
     get_user_list_by_role_name();
     async function get_user_list(resp) {
-      const result_user_list = await axios.get(
-        resp?.finance?.includes(LocalStorageData?.user_id)
-          ? "/get_user_list_by_on_boarding_counter/2"
-          : resp?.management?.includes(LocalStorageData?.user_id)
-          ? "/get_user_list_by_on_boarding_counter/4"
-          : `/user_list/${getStatus_code}`
-      );
+      // const result_user_list = await axios.get(
+      //   resp?.finance?.includes(LocalStorageData?.user_id)
+      //     ? `/get_user_list_by_on_boarding_counter/3/${getStatus_code}`
+      //     : resp?.management?.includes(LocalStorageData?.user_id)
+      //     ? `/get_user_list_by_on_boarding_counter/5/${getStatus_code}`
+      //     : `/user_list/${getStatus_code}`
+      // );
+      const result_user_list = await axios.get(`/user_list/${getStatus_code}`);
       const resp_user_list = result_user_list.data;
       console.log("resp_user_list", resp_user_list);
       setGetUserList(resp_user_list);
@@ -80,32 +81,41 @@ const User_List = () => {
                       class="btn btn-sm btn-inverse-info btn-fw ms-1"
                       onClick={() => setStatus_code("all_users")}
                     >
-                      All Users
+                      All
                     </button>
                     <button
                       type="button"
                       class="btn btn-sm btn-inverse-success btn-fw ms-1"
                       onClick={() => setStatus_code("active_users")}
                     >
-                      Active Users
+                      Active
                     </button>
                     <button
                       type="button"
                       class="btn btn-sm btn-inverse-danger btn-fw ms-1"
                       onClick={() => setStatus_code("deactive_users")}
                     >
-                      Deactive Users
+                      Deactivated
                     </button>
                     <button
                       type="button"
-                      class="btn btn-sm btn-outline-info btn-icon-text"
-                      onClick={() => setAddEventModal(true)}
-                      style={{ float: "right" }}
+                      class="btn btn-sm btn-inverse-primary btn-fw ms-1"
+                      onClick={() => setStatus_code("pending_onboarding_users")}
                     >
-                      <i class="mdi mdi-upload btn-icon-prepend"></i> Upload
-                      File
+                      Pending Onboarding
                     </button>
-
+                    {(roless?.admin?.includes(LocalStorageData?.user_id) ||
+                      roless?.hr?.includes(LocalStorageData?.user_id)) && (
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-info btn-icon-text"
+                        onClick={() => setAddEventModal(true)}
+                        style={{ float: "right" }}
+                      >
+                        <i class="mdi mdi-upload btn-icon-prepend"></i> Upload
+                        File
+                      </button>
+                    )}
                     {show
                       ? duplcates?.map((item) => {
                           return (
@@ -135,7 +145,14 @@ const User_List = () => {
               </div>
               <div class="row">
                 <div class="card">
-                  <div class="card-body">
+                  <div
+                    class="card-body"
+                    style={{
+                      maxWidth: "100%",
+                      overflow: "hidden",
+                      overflowX: "scroll",
+                    }}
+                  >
                     <table class="table table-striped">
                       <thead>
                         <tr>
@@ -149,7 +166,7 @@ const User_List = () => {
                           <th>Designation</th>
 
                           <th>Status</th>
-                          <th>Edit/Boarding</th>
+                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -196,41 +213,135 @@ const User_List = () => {
                               </td>
 
                               <td>
-                                <NavLink to={`/user_update/${value?._id}`}>
+                                {/* ================ Edit Button ============= */}
+                                {roless?.admin?.includes(
+                                  LocalStorageData?.user_id
+                                ) ||
+                                roless?.hr?.includes(
+                                  LocalStorageData?.user_id
+                                ) ? (
+                                  <NavLink to={`/user_update/${value?._id}`}>
+                                    <button
+                                      type="button"
+                                      class="btn btn-sm btn-inverse-dark btn-icon"
+                                      title="Edit"
+                                    >
+                                      <i class="mdi mdi-table-edit"></i>
+                                    </button>
+                                  </NavLink>
+                                ) : (
                                   <button
                                     type="button"
                                     class="btn btn-sm btn-inverse-dark btn-icon"
                                     title="Edit"
+                                    disabled
                                   >
                                     <i class="mdi mdi-table-edit"></i>
                                   </button>
-                                </NavLink>
-                                <NavLink to={`/on_boarding/${value?._id}`}>
+                                )}
+                                {/* ================ On Boarding Button ============= */}
+
+                                {roless?.admin?.includes(
+                                  LocalStorageData?.user_id
+                                ) ||
+                                roless?.hr?.includes(
+                                  LocalStorageData?.user_id
+                                ) ||
+                                (roless?.finance?.includes(
+                                  LocalStorageData?.user_id
+                                ) &&
+                                  value?.on_boarding_steper_counter >= 2) ||
+                                (roless?.management?.includes(
+                                  LocalStorageData?.user_id
+                                ) &&
+                                  value?.on_boarding_steper_counter >= 4) ? (
+                                  <NavLink to={`/on_boarding/${value?._id}`}>
+                                    <button
+                                      type="button"
+                                      class={`btn btn-sm ${
+                                        value?.on_boarding_status
+                                          ? "btn-inverse-success"
+                                          : value?.on_boarding_steper_counter >
+                                            0
+                                          ? "btn-inverse-warning"
+                                          : "btn-inverse-danger"
+                                      } btn-icon ms-2`}
+                                      title="Onboarding"
+                                    >
+                                      <i class="mdi mdi-airplane"></i>
+                                    </button>
+                                  </NavLink>
+                                ) : (
                                   <button
                                     type="button"
-                                    class="btn btn-sm btn-inverse-dark btn-icon ms-2"
+                                    class={`btn btn-sm ${
+                                      value?.on_boarding_status
+                                        ? "btn-inverse-success"
+                                        : value?.on_boarding_steper_counter > 0
+                                        ? "btn-inverse-warning"
+                                        : "btn-inverse-danger"
+                                    } btn-icon ms-2`}
                                     title="Onboarding"
+                                    disabled
                                   >
                                     <i class="mdi mdi-airplane"></i>
                                   </button>
-                                </NavLink>
-                                {value?.on_boarding_steper_counter === 6 &&
-                                  (roless?.admin?.includes(
+                                )}
+                                {/* ================ Off Boarding Button ============= */}
+
+                                {value?.on_boarding_status === true &&
+                                (roless?.admin?.includes(
+                                  LocalStorageData?.user_id
+                                ) ||
+                                  (roless?.hr?.includes(
                                     LocalStorageData?.user_id
-                                  ) ||
-                                    value?.off_boarding_steper_counter > 0) && (
-                                    <NavLink to={`/off_boarding/${value?._id}`}>
-                                      <button
-                                        type="button"
-                                        class="btn btn-sm btn-inverse-dark btn-icon ms-2"
-                                        title="Offboarding"
-                                      >
-                                        <i class="mdi mdi-airplane-off"></i>
-                                      </button>
-                                    </NavLink>
-                                  )}
+                                  ) &&
+                                    value?.off_boarding_steper_counter >= 1) ||
+                                  (roless?.management?.includes(
+                                    LocalStorageData?.user_id
+                                  ) &&
+                                    value?.off_boarding_steper_counter >=
+                                      2)) ? (
+                                  <NavLink to={`/off_boarding/${value?._id}`}>
+                                    <button
+                                      type="button"
+                                      class={`btn btn-sm ${
+                                        value?.off_boarding_status
+                                          ? "btn-inverse-success"
+                                          : value?.off_boarding_steper_counter >
+                                            0
+                                          ? "btn-inverse-warning"
+                                          : "btn-inverse-danger"
+                                      } btn-icon ms-2`}
+                                      title="Offboarding"
+                                      // style={{
+                                      //   display:
+                                      //     roless?.finance?.includes(
+                                      //       LocalStorageData?.user_id
+                                      //     ) && "none",
+                                      // }}
+                                      // disabled
+                                    >
+                                      <i class="mdi mdi-airplane-off"></i>
+                                    </button>
+                                  </NavLink>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    class={`btn btn-sm  btn-inverse-dark btn-icon ms-2`}
+                                    title="Offboarding"
+                                    // style={{
+                                    //   display:
+                                    //     roless?.finance?.includes(
+                                    //       LocalStorageData?.user_id
+                                    //     ) && "none",
+                                    // }}
+                                    disabled
+                                  >
+                                    <i class="mdi mdi-airplane-off"></i>
+                                  </button>
+                                )}
                               </td>
-                              <td></td>
                             </tr>
                           );
                         })}

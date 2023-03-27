@@ -137,6 +137,7 @@ const Off_Boarding = () => {
           await axios
             .put(`/user_update/${_id}`, {
               off_boarding_steper_counter: steperCounter,
+              off_boarding_status: true,
             })
             .then((res) => {
               return console.log(res?.data.message);
@@ -277,16 +278,17 @@ const Off_Boarding = () => {
                               return (
                                 <Step label={val?.label}>
                                   {inputData?.steper_counter <
-                                  val?.step_counter ? (
+                                    val?.step_counter &&
+                                  inputData?.step_counter === undefined ? (
                                     <div
                                       class="alert alert-warning alert-dismissible fade show"
                                       role="alert"
-                                      style={{
-                                        display:
-                                          val?.step_counter === 1
-                                            ? "none"
-                                            : "block",
-                                      }}
+                                      // style={{
+                                      //   display:
+                                      //     val?.step_counter === 1
+                                      //       ? "none"
+                                      //       : "block",
+                                      // }}
                                     >
                                       <i class="mdi mdi-alert-octagon me-1"></i>
                                       {val?.alert_warning_title}
@@ -301,12 +303,12 @@ const Off_Boarding = () => {
                                     <div
                                       class="alert alert-success alert-dismissible fade show"
                                       role="alert"
-                                      style={{
-                                        display:
-                                          val?.step_counter === 1
-                                            ? "none"
-                                            : "block",
-                                      }}
+                                      // style={{
+                                      //   display:
+                                      //     val?.step_counter === 1
+                                      //       ? "none"
+                                      //       : "block",
+                                      // }}
                                     >
                                       <i class="mdi mdi-check-circle-outline me-1"></i>
                                       {val?.alert_success_title}
@@ -511,10 +513,7 @@ const Off_Boarding = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <td>
-                                              {" "}
-                                              Important mails transferred{" "}
-                                            </td>
+                                            <td>Important mails transferred</td>
                                             <td>
                                               <div className="board">
                                                 <span>No</span>
@@ -824,10 +823,7 @@ const Off_Boarding = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <td>
-                                              {" "}
-                                              Office 365 account deletion{" "}
-                                            </td>
+                                            <td>Office 365 account deletion</td>
                                             <td>
                                               <div className="board">
                                                 <span>No</span>
@@ -1311,7 +1307,7 @@ const Off_Boarding = () => {
                             </button>
                           )}
                           {/* <!==========  Update & Save Button ============> */}
-                          {active > 1 && active < 3 && (
+                          {active >= 1 && active < 3 && (
                             <>
                               {inputData?._id ? (
                                 <>

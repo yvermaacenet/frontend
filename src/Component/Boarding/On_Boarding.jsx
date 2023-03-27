@@ -181,7 +181,7 @@ const On_Boarding = () => {
       alert_success_title: "This step has been completed from HR Department !!",
     },
     {
-      label: " Documents",
+      label: "Documents",
       component: Document,
       import_data: inputData,
       step_counter: 2,
@@ -420,16 +420,17 @@ const On_Boarding = () => {
                               return (
                                 <Step label={val.label}>
                                   {inputData?.steper_counter <
-                                  val?.step_counter ? (
+                                    val?.step_counter &&
+                                  inputData?.step_counter === undefined ? (
                                     <div
                                       class="alert alert-warning alert-dismissible fade show"
                                       role="alert"
-                                      style={{
-                                        display:
-                                          val?.step_counter === 1
-                                            ? "none"
-                                            : "block",
-                                      }}
+                                      // style={{
+                                      //   display:
+                                      //     val?.step_counter === 1
+                                      //       ? "none"
+                                      //       : "block",
+                                      // }}
                                     >
                                       <i class="mdi mdi-alert-octagon me-1"></i>
                                       {val?.alert_warning_title}
@@ -444,12 +445,12 @@ const On_Boarding = () => {
                                     <div
                                       class="alert alert-success alert-dismissible fade show"
                                       role="alert"
-                                      style={{
-                                        display:
-                                          val?.step_counter === 1
-                                            ? "none"
-                                            : "block",
-                                      }}
+                                      // style={{
+                                      //   display:
+                                      //     val?.step_counter === 1
+                                      //       ? "none"
+                                      //       : "block",
+                                      // }}
                                     >
                                       <i class="mdi mdi-check-circle-outline me-1"></i>
                                       {val?.alert_success_title}
@@ -2115,7 +2116,7 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 3
+                                                      ) && active > 2
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
@@ -2150,7 +2151,7 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 3
+                                                      ) && active > 2
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
@@ -2188,7 +2189,7 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 3
+                                                      ) && active > 2
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
@@ -2221,7 +2222,7 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 3
+                                                      ) && active > 2
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
@@ -2257,7 +2258,7 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 3
+                                                      ) && active > 2
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
@@ -2290,7 +2291,7 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 3
+                                                      ) && active > 2
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
@@ -2323,7 +2324,7 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 3
+                                                      ) && active > 2
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
@@ -2356,7 +2357,7 @@ const On_Boarding = () => {
                                                     disabled={
                                                       roless?.hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 3
+                                                      ) && active > 2
                                                         ? true
                                                         : roless?.management?.includes(
                                                             LocalStorageData?.user_id
@@ -2838,11 +2839,11 @@ const On_Boarding = () => {
                                                       disabled={
                                                         roless?.hr?.includes(
                                                           LocalStorageData?.user_id
-                                                        ) && active > 3
+                                                        ) && active > 2
                                                           ? true
                                                           : roless?.finance?.includes(
                                                               LocalStorageData?.user_id
-                                                            ) && active > 5
+                                                            ) && active > 4
                                                           ? true
                                                           : roless?.management?.includes(
                                                               LocalStorageData?.user_id
@@ -2877,11 +2878,11 @@ const On_Boarding = () => {
                                                       disabled={
                                                         roless?.hr?.includes(
                                                           LocalStorageData?.user_id
-                                                        ) && active > 3
+                                                        ) && active > 2
                                                           ? true
                                                           : roless?.finance?.includes(
                                                               LocalStorageData?.user_id
-                                                            ) && active > 5
+                                                            ) && active > 4
                                                           ? true
                                                           : roless?.management?.includes(
                                                               LocalStorageData?.user_id
@@ -2914,11 +2915,11 @@ const On_Boarding = () => {
                                                       disabled={
                                                         roless?.hr?.includes(
                                                           LocalStorageData?.user_id
-                                                        ) && active > 3
+                                                        ) && active > 2
                                                           ? true
                                                           : roless?.finance?.includes(
                                                               LocalStorageData?.user_id
-                                                            ) && active > 5
+                                                            ) && active > 4
                                                           ? true
                                                           : roless?.management?.includes(
                                                               LocalStorageData?.user_id
@@ -3336,17 +3337,6 @@ const On_Boarding = () => {
                                     ? "block"
                                     : "none",
                               }}
-                              disabled={
-                                roless?.management?.includes(
-                                  LocalStorageData?.user_id
-                                ) && active > 5
-                                  ? false
-                                  : roless?.admin?.includes(
-                                      LocalStorageData?.user_id
-                                    ) && active > 5
-                                  ? false
-                                  : true
-                              }
                             >
                               Submitte
                             </button>

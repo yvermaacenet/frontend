@@ -60,25 +60,25 @@ const Profile_Form = ({ multiselect_disabled, status_hide }) => {
       role: selectedList,
     });
   };
-  const onStatusChange = (status) => {
-    async function postStatus() {
-      const result = await axios
-        .put(`/user_activation/${_id}/${status}`)
-        .then((res) =>
-          res?.data
-            ? alert("Acoount has been activated !!")
-            : alert("Acoount has been deactivated !!")
-        );
-    }
-    postStatus();
-  };
+  // const onStatusChange = (status) => {
+  //   async function postStatus() {
+  //     const result = await axios
+  //       .put(`/user_activation/${_id}/${status}`)
+  //       .then((res) =>
+  //         res?.data
+  //           ? alert("Acoount has been activated !!")
+  //           : alert("Acoount has been deactivated !!")
+  //       );
+  //   }
+  //   postStatus();
+  // };
   const onUpdateButton = (e) => {
     e.preventDefault();
     async function updateData() {
       const result = await axios
-        .put(`/user_update/${_id}`, inputData)
+        .put(`/user_update/${_id}`, { ...inputData, status: checkedStatus })
         .then((res) => {
-          return alert(res?.data.message), navigate("/user_list");
+          return alert(res?.data.message), navigate("/user_list/all");
         })
         .catch((err) => console.log(err));
     }
@@ -167,10 +167,8 @@ const Profile_Form = ({ multiselect_disabled, status_hide }) => {
                         // onChange={(e) => onStatusChange(e, value?._id)}
                         checked={checkedStatus}
                         onChange={() => {
-                          return (
-                            setCheckedStatus(!checkedStatus),
-                            onStatusChange(!checkedStatus)
-                          );
+                          return setCheckedStatus(!checkedStatus);
+                          // onStatusChange(!checkedStatus)
                         }}
                       />
                       <span class="slider round"></span>
@@ -662,7 +660,7 @@ const Profile_Form = ({ multiselect_disabled, status_hide }) => {
           class="btn btn-sm btn-gradient-primary me-2"
           onClick={onUpdateButton}
         >
-          Submit
+          Update
         </button>
       </form>
     </>

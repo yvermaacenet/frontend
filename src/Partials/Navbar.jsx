@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -6,7 +6,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [cookies, setCookie, removeCookie] = useCookies();
-
+  const [state, setState] = useState(false);
+  const [menu, setMenu] = useState(false);
+  useEffect(() => {
+    document.body.classList.toggle("sidebar-icon-only");
+  }, [state]);
   return (
     <>
       <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -18,15 +22,17 @@ const Navbar = () => {
             <img src="../assets/images/logo-mini.svg" alt="logo" />
           </NavLink>
         </div>
+
         <div className="navbar-menu-wrapper d-flex align-items-stretch">
           <button
             className="navbar-toggler navbar-toggler align-self-center"
             type="button"
-            data-toggle="minimize"
+            data-bs-toggle="minimize"
+            onClick={() => setState(!state)}
           >
             <span className="mdi mdi-menu"></span>
           </button>
-          <div className="search-field d-none d-md-block">
+          {/* <div className="search-field d-none d-md-block">
             <form className="d-flex align-items-center h-100" action="#">
               <div className="input-group">
                 <div className="input-group-prepend bg-transparent">
@@ -39,7 +45,10 @@ const Navbar = () => {
                 />
               </div>
             </form>
-          </div>
+          </div> */}
+          {/* <div className="d-flex justify-content-center w-100 align-items-center">
+            <h2>Employee Tracker</h2>
+          </div> */}
           <ul className="navbar-nav navbar-nav-right">
             <li className="nav-item nav-profile dropdown">
               <a
@@ -91,7 +100,7 @@ const Navbar = () => {
                 <i className="mdi mdi-fullscreen" id="fullscreen-button"></i>
               </a>
             </li>
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <a
                 className="nav-link count-indicator dropdown-toggle"
                 id="messageDropdown"
@@ -158,8 +167,8 @@ const Navbar = () => {
                 <div className="dropdown-divider"></div>
                 <h6 className="p-3 mb-0 text-center">4 new messages</h6>
               </div>
-            </li>
-            <li className="nav-item dropdown">
+            </li> */}
+            {/* <li className="nav-item dropdown">
               <a
                 className="nav-link count-indicator dropdown-toggle"
                 id="notificationDropdown"
@@ -221,15 +230,17 @@ const Navbar = () => {
                 <div className="dropdown-divider"></div>
                 <h6 className="p-3 mb-0 text-center">See all notifications</h6>
               </div>
-            </li>
+            </li> */}
             <li className="nav-item nav-logout d-none d-lg-block">
               <NavLink
                 className="nav-link"
                 onClick={() => {
-                  localStorage.clear();
-                  removeCookie("Access_Token");
-                  navigate("/");
-                  // alert("");
+                  return (
+                    localStorage.clear(),
+                    removeCookie("Access_Token"),
+                    navigate("/")
+                    // alert("");
+                  );
                 }}
                 to="/"
               >
@@ -242,10 +253,13 @@ const Navbar = () => {
               </a>
             </li>
           </ul>
+
           <button
             className="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
             type="button"
-            data-toggle="offcanvas"
+            onClick={() =>
+              document.getElementById("sidebar").classList.toggle("active")
+            }
           >
             <span className="mdi mdi-menu"></span>
           </button>

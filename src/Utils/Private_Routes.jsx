@@ -18,8 +18,7 @@ const Private_Routes = ({ allowedRoles, children }) => {
   }, [cookies, navigate]);
 
   if (!isAuthorized) {
-    removeCookie("Access_Token");
-    return <Navigate to="/" />;
+    return removeCookie("Access_Token"), (<Navigate to="/" />);
   }
 
   return children;

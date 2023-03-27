@@ -15112,10 +15112,10 @@ code {
     linear,
     left top,
     right top,
-    from(#e7ebf0),
-    to(#868e96)
+    from(#c3cfde),
+    to(#4a5056)
   ) !important;
-  background: linear-gradient(to right, #e7ebf0, #868e96) !important;
+  background: linear-gradient(to right, #c3cfde, #4a5056) !important;
 }
 
 .bg-gradient-success {
@@ -15700,10 +15700,10 @@ code {
     linear,
     left top,
     right top,
-    from(#e7ebf0),
-    to(#868e96)
+    from(#c3cfde),
+    to(#4a5056)
   );
-  background: linear-gradient(to right, #e7ebf0, #868e96);
+  background: linear-gradient(to right, #c3cfde, #4a5056);
   color: #ffffff;
 }
 
@@ -16287,10 +16287,10 @@ code {
     linear,
     left top,
     right top,
-    from(#e7ebf0),
-    to(#868e96)
+    from(#c3cfde),
+    to(#4a5056)
   );
-  background: linear-gradient(to right, #e7ebf0, #868e96);
+  background: linear-gradient(to right, #c3cfde, #4a5056);
   color: #000000;
 }
 
@@ -16684,10 +16684,10 @@ code {
     linear,
     left top,
     right top,
-    from(#e7ebf0),
-    to(#868e96)
+    from(#c3cfde),
+    to(#4a5056)
   );
-  background: linear-gradient(to right, #e7ebf0, #868e96);
+  background: linear-gradient(to right, #c3cfde, #4a5056);
   border: 0;
   -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease;
@@ -16699,10 +16699,10 @@ code {
     linear,
     left top,
     right top,
-    from(#e7ebf0),
-    to(#868e96)
+    from(#c3cfde),
+    to(#4a5056)
   );
-  background: linear-gradient(to right, #e7ebf0, #868e96);
+  background: linear-gradient(to right, #c3cfde, #4a5056);
 }
 .btn-gradient-secondary:hover {
   opacity: 0.8;
@@ -17726,10 +17726,10 @@ code {
     linear,
     left top,
     right top,
-    from(#e7ebf0),
-    to(#868e96)
+    from(#c3cfde),
+    to(#4a5056)
   );
-  background: linear-gradient(to right, #e7ebf0, #868e96);
+  background: linear-gradient(to right, #c3cfde, #4a5056);
 }
 
 .form-check-success.form-check
@@ -19010,10 +19010,10 @@ dl li {
     linear,
     left top,
     right top,
-    from(#e7ebf0),
-    to(#868e96)
+    from(#c3cfde),
+    to(#4a5056)
   );
-  background: linear-gradient(to right, #e7ebf0, #868e96);
+  background: linear-gradient(to right, #c3cfde, #4a5056);
   color: #ffffff;
 }
 .navbar.navbar-secondary

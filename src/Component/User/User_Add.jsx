@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const User_Add = () => {
   const navigate = useNavigate();
   const [inputData, setInputData] = useState([]);
+
   const inputEvent = (event) => {
     const { name, value } = event.target;
     setInputData((preValue) => {

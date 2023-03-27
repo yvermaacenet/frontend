@@ -1,21 +1,12 @@
 import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { ImportScripts } from "../Utils/ImportScript";
 import ImportScript from "../Utils/ImportScript";
 
 const Sidebar = () => {
-  const scriptArrsy = [
-    "assets/js/misc.js",
-    "assets/js/off-canvas.js",
-    "assets/vendors/js/vendor.bundle.base.js",
-    "assets/vendors/chart.js/Chart.min.js",
-    "assets/js/jquery.cookie.js",
-    "assets/js/hoverable-collapse.js",
-    "assets/js/dashboard.js",
-    "assets/js/todolist.js",
-  ];
+  const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
+
+  const scriptArrsy = ["/assets/js/misc.js"];
   ImportScript(scriptArrsy);
-  // ImportScripts("../assets/js/off-canvas.js");
 
   return (
     <>
@@ -57,83 +48,97 @@ const Sidebar = () => {
               <i className="mdi mdi-home menu-icon"></i>
             </NavLink>
           </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              data-bs-toggle="collapse"
-              href="#ui-basic"
-              aria-expanded="false"
-              aria-controls="ui-basic"
-            >
-              <span class="menu-title">Users</span>
-              <i class="menu-arrow"></i>
-              <i class="mdi mdi-account-multiple-outline menu-icon"></i>
-            </a>
-            <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <ul className="nav flex-column sub-menu">
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/user_list/all_users">
-                      Users List
-                    </NavLink>
+          {LocalStorageData?.role?.map(
+            (val) =>
+              val?.name === "Admin" && (
+                <>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      data-bs-toggle="collapse"
+                      href="#ui-basic"
+                      aria-expanded="false"
+                      aria-controls="ui-basic"
+                    >
+                      <span class="menu-title">Users</span>
+                      <i class="menu-arrow"></i>
+                      <i class="mdi mdi-account-multiple-outline menu-icon"></i>
+                    </a>
+                    <div class="collapse" id="ui-basic">
+                      <ul class="nav flex-column sub-menu">
+                        <ul className="nav flex-column sub-menu">
+                          <li className="nav-item">
+                            <NavLink
+                              className="nav-link"
+                              to="/user_list/all_users"
+                            >
+                              Users List
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </ul>
+                    </div>
                   </li>
-                </ul>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              data-bs-toggle="collapse"
-              href="#ui-role"
-              aria-expanded="false"
-              aria-controls="ui-basic"
-            >
-              <span class="menu-title">Department</span>
-              <i class="menu-arrow"></i>
-              <i class="mdi mdi-crosshairs-gps menu-icon"></i>
-            </a>
-            <div class="collapse" id="ui-role">
-              <ul class="nav flex-column sub-menu">
-                <ul className="nav flex-column sub-menu">
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/Department_list">
-                      Department List
-                    </NavLink>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      data-bs-toggle="collapse"
+                      href="#ui-role"
+                      aria-expanded="false"
+                      aria-controls="ui-basic"
+                    >
+                      <span class="menu-title">Department</span>
+                      <i class="menu-arrow"></i>
+                      <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                    </a>
+                    <div class="collapse" id="ui-role">
+                      <ul class="nav flex-column sub-menu">
+                        <ul className="nav flex-column sub-menu">
+                          <li className="nav-item">
+                            <NavLink className="nav-link" to="/department_list">
+                              Department List
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </ul>
+                    </div>
                   </li>
-                </ul>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              data-bs-toggle="collapse"
-              href="#ui-cabin"
-              aria-expanded="false"
-              aria-controls="ui-basic"
-            >
-              <span class="menu-title">Cabin</span>
-              <i class="menu-arrow"></i>
-              <i class="mdi mdi-home-modern menu-icon"></i>
-            </a>
-            <div class="collapse" id="ui-cabin">
-              <ul class="nav flex-column sub-menu">
-                <ul className="nav flex-column sub-menu">
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/cabin_list">
-                      Cabin List
-                    </NavLink>
+                  <li class="nav-item">
+                    <a
+                      class="nav-link"
+                      data-bs-toggle="collapse"
+                      href="#ui-cabin"
+                      aria-expanded="false"
+                      aria-controls="ui-basic"
+                    >
+                      <span class="menu-title">Cabin</span>
+                      <i class="menu-arrow"></i>
+                      <i class="mdi mdi-home-modern menu-icon"></i>
+                    </a>
+                    <div class="collapse" id="ui-cabin">
+                      <ul class="nav flex-column sub-menu">
+                        <ul className="nav flex-column sub-menu">
+                          <li className="nav-item">
+                            <NavLink className="nav-link" to="/cabin_list">
+                              Cabin List
+                            </NavLink>
+                          </li>
+                          <li className="nav-item">
+                            <NavLink
+                              className="nav-link"
+                              to="/cabin_slot_booking"
+                            >
+                              Cabin Booking
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </ul>
+                    </div>
                   </li>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/cabin_slot_booking">
-                      Cabin Booking
-                    </NavLink>
-                  </li>
-                </ul>
-              </ul>
-            </div>
-          </li>
+                </>
+              )
+          )}
+
           {/* <li class="nav-item">
             <a
               class="nav-link"

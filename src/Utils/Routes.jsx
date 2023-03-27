@@ -22,7 +22,7 @@ const Routes_Array = [
   {
     path: "/user_list/:status_code",
     component: User_List,
-    allowedRoles: ["Admin", "Employee"],
+    allowedRoles: ["Admin", "HR", "Finance", "Management"],
   },
   {
     path: "/user_add",
