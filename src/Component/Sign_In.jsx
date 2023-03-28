@@ -44,6 +44,60 @@ const Sign_In = () => {
   if (cookies?.Access_Token) {
     return <Navigate to={"/dashboard"} />;
   }
+  // ============Working with ZOHO=========
+  const CLIENT_ID = "1000.TR1UKH83PJ5ZE49A1XBMG41T92UN6H";
+  const CLIENT_SECRET = "8a85ec1fc376bd3e7e58756aaa82fc48a4e741f98b";
+  const AUTH_URL = "http://localhost:3000/dashboard";
+  const TOKEN_URL = "https://accounts.zoho.in/oauth/v2/token";
+  const SCOPE = "ZohoPeople.profile.read,ZohoPeople.forms.read";
+  const REDIRECT_URL = "http://localhost:3000/dashboard/"; // your redirect URL
+  const GRANT_TYPE = "authorization_code";
+
+  const authenticate = async () => {
+    alert("1");
+    const authUrl = `https://accounts.zoho.com/oauth/v2/auth?scope=ZOHOPEOPLE.forms.ALL&client_id=${CLIENT_ID}&response_type=code&access_type=offline&redirect_uri=${REDIRECT_URL}`;
+
+    // const authUrl = `${AUTH_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${SCOPE}`;
+    const response = await fetch(authUrl, {
+      method: "GET",
+      redirect: "follow",
+    });
+
+    // Redirect the user to the Zoho login page
+    window.location.href = response.url;
+  };
+
+  //   // Step 2: Get the access token
+  //   const getToken = async (code) => {
+  //     const tokenUrl = `${TOKEN_URL}?grant_type=${GRANT_TYPE}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URL}&code=${code}`;
+
+  //   const response = await fetch(tokenUrl, {
+  //     method: 'POST',
+  //     redirect: 'follow',
+  //   });
+
+  //   const { access_token } = await response.json();
+
+  //   console.log("access token")
+  //   return access_token;
+  // };
+
+  // Step 3: Make an API request
+  const getEmployeeDetails = async (accessToken) => {
+    const url =
+      "https://people.zoho.com/people/api/forms/P_EmployeeView/records";
+    const options = {
+      headers: {
+        Authorization: `Zoho-oauthtoken ${accessToken}`,
+      },
+    };
+
+    const response = await fetch(url, options);
+    const data = await response.json();
+    return data;
+  };
+
+  // ============End Working with ZOHO=========
   return (
     <div className="container-scroller">
       <div className="container-fluid page-body-wrapper full-page-wrapper">
@@ -99,6 +153,20 @@ const Sign_In = () => {
                       type="submit"
                     >
                       SIGN IN
+                    </button>
+                    <button
+                      className="btn btn-sm btn-dark ms-2"
+                      onClick={async () => {
+                        try {
+                          const code = await authenticate();
+                          // const accessToken = await getToken(code);
+                          // const employeeDetails = await getEmployeeDetails(accessToken);
+                        } catch (error) {
+                          console.error(error);
+                        }
+                      }}
+                    >
+                      Login With ZOHO
                     </button>
                   </div>
                   <div className="my-2 d-flex justify-content-between align-items-center">
