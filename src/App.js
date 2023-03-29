@@ -7,6 +7,7 @@ import Private_Routes from "./Utils/Private_Routes";
 import Routes_Array from "./Utils/Routes";
 import $ from "jquery";
 import Form12BB from "./Component/Form12BB";
+import Get_Form12bb_Data from "./Component/Get_Form12bb_Data";
 function App() {
   return (
     <>
@@ -25,7 +26,12 @@ function App() {
           <Route exact path="/" element={<Sign_In />} />
           {/* <Route exact path="*" element={<Sign_In />} /> */}
           <Route exact path="/sign_up" element={<Sign_Up />} />
-          <Route exact path="/Form12BB" element={<Form12BB />} />
+          <Route exact path="/form12bb" element={<Form12BB />} />
+          <Route
+            exact
+            path="/get_form12bb_data"
+            element={<Get_Form12bb_Data />}
+          />
         </Routes>
       </Router>
     </>

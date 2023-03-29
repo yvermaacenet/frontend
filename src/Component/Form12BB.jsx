@@ -6,6 +6,7 @@ import classNames from "classnames";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { BaseURL, headersCors } from "../Utils/AxiosApi";
 
 const Form12BB = () => {
   const navigate = useNavigate();
@@ -59,7 +60,9 @@ const Form12BB = () => {
       deductions,
     };
     async function postData() {
-      const result = await axios.post(`form_12_bb`, jsonDate);
+      const result = await axios.post(`${BaseURL}/form_12_bb`, jsonDate, {
+        headers: headersCors,
+      });
       const resp = result.data;
       if (resp?.message === "updated") {
         alert("Created");
@@ -254,6 +257,7 @@ const Form12BB = () => {
       name: "Disabled Individuals",
     },
   ];
+
   return (
     <>
       <div className="container-scroller">
@@ -525,13 +529,19 @@ const Form12BB = () => {
                                 ?.message
                             }
                           </small>
+                          <small>
+                            <span className="text-danger ">Note</span> :
+                            Permanent Account Number shall be furnished if the
+                            aggregate rent paid during the previous year exceeds
+                            one lakh rupees.
+                          </small>
                         </div>
                       </>
                     )}
 
                     <div class="form-group row">
                       <label class="col-sm-6 col-form-label">
-                        Leave travel concessions or assistance
+                        Leave travel concessions or assistance(LTA)
                       </label>
                       <div class="col-sm-3">
                         <div class="form-check">

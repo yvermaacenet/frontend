@@ -119,7 +119,7 @@ const Sign_In = () => {
                   <div className="my-2 d-flex justify-content-between align-items-center">
                     <div className="form-check">
                       <label className="form-check-label text-muted">
-                        <input type="checkbox" className="form-check-input" />{" "}
+                        <input type="checkbox" className="form-check-input" />
                         Keep me signed in
                       </label>
                     </div>
@@ -143,6 +143,27 @@ const Sign_In = () => {
                     </NavLink>
                   </div>
                 </form>
+                <div className="mt-3 border bg-light p-3">
+                  <small>Click here for 12bb Form </small>
+                  <ul class="list-arrow fw-bolder">
+                    <li>
+                      <NavLink
+                        to="get_form12bb_data"
+                        className="text-success ms-2 text-decoration-none fw-lighter fs-6"
+                      >
+                        Download Form 12BB Data
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="form12bb"
+                        className="text-success ms-2 text-decoration-none fw-lighter fs-6"
+                      >
+                        Form 12BB
+                      </NavLink>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
