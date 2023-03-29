@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { NavLink, urlParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Footer from "../Partials/Footer";
 import Navbar from "../Partials/Navbar";
 import Page_Header from "../Partials/Page_Header";
@@ -11,6 +11,9 @@ import { Pie, Doughnut } from "react-chartjs-2";
 ChartJS.register(ArcElement, Tooltip, Legend);
 // import {ReactApexChart} from "react-apexcharts";
 const Dashboard = () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
+  console.log("eqew", code);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [userCreationDate, setUserCreationDate] = useState();
   const [cabinSlotBookingCreationDate, setCabinSlotBookingCreationDate] =
@@ -101,7 +104,6 @@ const Dashboard = () => {
         .catch((err) => console.log(err));
     }
     get_counterList();
-    sendCode();
   }, []);
   const cardArray = [
     // {
@@ -156,24 +158,58 @@ const Dashboard = () => {
       card_allowed_access: ["Employee"],
     },
   ];
-  // const data = {
-  //   labels: ["Active", "Deactivated"],
-  //   datasets: [
-  //     {
-  //       label: "# of Votes",
-  //       data: [3, 7],
-  //       backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
-  //       borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
-  async function sendCode() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
-    const result = await axios.post(`sign_in_zoho_get_access_token/${code}`);
-  }
+  const data = {
+    labels: ["Active", "Deactivated"],
+    datasets: [
+      {
+        label: "# of Votes",
+        data: [3, 7],
+        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
+        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  };
+  // ==================
+  const CLIENT_ID = "1000.5T8DM01JDTNRYUPXI0I96CA5WD7YTY";
+  const CLIENT_SECRET = "9a85b7eca3f270d6427e4e72005bb3eb2ee6076d06";
+  const AUTH_URL = "http://localhost:3000/dashboard";
+  const TOKEN_URL = "https://accounts.zoho.in/oauth/v2/token";
+  const SCOPE = "ZohoPeople.profile.ALL,ZohoPeople.forms.ALL";
+  const REDIRECT_URL = "http://localhost:3000/dashboard"; // your redirect URL
+  const GRANT_TYPE = "authorization_code";
 
+  const [accessToken, setAccessToken] = useState("");
+  const getAccountDetails = async (abc) => {
+    try {
+      const response = await fetch(
+        "https://people.zoho.com/people/api/forms/P_EmployeeView/records",
+        {
+          headers: {
+            Authorization: `Zoho-oauthtoken ${abc}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data); // Log the account details to the console
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Step 2: Get the access token
+  const getToken = async () => {
+    const tokenUrl = `${TOKEN_URL}?grant_type=${GRANT_TYPE}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&redirect_uri=${REDIRECT_URL}&code=${code}`;
+    const response = await fetch(tokenUrl, {
+      method: "POST",
+      redirect: "follow",
+    });
+    const res = await response.json();
+    getAccountDetails(res?.access_token);
+    console.log("res", res.access_token);
+  };
+  getToken();
+  // ==================
   return (
     <>
       <div class="container-scroller">
@@ -190,7 +226,9 @@ const Dashboard = () => {
 
               <div class="row">
                 <div class="col-md-3 stretch-card grid-margin">
-                  <div class="card   card-img-holder text-white">
+                  <Pie data={data} />
+
+                  {/* <div class="card card-img-holder text-white">
                     <div class="card-body">
                       <NavLink to="/user_list/active_users">
                         <div>
@@ -203,18 +241,12 @@ const Dashboard = () => {
                               style={{ float: "right" }}
                             ></i>
                           </h4>
-                          <h1 class="mb-4 text-center">
-                            <ReactApexChart
-                              options={state.options}
-                              series={state.series}
-                              type="pie"
-                              // width={380}
-                            />
-                          </h1>
+                          <h1 class="mb-4 text-center"></h1>
                         </div>
                       </NavLink>
+                      <Pie data={data} />
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div class="col-md-3 stretch-card grid-margin">
                   <div class="card bg-gradient-info card-img-holder text-white">

@@ -318,3 +318,123 @@ export const editJobsValidation = yup.object({
   display_order: yup.string().required("Please Enter Display Order "),
   display_date: yup.string().required("Please Choose date "),
 });
+export const form12bb_validation = yup.object({
+  /*=========> Login Information Validation ==========>*/
+  name: yup.string().required("This field is required"),
+  address: yup.string().required("This field is required"),
+  permanent_account_number_of_the_employee: yup
+    .string()
+    .required("This field is required")
+    .min(10, "This field must be equal to 10 digits")
+    .max(10, "This field must be equal to 10 digits")
+    .matches(
+      /^[a-zA-Z0-9_\s]+$/,
+      "special Characters are not allowed for this field"
+    ),
+
+  houseRentAllowance: yup.string().required("This field is required"),
+
+  rent_paid_to_the_landlord: yup
+    .string()
+    .when("houseRentAllowance", (val, schema) => {
+      if (val[0] === "true") {
+        return yup
+          .string()
+          .required("This field is required")
+          .matches(/^[0-9]+$/, "This field must be only digits (0-9)");
+      } else return yup.string().notRequired();
+    }),
+  name_of_the_landlord: yup
+    .string()
+    .when("houseRentAllowance", (val, schema) => {
+      if (val[0] === "true") {
+        return yup.string().required("This field is required");
+      } else return yup.string().notRequired();
+    }),
+  address_of_the_landlord: yup
+    .string()
+    .when("houseRentAllowance", (val, schema) => {
+      if (val[0] === "true") {
+        return yup.string().required("This field is required");
+      } else return yup.string().notRequired();
+    }),
+  permanent_account_number_of_the_landloard: yup
+    .string()
+    .when("houseRentAllowance", (val, schema) => {
+      if (val[0] === "true") {
+        return yup.string().required("This field is required");
+      } else return yup.string().notRequired();
+    })
+    .min(10, "This field must be equal to 10 digits")
+    .max(10, "This field must be equal to 10 digits")
+    .matches(
+      /^[a-zA-Z0-9_\s]+$/,
+      "special Characters are not allowed for this field"
+    ),
+  leavetravelconcessionsorassistance: yup
+    .string()
+    .required("This field is required"),
+
+  leave_travel_concessions_or_assistance_amount: yup
+    .string()
+    .when("leavetravelconcessionsorassistance", (val, schema) => {
+      if (val[0] === "true") {
+        return yup
+          .string()
+          .required("This field is required")
+          .matches(/^[0-9]+$/, "This field must be only digits (0-9)");
+      } else return yup.string().notRequired();
+    }),
+
+  deductionofinterestonborrowing: yup
+    .string()
+    .required("This field is required"),
+
+  interest_payable_paid_to_the_lender: yup
+    .string()
+    .when("deductionofinterestonborrowing", (val, schema) => {
+      console.log("sdcdscdcdc", val);
+      if (val[0] === "true") {
+        return yup
+          .string()
+          .required("This field is required")
+          .matches(/^[0-9]+$/, "This field must be only digits (0-9)");
+      } else return yup.string().notRequired();
+    }),
+  name_of_the_lander: yup
+    .string()
+    .when("deductionofinterestonborrowing", (val, schema) => {
+      console.log("sdcdscdcdc", val);
+      if (val[0] === "true") {
+        return yup.string().required("This field is required");
+      } else return yup.string().notRequired();
+    }),
+  address_of_the_lander: yup
+    .string()
+    .when("deductionofinterestonborrowing", (val, schema) => {
+      console.log("sdcdscdcdc", val);
+      if (val[0] === "true") {
+        return yup.string().required("This field is required");
+      } else return yup.string().notRequired();
+    }),
+  permanent_account_number_of_the_lander: yup
+    .string()
+    .when("deductionofinterestonborrowing", (val, schema) => {
+      console.log("sdcdscdcdc", val);
+      if (val[0] === "true") {
+        return yup.string().required("This field is required");
+      } else return yup.string().notRequired();
+    })
+    .min(10, "This field must be equal to 10 digits")
+    .max(10, "This field must be equal to 10 digits")
+    .matches(
+      /^[a-zA-Z0-9_\s]+$/,
+      "special Characters are not allowed for this field"
+    ),
+  father_name: yup.string().required("This field is required"),
+  place: yup.string().required("This field is required"),
+  designation: yup.string().required("This field is required"),
+  // section: yup.string().required("This field is required"),
+  // section_type: yup.string().required("This field is required"),
+  // section_amount: yup.string().required("This field is required"),
+});

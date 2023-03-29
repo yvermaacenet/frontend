@@ -15,7 +15,7 @@ import Profile_Update from "../Component/User/Profile_Update";
 const Routes_Array = [
   //   <!================= User ==================>
   {
-    path: "/dashboard",
+    path: "/dashboard/*",
     component: Dashboard,
     allowedRoles: ["Admin", "Employee"],
   },

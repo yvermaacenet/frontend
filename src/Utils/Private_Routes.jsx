@@ -11,15 +11,15 @@ const Private_Routes = ({ allowedRoles, children }) => {
   const role = LocalStorageData?.role.filter((val) => user.push(val.name));
   const isAuthorized = allowedRoles?.some((role) => user?.includes(role));
 
-  useEffect(() => {
-    if (!cookies["Access_Token"]) {
-      navigate("/");
-    }
-  }, [cookies, navigate]);
+  // useEffect(() => {
+  //   if (!cookies["Access_Token"]) {
+  //     navigate("/");
+  //   }
+  // }, [cookies, navigate]);
 
-  if (!isAuthorized) {
-    return removeCookie("Access_Token"), (<Navigate to="/" />);
-  }
+  // if (!isAuthorized) {
+  //   return removeCookie("Access_Token"), (<Navigate to="/" />);
+  // }
 
   return children;
 };
