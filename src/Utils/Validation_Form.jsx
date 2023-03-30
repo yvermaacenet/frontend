@@ -442,5 +442,17 @@ export const form12bb_validation = yup.object({
 });
 
 export const form_flexible_validation = yup.object({
+  email: yup
+    .string()
+    .required("This field is required")
+    .email("Email should be valid and contain @")
+    .matches(
+      /[A-Za-z0-9._%+-]+@+(acenet.io|[A-Za-z0-9._%+-])$/,
+      "Please enter valid email id"
+    ),
+  emp_id: yup
+    .string()
+    .required("This field is required")
+    .matches(/^\d*$/, "Employe id must be only numeric"),
   vpf_apply: yup.string().required("This field is required"),
 });

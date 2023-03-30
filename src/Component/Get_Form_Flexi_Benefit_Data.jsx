@@ -61,7 +61,7 @@ const Get_Form_Flexi_Benefit_Data = () => {
           <div class="grid-margin stretch-card w-75">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Form 12BB Data</h4>
+                <h4 class="card-title">Flexi Form Data</h4>
                 {/* <p class="card-description">
                 Add class <code>.table</code>
               </p> */}

@@ -96,29 +96,28 @@ const Flexible_Benefit_Plan = () => {
             <div className="col-lg-9 mx-auto">
               <div className="auth-form-light text-left p-5">
                 <h2 className="text-center">
-                  Declaration - Flexible Benefit Plan{" "}
+                  Declaration - Flexible Benefit Plan
                 </h2>
 
                 <h6 className="font-weight-light text-center">
                   (See rule 26C)
                 </h6>
                 <div className="text-end mb-4">
-                  <button className="btn btn-success">
-                    <NavLink
-                      to="/get_flexi_form_data"
-                      className="text-light ms-2 text-decoration-none fw-lighter fs-6"
-                    >
+                  <NavLink
+                    to="/get_flexi_form_data"
+                    className="text-light ms-2 text-decoration-none fw-lighter fs-6"
+                  >
+                    <button className="btn btn-success">
                       Download Flexi Form Data
-                    </NavLink>
-                  </button>
-                  <button className="btn btn-success ms-3">
-                    <NavLink
-                      to="/form12bb"
-                      className="text-light ms-2 text-decoration-none fw-lighter fs-6"
-                    >
-                      12BB Form
-                    </NavLink>
-                  </button>
+                    </button>
+                  </NavLink>
+
+                  <NavLink
+                    to="/form12bb"
+                    className="text-light ms-2 text-decoration-none fw-lighter fs-6"
+                  >
+                    <button className="btn btn-success ms-3">12BB Form</button>
+                  </NavLink>
                 </div>
 
                 <form
@@ -127,39 +126,64 @@ const Flexible_Benefit_Plan = () => {
                 >
                   <div className="form-group">
                     <label for="exampleInputUsername1">Name</label>
-
+                    <span style={style}> *</span>
                     <input
                       name="name"
                       onChange={handleInput}
                       type="text"
-                      className="form-control form-control-sm"
+                      className={classNames("form-control form-control-sm", {
+                        "is-invalid": errors.vpf_apply,
+                      })}
+                      {...register("vpf_apply", {
+                        value: inputData?.vpf_apply,
+                      })}
                       id="exampleInputUsername1"
                       placeholder="Name"
                     />
+                    <small class="invalid-feedback">
+                      {errors.vpf_apply?.message}
+                    </small>
                   </div>
                   <div className="form-group">
                     <label for="exampleInputUsername1">Email</label>
-
+                    <span style={style}> *</span>
                     <input
                       name="email"
                       onChange={handleInput}
                       type="text"
-                      className="form-control form-control-sm"
+                      className={classNames("form-control form-control-sm", {
+                        "is-invalid": errors.email,
+                      })}
+                      {...register("email", {
+                        value: inputData?.email,
+                      })}
                       id="exampleInputUsername1"
                       placeholder="Name"
                     />
+                    <small class="invalid-feedback">
+                      {errors.email?.message}
+                    </small>
                   </div>
                   <div className="form-group">
                     <label for="exampleInputUsername1">Employee Id</label>
-
+                    <span style={style}> *</span>
                     <input
                       name="emp_id"
                       onChange={handleInput}
                       type="text"
-                      className="form-control form-control-sm"
+                      className={classNames("form-control form-control-sm", {
+                        "is-invalid": errors.emp_id,
+                      })}
+                      {...register("emp_id", {
+                        value: inputData?.emp_id,
+                      })}
                       id="exampleInputUsername1"
                       placeholder="Name"
+                      maxLength={4}
                     />
+                    <small class="invalid-feedback">
+                      {errors.emp_id?.message}
+                    </small>
                   </div>
 
                   <div className="form-group">
@@ -231,8 +255,8 @@ const Flexible_Benefit_Plan = () => {
                       })}
                     >
                       <option value=""> -- select one -- </option>
-                      <option value="no">NO</option>
-                      <option value="yes">YES</option>
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
                     </select>
                     <small class="invalid-feedback">
                       {errors.vpf_apply?.message}
@@ -246,7 +270,6 @@ const Flexible_Benefit_Plan = () => {
                         <div className="row">
                           <div className="col-4">
                             <label htmlFor="">
-                              {" "}
                               Children allowance <span>(Max. 2)</span>
                             </label>
                           </div>
@@ -263,12 +286,13 @@ const Flexible_Benefit_Plan = () => {
                             </select>
                           </div>
                           <div className="col-4">
-                            Total Allowance{" "}
+                            Total Allowance:
                             <span className="ms-3 fw-bold">
                               {inputData?.children_allowance === undefined
                                 ? 0 * 100
                                 : inputData?.children_allowance * 100}{" "}
                             </span>
+                            Per Month
                           </div>
                         </div>
                       </div>
