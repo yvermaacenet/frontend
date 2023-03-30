@@ -9,13 +9,53 @@ import { useForm } from "react-hook-form";
 const Flexible_Benefit_Plan = () => {
   const navigate = useNavigate();
   const positions = {
-    hr: ["HR Manager", "HR Executive", "HR Assistant"],
-    business: [
-      "Business Analyst",
-      "Management Consultant",
-      "Marketing Specialist",
+    hr: [
+      "Executive -HR & Ops",
+      "Sr. Executive-HR & Ops",
+      "Lead Executive -HR & Ops",
+      "Assistant Manager -HR & Ops",
+      "Manager -HR & Ops",
+      "Associate Vice President -HR & Ops",
+      "Vice President -HR& Ops",
+      "Associate Director -HR & Ops",
+      "Director -HR & Ops",
+      "CXO/Managing Partner",
     ],
-    technology: ["Software Engineer", "Web Developer", "Data Analyst"],
+    business: [
+      "Analyst Consulting",
+      "Associate Consultant",
+      "Consultant",
+      "Senior Consultant",
+      "Managing Consultant",
+      "Principal Consultant",
+      "Senior Principal Consultant",
+      "Associate Partner",
+      "Partner",
+      "CXO/Managing Partner",
+    ],
+    technology: [
+      "Junior Software Engineer",
+      "Software Engineer",
+      "Senior Software Engineer",
+      "Lead-Technology/Associate project Manager-Technology",
+      "Manger Technology",
+      "Associate Vice-President Technology",
+      "Vice-President Technology",
+      "Director Technology",
+      "CXO/Managing Partner",
+    ],
+    management: [
+      "Analyst",
+      "Associate Vice President-Program Management ",
+      "Vice President-Program Management",
+      "Associate Director-Program Management",
+      "Director-Program Management",
+      "CXO/Managing Partner",
+      "Associate Project Management /Senior Business Analyst",
+      "Project Manager/ Managing Consultant",
+      "Business Analyst",
+      "Associate BA",
+    ],
   };
 
   const [selectedBand, setselectedBand] = useState("band_1");
@@ -72,12 +112,7 @@ const Flexible_Benefit_Plan = () => {
       });
       console.log(jsonDate);
       const resp = result.data;
-      if (resp?.message === "updated") {
-        alert("Created");
-        setInputData([]);
-        navigate("/");
-        // window.location.reload();
-      }
+      alert(resp.message);
       console.log(jsonDate);
     }
     postData();
@@ -217,7 +252,8 @@ const Flexible_Benefit_Plan = () => {
                     >
                       <option value="hr">HR</option>
                       <option value="business">Business Consulting</option>
-                      <option value="technology">Technology</option>
+                      <option value="technology">Technology Consulting</option>
+                      <option value="management">Management</option>
                     </select>
                   </div>
                   <div className="form-group">
@@ -320,14 +356,24 @@ const Flexible_Benefit_Plan = () => {
                               }
                             />
                           </div>
+                          <div className="col-4 text-danger">
+                            {selectedBand === "band_2"
+                              ? "Max Allowance 2000 "
+                              : selectedBand === "band_3"
+                              ? "Max Allowance 3000 "
+                              : selectedBand === "band_4"
+                              ? "Max Allowance 5000 "
+                              : ""}
+                          </div>
                         </div>
                       </div>
 
                       <div className="form-group">
                         <div className="row">
-                          <div className="col-6">
+                          <div className="col-4">
                             <label htmlFor="">Fuel</label>
-
+                          </div>
+                          <div className="col-4">
                             <input
                               onChange={handleInput}
                               name="fuel_allowance"
@@ -345,10 +391,24 @@ const Flexible_Benefit_Plan = () => {
                               }
                             />
                           </div>
-                          {selectedBand === "band_4" ? (
-                            <div className="col-6">
+                          <div className="col-4 text-danger">
+                            {selectedBand === "band_2"
+                              ? "Max Allowance 3000 "
+                              : selectedBand === "band_3"
+                              ? "Max Allowance 5000 "
+                              : selectedBand === "band_4"
+                              ? "Max Allowance 10000 "
+                              : ""}
+                          </div>
+                        </div>
+                      </div>
+                      {selectedBand === "band_4" ? (
+                        <div className="form-group">
+                          <div className="row">
+                            <div className="col-4">
                               <label htmlFor="">Driver</label>
-
+                            </div>
+                            <div className="col-4">
                               <input
                                 type="number"
                                 name="driver_allowance"
@@ -357,11 +417,16 @@ const Flexible_Benefit_Plan = () => {
                                 max="8000"
                               />
                             </div>
-                          ) : (
-                            ""
-                          )}
+                            <div className="col-4 text-danger">
+                              {selectedBand === "band_4"
+                                ? "Max Allowance 8000 "
+                                : ""}
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        ""
+                      )}
 
                       <div className="form-group">
                         <div className="row">
@@ -386,6 +451,15 @@ const Flexible_Benefit_Plan = () => {
                                   : ""
                               }
                             />
+                          </div>
+                          <div className="col-4 text-danger">
+                            {selectedBand === "band_2"
+                              ? "Max Allowance 2000 "
+                              : selectedBand === "band_3"
+                              ? "Max Allowance 3000 "
+                              : selectedBand === "band_4"
+                              ? "Max Allowance 5000 "
+                              : ""}
                           </div>
                         </div>
                       </div>
@@ -412,6 +486,15 @@ const Flexible_Benefit_Plan = () => {
                                   : ""
                               }
                             />
+                          </div>
+                          <div className="col-4 text-danger">
+                            {selectedBand === "band_2"
+                              ? "Max Allowance 1500 "
+                              : selectedBand === "band_3"
+                              ? "Max Allowance 2000 "
+                              : selectedBand === "band_4"
+                              ? "Max Allowance 2500 "
+                              : ""}
                           </div>
                         </div>
                       </div>
