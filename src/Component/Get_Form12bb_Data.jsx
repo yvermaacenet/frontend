@@ -11,53 +11,43 @@ const Get_Form12bb_Data = () => {
       const result = await axios.get(`form_12_bb`);
       const resp = result.data;
       setForm12bbdata(resp);
-      //   console.log(resp);
     }
     getData();
   }, []);
-  const ded = [
-    {
-      name: "dada",
-      father_name: "fsfds",
-      place: "fsfsfsd",
-      address: "ddada",
-      financial_year: "2023-2024",
-      permanent_account_number_of_the_employee: "1234567890",
-      rent_paid_to_the_landlord: 1234567890,
-      name_of_the_landlord: "",
-      address_of_the_landlord: "sdadad",
-      permanent_account_number_of_the_landloard: "1234567890I",
-    },
-  ];
-  const ded2 = getForm12bbdatabyid.deductions;
 
-  //   const mergedData = ded.concat(ded2);
-  //   const worksheet = XLSX.utils.json_to_sheet(mergedData);
-  //   const workbook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
-  //   const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-  //   const downloadExcel = () => {
-  //     const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  //     const fileName = "users.xlsx";
-  //     saveAs(blob, fileName);
-  //   };
   const clickbuttondata = async (id) => {
     const result = await axios.get(`form_12_bb/${id}`);
     const resp = result.data[0];
     console.log(resp);
-    // setForm12bbdatabyid(resp);
     const ded = [
       {
-        name: resp.name,
-        father_name: resp.father_name,
-        place: resp.place,
+        Name: resp.name,
+        "Fathers Name": resp.father_name,
+        Address: resp.address,
+        PAN: resp.permanent_account_number_of_the_employee,
+        Place: resp.place,
+        "Financial Year": resp.financial_year,
+        "Rent Paid to the landlord": resp.rent_paid_to_the_landlord,
+        "Name of the landlord": resp.name_of_the_landlord,
+        "Address of the landlord": resp.address_of_the_landlord,
+        "PAN of landlord": resp.permanent_account_number_of_the_landloard,
+        "Leave travel concession /assistance":
+          resp.leave_travel_concessions_or_assistance_amount,
+        "Interest Paid to the lender": resp.interest_payable_paid_to_the_lender,
+        "Name of the lender": resp.name_of_the_lander,
+        "Address of the lander": resp.address_of_the_lender,
+        "Permanent Account Number of the lander":
+          resp.permanent_account_number_of_the_lander,
+        "Financial Institutions(if available)": resp.financial_institutions,
+        "Employer(if available)": resp.employer,
+        Others: resp.others,
       },
     ];
     const ded2 = resp.deductions.map((val) => {
       return {
-        section: val.section,
-        section_type: val.section_type,
-        section_amount: val.section_amount,
+        "Section Name": val.section,
+        "Section Type": val.section_type,
+        "Section Amount": val.section_amount,
       };
     });
 
@@ -105,15 +95,16 @@ const Get_Form12bb_Data = () => {
                   {getForm12bbdata?.map((val, index) => {
                     return (
                       <tr>
-                        <td>{val._id}</td>
+                        <td>{index + 1}</td>
                         <td>{val?.name}</td>
                         <td>{val.address}</td>
                         <td>
                           <button
+                            className="btn btn-outline-primary"
                             type="button"
                             onClick={() => clickbuttondata(val?._id)}
                           >
-                            dassss
+                            Download
                           </button>
                           {/* <button type="button" onClick={() => downloadExcel()}>
                             Download

@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { BaseURL, headersCors } from "../Utils/AxiosApi";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const Form12BB = () => {
   const navigate = useNavigate();
@@ -54,7 +56,8 @@ const Form12BB = () => {
       };
     });
   };
-  const onSignUpButton = () => {
+  const onSignUpButton = (e) => {
+    e.preventDefault();
     const jsonDate = {
       ...inputData,
       deductions,
@@ -63,35 +66,79 @@ const Form12BB = () => {
       const result = await axios.post(`${BaseURL}/form_12_bb`, jsonDate, {
         headers: headersCors,
       });
+      console.log(jsonDate);
       const resp = result.data;
       if (resp?.message === "updated") {
         alert("Created");
+        // navigate("/");
         // window.location.reload();
       }
     }
     postData();
   };
 
-  //   function addInput() {
-  //     setInputs((prevInputs) => [
-  //       ...prevInputs,
-  //       { section: "", section_type: "", section_amount: "" },
-  //     ]);
-  //   }
-  //   function updateInput(index, key, value) {
-  //     setInputs((prevInputs) => {
-  //       const newInputs = [...prevInputs];
-  //       newInputs[index][key] = value;
-  //       return newInputs;
-  //     });
-  //   }
-  //   function removeInput(index) {
-  //     setInputs((prevInputs) => {
-  //       const newInputs = [...prevInputs];
-  //       newInputs.splice(index, 1);
-  //       return newInputs;
-  //     });
-  //   }
+  const style = {
+    display: "inline",
+    color: "red",
+  };
+
+  // =========Excelsheet==========
+
+  const ded = [
+    {
+      section: "section_80ccc",
+
+      section_type: "InvestmentinPensionFunds",
+
+      section_amount: 23131,
+    },
+
+    {
+      section: "section_80ccd1",
+
+      section_type: "AtalPensionYojana",
+
+      section_amount: 78844,
+    },
+  ];
+
+  const ded2 = [
+    {
+      _id: "642436c53f8d8248caa3ebec",
+
+      name: "dada",
+
+      father_name: "fsfds",
+
+      place: "fsfsfsd",
+
+      address: "ddada",
+
+      financial_year: "2023-2024",
+
+      permanent_account_number_of_the_employee: "1234567890",
+
+      rent_paid_to_the_landlord: 1234567890,
+
+      name_of_the_landlord: "",
+
+      address_of_the_landlord: "sdadad",
+
+      permanent_account_number_of_the_landloard: "1234567890I",
+    },
+  ];
+
+  const mergedData = ded2.concat(ded);
+
+  const worksheet = XLSX.utils.json_to_sheet(mergedData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  const downloadExcel = () => {
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    const fileName = "users.xlsx";
+    saveAs(blob, fileName);
+  };
   function removeData(index) {
     setDeductions((prevData) => {
       const newData = [...prevData];
@@ -257,7 +304,17 @@ const Form12BB = () => {
       name: "Disabled Individuals",
     },
   ];
+  const [deductionss, setDeductionss] = useState([]);
 
+  // Calculate the total amount
+  const totalAmount = deductions.reduce(
+    (acc, curr) => parseInt(acc) + parseInt(curr.section_amount),
+    0
+  );
+
+  // Function to remove a row from the table
+
+  console.log(totalAmount);
   return (
     <>
       <div className="container-scroller">
@@ -267,9 +324,28 @@ const Form12BB = () => {
               <div className="col-lg-9 mx-auto">
                 <div className="auth-form-light text-left p-5">
                   <h2 className="text-center">FORM NO.12BB</h2>
+
                   <h6 className="font-weight-light text-center">
                     (See rule 26C)
                   </h6>
+                  <div className="text-end mb-4">
+                    <button className="btn btn-success">
+                      <NavLink
+                        to="/get_form12bb_data"
+                        className="text-light ms-2 text-decoration-none fw-lighter fs-6"
+                      >
+                        Download 12BB Data
+                      </NavLink>
+                    </button>
+                    <button className="btn btn-success ms-3">
+                      <NavLink
+                        to="/flexible_benefit_plan"
+                        className="text-light ms-2 text-decoration-none fw-lighter fs-6"
+                      >
+                        Flexible Benefit Plan
+                      </NavLink>
+                    </button>
+                  </div>
 
                   <form
                     class="forms-sample"
@@ -277,6 +353,7 @@ const Form12BB = () => {
                   >
                     <div class="form-group">
                       <label for="exampleInputUsername1">Name</label>
+                      <span style={style}> *</span>
                       <input
                         className={classNames("form-control form-control-sm", {
                           "is-invalid": errors.name,
@@ -296,6 +373,7 @@ const Form12BB = () => {
                     </div>
                     <div class="form-group">
                       <label for="exampleInputUsername1">Address</label>
+                      <span style={style}> *</span>
                       <input
                         className={classNames("form-control form-control-sm", {
                           "is-invalid": errors.address,
@@ -317,6 +395,7 @@ const Form12BB = () => {
                       <label for="exampleInputUsername1">
                         Permanent Account Number of the employee
                       </label>
+                      <span style={style}> *</span>
                       <input
                         className={classNames("form-control form-control-sm", {
                           "is-invalid":
@@ -346,6 +425,7 @@ const Form12BB = () => {
                     </div>
                     <div class="form-group">
                       <label>Financial year</label>
+                      <span style={style}> *</span>
                       <select
                         class="form-control form-control-sm"
                         value="2023-2024"
@@ -407,9 +487,19 @@ const Form12BB = () => {
                               })}
                               name="houseRentAllowance"
                               value={houseRentAllowance}
-                              onChange={(e) =>
-                                sethouseRentAllowance(!houseRentAllowance)
-                              }
+                              onChange={(e) => {
+                                return (
+                                  sethouseRentAllowance(!houseRentAllowance),
+                                  setInputData({
+                                    ...inputData,
+                                    rent_paid_to_the_landlord: "",
+                                    name_of_the_landlord: "",
+                                    address_of_the_landlord: "",
+                                    permanent_account_number_of_the_landloard:
+                                      "",
+                                  })
+                                );
+                              }}
                               checked={
                                 houseRentAllowance === false ? true : false
                               }
@@ -428,6 +518,7 @@ const Form12BB = () => {
                           <label for="exampleInputUsername1">
                             Rent paid to the landlord
                           </label>
+                          <span style={style}> *</span>
                           <input
                             className={classNames(
                               "form-control form-control-sm",
@@ -452,6 +543,7 @@ const Form12BB = () => {
                           <label for="exampleInputUsername1">
                             Name of the landlord
                           </label>
+                          <span style={style}> *</span>
                           <input
                             className={classNames(
                               "form-control form-control-sm",
@@ -476,6 +568,7 @@ const Form12BB = () => {
                           <label for="exampleInputUsername1">
                             Address of the landlord
                           </label>
+                          <span style={style}> *</span>
                           <input
                             className={classNames(
                               "form-control form-control-sm",
@@ -500,6 +593,7 @@ const Form12BB = () => {
                           <label for="exampleInputUsername1">
                             Permanent Account Number of the landlord
                           </label>
+                          <span style={style}> *</span>
                           <input
                             className={classNames(
                               "form-control form-control-sm",
@@ -541,7 +635,7 @@ const Form12BB = () => {
 
                     <div class="form-group row">
                       <label class="col-sm-6 col-form-label">
-                        Leave travel concessions or assistance(LTA)
+                        Leave travel concessions or assistance (lta)
                       </label>
                       <div class="col-sm-3">
                         <div class="form-check">
@@ -606,11 +700,19 @@ const Form12BB = () => {
                               )}
                               name="leavetravelconcessionsorassistance"
                               value={leavetravelconcessionsorassistance}
-                              onChange={(e) =>
-                                setleavetravelconcessionsorassistance(
-                                  !leavetravelconcessionsorassistance
-                                )
-                              }
+                              onChange={(e) => {
+                                return (
+                                  setleavetravelconcessionsorassistance(
+                                    !leavetravelconcessionsorassistance
+                                  ),
+                                  setInputData({
+                                    ...inputData,
+
+                                    leave_travel_concessions_or_assistance_amount:
+                                      "",
+                                  })
+                                );
+                              }}
                               checked={
                                 leavetravelconcessionsorassistance === false
                                   ? true
@@ -632,6 +734,8 @@ const Form12BB = () => {
                       <>
                         <div class="form-group">
                           <label for="exampleInputUsername1">Amount(Rs.)</label>
+                          <span style={style}> *</span>
+
                           <input
                             className={classNames(
                               "form-control form-control-sm",
@@ -670,6 +774,7 @@ const Form12BB = () => {
                       <label class="col-sm-6 col-form-label">
                         Deduction of interest on borrowing
                       </label>
+
                       <div class="col-sm-3">
                         <div class="form-check">
                           <label class="form-check-label">
@@ -722,11 +827,23 @@ const Form12BB = () => {
                               })}
                               name="deductionofinterestonborrowing"
                               value={deductionofinterestonborrowing}
-                              onChange={(e) =>
-                                setDeductionofinterestonborrowing(
-                                  !deductionofinterestonborrowing
-                                )
-                              }
+                              onChange={(e) => {
+                                return (
+                                  setDeductionofinterestonborrowing(
+                                    !deductionofinterestonborrowing
+                                  ),
+                                  setInputData({
+                                    ...inputData,
+                                    interest_payable_paid_to_the_lender: "",
+                                    name_of_the_lander: "",
+                                    address_of_the_lander: "",
+                                    permanent_account_number_of_the_lander: "",
+                                    financial_institutions: "",
+                                    employer: "",
+                                    others: "",
+                                  })
+                                );
+                              }}
                               checked={
                                 deductionofinterestonborrowing === false
                                   ? true
@@ -747,7 +864,9 @@ const Form12BB = () => {
                           <label for="exampleInputUsername1">
                             Interest payable/paid to the lender
                           </label>
+                          <span style={style}> *</span>
                           <input
+                            type="number"
                             className={classNames(
                               "form-control form-control-sm",
                               {
@@ -779,8 +898,9 @@ const Form12BB = () => {
                         </div>
                         <div class="form-group">
                           <label for="exampleInputUsername1">
-                            Name of the lander
+                            Name of the lender
                           </label>
+                          <span style={style}> *</span>
                           <input
                             className={classNames(
                               "form-control form-control-sm",
@@ -803,8 +923,9 @@ const Form12BB = () => {
                         </div>
                         <div class="form-group">
                           <label for="exampleInputUsername1">
-                            Address of the lander
+                            Address of the lender
                           </label>
+                          <span style={style}> *</span>
                           <input
                             className={classNames(
                               "form-control form-control-sm",
@@ -827,8 +948,9 @@ const Form12BB = () => {
                         </div>
                         <div class="form-group">
                           <label for="exampleInputUsername1">
-                            Permanent Account Number of the lander
+                            Permanent Account Number of the lender
                           </label>
+                          <span style={style}> *</span>
                           <input
                             className={classNames(
                               "form-control form-control-sm",
@@ -900,7 +1022,7 @@ const Form12BB = () => {
                     )}
 
                     <p class="card-description fw-bold fs-6">
-                      Dedeuction Forms Selected
+                      Investment Declarations
                     </p>
                     <table class="table table-bordered">
                       <thead>
@@ -934,12 +1056,20 @@ const Form12BB = () => {
                             </tr>
                           );
                         })}
+                        <tr className="bg-light">
+                          <td className="fw-bold ">Total:</td>
+                          <td></td>
+                          <td></td>
+                          <td className="fw-bold ">{Number(totalAmount)}</td>
+                          <td></td>
+                        </tr>
                       </tbody>
                     </table>
 
                     <div class="form-group row mt-4">
                       <div className="col-md-4">
                         <label>Section</label>
+                        <span style={style}> *</span>
                         <select
                           class="form-control form-control-sm"
                           name="section"
@@ -981,6 +1111,7 @@ const Form12BB = () => {
                       </div>
                       <div className="col-md-4">
                         <label>Type</label>
+                        <span style={style}> *</span>
                         <select
                           class="form-control form-control-sm"
                           name="section_type"
@@ -998,12 +1129,28 @@ const Form12BB = () => {
                         >
                           <option value="">-- Select One --</option>
                           {getSection?.map((val) => {
-                            return <option value={val.name}>{val.name}</option>;
+                            return (
+                              <option
+                                value={val.name}
+                                style={{
+                                  display: deductions
+                                    ?.map((value, index) => {
+                                      return value?.section_type;
+                                    })
+                                    .includes(val?.name)
+                                    ? "none"
+                                    : "block",
+                                }}
+                              >
+                                {val.name}
+                              </option>
+                            );
                           })}
                         </select>
                       </div>
                       <div className="col-md-2">
                         <label>Amount</label>
+                        <span style={style}> *</span>
                         <input
                           className="form-control form-control-sm"
                           name="section_amount"
@@ -1029,6 +1176,13 @@ const Form12BB = () => {
                             deductions.push(data);
                             setData({});
                           }}
+                          disabled={
+                            data?.section === undefined ||
+                            data?.section_type === undefined ||
+                            data?.section_amount === undefined
+                              ? true
+                              : false
+                          }
                         >
                           Add
                         </button>
@@ -1059,13 +1213,8 @@ const Form12BB = () => {
                     </div>
                     <div className="row">
                       <p>
-                        I,
-                        <input
-                          className="form-control form-control-sm"
-                          value={inputData?.name}
-                          disabled
-                        />
-                        ,son/daughter of
+                        I,<span className="fw-bold"> {inputData?.name}</span>,
+                        son/daughter of <span style={style}> *</span>
                         <input
                           className={classNames(
                             "form-control form-control-sm",
@@ -1092,6 +1241,7 @@ const Form12BB = () => {
                           <label for="exampleInputUsername1">
                             Submitted Date
                           </label>
+                          <span style={style}> *</span>
                           <input
                             type="date"
                             className="form-control form-control-sm"
@@ -1107,6 +1257,7 @@ const Form12BB = () => {
                       <div className="col-md-4">
                         <div class="form-group">
                           <label for="exampleInputUsername1">Place</label>
+                          <span style={style}> *</span>
                           <input
                             className={classNames(
                               "form-control form-control-sm",
@@ -1132,6 +1283,7 @@ const Form12BB = () => {
                       <div className="col-md-4">
                         <div class="form-group">
                           <label for="exampleInputUsername1">Designation</label>
+                          <span style={style}> *</span>
                           <input
                             className={classNames(
                               "form-control form-control-sm",

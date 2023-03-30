@@ -8,6 +8,8 @@ import Routes_Array from "./Utils/Routes";
 import $ from "jquery";
 import Form12BB from "./Component/Form12BB";
 import Get_Form12bb_Data from "./Component/Get_Form12bb_Data";
+import Flexible_Benefit_Plan from "./Component/Flexible_Benefit_Plan";
+import Get_Form_Flexi_Benefit_Data from "./Component/Get_Form_Flexi_Benefit_Data";
 function App() {
   return (
     <>
@@ -31,6 +33,16 @@ function App() {
             exact
             path="/get_form12bb_data"
             element={<Get_Form12bb_Data />}
+          />
+          <Route
+            exact
+            path="/flexible_benefit_plan"
+            element={<Flexible_Benefit_Plan />}
+          />
+          <Route
+            exact
+            path="/get_flexi_form_data"
+            element={<Get_Form_Flexi_Benefit_Data />}
           />
         </Routes>
       </Router>

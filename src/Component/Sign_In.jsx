@@ -144,8 +144,16 @@ const Sign_In = () => {
                   </div>
                 </form>
                 <div className="mt-3 border bg-light p-3">
-                  <small>Click here for 12bb Form </small>
+                  <small>Click here for Forms </small>
                   <ul class="list-arrow fw-bolder">
+                    <li>
+                      <NavLink
+                        to="form12bb"
+                        className="text-success ms-2 text-decoration-none fw-lighter fs-6"
+                      >
+                        Form 12BB
+                      </NavLink>
+                    </li>
                     <li>
                       <NavLink
                         to="get_form12bb_data"
@@ -154,12 +162,21 @@ const Sign_In = () => {
                         Download Form 12BB Data
                       </NavLink>
                     </li>
+
                     <li>
                       <NavLink
-                        to="form12bb"
+                        to="flexible_benefit_plan"
                         className="text-success ms-2 text-decoration-none fw-lighter fs-6"
                       >
-                        Form 12BB
+                        Flexible Benefit Form
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="get_flexi_form_data"
+                        className="text-success ms-2 text-decoration-none fw-lighter fs-6"
+                      >
+                        Download Flexible Benefit Form
                       </NavLink>
                     </li>
                   </ul>

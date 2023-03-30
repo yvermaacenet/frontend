@@ -325,11 +325,11 @@ export const form12bb_validation = yup.object({
   permanent_account_number_of_the_employee: yup
     .string()
     .required("This field is required")
-    .min(10, "This field must be equal to 10 digits")
-    .max(10, "This field must be equal to 10 digits")
+    .min(10, "This field must be equal to 10 characters")
+    .max(10, "This field must be equal to 10 characters")
     .matches(
-      /^[a-zA-Z0-9_\s]+$/,
-      "special Characters are not allowed for this field"
+      /^(?=.*?\d)(?=.*?[A-Z])[A-Z\d]+$/,
+      "This field allows only uppercase alphabetic characters and numerals"
     ),
 
   houseRentAllowance: yup.string().required("This field is required"),
@@ -365,12 +365,13 @@ export const form12bb_validation = yup.object({
         return yup.string().required("This field is required");
       } else return yup.string().notRequired();
     })
-    .min(10, "This field must be equal to 10 digits")
-    .max(10, "This field must be equal to 10 digits")
+    .min(10, "This field must be equal to 10 characters")
+    .max(10, "This field must be equal to 10 characters")
     .matches(
-      /^[a-zA-Z0-9_\s]+$/,
-      "special Characters are not allowed for this field"
+      /^(?=.*?\d)(?=.*?[A-Z])[A-Z\d]+$/,
+      "This field allows only uppercase alphabetic characters and numerals"
     ),
+
   leavetravelconcessionsorassistance: yup
     .string()
     .required("This field is required"),
@@ -425,16 +426,21 @@ export const form12bb_validation = yup.object({
         return yup.string().required("This field is required");
       } else return yup.string().notRequired();
     })
-    .min(10, "This field must be equal to 10 digits")
-    .max(10, "This field must be equal to 10 digits")
+    .min(10, "This field must be equal to 10 characters")
+    .max(10, "This field must be equal to 10 characters")
     .matches(
-      /^[a-zA-Z0-9_\s]+$/,
-      "special Characters are not allowed for this field"
+      /^(?=.*?\d)(?=.*?[A-Z])[A-Z\d]+$/,
+      "This field allows only uppercase alphabetic characters and numerals"
     ),
+
   father_name: yup.string().required("This field is required"),
   place: yup.string().required("This field is required"),
   designation: yup.string().required("This field is required"),
   // section: yup.string().required("This field is required"),
   // section_type: yup.string().required("This field is required"),
   // section_amount: yup.string().required("This field is required"),
+});
+
+export const form_flexible_validation = yup.object({
+  vpf_apply: yup.string().required("This field is required"),
 });
