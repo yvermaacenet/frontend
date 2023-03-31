@@ -492,7 +492,7 @@ const Form12BB = () => {
                           onSubmit={handleSubmit(onSaveButton)}
                         >
                           <div class="form-group">
-                            <label for="exampleInputUsername1">Name</label>
+                            <label>Name</label>
                             <span style={style}> *</span>
                             <input
                               className={classNames(
@@ -516,8 +516,7 @@ const Form12BB = () => {
                           </div>
 
                           <div className="form-group">
-                            <label for="exampleInputUsername1">Email</label>
-
+                            <label>Email</label>
                             <input
                               className="form-control form-control-sm bg-light"
                               name="email"
@@ -528,9 +527,7 @@ const Form12BB = () => {
                             />
                           </div>
                           <div className="form-group">
-                            <label for="exampleInputUsername1">
-                              Employee Id
-                            </label>
+                            <label>Employee Id</label>
 
                             <input
                               className="form-control form-control-sm bg-light"
@@ -542,7 +539,7 @@ const Form12BB = () => {
                             />
                           </div>
                           <div class="form-group">
-                            <label for="exampleInputUsername1">Address</label>
+                            <label>Address</label>
                             <span style={style}> *</span>
                             <input
                               className={classNames(
@@ -565,7 +562,7 @@ const Form12BB = () => {
                             </small>
                           </div>
                           <div class="form-group">
-                            <label for="exampleInputUsername1">
+                            <label>
                               Permanent Account Number of the employee
                             </label>
                             <span style={style}> *</span>
@@ -711,9 +708,7 @@ const Form12BB = () => {
                           {houseRentAllowance && (
                             <>
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
-                                  Rent paid to the landlord
-                                </label>
+                                <label>Rent paid to the landlord</label>
                                 <span style={style}> *</span>
                                 <input
                                   className={classNames(
@@ -737,9 +732,7 @@ const Form12BB = () => {
                                 </small>
                               </div>
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
-                                  Name of the landlord
-                                </label>
+                                <label>Name of the landlord</label>
                                 <span style={style}> *</span>
                                 <input
                                   className={classNames(
@@ -763,7 +756,7 @@ const Form12BB = () => {
                               </div>
 
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
+                                <label>
                                   Permanent Account Number of the landlord
                                 </label>
                                 <span style={style}> *</span>
@@ -908,9 +901,7 @@ const Form12BB = () => {
                           {leavetravelconcessionsorassistance && (
                             <>
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
-                                  Amount(Rs.)
-                                </label>
+                                <label>Amount(Rs.)</label>
                                 <span style={style}> *</span>
 
                                 <input
@@ -1059,7 +1050,7 @@ const Form12BB = () => {
                           {deductionofinterestonborrowing && (
                             <>
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
+                                <label>
                                   Interest payable/paid to the lender
                                 </label>
                                 <span style={style}> *</span>
@@ -1095,9 +1086,7 @@ const Form12BB = () => {
                                 </small>
                               </div>
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
-                                  Name of the lender
-                                </label>
+                                <label>Name of the lender</label>
                                 <span style={style}> *</span>
                                 <input
                                   className={classNames(
@@ -1120,9 +1109,7 @@ const Form12BB = () => {
                                 </small>
                               </div>
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
-                                  Address of the lender
-                                </label>
+                                <label>Address of the lender</label>
                                 <span style={style}> *</span>
                                 <input
                                   className={classNames(
@@ -1146,7 +1133,7 @@ const Form12BB = () => {
                                 </small>
                               </div>
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
+                                <label>
                                   Permanent Account Number of the lender
                                 </label>
                                 <span style={style}> *</span>
@@ -1182,7 +1169,7 @@ const Form12BB = () => {
                                 </small>
                               </div>
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
+                                <label>
                                   Financial Institutions(if available)
                                 </label>
                                 <input
@@ -1196,9 +1183,7 @@ const Form12BB = () => {
                               </div>
 
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
-                                  Others
-                                </label>
+                                <label>Others</label>
                                 <input
                                   className="form-control form-control-sm"
                                   name="others"
@@ -1438,9 +1423,7 @@ const Form12BB = () => {
                           <div className="row">
                             <div className="col-md-4">
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
-                                  Submitted Date
-                                </label>
+                                <label>Submitted Date</label>
                                 <span style={style}> *</span>
                                 <input
                                   type="date"
@@ -1456,7 +1439,7 @@ const Form12BB = () => {
 
                             <div className="col-md-4">
                               <div class="form-group">
-                                <label for="exampleInputUsername1">Place</label>
+                                <label>Place</label>
                                 <span style={style}> *</span>
                                 <input
                                   className={classNames(
@@ -1482,9 +1465,7 @@ const Form12BB = () => {
 
                             <div className="col-md-4">
                               <div class="form-group">
-                                <label for="exampleInputUsername1">
-                                  Designation
-                                </label>
+                                <label>Designation</label>
                                 <span style={style}> *</span>
                                 <input
                                   className={classNames(

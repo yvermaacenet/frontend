@@ -12,6 +12,8 @@ import User_Add from "../Component/User/User_Add";
 import User_List from "../Component/User/User_List";
 import User_Update from "../Component/User/User_Update";
 import Profile_Update from "../Component/User/Profile_Update";
+import Form12BB from "../Component/Form12BB";
+import Flexible_Benefit_Plan from "../Component/Flexible_Benefit_Plan";
 const Routes_Array = [
   //   <!================= User ==================>
   {
@@ -89,6 +91,17 @@ const Routes_Array = [
     path: "/off_boarding/:_id",
     component: Off_Boarding,
     allowedRoles: ["Admin", "Employee", "HR", "Management"],
+  },
+  //   <!================= Form's ==================>
+  {
+    path: "/form12bb",
+    component: Form12BB,
+    allowedRoles: ["Employee"],
+  },
+  {
+    path: "/flexible_benefit_plan",
+    component: Flexible_Benefit_Plan,
+    allowedRoles: ["Employee"],
   },
 ];
 
