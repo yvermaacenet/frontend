@@ -188,7 +188,7 @@ const Dashboard = () => {
                 page_title_icon="mdi-home"
               />
 
-              <div class="row">
+              {/* <div class="row">
                 <div class="col-md-3 stretch-card grid-margin">
                   <div class="card   card-img-holder text-white">
                     <div class="card-body">
@@ -301,7 +301,7 @@ const Dashboard = () => {
                       )
                   )
                 )}
-              </div>
+              </div> */}
             </div>
             <footer class="footer">
               <Footer />

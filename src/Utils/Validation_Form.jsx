@@ -321,19 +321,19 @@ export const editJobsValidation = yup.object({
 export const form12bb_validation = yup.object({
   /*=========> Login Information Validation ==========>*/
   name: yup.string().required("This field is required"),
-  email: yup
-    .string()
-    .required("This field is required")
-    .email("Email should be valid and contain @")
-    .matches(
-      /[A-Za-z0-9._%+-]+@+(acenet.io|[A-Za-z0-9._%+-])$/,
-      "Please enter acenet id"
-    ),
-  // salary_band: yup.string().required("This field is required"),
-  emp_id: yup
-    .string()
-    .required("This field is required")
-    .matches(/^\d*$/, "Employe id must be only numeric"),
+  // email: yup
+  //   .string()
+  //   .required("This field is required")
+  //   .email("Email should be valid and contain @")
+  //   .matches(
+  //     /[A-Za-z0-9._%+-]+@+(acenet.io|[A-Za-z0-9._%+-])$/,
+  //     "Please enter acenet id"
+  //   ),
+  // // salary_band: yup.string().required("This field is required"),
+  // emp_id: yup
+  //   .string()
+  //   .required("This field is required")
+  //   .matches(/^\d*$/, "Employe id must be only numeric"),
   address: yup.string().required("This field is required"),
   permanent_account_number_of_the_employee: yup
     .string()
@@ -364,13 +364,7 @@ export const form12bb_validation = yup.object({
         return yup.string().required("This field is required");
       } else return yup.string().notRequired();
     }),
-  address_of_the_landlord: yup
-    .string()
-    .when("houseRentAllowance", (val, schema) => {
-      if (val[0] === "true") {
-        return yup.string().required("This field is required");
-      } else return yup.string().notRequired();
-    }),
+
   permanent_account_number_of_the_landloard: yup
     .string()
     .when("houseRentAllowance", (val, schema) => {
@@ -452,17 +446,17 @@ export const form12bb_validation = yup.object({
 
 export const form_flexible_validation = yup.object({
   name: yup.string().required("This field is required"),
-  email: yup
-    .string()
-    .required("This field is required")
-    .email("Email should be valid and contain @")
-    .matches(
-      /[A-Za-z0-9._%+-]+@+(acenet.io|[A-Za-z0-9._%+-])$/,
-      "Please enter acenet id"
-    ),
-  // salary_band: yup.string().required("This field is required"),
-  emp_id: yup
-    .string()
-    .required("This field is required")
-    .matches(/^\d*$/, "Employe id must be only numeric"),
+  // email: yup
+  //   .string()
+  //   .required("This field is required")
+  //   .email("Email should be valid and contain @")
+  //   .matches(
+  //     /[A-Za-z0-9._%+-]+@+(acenet.io|[A-Za-z0-9._%+-])$/,
+  //     "Please enter acenet id"
+  //   ),
+  // // salary_band: yup.string().required("This field is required"),
+  // emp_id: yup
+  //   .string()
+  //   .required("This field is required")
+  //   .matches(/^\d*$/, "Employe id must be only numeric"),
 });

@@ -20,9 +20,11 @@ const Sidebar = () => {
                 {/* <!--change to offline or busy as needed--> */}
               </div>
               <div className="nav-profile-text d-flex flex-column">
-                <span className="font-weight-bold mb-2">David Grey. H</span>
+                <span className="font-weight-bold mb-2">
+                  {LocalStorageData?.name}
+                </span>
                 <span className="text-secondary text-small">
-                  Project Manager
+                  {LocalStorageData?.department}
                 </span>
               </div>
               <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
@@ -47,6 +49,35 @@ const Sidebar = () => {
               <span className="menu-title">Dashboard</span>
               <i className="mdi mdi-home menu-icon"></i>
             </NavLink>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              data-bs-toggle="collapse"
+              href="#ui-basic"
+              aria-expanded="false"
+              aria-controls="ui-basic"
+            >
+              <span class="menu-title">Forms</span>
+              <i class="menu-arrow"></i>
+              <i class="mdi mdi-book-plus menu-icon"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <ul className="nav flex-column sub-menu">
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/form12bb">
+                      Form 12 BB
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/flexible_benefit_plan">
+                      Form Flexible Benefit
+                    </NavLink>
+                  </li>
+                </ul>
+              </ul>
+            </div>
           </li>
           {LocalStorageData?.role?.map(
             (val) =>

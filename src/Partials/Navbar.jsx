@@ -66,7 +66,7 @@ const Navbar = () => {
                   <p className="mb-1 text-black">{LocalStorageData?.name}</p>
                 </div>
               </a>
-              <div
+              {/* <div
                 className="dropdown-menu navbar-dropdown"
                 aria-labelledby="profileDropdown"
               >
@@ -93,7 +93,7 @@ const Navbar = () => {
                   Off-Boarding
                 </NavLink>
                 <div className="dropdown-divider"></div>
-              </div>
+              </div> */}
             </li>
             <li className="nav-item d-none d-lg-block full-screen-link">
               <a className="nav-link">

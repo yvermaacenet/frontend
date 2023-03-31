@@ -27,10 +27,10 @@ function App() {
               }
             />
           ))}
-          {/* <Route exact path="/" element={<Sign_In />} /> */}
+          <Route exact path="/" element={<Sign_In />} />
           {/* <Route exact path="*" element={<Sign_In />} /> */}
           <Route exact path="/sign_up" element={<Sign_Up />} />
-          <Route exact path="/" element={<Forms />} />
+          <Route exact path="/forms" element={<Forms />} />
           <Route
             exact
             path="/forms_data_download"

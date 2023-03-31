@@ -27,7 +27,6 @@ const Get_Form_Flexi_Benefit_Data = () => {
         "Salary band": val?.salary_band,
         Stream: val?.stream,
         Position: val?.position,
-        VPF: val?.vpf_apply,
         "Children allowance": val?.children_allowance,
         "Telephone Allowance": val?.telephone_allowance,
         Fuel: val?.fuel_allowance,

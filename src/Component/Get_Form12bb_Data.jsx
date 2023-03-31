@@ -28,6 +28,7 @@ const Get_Form12bb_Data = () => {
         PAN: resp.permanent_account_number_of_the_employee,
         Place: resp.place,
         "Financial Year": resp.financial_year,
+        VPF: resp?.vpf_apply,
         "Rent Paid to the landlord": resp.rent_paid_to_the_landlord,
         "Name of the landlord": resp.name_of_the_landlord,
         "Address of the landlord": resp.address_of_the_landlord,
@@ -40,7 +41,6 @@ const Get_Form12bb_Data = () => {
         "Permanent Account Number of the lender":
           resp.permanent_account_number_of_the_lender,
         "Financial Institutions(if available)": resp.financial_institutions,
-        "Employer(if available)": resp.employer,
         Others: resp.others,
       },
     ];

@@ -38,17 +38,18 @@ const Sign_In = () => {
       } else {
         alert(resp?.message);
       }
+      alert(resp?.message);
     }
     postData();
   };
-  const onSignInZOHO = () => {
-    async function postData() {
-      const result = await axios.get(`sign_in_zoho`);
-      const resp = result.data;
-      window.location.replace(resp);
-    }
-    postData();
-  };
+  // const onSignInZOHO = () => {
+  //   async function postData() {
+  //     const result = await axios.get(`sign_in_zoho`);
+  //     const resp = result.data;
+  //     window.location.replace(resp);
+  //   }
+  //   postData();
+  // };
   if (cookies?.Access_Token) {
     return <Navigate to={"/dashboard"} />;
   }
@@ -108,13 +109,13 @@ const Sign_In = () => {
                     >
                       SIGN IN
                     </button>
-                    <button
+                    {/* <button
                       className="btn btn-block btn-gradient-secondary btn-sm font-weight-medium ms-4"
                       type="button"
                       onClick={onSignInZOHO}
                     >
                       ZOHO
-                    </button>
+                    </button> */}
                   </div>
                   <div className="my-2 d-flex justify-content-between align-items-center">
                     <div className="form-check">
