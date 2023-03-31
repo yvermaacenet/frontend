@@ -56,22 +56,100 @@ const Form12BB = () => {
       };
     });
   };
+
+  function capitalizeBothStrings(str) {
+    const words = str.split(" ");
+    const capitalizedWords = words.map(
+      (word) => word.charAt(0).toUpperCase() + word.slice(1)
+    );
+    return capitalizedWords.join(" ");
+  }
+  // capitalizeBothStrings(dd);
+
   const onSignUpButton = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     const jsonDate = {
       ...inputData,
-      deductions,
+      name:
+        inputData?.name !== undefined && capitalizeBothStrings(inputData?.name),
+      deductions:
+        deductions[0]?.section === undefined
+          ? [
+              {
+                section: "NA",
+                section_type: "NA",
+                section_amount: "NA",
+              },
+            ]
+          : deductions,
+      rent_paid_to_the_landlord:
+        inputData?.rent_paid_to_the_landlord === "" ||
+        inputData?.rent_paid_to_the_landlord === undefined
+          ? "NA"
+          : inputData?.rent_paid_to_the_landlord,
+      name_of_the_landlord:
+        inputData?.name_of_the_landlord === "" ||
+        inputData?.name_of_the_landlord === undefined
+          ? "NA"
+          : inputData?.name_of_the_landlord,
+      address_of_the_landlord:
+        inputData?.address_of_the_landlord === "" ||
+        inputData?.address_of_the_landlord === undefined
+          ? "NA"
+          : inputData?.address_of_the_landlord,
+      permanent_account_number_of_the_landloard:
+        inputData?.permanent_account_number_of_the_landloard === "" ||
+        inputData?.permanent_account_number_of_the_landloard === undefined
+          ? "NA"
+          : inputData?.permanent_account_number_of_the_landloard,
+      leave_travel_concessions_or_assistance_amount:
+        inputData?.leave_travel_concessions_or_assistance_amount === "" ||
+        inputData?.leave_travel_concessions_or_assistance_amount === undefined
+          ? "NA"
+          : inputData?.leave_travel_concessions_or_assistance_amount,
+      interest_payable_paid_to_the_lender:
+        inputData?.interest_payable_paid_to_the_lender === "" ||
+        inputData?.interest_payable_paid_to_the_lender === undefined
+          ? "NA"
+          : inputData?.interest_payable_paid_to_the_lender,
+      name_of_the_lender:
+        inputData?.name_of_the_lender === "" ||
+        inputData?.name_of_the_lender === undefined
+          ? "NA"
+          : inputData?.name_of_the_lender,
+      address_of_the_lender:
+        inputData?.address_of_the_lender === "" ||
+        inputData?.address_of_the_lender === undefined
+          ? "NA"
+          : inputData?.address_of_the_lender,
+      permanent_account_number_of_the_lender:
+        inputData?.permanent_account_number_of_the_lender === "" ||
+        inputData?.permanent_account_number_of_the_lender === undefined
+          ? "NA"
+          : inputData?.permanent_account_number_of_the_lender,
+      financial_institutions:
+        inputData?.financial_institutions === "" ||
+        inputData?.financial_institutions === undefined
+          ? "NA"
+          : inputData?.financial_institutions,
+      employer:
+        inputData?.employer === "" || inputData?.employer === undefined
+          ? "NA"
+          : inputData?.employer,
+      others:
+        inputData?.others === "" || inputData?.others === undefined
+          ? "NA"
+          : inputData?.others,
     };
     async function postData() {
       const result = await axios.post(`${BaseURL}/form_12_bb`, jsonDate, {
         headers: headersCors,
       });
-      console.log(jsonDate);
+      // console.log(jsonDate);
       const resp = result.data;
-      if (resp?.message === "updated") {
-        alert("Created");
-        // navigate("/");
-        // window.location.reload();
+      alert(resp.message);
+      if (resp?.message === "Form has been submitted") {
+        navigate("/");
       }
     }
     postData();
@@ -84,61 +162,6 @@ const Form12BB = () => {
 
   // =========Excelsheet==========
 
-  const ded = [
-    {
-      section: "section_80ccc",
-
-      section_type: "InvestmentinPensionFunds",
-
-      section_amount: 23131,
-    },
-
-    {
-      section: "section_80ccd1",
-
-      section_type: "AtalPensionYojana",
-
-      section_amount: 78844,
-    },
-  ];
-
-  const ded2 = [
-    {
-      _id: "642436c53f8d8248caa3ebec",
-
-      name: "dada",
-
-      father_name: "fsfds",
-
-      place: "fsfsfsd",
-
-      address: "ddada",
-
-      financial_year: "2023-2024",
-
-      permanent_account_number_of_the_employee: "1234567890",
-
-      rent_paid_to_the_landlord: 1234567890,
-
-      name_of_the_landlord: "",
-
-      address_of_the_landlord: "sdadad",
-
-      permanent_account_number_of_the_landloard: "1234567890I",
-    },
-  ];
-
-  const mergedData = ded2.concat(ded);
-
-  const worksheet = XLSX.utils.json_to_sheet(mergedData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
-  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-  const downloadExcel = () => {
-    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-    const fileName = "users.xlsx";
-    saveAs(blob, fileName);
-  };
   function removeData(index) {
     setDeductions((prevData) => {
       const newData = [...prevData];
@@ -146,7 +169,7 @@ const Form12BB = () => {
       return newData;
     });
   }
-  const section_80c = [
+  const section_80C = [
     {
       name: "Life Insurance Premiums",
     },
@@ -187,12 +210,12 @@ const Form12BB = () => {
       name: "Investment",
     },
   ];
-  const section_80ccc = [
+  const section_80CCC = [
     {
       name: "Investment in Pension Funds",
     },
   ];
-  const section_80ccd1 = [
+  const section_80CCD1 = [
     {
       name: "Atal Pension Yojana",
     },
@@ -200,7 +223,7 @@ const Form12BB = () => {
       name: "National Pension Scheme Contribution",
     },
   ];
-  const section_80ccd1b = [
+  const section_80CCD1B = [
     {
       name: "Atal Pension Yojana(additional deduction)",
     },
@@ -208,12 +231,12 @@ const Form12BB = () => {
       name: "National Pension Scheme Contribution (additional deduction)",
     },
   ];
-  const section_80ccd2 = [
+  const section_80CCD2 = [
     {
       name: "National Pension Scheme Contribution by Employer",
     },
   ];
-  const section_80d = [
+  const section_80D = [
     {
       name: "Medical Insurance Premium",
     },
@@ -224,82 +247,82 @@ const Form12BB = () => {
       name: "Medical Expenditure",
     },
   ];
-  const section_80dd = [
+  const section_80DD = [
     {
       name: "Medical Treatment of a Dependent with Disability",
     },
   ];
-  const section_80ddb = [
+  const section_80DDB = [
     {
       name: "Medical expenditure for treatment of Specified Diseases",
     },
   ];
-  const section_80e = [
+  const section_80E = [
     {
       name: "Interest paid on Loan taken for Higher Education",
     },
   ];
-  const section_80ee = [
+  const section_80EE = [
     {
       name: "Interest paid on Housing Loan",
     },
   ];
-  const section_80eea = [
+  const section_80EEA = [
     {
       name: "Interest Paid on Housing Loan",
     },
   ];
-  const section_80eeb = [
+  const section_80EEB = [
     {
       name: "Interest paid on Electric Vehicle Loan",
     },
   ];
-  const section_80g = [
+  const section_80G = [
     {
       name: "Donation to specified funds/institutions.",
     },
   ];
-  const section_80gg = [
+  const section_80GG = [
     {
       name: "Income Tax Deduction for House Rent Paid.",
     },
   ];
-  const section_80gga = [
+  const section_80GGA = [
     {
-      name: "	Donation to Scientific Research & Rural Development",
+      name: "Donation to Scientific Research & Rural Development",
     },
   ];
-  const section_80ggb = [
+  const section_80GGB = [
     {
-      name: "	Contribution to Political Parties",
+      name: "Contribution to Political Parties",
     },
   ];
-  const section_80ggc = [
+  const section_80GGC = [
     {
       name: "Individuals on contribution to Political Parties",
     },
   ];
-  const section_80rrb = [
+  const section_80RRB = [
     {
-      name: "	Royalty on Patents",
+      name: "Royalty on Patents",
     },
   ];
-  const section_80qqb = [
+  const section_80QQB = [
     {
       name: "Royalty Income of Authors",
     },
   ];
-  const section_80tta = [
+  const section_80TTA = [
     {
       name: "Interest earned on Savings Accounts",
     },
   ];
-  const section_80ttb = [
+  const section_80TTB = [
     {
       name: "Interest Income earned on deposits(Savings/ FDs)",
     },
   ];
-  const section_80u = [
+  const section_80U = [
     {
       name: "Disabled Individuals",
     },
@@ -314,7 +337,6 @@ const Form12BB = () => {
 
   // Function to remove a row from the table
 
-  console.log(totalAmount);
   return (
     <>
       <div className="container-scroller">
@@ -328,7 +350,7 @@ const Form12BB = () => {
                   <h6 className="font-weight-light text-center">
                     (See rule 26C)
                   </h6>
-                  <div className="text-end mb-4">
+                  {/* <div className="text-end mb-4">
                     <button className="btn btn-success">
                       <NavLink
                         to="/get_form12bb_data"
@@ -345,7 +367,7 @@ const Form12BB = () => {
                         Flexible Benefit Plan
                       </NavLink>
                     </button>
-                  </div>
+                  </div> */}
 
                   <form
                     class="forms-sample"
@@ -369,6 +391,47 @@ const Form12BB = () => {
                       />
                       <small class="invalid-feedback">
                         {errors.name?.message}
+                      </small>
+                    </div>
+
+                    <div className="form-group">
+                      <label for="exampleInputUsername1">Email</label>
+                      <span style={style}> *</span>
+                      <input
+                        className={classNames("form-control form-control-sm", {
+                          "is-invalid": errors.email,
+                        })}
+                        {...register("email", {
+                          value: inputData?.email,
+                        })}
+                        name="email"
+                        onChange={inputEvent}
+                        placeholder="Enter Email"
+                        value={inputData?.email}
+                        // autoSave
+                      />
+                      <small class="invalid-feedback">
+                        {errors.email?.message}
+                      </small>
+                    </div>
+                    <div className="form-group">
+                      <label for="exampleInputUsername1">Employee Id</label>
+                      <span style={style}> *</span>
+                      <input
+                        className={classNames("form-control form-control-sm", {
+                          "is-invalid": errors.emp_id,
+                        })}
+                        {...register("emp_id", {
+                          value: inputData?.emp_id,
+                        })}
+                        name="emp_id"
+                        onChange={inputEvent}
+                        placeholder="Enter Employee id"
+                        value={inputData?.emp_id}
+                        maxLength={4}
+                      />
+                      <small class="invalid-feedback">
+                        {errors.emp_id?.message}
                       </small>
                     </div>
                     <div class="form-group">
@@ -835,9 +898,9 @@ const Form12BB = () => {
                                   setInputData({
                                     ...inputData,
                                     interest_payable_paid_to_the_lender: "",
-                                    name_of_the_lander: "",
-                                    address_of_the_lander: "",
-                                    permanent_account_number_of_the_lander: "",
+                                    name_of_the_lender: "",
+                                    address_of_the_lender: "",
+                                    permanent_account_number_of_the_lender: "",
                                     financial_institutions: "",
                                     employer: "",
                                     others: "",
@@ -905,20 +968,20 @@ const Form12BB = () => {
                             className={classNames(
                               "form-control form-control-sm",
                               {
-                                "is-invalid": errors.name_of_the_lander,
+                                "is-invalid": errors.name_of_the_lender,
                               }
                             )}
-                            {...register("name_of_the_lander", {
-                              value: inputData?.name_of_the_lander,
+                            {...register("name_of_the_lender", {
+                              value: inputData?.name_of_the_lender,
                             })}
-                            name="name_of_the_lander"
+                            name="name_of_the_lender"
                             onChange={inputEvent}
-                            placeholder="Enter Name of the lander"
-                            value={inputData?.name_of_the_lander}
+                            placeholder="Enter Name of the lender"
+                            value={inputData?.name_of_the_lender}
                             // autoSave
                           />
                           <small class="invalid-feedback">
-                            {errors.name_of_the_lander?.message}
+                            {errors.name_of_the_lender?.message}
                           </small>
                         </div>
                         <div class="form-group">
@@ -930,20 +993,20 @@ const Form12BB = () => {
                             className={classNames(
                               "form-control form-control-sm",
                               {
-                                "is-invalid": errors.address_of_the_lander,
+                                "is-invalid": errors.address_of_the_lender,
                               }
                             )}
-                            {...register("address_of_the_lander", {
-                              value: inputData?.address_of_the_lander,
+                            {...register("address_of_the_lender", {
+                              value: inputData?.address_of_the_lender,
                             })}
-                            name="address_of_the_lander"
+                            name="address_of_the_lender"
                             onChange={inputEvent}
-                            placeholder="Enter Address of the lander"
-                            value={inputData?.address_of_the_lander}
+                            placeholder="Enter Address of the lender"
+                            value={inputData?.address_of_the_lender}
                             // autoSave
                           />
                           <small class="invalid-feedback">
-                            {errors.address_of_the_lander?.message}
+                            {errors.address_of_the_lender?.message}
                           </small>
                         </div>
                         <div class="form-group">
@@ -956,27 +1019,27 @@ const Form12BB = () => {
                               "form-control form-control-sm",
                               {
                                 "is-invalid":
-                                  errors.permanent_account_number_of_the_lander,
+                                  errors.permanent_account_number_of_the_lender,
                               }
                             )}
                             {...register(
-                              "permanent_account_number_of_the_lander",
+                              "permanent_account_number_of_the_lender",
                               {
                                 value:
-                                  inputData?.permanent_account_number_of_the_lander,
+                                  inputData?.permanent_account_number_of_the_lender,
                               }
                             )}
-                            name="permanent_account_number_of_the_lander"
+                            name="permanent_account_number_of_the_lender"
                             onChange={inputEvent}
-                            placeholder="Enter Permanent Account Number of the lander"
+                            placeholder="Enter Permanent Account Number of the lender"
                             value={
-                              inputData?.permanent_account_number_of_the_lander
+                              inputData?.permanent_account_number_of_the_lender
                             }
                             // autoSave
                           />
                           <small class="invalid-feedback">
                             {
-                              errors.permanent_account_number_of_the_lander
+                              errors.permanent_account_number_of_the_lender
                                 ?.message
                             }
                           </small>
@@ -1069,7 +1132,6 @@ const Form12BB = () => {
                     <div class="form-group row mt-4">
                       <div className="col-md-4">
                         <label>Section</label>
-                        <span style={style}> *</span>
                         <select
                           class="form-control form-control-sm"
                           name="section"
@@ -1085,33 +1147,32 @@ const Form12BB = () => {
                           }}
                         >
                           <option value="">-- Select One --</option>
-                          <option value="section_80c">80C </option>
-                          <option value="section_80ccc">80CCC </option>
-                          <option value="section_80ccd1">80CCD(1)</option>
-                          <option value="section_80ccd1b">80CCD(1B)</option>
-                          <option value="section_80ccd2">80CCD(2)</option>
-                          <option value="section_80d"> 80D</option>
-                          <option value="section_80dd">80DD</option>
-                          <option value="section_80ddb">80DDB</option>
-                          <option value="section_80e">80E</option>
-                          <option value="section_80ee">80EE</option>
-                          <option value="section_80eea">80EEA</option>
-                          <option value="section_80eeb">80EEB</option>
-                          <option value="section_80g">80G</option>
-                          <option value="section_80gg">80GG</option>
-                          <option value="section_80gga">80GGA</option>
-                          <option value="section_80ggb">80GGB</option>
-                          <option value="section_80ggc">80GGC</option>
-                          <option value="section_80rrb">80RRB</option>
-                          <option value="section_80qqb">80QQB</option>
-                          <option value="section_80tta">80TTA</option>
-                          <option value="section_80ttb">80TTB</option>
-                          <option value="section_80u">80U</option>
+                          <option value="section_80C">80C </option>
+                          <option value="section_80CCC">80CCC </option>
+                          <option value="section_80CCD1">80CCD(1)</option>
+                          <option value="section_80CCD1B">80CCD(1B)</option>
+                          <option value="section_80CCC2">80CCD(2)</option>
+                          <option value="section_80D"> 80D</option>
+                          <option value="section_80DD">80DD</option>
+                          <option value="section_80DDB">80DDB</option>
+                          <option value="section_80A">80E</option>
+                          <option value="section_80EE">80EE</option>
+                          <option value="section_80EEA">80EEA</option>
+                          <option value="section_80EEB">80EEB</option>
+                          <option value="section_80G">80G</option>
+                          <option value="section_80GG">80GG</option>
+                          <option value="section_80GGA">80GGA</option>
+                          <option value="section_80GGB">80GGB</option>
+                          <option value="section_80GGC">80GGC</option>
+                          <option value="section_80RRB">80RRB</option>
+                          <option value="section_80QQB">80QQB</option>
+                          <option value="section_80TTA">80TTA</option>
+                          <option value="section_80TTB">80TTB</option>
+                          <option value="section_80U">80U</option>
                         </select>
                       </div>
                       <div className="col-md-4">
                         <label>Type</label>
-                        <span style={style}> *</span>
                         <select
                           class="form-control form-control-sm"
                           name="section_type"
@@ -1150,7 +1211,6 @@ const Form12BB = () => {
                       </div>
                       <div className="col-md-2">
                         <label>Amount</label>
-                        <span style={style}> *</span>
                         <input
                           className="form-control form-control-sm"
                           name="section_amount"

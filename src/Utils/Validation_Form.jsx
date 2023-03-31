@@ -321,6 +321,19 @@ export const editJobsValidation = yup.object({
 export const form12bb_validation = yup.object({
   /*=========> Login Information Validation ==========>*/
   name: yup.string().required("This field is required"),
+  email: yup
+    .string()
+    .required("This field is required")
+    .email("Email should be valid and contain @")
+    .matches(
+      /[A-Za-z0-9._%+-]+@+(acenet.io|[A-Za-z0-9._%+-])$/,
+      "Please enter acenet id"
+    ),
+  // salary_band: yup.string().required("This field is required"),
+  emp_id: yup
+    .string()
+    .required("This field is required")
+    .matches(/^\d*$/, "Employe id must be only numeric"),
   address: yup.string().required("This field is required"),
   permanent_account_number_of_the_employee: yup
     .string()
@@ -394,7 +407,6 @@ export const form12bb_validation = yup.object({
   interest_payable_paid_to_the_lender: yup
     .string()
     .when("deductionofinterestonborrowing", (val, schema) => {
-      console.log("sdcdscdcdc", val);
       if (val[0] === "true") {
         return yup
           .string()
@@ -402,26 +414,23 @@ export const form12bb_validation = yup.object({
           .matches(/^[0-9]+$/, "This field must be only digits (0-9)");
       } else return yup.string().notRequired();
     }),
-  name_of_the_lander: yup
+  name_of_the_lender: yup
     .string()
     .when("deductionofinterestonborrowing", (val, schema) => {
-      console.log("sdcdscdcdc", val);
       if (val[0] === "true") {
         return yup.string().required("This field is required");
       } else return yup.string().notRequired();
     }),
-  address_of_the_lander: yup
+  address_of_the_lender: yup
     .string()
     .when("deductionofinterestonborrowing", (val, schema) => {
-      console.log("sdcdscdcdc", val);
       if (val[0] === "true") {
         return yup.string().required("This field is required");
       } else return yup.string().notRequired();
     }),
-  permanent_account_number_of_the_lander: yup
+  permanent_account_number_of_the_lender: yup
     .string()
     .when("deductionofinterestonborrowing", (val, schema) => {
-      console.log("sdcdscdcdc", val);
       if (val[0] === "true") {
         return yup.string().required("This field is required");
       } else return yup.string().notRequired();
@@ -451,9 +460,9 @@ export const form_flexible_validation = yup.object({
       /[A-Za-z0-9._%+-]+@+(acenet.io|[A-Za-z0-9._%+-])$/,
       "Please enter acenet id"
     ),
+  // salary_band: yup.string().required("This field is required"),
   emp_id: yup
     .string()
     .required("This field is required")
     .matches(/^\d*$/, "Employe id must be only numeric"),
-  vpf_apply: yup.string().required("This field is required"),
 });

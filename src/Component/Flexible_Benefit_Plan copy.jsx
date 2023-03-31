@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 const Flexible_Benefit_Plan = () => {
   const navigate = useNavigate();
   const positions = {
-    HR: [
+    hr: [
       "Executive -HR & Ops",
       "Sr. Executive-HR & Ops",
       "Lead Executive -HR & Ops",
@@ -21,7 +21,7 @@ const Flexible_Benefit_Plan = () => {
       "Director -HR & Ops",
       "CXO/Managing Partner",
     ],
-    "Business Consulting": [
+    business: [
       "Analyst Consulting",
       "Associate Consultant",
       "Consultant",
@@ -33,7 +33,7 @@ const Flexible_Benefit_Plan = () => {
       "Partner",
       "CXO/Managing Partner",
     ],
-    "Technology Consulting": [
+    technology: [
       "Junior Software Engineer",
       "Software Engineer",
       "Senior Software Engineer",
@@ -44,7 +44,7 @@ const Flexible_Benefit_Plan = () => {
       "Director Technology",
       "CXO/Managing Partner",
     ],
-    Management: [
+    management: [
       "Analyst",
       "Associate Vice President-Program Management ",
       "Vice President-Program Management",
@@ -58,8 +58,8 @@ const Flexible_Benefit_Plan = () => {
     ],
   };
 
-  const [selectedBand, setselectedBand] = useState("Band 1");
-  const [selectedStream, setSelectedStream] = useState("HR");
+  const [selectedBand, setselectedBand] = useState("band_1");
+  const [selectedStream, setSelectedStream] = useState("hr");
   const [selectedPosition, setSelectedPosition] = useState("");
   const [inputData, setInputData] = useState([]);
   const {
@@ -72,13 +72,6 @@ const Flexible_Benefit_Plan = () => {
   });
   const handleBandChange = (event) => {
     setselectedBand(event.target.value);
-    setInputData({
-      ...inputData,
-      fuel_allowance: "NA",
-      meals_allowance: "NA",
-      books_and_periodicals_allowance: "NA",
-      telephone_allowance: "NA",
-    });
   };
 
   const handleStreamChange = (event) => {
@@ -99,65 +92,28 @@ const Flexible_Benefit_Plan = () => {
       };
     });
   };
-  function capitalizeBothStrings(str) {
-    const words = str.split(" ");
-    const capitalizedWords = words.map(
-      (word) => word.charAt(0).toUpperCase() + word.slice(1)
-    );
-    return capitalizedWords.join(" ");
-  }
+
   const handleSubmitButton = (e) => {
     const jsonDate = {
       ...inputData,
-      // name: inputData?.name === "" ? "NA" : inputData?.name,
-      // email: inputData?.email === "" ? "NA" : inputData?.email,
-      // emp_id: inputData?.emp_id === "" ? "NA" : inputData?.emp_id,
-      name:
-        inputData?.name !== undefined && capitalizeBothStrings(inputData?.name),
       vpf_apply:
-        inputData?.vpf_apply === undefined ? "No" : inputData?.vpf_apply,
+        inputData?.vpf_apply === undefined ? "no" : inputData?.vpf_apply,
       children_allowance:
         inputData?.children_allowance === undefined
           ? 0
-          : inputData?.children_allowance * 100,
+          : inputData?.children_allowance,
       salary_band: selectedBand,
       stream: selectedStream,
-      position: selectedPosition === "" ? "NA" : selectedPosition,
-      telephone_allowance:
-        inputData?.telephone_allowance === "" ||
-        inputData?.telephone_allowance === undefined
-          ? "NA"
-          : inputData?.telephone_allowance,
-      fuel_allowance:
-        inputData?.fuel_allowance === "" ||
-        inputData?.fuel_allowance === undefined
-          ? "NA"
-          : inputData?.fuel_allowance,
-      driver_allowance:
-        inputData?.driver_allowance === "" ||
-        inputData?.driver_allowance === undefined
-          ? "NA"
-          : inputData?.driver_allowance,
-      meals_allowance:
-        inputData?.meals_allowance === "" ||
-        inputData?.meals_allowance === undefined
-          ? "NA"
-          : inputData?.meals_allowance,
-      books_and_periodicals_allowance:
-        inputData?.books_and_periodicals_allowance === "" ||
-        inputData?.books_and_periodicals_allowance === undefined
-          ? "NA"
-          : inputData?.books_and_periodicals_allowance,
+      position: selectedPosition,
     };
     async function postData() {
       const result = await axios.post(`${BaseURL}/form_flexi`, jsonDate, {
         headers: headersCors,
       });
+      console.log(jsonDate);
       const resp = result.data;
       alert(resp.message);
-      if (resp?.message === "Form has been submitted") {
-        navigate("/");
-      }
+      console.log(jsonDate);
     }
     postData();
   };
@@ -276,10 +232,13 @@ const Flexible_Benefit_Plan = () => {
                       onChange={handleBandChange}
                       name="salary_band"
                     >
-                      <option value="Band 1">less than 10 Lakhs</option>
-                      <option value="Band 2"> 10 lakhs - 15 Lakhs</option>
-                      <option value="Band 3"> 15 Lakhs - 20 Lakhs</option>
-                      <option value="Band 4"> Above 20 Lakhs</option>
+                      <option value="" disabled>
+                        --select one --
+                      </option>
+                      <option value="band_1">less than 10 Lakhs</option>
+                      <option value="band_2"> 10 lakhs - 15 Lakhs</option>
+                      <option value="band_3"> 15 Lakhs - 20 Lakhs</option>
+                      <option value="band_4"> Above 20 Lakhs</option>
                     </select>
                   </div>
                   <div className="form-group">
@@ -294,14 +253,10 @@ const Flexible_Benefit_Plan = () => {
                       onChange={handleStreamChange}
                       name="stream"
                     >
-                      <option value="HR">HR</option>
-                      <option value="Business Consulting">
-                        Business Consulting
-                      </option>
-                      <option value="Technology Consulting">
-                        Technology Consulting
-                      </option>
-                      <option value="Management">Management</option>
+                      <option value="hr">HR</option>
+                      <option value="business">Business Consulting</option>
+                      <option value="technology">Technology Consulting</option>
+                      <option value="management">Management</option>
                     </select>
                   </div>
                   <div className="form-group">
@@ -326,19 +281,29 @@ const Flexible_Benefit_Plan = () => {
 
                   <div className="form-group">
                     <label htmlFor="">Would you like to opt for VPF?</label>
+                    <span style={style}> *</span>
                     <select
                       onChange={handleInput}
                       name="vpf_apply"
-                      className="form-control form-control-sm"
-                      value={inputData?.vpf_apply}
+                      id=""
+                      className={classNames("form-control form-control-sm", {
+                        "is-invalid": errors.vpf_apply,
+                      })}
+                      {...register("vpf_apply", {
+                        value: inputData?.vpf_apply,
+                      })}
                     >
-                      <option value="No">No</option>
-                      <option value="Yes">Yes</option>
+                      <option value=""> -- select one -- </option>
+                      <option value="no">No</option>
+                      <option value="yes">Yes</option>
                     </select>
+                    <small class="invalid-feedback">
+                      {errors.vpf_apply?.message}
+                    </small>
                   </div>
 
                   {/* =========Only for band 2 and above============= */}
-                  {selectedBand !== "Band 1" ? (
+                  {selectedBand !== "band_1" ? (
                     <>
                       <div className="form-group">
                         <div className="row">
@@ -381,14 +346,22 @@ const Flexible_Benefit_Plan = () => {
                               onChange={handleInput}
                               name="telephone_allowance"
                               type="number"
-                              className="form-control form-control-sm"
+                              className={classNames(
+                                "form-control form-control-sm",
+                                {
+                                  "is-invalid": errors.telephone_allowance,
+                                }
+                              )}
+                              {...register("telephone_allowance", {
+                                value: inputData?.telephone_allowance,
+                              })}
                               min="1"
                               max={
-                                selectedBand === "Band 2"
+                                selectedBand === "band_2"
                                   ? 2000
-                                  : selectedBand === "Band 3"
+                                  : selectedBand === "band_3"
                                   ? 3000
-                                  : selectedBand === "Band 4"
+                                  : selectedBand === "band_4"
                                   ? 5000
                                   : ""
                               }
@@ -399,11 +372,11 @@ const Flexible_Benefit_Plan = () => {
                             </small>
                           </div>
                           <div className="col-4 text-danger mt-2">
-                            {selectedBand === "Band 2"
+                            {selectedBand === "band_2"
                               ? "(Max Allowance 2000) "
-                              : selectedBand === "Band 3"
+                              : selectedBand === "band_3"
                               ? "(Max Allowance 3000) "
-                              : selectedBand === "Band 4"
+                              : selectedBand === "band_4"
                               ? "(Max Allowance 5000) "
                               : ""}
                           </div>
@@ -422,30 +395,29 @@ const Flexible_Benefit_Plan = () => {
                               value={inputData?.fuel}
                               type="number"
                               className="form-control form-control-sm"
-                              min="1"
                               max={
-                                selectedBand === "Band 2"
+                                selectedBand === "band_2"
                                   ? "3000"
-                                  : selectedBand === "Band 3"
+                                  : selectedBand === "band_3"
                                   ? "5000"
-                                  : selectedBand === "Band 4"
+                                  : selectedBand === "band_4"
                                   ? "10000"
                                   : ""
                               }
                             />
                           </div>
                           <div className="col-4 text-danger mt-2">
-                            {selectedBand === "Band 2"
+                            {selectedBand === "band_2"
                               ? "(Max Allowance 3000) "
-                              : selectedBand === "Band 3"
+                              : selectedBand === "band_3"
                               ? "(Max Allowance 5000) "
-                              : selectedBand === "Band 4"
+                              : selectedBand === "band_4"
                               ? "(Max Allowance 10000) "
                               : ""}
                           </div>
                         </div>
                       </div>
-                      {selectedBand === "Band 4" ? (
+                      {selectedBand === "band_4" ? (
                         <div className="form-group">
                           <div className="row">
                             <div className="col-4">
@@ -461,7 +433,7 @@ const Flexible_Benefit_Plan = () => {
                               />
                             </div>
                             <div className="col-4 text-danger mt-2">
-                              {selectedBand === "Band 4"
+                              {selectedBand === "band_4"
                                 ? "(Max Allowance 8000)"
                                 : ""}
                             </div>
@@ -485,22 +457,22 @@ const Flexible_Benefit_Plan = () => {
                               type="number"
                               min="1"
                               max={
-                                selectedBand === "Band 2"
+                                selectedBand === "band_2"
                                   ? "2000"
-                                  : selectedBand === "Band 3"
+                                  : selectedBand === "band_3"
                                   ? "3000"
-                                  : selectedBand === "Band 4"
+                                  : selectedBand === "band_4"
                                   ? "5000"
                                   : ""
                               }
                             />
                           </div>
                           <div className="col-4 text-danger mt-2">
-                            {selectedBand === "Band 2"
+                            {selectedBand === "band_2"
                               ? "(Max Allowance 2000) "
-                              : selectedBand === "Band 3"
+                              : selectedBand === "band_3"
                               ? "(Max Allowance 3000) "
-                              : selectedBand === "Band 4"
+                              : selectedBand === "band_4"
                               ? "(Max Allowance 5000) "
                               : ""}
                           </div>
@@ -520,22 +492,22 @@ const Flexible_Benefit_Plan = () => {
                               type="number"
                               min="1"
                               max={
-                                selectedBand === "Band 2"
+                                selectedBand === "band_2"
                                   ? "1500"
-                                  : selectedBand === "Band 3"
+                                  : selectedBand === "band_3"
                                   ? "2000"
-                                  : selectedBand === "Band 4"
+                                  : selectedBand === "band_4"
                                   ? "2500"
                                   : ""
                               }
                             />
                           </div>
                           <div className="col-4 text-danger mt-2">
-                            {selectedBand === "Band 2"
-                              ? "(Max Allowance 1500)"
-                              : selectedBand === "Band 3"
+                            {selectedBand === "band_2"
+                              ? "Max Allowance 1500 "
+                              : selectedBand === "band_3"
                               ? "(Max Allowance 2000) "
-                              : selectedBand === "Band 4"
+                              : selectedBand === "band_4"
                               ? "Max Allowance 2500 "
                               : ""}
                           </div>

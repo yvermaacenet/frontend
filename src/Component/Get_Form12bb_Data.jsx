@@ -18,10 +18,11 @@ const Get_Form12bb_Data = () => {
   const clickbuttondata = async (id) => {
     const result = await axios.get(`form_12_bb/${id}`);
     const resp = result.data[0];
-    console.log(resp);
     const ded = [
       {
         Name: resp.name,
+        Email: resp.email,
+        "Employee ID": resp.emp_id,
         "Fathers Name": resp.father_name,
         Address: resp.address,
         PAN: resp.permanent_account_number_of_the_employee,
@@ -34,10 +35,10 @@ const Get_Form12bb_Data = () => {
         "Leave travel concession /assistance":
           resp.leave_travel_concessions_or_assistance_amount,
         "Interest Paid to the lender": resp.interest_payable_paid_to_the_lender,
-        "Name of the lender": resp.name_of_the_lander,
-        "Address of the lander": resp.address_of_the_lender,
-        "Permanent Account Number of the lander":
-          resp.permanent_account_number_of_the_lander,
+        "Name of the lender": resp.name_of_the_lender,
+        "Address of the lender": resp.address_of_the_lender,
+        "Permanent Account Number of the lender":
+          resp.permanent_account_number_of_the_lender,
         "Financial Institutions(if available)": resp.financial_institutions,
         "Employer(if available)": resp.employer,
         Others: resp.others,
@@ -45,7 +46,7 @@ const Get_Form12bb_Data = () => {
     ];
     const ded2 = resp.deductions.map((val) => {
       return {
-        "Section Name": val.section,
+        "Section Name": val.section.split("section_")[1],
         "Section Type": val.section_type,
         "Section Amount": val.section_amount,
       };
@@ -59,19 +60,16 @@ const Get_Form12bb_Data = () => {
       bookType: "xlsx",
       type: "array",
     });
-    console.log(excelBuffer);
     const downloadExcel = async () => {
       const blob = await new Blob([excelBuffer], {
         type: "application/octet-stream",
       });
-      const fileName = `${resp.name}.xlsx`;
+      const fileName = `${resp.name}_Form_12_BB.xlsx`;
       saveAs(blob, fileName);
     };
     downloadExcel();
   };
 
-  console.log("dsada", [getForm12bbdatabyid]);
-  console.log("dsada", [getForm12bbdatabyid.deductions]);
   return (
     <div>
       <div className="row">
