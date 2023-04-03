@@ -18491,7 +18491,7 @@ dl li {
   font-size: 0.8125rem;
 }
 .auth form .form-group .form-control {
-  background: transparent;
+  /* background: transparent; */
   border-radius: 0;
   font-size: 0.9375rem;
 }

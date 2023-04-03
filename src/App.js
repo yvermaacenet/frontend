@@ -12,6 +12,7 @@ import Flexible_Benefit_Plan from "./Component/Flexible_Benefit_Plan";
 import Get_Form_Flexi_Benefit_Data from "./Component/Get_Form_Flexi_Benefit_Data";
 import Forms from "./Component/Forms";
 import Forms_Data_Download from "./Component/Forms_Data_Download";
+import Dashboard from "./Component/Dashboard";
 function App() {
   return (
     <>
@@ -27,6 +28,7 @@ function App() {
               }
             />
           ))}
+          <Route exact path="/dashboard/*" element={<Dashboard />} />
           <Route exact path="/" element={<Sign_In />} />
           {/* <Route exact path="*" element={<Sign_In />} /> */}
           <Route exact path="/sign_up" element={<Sign_Up />} />

@@ -42,23 +42,88 @@ const Sign_In = () => {
     }
     postData();
   };
-  // const onSignInZOHO = () => {
-  //   async function postData() {
-  //     const result = await axios.get(`sign_in_zoho`);
-  //     const resp = result.data;
-  //     window.location.replace(resp);
-  //   }
-  //   postData();
-  // };
+  const onSignInZoho = () => {
+    async function postData() {
+      const result = await axios.get(`sign_in_zoho`);
+      const resp = result.data;
+      window.location.replace(resp);
+    }
+    postData();
+  };
   if (cookies?.Access_Token) {
     return <Navigate to={"/dashboard"} />;
   }
+  const mongoDatabase = [
+    {
+      "Email address": "uday@acenet.io",
+      "First Name": "Uday Kumar",
+      "Employee ID": "91",
+    },
+    {
+      "Email address": "manish@acenet.io",
+      "First Name": "Manish",
+      "Employee ID": "90",
+    },
+  ];
+  const zohoApiData = [
+    {
+      "Email address": "udayq@acenet.io",
+      "First Name": "Uday",
+      "Employee ID": "91",
+    },
+    {
+      "Email address": "manish@acenet.io",
+      "First Name": "Manish",
+      "Employee ID": "90",
+    },
+    {
+      "Email address": "yogendra@acenet.io",
+      "First Name": "Yogendra Verma",
+      "Employee ID": "92",
+    },
+    {
+      "Email address": "akshay@acenet.io",
+      "First Name": "akshay ",
+      "Employee ID": "93",
+    },
+  ];
+  const gettingDataForUpdate = [];
+  function abc(obj1, obj2) {
+    var ret = {};
+    for (var i in obj2) {
+      if (!obj1.hasOwnProperty(i) || obj2[i] !== obj1[i]) {
+        ret[i] = obj2[i];
+      }
+    }
+    return gettingDataForUpdate.push(ret);
+  }
+  // mongoDatabase.map((val) =>
+  //   zohoApiData.map((res) => {
+  //     if (val["Employee ID"] === res["Employee ID"]) {
+  //       return console.log(abc(val, res));
+  //     }
+  //   })
+  // );
+
+  const compareData = zohoApiData.filter((val) =>
+    mongoDatabase.some(
+      (res) => res["Employee ID"] === val["Employee ID"] && abc(val, res)
+    )
+  );
+  const newData = zohoApiData.filter(
+    (val) =>
+      !mongoDatabase.some((res) => res["Employee ID"] === val["Employee ID"])
+  );
+
+  console.log("gettingDataForUpdate", gettingDataForUpdate);
+  console.log("newData", newData);
+  // console.log("compareData", compareData);
   return (
     <div className="container-scroller">
       <div className="container-fluid page-body-wrapper full-page-wrapper">
         <div className="content-wrapper d-flex align-items-center auth">
           <div className="row flex-grow">
-            <div className="col-lg-6 mx-auto">
+            <div className="col-lg-4 mx-auto">
               <div className="auth-form-light text-left p-5">
                 <div className="brand-logo">
                   <img src="../../assets/images/logo.svg" />
@@ -92,6 +157,7 @@ const Sign_In = () => {
                       {...register("password", {
                         value: inputData?.password,
                       })}
+                      type="password"
                       name="password"
                       onChange={inputEvent}
                       placeholder="Enter Password"
@@ -109,15 +175,15 @@ const Sign_In = () => {
                     >
                       SIGN IN
                     </button>
-                    {/* <button
+                    <button
                       className="btn btn-block btn-gradient-secondary btn-sm font-weight-medium ms-4"
                       type="button"
-                      onClick={onSignInZOHO}
+                      onClick={onSignInZoho}
                     >
-                      ZOHO
-                    </button> */}
+                      SIGN IN WITH ZOHO
+                    </button>
                   </div>
-                  <div className="my-2 d-flex justify-content-between align-items-center">
+                  {/* <div className="my-2 d-flex justify-content-between align-items-center">
                     <div className="form-check">
                       <label className="form-check-label text-muted">
                         <input type="checkbox" className="form-check-input" />
@@ -127,7 +193,7 @@ const Sign_In = () => {
                     <a href="#" className="auth-link text-black">
                       Forgot password?
                     </a>
-                  </div>
+                  </div> */}
                   {/* <div className="mb-2">
                     <button
                       type="button"
@@ -144,7 +210,7 @@ const Sign_In = () => {
                     </NavLink>
                   </div>
                 </form>
-                <div className="mt-3 border bg-light p-3">
+                {/* <div className="mt-3 border bg-light p-3">
                   <small>Click here for Forms </small>
                   <ul class="list-arrow fw-bolder">
                     <li>
@@ -181,7 +247,7 @@ const Sign_In = () => {
                       </NavLink>
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

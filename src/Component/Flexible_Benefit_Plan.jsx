@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
 import { BaseURL, headersCors } from "../Utils/AxiosApi";
 import axios from "axios";
@@ -80,6 +80,33 @@ const Flexible_Benefit_Plan = () => {
     mode: "onTouched",
     resolver: yupResolver(form_flexible_validation),
   });
+  useEffect(() => {
+    async function getData() {
+      const result = await axios.get(
+        `${BaseURL}/get_form_flexible_by_id/${LocalStorageData?.user_id}`
+      );
+      const resp = result?.data[0];
+      setInputData({
+        ...resp,
+        children_allowance:
+          resp?.children_allowance !== undefined
+            ? resp?.children_allowance / 100
+            : resp?.children_allowance,
+      });
+
+      setselectedBand(
+        resp?.salary_band === undefined ? "Band 1" : resp?.salary_band
+      );
+      setSelectedStream(resp?.stream === undefined ? "HR" : resp?.stream);
+      setSelectedPosition(resp?.position === undefined ? "" : resp?.position);
+      // setDeductionofinterestonborrowing(
+      //   resp?.deduction_of_interest_on_borrowing === undefined
+      //     ? true
+      //     : resp?.deduction_of_interest_on_borrowing
+      // );
+    }
+    getData();
+  }, []);
   const handleBandChange = (event) => {
     setselectedBand(event.target.value);
     setInputData({
@@ -119,6 +146,8 @@ const Flexible_Benefit_Plan = () => {
   const handleSubmitButton = (e) => {
     const jsonDate = {
       ...inputData,
+      status: true,
+      user_id: LocalStorageData?.user_id,
       email: LocalStorageData?.email,
       emp_id: LocalStorageData?.emp_id,
       name:
@@ -158,14 +187,14 @@ const Flexible_Benefit_Plan = () => {
           : inputData?.books_and_periodicals_allowance,
     };
     async function postData() {
-      setLoading(true);
+      // setLoading(true);
       const result = await axios.post(`${BaseURL}/form_flexi`, jsonDate, {
         headers: headersCors,
       });
       const resp = result.data;
       alert(resp.message);
       if (resp?.message === "Form has been submitted") {
-        setLoading(false);
+        // setLoading(false);
 
         navigate("/");
       }
@@ -251,6 +280,7 @@ const Flexible_Benefit_Plan = () => {
                               placeholder="Enter First name"
                               value={inputData?.name}
                               // autoSave
+                              disabled={inputData?.status && true}
                             />
                             <small class="invalid-feedback">
                               {errors.name?.message}
@@ -259,7 +289,7 @@ const Flexible_Benefit_Plan = () => {
                           <div className="form-group">
                             <label for="exampleInputUsername1">Email</label>
                             <input
-                              className="form-control form-control-sm bg-light"
+                              className="form-control form-control-sm  "
                               name="email"
                               onChange={handleInput}
                               placeholder="Enter Email"
@@ -272,7 +302,7 @@ const Flexible_Benefit_Plan = () => {
                               Employee Id
                             </label>
                             <input
-                              className="form-control form-control-sm bg-light"
+                              className="form-control form-control-sm  "
                               name="emp_id"
                               onChange={handleInput}
                               placeholder="Enter Employee id"
@@ -291,6 +321,8 @@ const Flexible_Benefit_Plan = () => {
                               id="exampleFormControlSelect3"
                               onChange={handleBandChange}
                               name="salary_band"
+                              disabled={inputData?.status && true}
+                              value={inputData?.salary_band}
                             >
                               <option value="Band 1">less than 10 Lakhs</option>
                               <option value="Band 2">
@@ -315,6 +347,7 @@ const Flexible_Benefit_Plan = () => {
                               value={selectedStream}
                               onChange={handleStreamChange}
                               name="stream"
+                              disabled={inputData?.status && true}
                             >
                               <option value="HR">HR</option>
                               <option value="Business Consulting">
@@ -336,6 +369,7 @@ const Flexible_Benefit_Plan = () => {
                               className="form-control form-control-sm"
                               value={selectedPosition}
                               onChange={handlePositionChange}
+                              disabled={inputData?.status && true}
                             >
                               <option value="">Select a position</option>
                               {positions[selectedStream].map((position) => (
@@ -362,6 +396,7 @@ const Flexible_Benefit_Plan = () => {
                                       name="children_allowance"
                                       onChange={handleInput}
                                       value={inputData?.children_allowance}
+                                      disabled={inputData?.status && true}
                                     >
                                       <option value={0}>0</option>
                                       <option value={1}>1</option>
@@ -370,7 +405,7 @@ const Flexible_Benefit_Plan = () => {
                                   </div>
                                   <div className="col-4">
                                     Total Allowance:
-                                    <span className="ms-3 fw-bold">
+                                    <span className="ms-1 me-1 fw-bold">
                                       {inputData?.children_allowance ===
                                       undefined
                                         ? 0 * 100
@@ -405,6 +440,8 @@ const Flexible_Benefit_Plan = () => {
                                           : ""
                                       }
                                       maxLength={4}
+                                      value={inputData?.telephone_allowance}
+                                      disabled={inputData?.status && true}
                                     />
                                     <small class="invalid-feedback">
                                       {errors.telephone_allowance?.message}
@@ -431,9 +468,9 @@ const Flexible_Benefit_Plan = () => {
                                     <input
                                       onChange={handleInput}
                                       name="fuel_allowance"
-                                      value={inputData?.fuel}
                                       type="number"
                                       className="form-control form-control-sm"
+                                      value={inputData?.fuel_allowance}
                                       min="1"
                                       max={
                                         selectedBand === "Band 2"
@@ -444,6 +481,7 @@ const Flexible_Benefit_Plan = () => {
                                           ? "10000"
                                           : ""
                                       }
+                                      disabled={inputData?.status && true}
                                     />
                                   </div>
                                   <div className="col-4 text-danger mt-2">
@@ -468,8 +506,10 @@ const Flexible_Benefit_Plan = () => {
                                         type="number"
                                         name="driver_allowance"
                                         onChange={handleInput}
+                                        value={inputData?.driver_allowance}
                                         className="form-control form-control-sm"
                                         max="8000"
+                                        disabled={inputData?.status && true}
                                       />
                                     </div>
                                     <div className="col-4 text-danger mt-2">
@@ -494,6 +534,7 @@ const Flexible_Benefit_Plan = () => {
                                       onChange={handleInput}
                                       name="meals_allowance"
                                       className="form-control form-control-sm"
+                                      value={inputData?.meals_allowance}
                                       type="number"
                                       min="1"
                                       max={
@@ -505,6 +546,7 @@ const Flexible_Benefit_Plan = () => {
                                           ? "5000"
                                           : ""
                                       }
+                                      disabled={inputData?.status && true}
                                     />
                                   </div>
                                   <div className="col-4 text-danger mt-2">
@@ -532,6 +574,9 @@ const Flexible_Benefit_Plan = () => {
                                       name="books_and_periodicals_allowance"
                                       className="form-control form-control-sm"
                                       type="number"
+                                      value={
+                                        inputData?.books_and_periodicals_allowance
+                                      }
                                       min="1"
                                       max={
                                         selectedBand === "Band 2"
@@ -542,6 +587,7 @@ const Flexible_Benefit_Plan = () => {
                                           ? "2500"
                                           : ""
                                       }
+                                      disabled={inputData?.status && true}
                                     />
                                   </div>
                                   <div className="col-4 text-danger mt-2">
@@ -562,12 +608,21 @@ const Flexible_Benefit_Plan = () => {
 
                           {/* ===========================Submit================== */}
 
-                          <button
+                          {/* <button
                             type="submit"
                             className="btn btn-gradient-primary me-2"
                           >
                             Submit
-                          </button>
+                          </button> */}
+                          {!inputData?.status && (
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-success me-2"
+                              // onClick={() => setbutton_id(2)}
+                            >
+                              Submit
+                            </button>
+                          )}
                         </form>
                       </div>
                     </div>

@@ -345,11 +345,12 @@ export const form12bb_validation = yup.object({
       "This field allows only uppercase alphabetic characters and numerals"
     ),
 
-  houseRentAllowance: yup.string().required("This field is required"),
+  houseRentAllowance: yup.string().notRequired(),
 
   rent_paid_to_the_landlord: yup
     .string()
     .when("houseRentAllowance", (val, schema) => {
+      // console.log("eqeqewq", val);
       if (val[0] === "true") {
         return yup
           .string()
@@ -364,7 +365,13 @@ export const form12bb_validation = yup.object({
         return yup.string().required("This field is required");
       } else return yup.string().notRequired();
     }),
-
+  address_of_the_rental_property: yup
+    .string()
+    .when("houseRentAllowance", (val, schema) => {
+      if (val[0] === "true") {
+        return yup.string().required("This field is required");
+      } else return yup.string().notRequired();
+    }),
   permanent_account_number_of_the_landloard: yup
     .string()
     .when("houseRentAllowance", (val, schema) => {

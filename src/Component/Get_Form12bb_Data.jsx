@@ -16,44 +16,112 @@ const Get_Form12bb_Data = () => {
   }, []);
 
   const clickbuttondata = async (id) => {
-    const result = await axios.get(`form_12_bb/${id}`);
+    const result = await axios.get(`get_form_12_bb_controller_by_id/${id}`);
     const resp = result.data[0];
     const ded = [
-      {
-        Name: resp.name,
-        Email: resp.email,
-        "Employee ID": resp.emp_id,
-        "Fathers Name": resp.father_name,
-        Address: resp.address,
-        PAN: resp.permanent_account_number_of_the_employee,
-        Place: resp.place,
-        "Financial Year": resp.financial_year,
-        VPF: resp?.vpf_apply,
-        "Rent Paid to the landlord": resp.rent_paid_to_the_landlord,
-        "Name of the landlord": resp.name_of_the_landlord,
-        "Address of the landlord": resp.address_of_the_landlord,
-        "PAN of landlord": resp.permanent_account_number_of_the_landloard,
-        "Leave travel concession /assistance":
-          resp.leave_travel_concessions_or_assistance_amount,
-        "Interest Paid to the lender": resp.interest_payable_paid_to_the_lender,
-        "Name of the lender": resp.name_of_the_lender,
-        "Address of the lender": resp.address_of_the_lender,
-        "Permanent Account Number of the lender":
-          resp.permanent_account_number_of_the_lender,
-        "Financial Institutions(if available)": resp.financial_institutions,
-        Others: resp.others,
-      },
+      ["Sr.No", "#", "#"],
+      ["1", "Name", resp.name],
+      ["2", "Email", resp.email],
+      ["3", "Employee ID", resp.emp_id],
+      ["4", "Fathers Name", resp.father_name],
+      ["5", "Address", resp.address],
+      ["6", "PAN", resp.permanent_account_number_of_the_employee],
+      ["7", "Place", resp.place],
+      ["8", "Financial Year", resp.financial_year],
+      ["9", "VPF", resp?.vpf_apply],
+      ["10", "Self Occupied or Rented", resp?.self_occupied_or_rented],
+      ["11", "Rent Paid to the landlord", resp.rent_paid_to_the_landlord],
+      ["12", "Name of the landlord", resp.name_of_the_landlord],
+      // "Address of the landlord", resp.address_of_the_landlord,
+      [
+        "13",
+        "Address of the Rental Property",
+        resp.address_of_the_rental_property,
+      ],
+      ["14", "PAN of landlord", resp.permanent_account_number_of_the_landloard],
+      ["15", "Availed in last 4 Years", resp.availed_in_last_4_years],
+      [
+        "16",
+        "Leave travel concession /assistance",
+        resp.leave_travel_concessions_or_assistance_amount,
+      ],
+      [
+        "17",
+        "Interest Paid to the lender",
+        resp.interest_payable_paid_to_the_lender,
+      ],
+      ["18", "Name of the lender", resp.name_of_the_lender],
+      [
+        "19",
+        "Permanent Account Number of the lender",
+        resp.permanent_account_number_of_the_lender,
+      ],
+      [
+        "20",
+        "Financial Institutions(if available)",
+        resp.financial_institutions,
+      ],
+      ["21", "Others", resp.others],
+      ["22", "Section Name", "Section Type", "Amount"],
     ];
-    const ded2 = resp.deductions.map((val) => {
-      return {
-        "Section Name": val.section.split("section_")[1],
-        "Section Type": val.section_type,
-        "Section Amount": val.section_amount,
-      };
+    const rr = [];
+    function romanize(num) {
+      if (isNaN(num)) return NaN;
+      var digits = String(+num).split(""),
+        key = [
+          "",
+          "C",
+          "CC",
+          "CCC",
+          "CD",
+          "D",
+          "DC",
+          "DCC",
+          "DCCC",
+          "CM",
+          "",
+          "X",
+          "XX",
+          "XXX",
+          "XL",
+          "L",
+          "LX",
+          "LXX",
+          "LXXX",
+          "XC",
+          "",
+          "I",
+          "II",
+          "III",
+          "IV",
+          "V",
+          "VI",
+          "VII",
+          "VIII",
+          "IX",
+        ],
+        roman = "",
+        i = 3;
+      while (i--) roman = (key[+digits.pop() + i * 10] || "") + roman;
+      return Array(+digits.join("") + 1).join("M") + roman;
+    }
+    await resp?.deductions.map((val, index) => {
+      rr.push([
+        `(${romanize(index + 1)})`,
+        val.section.split("section_")[1],
+        val.section_type,
+        val.section_amount,
+        ,
+      ]);
     });
-
-    const mergedData = ded.concat(ded2);
-    const worksheet = XLSX.utils.json_to_sheet(mergedData);
+    // console.log("ded2", ded2);
+    // console.log("rr", rr);
+    const mergedData = ded.concat(rr);
+    // console.log("mergedData", mergedData);
+    const worksheet = XLSX.utils.aoa_to_sheet(mergedData);
+    worksheet["!cols"] = [{ width: 15 }, { width: 15 }];
+    // worksheet["!merges"] = uuuu;
+    // const worksheet = XLSX.utils.json_to_sheet(mergedData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
     const excelBuffer = XLSX.write(workbook, {
@@ -98,9 +166,9 @@ const Get_Form12bb_Data = () => {
                         <td>{val.address}</td>
                         <td>
                           <button
-                            className="btn btn-outline-primary"
+                            className="btn btn-sm btn-outline-primary"
                             type="button"
-                            onClick={() => clickbuttondata(val?._id)}
+                            onClick={() => clickbuttondata(val?.user_id)}
                           >
                             Download
                           </button>

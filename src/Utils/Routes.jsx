@@ -14,13 +14,14 @@ import User_Update from "../Component/User/User_Update";
 import Profile_Update from "../Component/User/Profile_Update";
 import Form12BB from "../Component/Form12BB";
 import Flexible_Benefit_Plan from "../Component/Flexible_Benefit_Plan";
+import Form12BB_Final_Submit from "../Component/Form12BB_Final_Submit";
 const Routes_Array = [
   //   <!================= User ==================>
-  {
-    path: "/dashboard/*",
-    component: Dashboard,
-    allowedRoles: ["Admin", "Employee"],
-  },
+  // {
+  //   path: "/dashboard/*",
+  //   component: Dashboard,
+  //   allowedRoles: ["Admin", "Employee"],
+  // },
   {
     path: "/user_list/:status_code",
     component: User_List,
@@ -96,6 +97,11 @@ const Routes_Array = [
   {
     path: "/form12bb",
     component: Form12BB,
+    allowedRoles: ["Employee"],
+  },
+  {
+    path: "/form12BB_final_submit",
+    component: Form12BB_Final_Submit,
     allowedRoles: ["Employee"],
   },
   {

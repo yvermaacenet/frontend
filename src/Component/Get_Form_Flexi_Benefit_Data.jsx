@@ -54,28 +54,28 @@ const Get_Form_Flexi_Benefit_Data = () => {
     downloadExcel();
   };
   const clickbuttondata = async (id) => {
-    const result = await axios.get(`form_flexi/${id}`);
+    const result = await axios.get(`get_form_flexible_by_id/${id}`);
     const resp = result.data[0];
     const ded = [
-      {
-        Name: resp.name,
-        Email: resp.email,
-        "Employee ID": resp.emp_id,
-        "Salary band": resp.salary_band,
-        Stream: resp.stream,
-        Position: resp.position,
-        VPF: resp.vpf_apply,
-        "Children allowance": resp.children_allowance,
-        "Telephone Allowance": resp.telephone_allowance,
-        Fuel: resp.fuel_allowance,
-        Driver: resp.driver_allowance,
-        "Meals Allowance": resp.meals_allowance,
-        "Books and Periodicals": resp.books_and_periodicals_allowance,
-      },
+      ["Sr.No", "#", "Value"],
+      ["1", "Name", resp.name],
+      ["2", "Email", resp.email],
+      ["3", "Employee ID", resp.emp_id],
+      ["4", "Salary band", resp.salary_band],
+      ["5", "Stream", resp.stream],
+      ["6", "Position", resp.position],
+      ["7", "Children allowance", resp.children_allowance],
+      ["8", "Telephone Allowance", resp.telephone_allowance],
+      ["9", "Fuel", resp.fuel_allowance],
+      ["10", "Driver", resp.driver_allowance],
+      ["11", "Meals Allowance", resp.meals_allowance],
+      ["12", "Books and Periodicals", resp.books_and_periodicals_allowance],
     ];
 
-    const worksheet = XLSX.utils.json_to_sheet(ded);
+    const worksheet = XLSX.utils.aoa_to_sheet(ded);
+    worksheet["!cols"] = [{ width: 15 }, { width: 15 }];
     const workbook = XLSX.utils.book_new();
+    // console.log("workbook", workbook);
     XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
@@ -133,7 +133,7 @@ const Get_Form_Flexi_Benefit_Data = () => {
                             <button
                               className="btn btn-outline-primary btn-sm"
                               type="button"
-                              onClick={() => clickbuttondata(val?._id)}
+                              onClick={() => clickbuttondata(val?.user_id)}
                             >
                               Download
                             </button>
