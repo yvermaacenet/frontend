@@ -32,7 +32,7 @@ const Sign_In = () => {
     async function postData() {
       const result = await axios.post(`sign_in`, inputData);
       const resp = result.data;
-      if (resp?.message === "loggedin successfully.") {
+      if (resp?.message === "loggedin successfully") {
         localStorage.setItem("loggedin", JSON.stringify(resp));
         navigate("/dashboard");
       } else {
@@ -53,71 +53,7 @@ const Sign_In = () => {
   if (cookies?.Access_Token) {
     return <Navigate to={"/dashboard"} />;
   }
-  const mongoDatabase = [
-    {
-      "Email address": "uday@acenet.io",
-      "First Name": "Uday Kumar",
-      "Employee ID": "91",
-    },
-    {
-      "Email address": "manish@acenet.io",
-      "First Name": "Manish",
-      "Employee ID": "90",
-    },
-  ];
-  const zohoApiData = [
-    {
-      "Email address": "udayq@acenet.io",
-      "First Name": "Uday",
-      "Employee ID": "91",
-    },
-    {
-      "Email address": "manish@acenet.io",
-      "First Name": "Manish",
-      "Employee ID": "90",
-    },
-    {
-      "Email address": "yogendra@acenet.io",
-      "First Name": "Yogendra Verma",
-      "Employee ID": "92",
-    },
-    {
-      "Email address": "akshay@acenet.io",
-      "First Name": "akshay ",
-      "Employee ID": "93",
-    },
-  ];
-  const gettingDataForUpdate = [];
-  function abc(obj1, obj2) {
-    var ret = {};
-    for (var i in obj2) {
-      if (!obj1.hasOwnProperty(i) || obj2[i] !== obj1[i]) {
-        ret[i] = obj2[i];
-      }
-    }
-    return gettingDataForUpdate.push(ret);
-  }
-  // mongoDatabase.map((val) =>
-  //   zohoApiData.map((res) => {
-  //     if (val["Employee ID"] === res["Employee ID"]) {
-  //       return console.log(abc(val, res));
-  //     }
-  //   })
-  // );
 
-  const compareData = zohoApiData.filter((val) =>
-    mongoDatabase.some(
-      (res) => res["Employee ID"] === val["Employee ID"] && abc(val, res)
-    )
-  );
-  const newData = zohoApiData.filter(
-    (val) =>
-      !mongoDatabase.some((res) => res["Employee ID"] === val["Employee ID"])
-  );
-
-  console.log("gettingDataForUpdate", gettingDataForUpdate);
-  console.log("newData", newData);
-  // console.log("compareData", compareData);
   return (
     <div className="container-scroller">
       <div className="container-fluid page-body-wrapper full-page-wrapper">
@@ -203,12 +139,12 @@ const Sign_In = () => {
                       facebook
                     </button>
                   </div> */}
-                  <div className="text-center mt-4 font-weight-light">
+                  {/* <div className="text-center mt-4 font-weight-light">
                     Don't have an account?
                     <NavLink to="sign_up" className="text-primary ms-2">
                       Create
                     </NavLink>
-                  </div>
+                  </div> */}
                 </form>
                 {/* <div className="mt-3 border bg-light p-3">
                   <small>Click here for Forms </small>

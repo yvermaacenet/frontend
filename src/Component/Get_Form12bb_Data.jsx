@@ -119,11 +119,18 @@ const Get_Form12bb_Data = () => {
     const mergedData = ded.concat(rr);
     // console.log("mergedData", mergedData);
     const worksheet = XLSX.utils.aoa_to_sheet(mergedData);
-    worksheet["!cols"] = [{ width: 15 }, { width: 15 }];
+    worksheet["!cols"] = [
+      { width: 5 },
+      { width: 25 },
+      { width: 25 },
+      { width: 25 },
+    ];
     // worksheet["!merges"] = uuuu;
     // const worksheet = XLSX.utils.json_to_sheet(mergedData);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Users", {
+      editable: true,
+    });
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
