@@ -14,7 +14,7 @@ const Sidebar = () => {
           <li className="nav-item nav-profile">
             <NavLink className="nav-link" to="/">
               <div className="nav-profile-image">
-                <img src="../assets/images/faces/face1.jpg" alt="profile" />
+                <img src={LocalStorageData?.photo} alt="image" />
                 <span className="login-status online"></span>
                 {/* <!--change to offline or busy as needed--> */}
               </div>
@@ -78,7 +78,7 @@ const Sidebar = () => {
                 </ul>
               </div>
             </li>
-            <li class="nav-item">
+            {/* <li class="nav-item">
               <a
                 class="nav-link"
                 data-bs-toggle="collapse"
@@ -101,7 +101,7 @@ const Sidebar = () => {
                   </ul>
                 </ul>
               </div>
-            </li>
+            </li> */}
             <li class="nav-item">
               <a
                 class="nav-link"
@@ -117,11 +117,14 @@ const Sidebar = () => {
               <div class="collapse" id="ui-cabin">
                 <ul class="nav flex-column sub-menu">
                   <ul className="nav flex-column sub-menu">
-                    <li className="nav-item">
-                      <NavLink className="nav-link" to="/cabin_list">
-                        Cabin List
-                      </NavLink>
-                    </li>
+                    {LocalStorageData?.zoho_role === "Admin" && (
+                      <li className="nav-item">
+                        <NavLink className="nav-link" to="/cabin_list">
+                          Cabin List
+                        </NavLink>
+                      </li>
+                    )}
+
                     <li className="nav-item">
                       <NavLink className="nav-link" to="/cabin_slot_booking">
                         Cabin Booking
@@ -163,7 +166,41 @@ const Sidebar = () => {
               </ul>
             </div>
           </li>
-          <li class="nav-item">
+          {LocalStorageData?.zoho_role === "CA" && (
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                data-bs-toggle="collapse"
+                href="#ui-form-download"
+                aria-expanded="false"
+                aria-controls="ui-basic"
+              >
+                <span class="menu-title">Forms </span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-book-plus menu-icon"></i>
+              </a>
+              <div class="collapse" id="ui-form-download">
+                <ul class="nav flex-column sub-menu">
+                  <ul className="nav flex-column sub-menu">
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/forms_data_download">
+                        {/* Form 12 BB */}
+                        forms_data_download
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/get_form12bb_data">
+                        {/* Form Flexible Benefit */}
+                        Get_Form12bb_Data
+                      </NavLink>
+                    </li>
+                  </ul>
+                </ul>
+              </div>
+            </li>
+          )}
+
+          {/* <li class="nav-item">
             <a
               class="nav-link"
               data-bs-toggle="collapse"
@@ -191,7 +228,7 @@ const Sidebar = () => {
                 </ul>
               </ul>
             </div>
-          </li>
+          </li> */}
         </ul>
       </nav>
     </>

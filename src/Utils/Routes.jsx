@@ -25,85 +25,85 @@ const Routes_Array = [
   {
     path: "/user_list/:status_code",
     component: User_List,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
-  {
-    path: "/user_add",
-    component: User_Add,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
-  },
-  {
-    path: "/user_update/:_id",
-    component: User_Update,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
-  },
-  {
-    path: "/profile_update/:_id",
-    component: Profile_Update,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
-  },
+  // {
+  //   path: "/user_add",
+  //   component: User_Add,
+  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  // },
+  // {
+  //   path: "/user_update/:_id",
+  //   component: User_Update,
+  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  // },
+  // {
+  //   path: "/profile_update/:_id",
+  //   component: Profile_Update,
+  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  // },
   //   <!================= Department ==================>
-  {
-    path: "/department_list",
-    component: Department_List,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
-  },
-  {
-    path: "/department_add",
-    component: Department_Add,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
-  },
-  {
-    path: "/department_update/:_id",
-    component: Department_Update,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
-  },
+  // {
+  //   path: "/department_list",
+  //   component: Department_List,
+  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  // },
+  // {
+  //   path: "/department_add",
+  //   component: Department_Add,
+  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  // },
+  // {
+  //   path: "/department_update/:_id",
+  //   component: Department_Update,
+  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  // },
   //   <!================= Cabin ==================>
 
   {
     path: "/cabin_add",
     component: Cabin_Add,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
   {
     path: "/cabin_list",
     component: Cabin_List,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
   {
     path: "/cabin_update/:_id",
     component: Cabin_Update,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
   //   <!================= Cabin Slot Booking ==================>
   {
     path: "/cabin_slot_booking",
     component: Cabin_Slot_Booking,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
 
   //   <!================= Boarding ==================>
   {
     path: "/on_boarding/:_id",
     component: On_Boarding,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
   {
     path: "/off_boarding/:_id",
     component: Off_Boarding,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
   //   <!================= Form's ==================>
   {
     path: "/form12bb",
     component: Form12BB,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
 
   {
     path: "/flexible_benefit_plan",
     component: Flexible_Benefit_Plan,
-    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
 ];
 

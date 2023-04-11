@@ -20,7 +20,7 @@ import { useAlert } from "react-alert";
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 const Cabin_Slot_Booking = () => {
-  const alert = useAlert.show();
+  const alert = useAlert();
   const [loading, setLoading] = useState(false);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getCabinSlotBookingList, setGetCabinSlotBookingList] = useState([]);
@@ -89,9 +89,9 @@ const Cabin_Slot_Booking = () => {
       );
     });
     if (selectCabin_id === "all") {
-      alert.show("Please select cabin");
+      alert?.show("Please select cabin");
     } else if (overlap) {
-      alert.show("This time slot is already booked!");
+      alert?.show("This time slot is already booked!");
     } else {
       setAddEventModal(true);
       const newEvent = {
@@ -130,7 +130,7 @@ const Cabin_Slot_Booking = () => {
       })
       .then((res) => {
         return (
-          alert.show(res.data.message),
+          alert?.show(res.data.message),
           setAddEventModal(false),
           setAllDay(false),
           setRenderComponent(true)
@@ -147,7 +147,7 @@ const Cabin_Slot_Booking = () => {
       })
       .then((res) => {
         return (
-          alert.show(res.data.message),
+          alert?.show(res.data.message),
           setEditEventModal(false),
           setAllDay(false),
           setRenderComponent(true)
@@ -162,7 +162,7 @@ const Cabin_Slot_Booking = () => {
       .delete(`cabin_slot_booking/${inputData?._id}`)
       .then((res) => {
         return (
-          alert.show(res.data.message),
+          alert?.show(res.data.message),
           setEditEventModal(false),
           setAllDay(false),
           setRenderComponent(true)
@@ -216,12 +216,12 @@ const Cabin_Slot_Booking = () => {
       console.log("end", event.end);
       console.log("event", event);
       if (selectCabin_id === "all") {
-        alert.show("Please select cabin");
+        alert?.show("Please select cabin");
       } else if (event.start === event.end) {
-        alert.show("Are you sure you want to delete this event?");
+        alert?.show("Are you sure you want to delete this event?");
         // onDeleteEvent(event);
       } else if (overlappingBooking && event._id !== overlappingBooking._id) {
-        alert.show("already booked");
+        alert?.show("already booked");
       } else {
         async function dragndrop() {
           setLoading(true);
@@ -230,7 +230,7 @@ const Cabin_Slot_Booking = () => {
             .then((res) => {
               return (
                 setLoading(false),
-                alert.show(res.data.message),
+                alert?.show(res.data.message),
                 setRenderComponent(true)
               );
             })
@@ -268,9 +268,9 @@ const Cabin_Slot_Booking = () => {
       );
       console.log(event.allDay);
       if (selectCabin_id === "all") {
-        alert.show("Please select cabin");
+        alert?.show("Please select cabin");
       } else if (overlappingBooking && event._id !== overlappingBooking._id) {
-        alert.show("already booked");
+        alert?.show("already booked");
       } else {
         setGetCabinSlotBookingList((prev) => {
           const existing = prev?.find((ev) => ev?._id === event?._id) ?? {};
@@ -285,7 +285,7 @@ const Cabin_Slot_Booking = () => {
               .then((res) => {
                 return (
                   setLoading(false),
-                  alert.show(res.data.message),
+                  alert?.show(res.data.message),
                   setRenderComponent(true)
                 );
               })

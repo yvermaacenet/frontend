@@ -69,8 +69,8 @@ const User_List = () => {
               <Page_Header
                 page_title="Employees"
                 page_title_icon="mdi-account-multiple-outline"
-                page_title_button="Add"
-                page_title_button_link="/user_add"
+                page_title_button="Back"
+                page_title_button_link="/dashboard"
               />
 
               <div class="row">
@@ -104,7 +104,16 @@ const User_List = () => {
                     >
                       Pending Onboarding
                     </button>
-                    {(roless?.Admin?.includes(LocalStorageData?.user_id) ||
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-inverse-secondary btn-fw ms-1"
+                      onClick={() =>
+                        setStatus_code("pending_offboarding_users")
+                      }
+                    >
+                      Pending Offboarding
+                    </button>
+                    {/* {(roless?.Admin?.includes(LocalStorageData?.user_id) ||
                       roless?.hr?.includes(LocalStorageData?.user_id)) && (
                       <button
                         type="button"
@@ -139,7 +148,7 @@ const User_List = () => {
                             </>
                           );
                         })
-                      : ""}
+                      : ""} */}
                   </div>
                 </div>
               </div>
@@ -157,7 +166,7 @@ const User_List = () => {
                       <thead>
                         <tr>
                           <th>#</th>
-                          <th>Employee ID</th>
+                          {/* <th>Employee ID</th> */}
                           <th>Name</th>
                           <th>Zoho Role</th>
                           <th>Phone</th>
@@ -173,7 +182,7 @@ const User_List = () => {
                               <td class="py-1">
                                 <img src={value?.Photo} alt="image" />
                               </td>
-                              <td class="py-1">{value["Employee ID"]}</td>
+                              {/* <td class="py-1">{value["Employee ID"]}</td> */}
                               <td>
                                 {value["First Name"]} {value["Last Name"]}
                               </td>
@@ -208,11 +217,11 @@ const User_List = () => {
                                 (roless?.Finance?.includes(
                                   LocalStorageData?.user_id
                                 ) &&
-                                  value?.on_boarding_steper_counter >= 2) ||
+                                  value?.on_boarding_steper_counter >= 1) ||
                                 (roless?.Management?.includes(
                                   LocalStorageData?.user_id
                                 ) &&
-                                  value?.on_boarding_steper_counter >= 3) ? (
+                                  value?.on_boarding_steper_counter >= 2) ? (
                                   <NavLink to={`/on_boarding/${value?._id}`}>
                                     <button
                                       type="button"

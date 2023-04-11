@@ -33,17 +33,17 @@ function App() {
           <Route exact path="*" element={<Sign_In />} />
           {/* <Route exact path="/sign_up" element={<Sign_Up />} /> */}
           {/* <Route exact path="/forms" element={<Forms />} /> */}
-          <Route
+          {/* <Route
             exact
             path="/forms_data_download"
             element={<Forms_Data_Download />}
-          />
+          /> */}
           {/* <Route exact path="/form12bb" element={<Form12BB />} /> */}
-          <Route
+          {/* <Route
             exact
             path="/get_form12bb_data"
             element={<Get_Form12bb_Data />}
-          />
+          /> */}
           {/* <Route
             exact
             path="/flexible_benefit_plan"

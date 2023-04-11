@@ -141,7 +141,7 @@ const Dashboard = () => {
       card_title: "Pending Onboarding",
       card_icon: "mdi-airplane",
       card_counter_data: counterList?.Pending_Onboarding,
-      card_allowed_access: ["Admin", "HR", "Finance", "Management"],
+      card_allowed_access: ["Admin", "Hr", "Finance", "Management"],
     },
     {
       card_background: "bg-gradient-secondary",
@@ -149,7 +149,7 @@ const Dashboard = () => {
       card_title: "Pending Offboarding",
       card_icon: "mdi-airplane-off",
       card_counter_data: counterList?.Pending_Offboarding,
-      card_allowed_access: ["Admin", "HR", "Finance", "Management"],
+      card_allowed_access: ["Admin", "Hr", "Finance", "Management"],
     },
     {
       card_background: "bg-gradient-warning",
@@ -159,7 +159,7 @@ const Dashboard = () => {
       card_counter_data: counterList?.Total_Cabin_Booking,
       card_allowed_access: [
         "Admin",
-        "HR",
+        "Hr",
         "Finance",
         "Management",
         "Team member",
@@ -283,22 +283,25 @@ const Dashboard = () => {
               />
 
               <div class="row">
-                <div class="col-md-4 grid-margin">
-                  <PieChart width={400} height={220}>
-                    <Pie
-                      activeIndex={states?.activeIndex}
-                      activeShape={renderActiveShape}
-                      data={data01}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                      onMouseEnter={onPieEnter}
-                    />
-                  </PieChart>
-                </div>
+                {!LocalStorageData?.zoho_role === "Team member" && (
+                  <div class="col-md-4 grid-margin">
+                    <PieChart width={400} height={220}>
+                      <Pie
+                        activeIndex={states?.activeIndex}
+                        activeShape={renderActiveShape}
+                        data={data01}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        fill="#82ca9d"
+                        dataKey="value"
+                        onMouseEnter={onPieEnter}
+                      />
+                    </PieChart>
+                  </div>
+                )}
+
                 {/* <div class="col-md-3 stretch-card grid-margin">
                   <div class="card bg-gradient-info card-img-holder text-white">
                     <div class="card-body">

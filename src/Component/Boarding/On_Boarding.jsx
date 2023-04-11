@@ -215,9 +215,9 @@ const On_Boarding = () => {
       import_data: inputData,
       step_counter: 5,
       alert_warning_title:
-        "This step is pending from Managment Department !! Please contact to Managment Department.",
+        "This step is pending from Management Department !! Please contact to Management Department.",
       alert_success_title:
-        "This step has been completed from Managment Department !!",
+        "This step has been completed from Management Department !!",
     },
     {
       label: " Other Formalities",
@@ -225,9 +225,9 @@ const On_Boarding = () => {
       import_data: inputData,
       step_counter: 6,
       alert_warning_title:
-        "This step is pending from Managment Department !! Please contact to Managment Department.",
+        "This step is pending from Management Department !! Please contact to Management Department.",
       alert_success_title:
-        "This step has been completed from Managment Department !!",
+        "This step has been completed from Management Department !!",
     },
   ];
   function convertDateFormate(str) {
@@ -379,110 +379,1264 @@ const On_Boarding = () => {
 
                   <div style={{ margin: "40px" }}>
                     <form class="forms-sample">
-                      {!roless?.Admin?.includes(LocalStorageData.user_id) &&
-                      !roless?.Hr?.includes(LocalStorageData.user_id) &&
-                      !roless?.Finance?.includes(LocalStorageData.user_id) &&
-                      !roless?.Management?.includes(
-                        LocalStorageData.user_id
-                      ) ? (
-                        <>
-                          <MultiStepForm activeStep={active}>
-                            {stperArrayForEmployee.map((val) => {
-                              return (
-                                <Step label={val.label}>
-                                  {inputData?.steper_counter <
-                                    val?.step_counter &&
-                                  inputData?.step_counter === undefined ? (
-                                    <div
-                                      class="alert alert-warning alert-dismissible fade show"
-                                      role="alert"
-                                      // style={{
-                                      //   display:
-                                      //     val?.step_counter === 1
-                                      //       ? "none"
-                                      //       : "block",
-                                      // }}
-                                    >
-                                      <i class="mdi mdi-alert-octagon me-1"></i>
-                                      {val?.alert_warning_title}
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      class="alert alert-success alert-dismissible fade show"
-                                      role="alert"
-                                      // style={{
-                                      //   display:
-                                      //     val?.step_counter === 1
-                                      //       ? "none"
-                                      //       : "block",
-                                      // }}
-                                    >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      {val?.alert_success_title}
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  )}
-                                  <val.component inputData={val?.import_data} />
-                                </Step>
-                              );
-                            })}
-                          </MultiStepForm>
-                          {/* <!==========  Previous Button ============> */}
+                      <>
+                        (Not Team member)
+                        <MultiStepForm activeStep={active}>
+                          <Step label="First Day Formalities (HR)">
+                            <>
+                              {inputData?.steper_counter <= 3 &&
+                              inputData?.steper_counter >= 1 ? (
+                                <div
+                                  class="alert alert-success alert-dismissible fade show"
+                                  role="alert"
+                                >
+                                  <i class="mdi mdi-check-circle-outline me-1"></i>
+                                  This step has been completed.
+                                  <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Close"
+                                  ></button>
+                                </div>
+                              ) : (
+                                <div
+                                  class="alert alert-warning alert-dismissible fade show"
+                                  role="alert"
+                                >
+                                  <i class="mdi mdi-alert-octagon me-1"></i>
+                                  "This step is pending !!"
+                                  <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="alert"
+                                    aria-label="Close"
+                                  ></button>
+                                </div>
+                              )}
+                            </>
+                            <>
+                              <div className="row">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <table class="table table-hover">
+                                      <thead>
+                                        <tr>
+                                          <th> Field Name </th>
+                                          <th> Action </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <p class="card-description mt-2 mb-0 text-center">
+                                          First Day Formalities
+                                        </p>
+                                        <tr>
+                                          <td> Wifi Passwords </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="wifi_passwords"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.wifi_passwords
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Generate Mail Id </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="genrate_mail_id"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.genrate_mail_id
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> One Drive Access </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="one_drive_access"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.one_drive_access
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Add To Official DLs</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="add_to_official_dls"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.add_to_official_dls
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Teams Access</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="teams_access"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.teams_access
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Biometric </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="biometric"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={inputData?.biometric}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Induction Call</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="induction_call"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.induction_call
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        {inputData?.induction_call === true ? (
+                                          <tr>
+                                            <td> Induction Call With</td>
+                                            <td>
+                                              <select
+                                                name="induction_call_with"
+                                                onChange={inputEvent}
+                                                style={{ opacity: 0 }}
+                                                value={
+                                                  inputData?.induction_call_with
+                                                }
+                                                className="form-control mt-2 "
+                                                type="text"
+                                              >
+                                                <option>Please Select</option>
+                                                <option value="sunil">
+                                                  Sunil
+                                                </option>
+                                                <option value="amit">
+                                                  Amit
+                                                </option>
+                                              </select>
+                                            </td>
+                                          </tr>
+                                        ) : (
+                                          ""
+                                        )}
+                                        <tr>
+                                          <td> Acenet Laptop</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="acenet_laptop"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.acenet_laptop
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Client Laptop</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="client_laptop"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.client_laptop
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Notepad </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="notpad"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={inputData?.notpad}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> T-Shirt</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="t_shirt"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={inputData?.t_shirt}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Welcome Kit</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="welcome_kit"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.welcome_kit
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Intro Slide Shared</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="intro_slide_shared"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.intro_slide_shared
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <p class="card-description mt-2 mb-0 text-center">
+                                          Documents
+                                        </p>
+                                        <tr>
+                                          <td>Aadhar Card</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="aadhar_card"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.aadhar_card
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> PAN Card</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="pan_card"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={inputData?.pan_card}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Passport </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="passport"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={inputData?.passport}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> DL </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="dl"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={inputData?.dl}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> 10th </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="ten_th"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={inputData?.ten_th}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> 12th </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="tweleve_th"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.tweleve_th
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Graduation </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="graduation"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.graduation
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Post Graduation</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="post_graduation"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.post_graduation
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            Experience proof - Relieving letter
+                                            from previous employers (if
+                                            previously employed)
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="experience_proof"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.experience_proof
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Passport size photograph</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="passport_size_photo"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.passport_size_photo
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Signed Offer Letter</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="signed_offer_latter"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.signed_offer_latter
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Document Verification</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="documents_verification"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.documents_verification
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Covid Certificate</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="covid_certificate"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.covid_certificate
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            Employee Data Sheet (Bank Details)
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="employee_data_sheet_bank_details"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.employee_data_sheet_bank_details
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Other official document</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="other_official_documents"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.other_official_documents
+                                                  }
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Pay slips - Last 3 months</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="pay_slips"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={inputData?.pay_slips}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            Form 16 or Taxable income statement
+                                            duly certified by previous
+                                            employer(Statement showing
+                                            deductions and Taxable income with
+                                            break up)
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="forms_16"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={inputData?.forms_16}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </>
+                          </Step>
 
-                          {active !== 1 && (
+                          <Step label="Compliance Documents (Finance)">
                             <>
-                              <button
-                                class="btn btn-sm btn-gradient-primary me-2"
-                                onClick={(e) => {
-                                  return (
-                                    e.preventDefault(),
-                                    setActive(active - 1),
-                                    setSteperCounter(steperCounter - 1)
-                                  );
-                                }}
-                              >
-                                Previous
-                              </button>
-                            </>
-                          )}
-                          {/* {active !== 7 && active <= steperCounter && ( */}
-                          {active !== 6 && (
-                            <>
-                              <button
-                                class="btn btn-sm btn-gradient-primary me-2"
-                                onClick={(e) => {
-                                  return (
-                                    e.preventDefault(),
-                                    setActive(active + 1),
-                                    setSteperCounter(steperCounter + 1)
-                                  );
-                                }}
-                                style={{ float: "right" }}
-                              >
-                                Next
-                              </button>
-                            </>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          (Not Team member)
-                          <MultiStepForm activeStep={active}>
-                            <Step label="First Day Formalities (HR)">
                               <>
                                 {inputData?.steper_counter <= 3 &&
-                                inputData?.steper_counter >= 1 ? (
+                                inputData?.steper_counter >= 2 ? (
                                   <div
                                     class="alert alert-success alert-dismissible fade show"
                                     role="alert"
@@ -512,1291 +1666,566 @@ const On_Boarding = () => {
                                   </div>
                                 )}
                               </>
-                              <>
-                                <div className="row">
-                                  <div class="card">
-                                    <div class="card-body">
-                                      <table class="table table-hover">
-                                        <thead>
-                                          <tr>
-                                            <th> Field Name </th>
-                                            <th> Action </th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <p class="card-description mt-2 mb-0 text-center">
-                                            First Day Formalities
-                                          </p>
-                                          <tr>
-                                            <td> Wifi Passwords </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="wifi_passwords"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.wifi_passwords
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Generate Mail Id </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="genrate_mail_id"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.genrate_mail_id
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> One Drive Access </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="one_drive_access"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.one_drive_access
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Add To Official DLs</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="add_to_official_dls"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.add_to_official_dls
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Teams Access</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="teams_access"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.teams_access
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Biometric </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="biometric"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.biometric
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Induction Call</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="induction_call"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.induction_call
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          {inputData?.induction_call ===
-                                          true ? (
-                                            <tr>
-                                              <td> Induction Call With</td>
-                                              <td>
-                                                <select
-                                                  name="induction_call_with"
+                              <div className="row">
+                                <div class="card">
+                                  <div class="card-body">
+                                    <table class="table table-hover">
+                                      <thead>
+                                        <tr>
+                                          <th> Field Name </th>
+                                          <th> Action </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <p class="card-description mt-2 mb-0 text-center">
+                                          Compliance Documents
+                                        </p>
+                                        <tr>
+                                          <td> PF Form Received</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="pf_form_recieved"
+                                                  class="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   style={{ opacity: 0 }}
-                                                  value={
-                                                    inputData?.induction_call_with
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
                                                   }
-                                                  className="form-control mt-2 "
-                                                  type="text"
-                                                >
-                                                  <option>Please Select</option>
-                                                  <option value="sunil">
-                                                    Sunil
-                                                  </option>
-                                                  <option value="amit">
-                                                    Amit
-                                                  </option>
-                                                </select>
-                                              </td>
-                                            </tr>
-                                          ) : (
-                                            ""
-                                          )}
-                                          <tr>
-                                            <td> Acenet Laptop</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="acenet_laptop"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.acenet_laptop
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Client Laptop</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="client_laptop"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.client_laptop
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Notepad </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="notpad"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={inputData?.notpad}
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> T-Shirt</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="t_shirt"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={inputData?.t_shirt}
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Welcome Kit</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="welcome_kit"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.welcome_kit
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Intro Slide Shared</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="intro_slide_shared"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.intro_slide_shared
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <p class="card-description mt-2 mb-0 text-center">
-                                            Documents
-                                          </p>
-                                          <tr>
-                                            <td>Aadhar Card</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="aadhar_card"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.aadhar_card
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> PAN Card</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="pan_card"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.pan_card
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Passport </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="passport"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.passport
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> DL </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="dl"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={inputData?.dl}
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> 10th </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="ten_th"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={inputData?.ten_th}
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> 12th </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="tweleve_th"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.tweleve_th
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Graduation </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="graduation"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.graduation
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Post Graduation</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="post_graduation"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.post_graduation
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              Experience proof - Relieving
-                                              letter from previous employers (if
-                                              previously employed)
-                                            </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="experience_proof"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.experience_proof
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Passport size photograph</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="passport_size_photo"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.passport_size_photo
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Signed Offer Letter</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="signed_offer_latter"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.signed_offer_latter
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Document Verification</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="documents_verification"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.documents_verification
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Covid Certificate</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="covid_certificate"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.covid_certificate
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              Employee Data Sheet (Bank Details)
-                                            </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="employee_data_sheet_bank_details"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.employee_data_sheet_bank_details
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Other official document</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="other_official_documents"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.other_official_documents
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Pay slips - Last 3 months</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="pay_slips"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.pay_slips
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              Form 16 or Taxable income
-                                              statement duly certified by
-                                              previous employer(Statement
-                                              showing deductions and Taxable
-                                              income with break up)
-                                            </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="forms_16"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.forms_16
-                                                    }
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </div>
+                                                  checked={
+                                                    inputData?.pf_form_recieved
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>PF Form submitted to CA Team</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="pf_submitted_to_ca_team"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.pf_submitted_to_ca_team
+                                                  }
+                                                />
+                                                <span
+                                                  class="slider round"
+                                                  disabled
+                                                ></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            PF Number shared with the employee
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="PF_number_shared_with_the_employee"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.PF_number_shared_with_the_employee
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> Gratuity Form Received</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="gratuity_Form_Received"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.gratuity_Form_Received
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            Gratuity Form submitteed to CA Team
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="gratuity_Form_submitteed_to_CA_Team"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.gratuity_Form_submitteed_to_CA_Team
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> GHI Documents Received</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="ghi_documents_received"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.ghi_documents_received
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>GHI Initiated</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="ghi_initiated"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.ghi_initiated
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>GHI E-Card issued</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="ghi_eCard_issued"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.ghi_eCard_issued
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <p class="card-description mt-2 mb-0 text-center">
+                                          HDFC Bank Details
+                                        </p>
+                                        <tr>
+                                          <td> HDFC Account Mapped</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="hdfc_account_mapped"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.hdfc_account_mapped
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> HDFC Account Initiated</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="hdfc_account_initiated"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.hdfc_account_initiated
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td> HDFC Account Opened</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="hdfc_account_opened"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.hdfc_account_opened
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            HDFC Account Benefeciary added
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="hdfc_account_benefeciary_added"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    roless?.Hr?.includes(
+                                                      LocalStorageData?.user_id
+                                                    ) && active > 1
+                                                      ? true
+                                                      : roless?.Finance?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) &&
+                                                        (active < 2 ||
+                                                          active > 2)
+                                                      ? true
+                                                      : roless?.Management?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active < 3
+                                                      ? true
+                                                      : false
+                                                  }
+                                                  checked={
+                                                    inputData?.hdfc_account_benefeciary_added
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
                                   </div>
                                 </div>
-                              </>
-                            </Step>
+                              </div>
+                            </>
+                          </Step>
 
-                            <Step label="Compliance Documents (Finance)">
+                          <Step label="ZOHO Account (Management)">
+                            <>
                               <>
-                                <>
-                                  {inputData?.steper_counter <= 3 &&
-                                  inputData?.steper_counter >= 2 ? (
-                                    <div
-                                      class="alert alert-success alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed.
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      class="alert alert-warning alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-alert-octagon me-1"></i>
-                                      "This step is pending !!"
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  )}
-                                </>
+                                {inputData?.steper_counter === 3 ? (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                ) : (
+                                  <div
+                                    class="alert alert-warning alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-alert-octagon me-1"></i>
+                                    "This step is pending !!"
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                )}
+                              </>
+
+                              <>
                                 <div className="row">
                                   <div class="card">
                                     <div class="card-body">
                                       <table class="table table-hover">
                                         <thead>
+                                          <p class="card-description mt-2 mb-0 text-center">
+                                            Zoho Accounts
+                                          </p>
                                           <tr>
                                             <th> Field Name </th>
                                             <th> Action </th>
                                           </tr>
                                         </thead>
                                         <tbody>
-                                          <p class="card-description mt-2 mb-0 text-center">
-                                            Compliance Documents
-                                          </p>
                                           <tr>
-                                            <td> PF Form Received</td>
+                                            <td>ZOHO People Account Created</td>
                                             <td>
                                               <div className="board">
                                                 <span>No</span>
                                                 <label class="switch ms-1 me-1 mt-1 ">
                                                   <input
                                                     type="checkbox"
-                                                    name="pf_form_recieved"
+                                                    name="zoho_people_account_created"
                                                     class="form-control form-control-sm"
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
@@ -1807,9 +2236,7 @@ const On_Boarding = () => {
                                                         ? true
                                                         : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
+                                                          ) && active > 2
                                                         ? true
                                                         : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
@@ -1818,7 +2245,7 @@ const On_Boarding = () => {
                                                         : false
                                                     }
                                                     checked={
-                                                      inputData?.pf_form_recieved
+                                                      inputData?.zoho_people_account_created
                                                     }
                                                   />
                                                   <span class="slider round"></span>
@@ -1829,7 +2256,7 @@ const On_Boarding = () => {
                                           </tr>
                                           <tr>
                                             <td>
-                                              PF Form submitted to CA Team
+                                              Zoho People Account Activated
                                             </td>
                                             <td>
                                               <div className="board">
@@ -1837,7 +2264,7 @@ const On_Boarding = () => {
                                                 <label class="switch ms-1 me-1 mt-1 ">
                                                   <input
                                                     type="checkbox"
-                                                    name="pf_submitted_to_ca_team"
+                                                    name="zoho_people_account_activated"
                                                     class="form-control form-control-sm"
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
@@ -1848,9 +2275,7 @@ const On_Boarding = () => {
                                                         ? true
                                                         : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
+                                                          ) && active > 2
                                                         ? true
                                                         : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
@@ -1859,51 +2284,7 @@ const On_Boarding = () => {
                                                         : false
                                                     }
                                                     checked={
-                                                      inputData?.pf_submitted_to_ca_team
-                                                    }
-                                                  />
-                                                  <span
-                                                    class="slider round"
-                                                    disabled
-                                                  ></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              PF Number shared with the employee
-                                            </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="PF_number_shared_with_the_employee"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                    checked={
-                                                      inputData?.PF_number_shared_with_the_employee
+                                                      inputData?.zoho_people_account_activated
                                                     }
                                                   />
                                                   <span class="slider round"></span>
@@ -1913,14 +2294,14 @@ const On_Boarding = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <td> Gratuity Form Received</td>
+                                            <td>Zoho Payroll Integrated</td>
                                             <td>
                                               <div className="board">
                                                 <span>No</span>
                                                 <label class="switch ms-1 me-1 mt-1 ">
                                                   <input
                                                     type="checkbox"
-                                                    name="gratuity_Form_Received"
+                                                    name="zoho_payroll_integrated"
                                                     class="form-control form-control-sm"
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
@@ -1931,9 +2312,7 @@ const On_Boarding = () => {
                                                         ? true
                                                         : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
+                                                          ) && active > 2
                                                         ? true
                                                         : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
@@ -1942,166 +2321,7 @@ const On_Boarding = () => {
                                                         : false
                                                     }
                                                     checked={
-                                                      inputData?.gratuity_Form_Received
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              Gratuity Form submitteed to CA
-                                              Team
-                                            </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="gratuity_Form_submitteed_to_CA_Team"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                    checked={
-                                                      inputData?.gratuity_Form_submitteed_to_CA_Team
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> GHI Documents Received</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="ghi_documents_received"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                    checked={
-                                                      inputData?.ghi_documents_received
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>GHI Initiated</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="ghi_initiated"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                    checked={
-                                                      inputData?.ghi_initiated
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>GHI E-Card issued</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="ghi_eCard_issued"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    disabled={
-                                                      roless?.Hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 1
-                                                        ? true
-                                                        : roless?.Finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
-                                                        ? true
-                                                        : roless?.Management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 3
-                                                        ? true
-                                                        : false
-                                                    }
-                                                    checked={
-                                                      inputData?.ghi_eCard_issued
+                                                      inputData?.zoho_payroll_integrated
                                                     }
                                                   />
                                                   <span class="slider round"></span>
@@ -2111,20 +2331,23 @@ const On_Boarding = () => {
                                             </td>
                                           </tr>
                                           <p class="card-description mt-2 mb-0 text-center">
-                                            HDFC Bank Details
+                                            Other Formalities
                                           </p>
                                           <tr>
-                                            <td> HDFC Account Mapped</td>
+                                            <td> BGV Initiated</td>
                                             <td>
                                               <div className="board">
                                                 <span>No</span>
                                                 <label class="switch ms-1 me-1 mt-1 ">
                                                   <input
                                                     type="checkbox"
-                                                    name="hdfc_account_mapped"
+                                                    name="bgv_initiated"
                                                     class="form-control form-control-sm"
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
+                                                    checked={
+                                                      inputData?.bgv_initiated
+                                                    }
                                                     disabled={
                                                       roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
@@ -2132,18 +2355,13 @@ const On_Boarding = () => {
                                                         ? true
                                                         : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
+                                                          ) && active > 2
                                                         ? true
                                                         : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
                                                           ) && active < 3
                                                         ? true
                                                         : false
-                                                    }
-                                                    checked={
-                                                      inputData?.hdfc_account_mapped
                                                     }
                                                   />
                                                   <span class="slider round"></span>
@@ -2153,17 +2371,20 @@ const On_Boarding = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <td> HDFC Account Initiated</td>
+                                            <td> BGV Invoice Paid</td>
                                             <td>
                                               <div className="board">
                                                 <span>No</span>
                                                 <label class="switch ms-1 me-1 mt-1 ">
                                                   <input
                                                     type="checkbox"
-                                                    name="hdfc_account_initiated"
+                                                    name="bgv_invoice_Paid"
                                                     class="form-control form-control-sm"
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
+                                                    checked={
+                                                      inputData?.bgv_invoice_Paid
+                                                    }
                                                     disabled={
                                                       roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
@@ -2171,18 +2392,13 @@ const On_Boarding = () => {
                                                         ? true
                                                         : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
+                                                          ) && active > 2
                                                         ? true
                                                         : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
                                                           ) && active < 3
                                                         ? true
                                                         : false
-                                                    }
-                                                    checked={
-                                                      inputData?.hdfc_account_initiated
                                                     }
                                                   />
                                                   <span class="slider round"></span>
@@ -2192,17 +2408,20 @@ const On_Boarding = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <td> HDFC Account Opened</td>
+                                            <td> BGV Report Received</td>
                                             <td>
                                               <div className="board">
                                                 <span>No</span>
                                                 <label class="switch ms-1 me-1 mt-1 ">
                                                   <input
                                                     type="checkbox"
-                                                    name="hdfc_account_opened"
+                                                    name="bgv_report_Received"
                                                     class="form-control form-control-sm"
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
+                                                    checked={
+                                                      inputData?.bgv_report_Received
+                                                    }
                                                     disabled={
                                                       roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
@@ -2210,18 +2429,13 @@ const On_Boarding = () => {
                                                         ? true
                                                         : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
+                                                          ) && active > 2
                                                         ? true
                                                         : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
                                                           ) && active < 3
                                                         ? true
                                                         : false
-                                                    }
-                                                    checked={
-                                                      inputData?.hdfc_account_opened
                                                     }
                                                   />
                                                   <span class="slider round"></span>
@@ -2231,19 +2445,20 @@ const On_Boarding = () => {
                                             </td>
                                           </tr>
                                           <tr>
-                                            <td>
-                                              HDFC Account Benefeciary added
-                                            </td>
+                                            <td> Update LinkedIn</td>
                                             <td>
                                               <div className="board">
                                                 <span>No</span>
                                                 <label class="switch ms-1 me-1 mt-1 ">
                                                   <input
                                                     type="checkbox"
-                                                    name="hdfc_account_benefeciary_added"
+                                                    name="update_linkedIn"
                                                     class="form-control form-control-sm"
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
+                                                    checked={
+                                                      inputData?.update_linkedIn
+                                                    }
                                                     disabled={
                                                       roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
@@ -2251,18 +2466,13 @@ const On_Boarding = () => {
                                                         ? true
                                                         : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 2 ||
-                                                            active > 2)
+                                                          ) && active > 2
                                                         ? true
                                                         : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
                                                           ) && active < 3
                                                         ? true
                                                         : false
-                                                    }
-                                                    checked={
-                                                      inputData?.hdfc_account_benefeciary_added
                                                     }
                                                   />
                                                   <span class="slider round"></span>
@@ -2277,448 +2487,124 @@ const On_Boarding = () => {
                                   </div>
                                 </div>
                               </>
-                            </Step>
-
-                            <Step label="ZOHO Account (Management)">
-                              <>
-                                <>
-                                  {inputData?.steper_counter === 3 ? (
-                                    <div
-                                      class="alert alert-success alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed.
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      class="alert alert-warning alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-alert-octagon me-1"></i>
-                                      "This step is pending !!"
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  )}
-                                </>
-
-                                <>
-                                  <div className="row">
-                                    <div class="card">
-                                      <div class="card-body">
-                                        <table class="table table-hover">
-                                          <thead>
-                                            <p class="card-description mt-2 mb-0 text-center">
-                                              Zoho Accounts
-                                            </p>
-                                            <tr>
-                                              <th> Field Name </th>
-                                              <th> Action </th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <td>
-                                                ZOHO People Account Created
-                                              </td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="zoho_people_account_created"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      disabled={
-                                                        roless?.Hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 1
-                                                          ? true
-                                                          : roless?.Finance?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active > 2
-                                                          ? true
-                                                          : roless?.Management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 3
-                                                          ? true
-                                                          : false
-                                                      }
-                                                      checked={
-                                                        inputData?.zoho_people_account_created
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td>
-                                                Zoho People Account Activated
-                                              </td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="zoho_people_account_activated"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      disabled={
-                                                        roless?.Hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 1
-                                                          ? true
-                                                          : roless?.Finance?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active > 2
-                                                          ? true
-                                                          : roless?.Management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 3
-                                                          ? true
-                                                          : false
-                                                      }
-                                                      checked={
-                                                        inputData?.zoho_people_account_activated
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td>Zoho Payroll Integrated</td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="zoho_payroll_integrated"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      disabled={
-                                                        roless?.Hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 1
-                                                          ? true
-                                                          : roless?.Finance?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active > 2
-                                                          ? true
-                                                          : roless?.Management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 3
-                                                          ? true
-                                                          : false
-                                                      }
-                                                      checked={
-                                                        inputData?.zoho_payroll_integrated
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                            <p class="card-description mt-2 mb-0 text-center">
-                                              Other Formalities
-                                            </p>
-                                            <tr>
-                                              <td> BGV Initiated</td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="bgv_initiated"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      checked={
-                                                        inputData?.bgv_initiated
-                                                      }
-                                                      disabled={
-                                                        roless?.Hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 1
-                                                          ? true
-                                                          : roless?.Finance?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active > 2
-                                                          ? true
-                                                          : roless?.Management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 3
-                                                          ? true
-                                                          : false
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td> BGV Invoice Paid</td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="bgv_invoice_Paid"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      checked={
-                                                        inputData?.bgv_invoice_Paid
-                                                      }
-                                                      disabled={
-                                                        roless?.Hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 1
-                                                          ? true
-                                                          : roless?.Finance?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active > 2
-                                                          ? true
-                                                          : roless?.Management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 3
-                                                          ? true
-                                                          : false
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td> BGV Report Received</td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="bgv_report_Received"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      checked={
-                                                        inputData?.bgv_report_Received
-                                                      }
-                                                      disabled={
-                                                        roless?.Hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 1
-                                                          ? true
-                                                          : roless?.Finance?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active > 2
-                                                          ? true
-                                                          : roless?.Management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 3
-                                                          ? true
-                                                          : false
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td> Update LinkedIn</td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="update_linkedIn"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      checked={
-                                                        inputData?.update_linkedIn
-                                                      }
-                                                      disabled={
-                                                        roless?.Hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 1
-                                                          ? true
-                                                          : roless?.Finance?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active > 2
-                                                          ? true
-                                                          : roless?.Management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 3
-                                                          ? true
-                                                          : false
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </>
-                              </>
-                            </Step>
-                          </MultiStepForm>
-                          {/* <!==========  Previous Button ============> */}
-                          {active !== 1 && (
-                            <>
-                              <button
-                                class="btn btn-sm btn-gradient-primary me-2"
-                                onClick={(e) => {
-                                  return (
-                                    e.preventDefault(),
-                                    setActive(active - 1),
-                                    setSteperCounter(steperCounter - 1)
-                                  );
-                                }}
-                              >
-                                Previous
-                              </button>
                             </>
-                          )}
-                          {/* <!==========  Next Button ============> */}
-                          {active !== 3 && (
+                          </Step>
+                        </MultiStepForm>
+                        {/* <!==========  Previous Button ============> */}
+                        {active !== 1 && (
+                          <>
                             <button
                               class="btn btn-sm btn-gradient-primary me-2"
                               onClick={(e) => {
                                 return (
                                   e.preventDefault(),
-                                  setActive(active + 1),
-                                  setSteperCounter(steperCounter + 1)
+                                  setActive(active - 1),
+                                  setSteperCounter(steperCounter - 1)
                                 );
                               }}
-                              style={{ float: "right" }}
                             >
-                              Next
+                              Previous
                             </button>
-                          )}
-                          {/* <!==========  Update & Save Button ============> */}
-                          {active >= 1 && active < 3 && (
-                            <>
-                              {inputData?._id ? (
-                                <>
-                                  <button
-                                    class="btn btn-sm btn-gradient-success me-2"
-                                    onClick={onUpdateNextButton}
-                                    style={{
-                                      float: "right",
-                                      display:
-                                        roless?.Hr?.includes(
-                                          LocalStorageData?.user_id
-                                        ) && active > 1
-                                          ? "none"
-                                          : roless?.Finance?.includes(
-                                              LocalStorageData?.user_id
-                                            ) &&
-                                            (active < 2 || active > 2)
-                                          ? "none"
-                                          : roless?.Management?.includes(
-                                              LocalStorageData?.user_id
-                                            ) && active < 5
-                                          ? "none"
-                                          : "block",
-                                    }}
-                                  >
-                                    Update & Next
-                                  </button>
-                                </>
-                              ) : (
+                          </>
+                        )}
+                        {/* <!==========  Next Button ============> */}
+                        {active !== 3 && (
+                          <button
+                            class="btn btn-sm btn-gradient-primary me-2"
+                            onClick={(e) => {
+                              return (
+                                e.preventDefault(),
+                                setActive(active + 1),
+                                setSteperCounter(steperCounter + 1)
+                              );
+                            }}
+                            style={{ float: "right" }}
+                          >
+                            Next
+                          </button>
+                        )}
+                        {/* <!==========  Update & Save Button ============> */}
+                        {active >= 1 && active < 3 && (
+                          <>
+                            {inputData?._id ? (
+                              <>
                                 <button
                                   class="btn btn-sm btn-gradient-success me-2"
-                                  onClick={onSaveNextButton}
+                                  onClick={onUpdateNextButton}
                                   style={{
                                     float: "right",
                                     display:
                                       roless?.Hr?.includes(
                                         LocalStorageData?.user_id
-                                      ) && active > 2
+                                      ) && active > 1
                                         ? "none"
                                         : roless?.Finance?.includes(
                                             LocalStorageData?.user_id
                                           ) &&
-                                          active < 2 &&
-                                          active > 2
+                                          (active < 2 || active > 2)
                                         ? "none"
                                         : roless?.Management?.includes(
                                             LocalStorageData?.user_id
-                                          ) && active < 5
+                                          ) && active < 3
                                         ? "none"
                                         : "block",
                                   }}
                                 >
-                                  Save & Next
+                                  Submit
                                 </button>
-                              )}
-                            </>
-                          )}
-                          {/* <!========== onSubmittedButton ============> */}
-                          {active === 3 && (
-                            <button
-                              class="btn btn-sm btn-gradient-success me-2"
-                              onClick={onSubmittedButton}
-                              style={{
-                                float: "right",
-                                display:
-                                  roless?.Management?.includes(
-                                    LocalStorageData?.user_id
-                                  ) && active > 2
-                                    ? "block"
-                                    : roless?.Admin?.includes(
-                                        LocalStorageData?.user_id
-                                      ) && active > 2
-                                    ? "block"
-                                    : "none",
-                              }}
-                            >
-                              Final Submit
-                            </button>
-                          )}
-                        </>
-                      )}
+                              </>
+                            ) : (
+                              <button
+                                class="btn btn-sm btn-gradient-success me-2"
+                                onClick={onSaveNextButton}
+                                style={{
+                                  float: "right",
+                                  display:
+                                    roless?.Hr?.includes(
+                                      LocalStorageData?.user_id
+                                    ) && active > 1
+                                      ? "none"
+                                      : roless?.Finance?.includes(
+                                          LocalStorageData?.user_id
+                                        ) &&
+                                        active < 2 &&
+                                        active > 2
+                                      ? "none"
+                                      : roless?.Management?.includes(
+                                          LocalStorageData?.user_id
+                                        ) && active < 3
+                                      ? "none"
+                                      : "block",
+                                }}
+                              >
+                                Submit
+                              </button>
+                            )}
+                          </>
+                        )}
+                        {/* <!========== onSubmittedButton ============> */}
+                        {active === 3 && (
+                          <button
+                            class="btn btn-sm btn-gradient-success me-2"
+                            onClick={onSubmittedButton}
+                            style={{
+                              float: "right",
+                              display:
+                                roless?.Management?.includes(
+                                  LocalStorageData?.user_id
+                                ) && active > 2
+                                  ? "block"
+                                  : roless?.Admin?.includes(
+                                      LocalStorageData?.user_id
+                                    ) && active > 2
+                                  ? "block"
+                                  : "none",
+                            }}
+                          >
+                            Submit
+                          </button>
+                        )}
+                      </>
                     </form>
                   </div>
                 </div>

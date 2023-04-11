@@ -52,21 +52,22 @@ const Navbar = () => {
           <ul className="navbar-nav navbar-nav-right">
             <li className="nav-item nav-profile dropdown">
               <a
-                className="nav-link dropdown-toggle"
+                // className="nav-link dropdown-toggle"
+                className="nav-link"
                 id="profileDropdown"
                 href="#"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 <div className="nav-profile-img">
-                  <img src="../assets/images/faces/face1.jpg" alt="image" />
+                  <img src={LocalStorageData?.photo} alt="image" />
                   <span className="availability-status online"></span>
                 </div>
                 <div className="nav-profile-text">
                   <p className="mb-1 text-black">{LocalStorageData?.name}</p>
                 </div>
               </a>
-              <div
+              {/* <div
                 className="dropdown-menu navbar-dropdown"
                 aria-labelledby="profileDropdown"
               >
@@ -93,7 +94,7 @@ const Navbar = () => {
                   Off-Boarding
                 </NavLink>
                 <div className="dropdown-divider"></div>
-              </div>
+              </div> */}
             </li>
             <li className="nav-item d-none d-lg-block full-screen-link">
               <a className="nav-link">
@@ -243,6 +244,7 @@ const Navbar = () => {
                   );
                 }}
                 to="/"
+                title="Signout"
               >
                 <i className="mdi mdi-power"></i>
               </NavLink>
