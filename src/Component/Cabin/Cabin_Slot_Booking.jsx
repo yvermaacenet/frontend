@@ -17,10 +17,18 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import ClockLoader from "react-spinners/ClockLoader";
 import { useAlert } from "react-alert";
+<<<<<<< HEAD
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 const Cabin_Slot_Booking = () => {
   const alert = useAlert.show();
+=======
+
+const DragAndDropCalendar = withDragAndDrop(Calendar);
+const localizer = momentLocalizer(moment);
+const Cabin_Slot_Booking = () => {
+  const alert = useAlert();
+>>>>>>> ab9c469ab4180b698fbbc6c745c88a7bafc1f9f1
   const [loading, setLoading] = useState(false);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getCabinSlotBookingList, setGetCabinSlotBookingList] = useState([]);
@@ -212,9 +220,13 @@ const Cabin_Slot_Booking = () => {
           (booking.end > start && booking.end <= end) ||
           (booking.start <= start && booking.end >= end)
       );
+<<<<<<< HEAD
       console.log("start", event.start);
       console.log("end", event.end);
       console.log("event", event);
+=======
+
+>>>>>>> ab9c469ab4180b698fbbc6c745c88a7bafc1f9f1
       if (selectCabin_id === "all") {
         alert.show("Please select cabin");
       } else if (event.start === event.end) {
@@ -369,12 +381,19 @@ const Cabin_Slot_Booking = () => {
                       startAccessor="start"
                       endAccessor="end"
                       defaultView={"week"}
+<<<<<<< HEAD
+=======
+                      eventPropGetter={eventStyleGetter}
+>>>>>>> ab9c469ab4180b698fbbc6c745c88a7bafc1f9f1
                       min={minDate_time}
                       max={maxDate_time}
                       style={{ height: "100vh" }}
                       showMultiDayTimes={true}
                       step={15}
+<<<<<<< HEAD
                       eventPropGetter={eventStyleGetter}
+=======
+>>>>>>> ab9c469ab4180b698fbbc6c745c88a7bafc1f9f1
                     />
                     <PureModal
                       header="Cabin Booking"
