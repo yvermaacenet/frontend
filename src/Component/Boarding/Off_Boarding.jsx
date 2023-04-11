@@ -5,17 +5,8 @@ import Footer from "../../Partials/Footer";
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
-import Employee_Details from "./Employee_Details";
 import axios from "axios";
-import FirstDayFormalities from "./FirstDayFormalities";
-import Document from "./Documents";
-import Compliance_Documents from "./Compliance_Documents";
-import Bank from "./Bank";
-import Zoho_Account from "./Zoho_Account";
-import Other_Formalities from "./Other_Formalities";
-import Supervisor_Clearance from "./Supervisor_Clearance";
-import Admin_Clearance from "./Admin_Clearance";
-import Other_Formalities_Off_Boarding from "./Other_Formalities_Off_Boarding";
+
 const Off_Boarding = () => {
   const navigate = useNavigate();
   const { _id } = useParams();
@@ -147,38 +138,7 @@ const Off_Boarding = () => {
       })
       .catch((err) => console.log(err));
   };
-  const stperArrayForEmployee = [
-    {
-      label: "Supervisor Clearance",
-      component: Supervisor_Clearance,
-      import_data: inputData,
-      step_counter: 1,
-      alert_warning_title:
-        "This step is pending from HR Department !! Please contact to HR Department.",
-      alert_success_title: "This step has been completed from HR Department !!",
-    },
-    {
-      label: "Admin Clearance",
-      component: Admin_Clearance,
-      import_data: inputData,
-      step_counter: 2,
-      alert_warning_title:
-        "This step is pending from Admin !! Please contact to Admin.",
-      alert_success_title: "This step has been completed from Admin !!",
-    },
-    {
-      label: "Other Formalities",
-      component: Other_Formalities_Off_Boarding,
-      import_data: inputData,
-      step_counter: 3,
-      alert_warning_title:
-        "This step is pending from Management Department !! Please contact to Management Department.",
-      alert_success_title:
-        "This step has been completed from Management Department !!",
-    },
-  ];
-  const dd = roless?.Admin?.includes(LocalStorageData.user_id);
-  console.log(dd);
+
   return (
     <div class="container-scroller">
       <Navbar />

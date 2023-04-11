@@ -50,35 +50,33 @@ const Sidebar = () => {
             </NavLink>
           </li>
 
-          {/* {LocalStorageData?.role?.map(
-            (val) =>
-              val?.name === "Admin" && (*/}
-          <>
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                data-bs-toggle="collapse"
-                href="#ui-basic"
-                aria-expanded="false"
-                aria-controls="ui-basic"
-              >
-                <span class="menu-title">Users</span>
-                <i class="menu-arrow"></i>
-                <i class="mdi mdi-account-multiple-outline menu-icon"></i>
-              </a>
-              <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
-                  <ul className="nav flex-column sub-menu">
-                    <li className="nav-item">
-                      <NavLink className="nav-link" to="/user_list/all_users">
-                        Users List
-                      </NavLink>
-                    </li>
+          {!LocalStorageData?.zoho_role === "Team member" && (
+            <>
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  data-bs-toggle="collapse"
+                  href="#ui-basic"
+                  aria-expanded="false"
+                  aria-controls="ui-basic"
+                >
+                  <span class="menu-title">Users</span>
+                  <i class="menu-arrow"></i>
+                  <i class="mdi mdi-account-multiple-outline menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-basic">
+                  <ul class="nav flex-column sub-menu">
+                    <ul className="nav flex-column sub-menu">
+                      <li className="nav-item">
+                        <NavLink className="nav-link" to="/user_list/all_users">
+                          Users List
+                        </NavLink>
+                      </li>
+                    </ul>
                   </ul>
-                </ul>
-              </div>
-            </li>
-            {/* <li class="nav-item">
+                </div>
+              </li>
+              {/* <li class="nav-item">
               <a
                 class="nav-link"
                 data-bs-toggle="collapse"
@@ -102,39 +100,40 @@ const Sidebar = () => {
                 </ul>
               </div>
             </li> */}
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                data-bs-toggle="collapse"
-                href="#ui-cabin"
-                aria-expanded="false"
-                aria-controls="ui-basic"
-              >
-                <span class="menu-title">Cabin</span>
-                <i class="menu-arrow"></i>
-                <i class="mdi mdi-home-modern menu-icon"></i>
-              </a>
-              <div class="collapse" id="ui-cabin">
-                <ul class="nav flex-column sub-menu">
-                  <ul className="nav flex-column sub-menu">
-                    {LocalStorageData?.zoho_role === "Admin" && (
-                      <li className="nav-item">
-                        <NavLink className="nav-link" to="/cabin_list">
-                          Cabin List
-                        </NavLink>
-                      </li>
-                    )}
-
+            </>
+          )}
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              data-bs-toggle="collapse"
+              href="#ui-cabin"
+              aria-expanded="false"
+              aria-controls="ui-basic"
+            >
+              <span class="menu-title">Cabin</span>
+              <i class="menu-arrow"></i>
+              <i class="mdi mdi-home-modern menu-icon"></i>
+            </a>
+            <div class="collapse" id="ui-cabin">
+              <ul class="nav flex-column sub-menu">
+                <ul className="nav flex-column sub-menu">
+                  {LocalStorageData?.zoho_role === "Admin" && (
                     <li className="nav-item">
-                      <NavLink className="nav-link" to="/cabin_slot_booking">
-                        Cabin Booking
+                      <NavLink className="nav-link" to="/cabin_list">
+                        Cabin List
                       </NavLink>
                     </li>
-                  </ul>
+                  )}
+
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/cabin_slot_booking">
+                      Cabin Booking
+                    </NavLink>
+                  </li>
                 </ul>
-              </div>
-            </li>
-          </>
+              </ul>
+            </div>
+          </li>
           {/* )
           )} */}
           <li class="nav-item">

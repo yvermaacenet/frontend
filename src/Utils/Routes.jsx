@@ -5,60 +5,21 @@ import Cabin_List from "../Component/Cabin/Cabin_List";
 import Cabin_Slot_Booking from "../Component/Cabin/Cabin_Slot_Booking";
 import Cabin_Update from "../Component/Cabin/Cabin_Update";
 import Dashboard from "../Component/Dashboard";
-import Department_Add from "../Component/Department/Department_Add";
-import Department_List from "../Component/Department/Department_List";
-import Department_Update from "../Component/Department/Department_Update";
-import User_Add from "../Component/User/User_Add";
 import User_List from "../Component/User/User_List";
-import User_Update from "../Component/User/User_Update";
-import Profile_Update from "../Component/User/Profile_Update";
-import Form12BB from "../Component/Form12BB";
-import Flexible_Benefit_Plan from "../Component/Flexible_Benefit_Plan";
-import Form12BB_Final_Submit from "../Component/Form12BB_Final_Submit";
+import Form12BB from "../Component/Forms/Form12BB";
+import Flexible_Benefit_Plan from "../Component/Forms/Flexible_Benefit_Plan";
 const Routes_Array = [
   //   <!================= User ==================>
-  // {
-  //   path: "/dashboard/*",
-  //   component: Dashboard,
-  //   allowedRoles: ["Admin", "Employee"],
-  // },
+  {
+    path: "/dashboard/*",
+    component: Dashboard,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  },
   {
     path: "/user_list/:status_code",
     component: User_List,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management"],
   },
-  // {
-  //   path: "/user_add",
-  //   component: User_Add,
-  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
-  // },
-  // {
-  //   path: "/user_update/:_id",
-  //   component: User_Update,
-  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
-  // },
-  // {
-  //   path: "/profile_update/:_id",
-  //   component: Profile_Update,
-  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
-  // },
-  //   <!================= Department ==================>
-  // {
-  //   path: "/department_list",
-  //   component: Department_List,
-  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
-  // },
-  // {
-  //   path: "/department_add",
-  //   component: Department_Add,
-  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
-  // },
-  // {
-  //   path: "/department_update/:_id",
-  //   component: Department_Update,
-  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
-  // },
-  //   <!================= Cabin ==================>
 
   {
     path: "/cabin_add",

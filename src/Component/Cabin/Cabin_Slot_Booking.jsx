@@ -9,7 +9,6 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import PureModal from "react-pure-modal";
 import "react-pure-modal/dist/react-pure-modal.min.css";
-import CustomTooltipForCalender from "../../Utils/CustomTooltipForCalender";
 import { Views, DateLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "react-pure-modal/dist/react-pure-modal.min.css";
@@ -552,7 +551,9 @@ const Cabin_Slot_Booking = () => {
               </div>
             )}
           </div>
-          <footer className="footer">{/* <Footer /> */}</footer>
+          <footer className="footer">
+            <Footer />
+          </footer>
         </div>
       </div>
     </div>

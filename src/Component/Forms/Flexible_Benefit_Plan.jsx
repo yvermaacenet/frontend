@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, NavLink, useNavigate } from "react-router-dom";
-import { BaseURL, headersCors } from "../Utils/AxiosApi";
+import { BaseURL, headersCors } from "../../Utils/AxiosApi";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { form_flexible_validation } from "../Utils/Validation_Form";
+import { form_flexible_validation } from "../../Utils/Validation_Form";
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
-import Navbar from "../Partials/Navbar";
-import Sidebar from "../Partials/Sidebar";
-import Page_Header from "../Partials/Page_Header";
+import Navbar from "../../Partials/Navbar";
+import Sidebar from "../../Partials/Sidebar";
+import Page_Header from "../../Partials/Page_Header";
 import { CSSProperties } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useAlert } from "react-alert";
@@ -262,55 +262,52 @@ const Flexible_Benefit_Plan = () => {
                           className="forms-sample"
                           onSubmit={handleSubmit(handleSubmitButton)}
                         >
-                          <div className="form-group">
-                            <label for="exampleInputUsername1">Name</label>
-                            <span style={style}> *</span>
-                            <input
-                              className={classNames(
-                                "form-control form-control-sm",
-                                {
-                                  "is-invalid": errors.name,
-                                }
-                              )}
-                              {...register("name", {
-                                value: inputData?.name,
-                              })}
-                              name="name"
-                              onChange={handleInput}
-                              placeholder="Enter First name"
-                              value={inputData?.name}
-                              // autoSave
-                              disabled={inputData?.status && true}
-                            />
-                            <small class="invalid-feedback">
-                              {errors.name?.message}
-                            </small>
-                          </div>
-                          <div className="form-group">
-                            <label for="exampleInputUsername1">Email</label>
-                            <input
-                              className="form-control form-control-sm  "
-                              name="email"
-                              onChange={handleInput}
-                              placeholder="Enter Email"
-                              value={LocalStorageData?.email}
-                              disabled
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label for="exampleInputUsername1">
-                              Employee Id
-                            </label>
-                            <input
-                              className="form-control form-control-sm  "
-                              name="emp_id"
-                              onChange={handleInput}
-                              placeholder="Enter Employee id"
-                              value={LocalStorageData?.emp_id}
-                              disabled
-                            />
-                          </div>
+                          <div className="row">
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label>Name</label>
 
+                                <input
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors.name,
+                                    }
+                                  )}
+                                  {...register("name")}
+                                  name="name"
+                                  placeholder="Enter Name"
+                                  value={LocalStorageData?.name}
+                                  disabled
+                                />
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label>Email</label>
+                                <input
+                                  className="form-control form-control-sm"
+                                  name="email"
+                                  placeholder="Enter Email"
+                                  value={LocalStorageData?.email}
+                                  disabled
+                                />
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label>Employee Id</label>
+
+                                <input
+                                  className="form-control form-control-sm"
+                                  name="emp_id"
+                                  placeholder="Enter Employee id"
+                                  value={LocalStorageData?.emp_id}
+                                  disabled
+                                />
+                              </div>
+                            </div>
+                          </div>
                           <div className="form-group">
                             <label for="exampleFormControlSelect3">
                               Select your salary band

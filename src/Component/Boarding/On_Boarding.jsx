@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MultiStepForm, Step } from "react-multi-form";
 import Footer from "../../Partials/Footer";
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
-import Employee_Details from "./Employee_Details";
 import axios from "axios";
-import FirstDayFormalities from "./FirstDayFormalities";
-import Document from "./Documents";
-import Compliance_Documents from "./Compliance_Documents";
-import Bank from "./Bank";
-import Zoho_Account from "./Zoho_Account";
-import Other_Formalities from "./Other_Formalities";
 
 const On_Boarding = () => {
   const navigate = useNavigate();
@@ -170,66 +163,7 @@ const On_Boarding = () => {
       })
       .catch((err) => console.log(err));
   };
-  const stperArrayForEmployee = [
-    {
-      label: "First Day Formalities",
-      component: FirstDayFormalities,
-      import_data: inputData,
-      step_counter: 1,
-      alert_warning_title:
-        "This step is pending from HR Department !! Please contact to HR Department.",
-      alert_success_title: "This step has been completed from HR Department !!",
-    },
-    {
-      label: "Documents",
-      component: Document,
-      import_data: inputData,
-      step_counter: 2,
-      alert_warning_title:
-        "This step is pending from HR Department !! Please contact to HR Department.",
-      alert_success_title: "This step has been completed from HR Department !!",
-    },
-    {
-      label: "Compliance Documents",
-      component: Compliance_Documents,
-      import_data: inputData,
-      step_counter: 3,
-      alert_warning_title:
-        "This step is pending from Finance Department !! Please contact to Finance Department.",
-      alert_success_title:
-        "This step has been completed from Finance Department !!",
-    },
-    {
-      label: "HDFC Bank ",
-      component: Bank,
-      import_data: inputData,
-      step_counter: 4,
-      alert_warning_title:
-        "This step is pending from Finance Department !! Please contact to Finance Department.",
-      alert_success_title:
-        "This step has been completed from Finance Department !!",
-    },
-    {
-      label: "Zoho Account ",
-      component: Zoho_Account,
-      import_data: inputData,
-      step_counter: 5,
-      alert_warning_title:
-        "This step is pending from Management Department !! Please contact to Management Department.",
-      alert_success_title:
-        "This step has been completed from Management Department !!",
-    },
-    {
-      label: " Other Formalities",
-      component: Other_Formalities,
-      import_data: inputData,
-      step_counter: 6,
-      alert_warning_title:
-        "This step is pending from Management Department !! Please contact to Management Department.",
-      alert_success_title:
-        "This step has been completed from Management Department !!",
-    },
-  ];
+
   function convertDateFormate(str) {
     const date = new Date(str),
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
@@ -2621,19 +2555,3 @@ const On_Boarding = () => {
 };
 
 export default On_Boarding;
-
-// <Switch
-//   onChange={(e) => {
-//     setInputData({
-//       ...inputData,
-//       abc: e,
-//     });
-//   }}
-//   checked={inputData?.abc}
-//   // disabled={inputData?.abc ? true : false}
-//   onColor="#84d9d2"
-//   onHandleColor="#1bcfb4"
-//   offColor="#ffbf96"
-//   offHandleColor="#fe7c96"
-//   className="react-switch"
-// />;
