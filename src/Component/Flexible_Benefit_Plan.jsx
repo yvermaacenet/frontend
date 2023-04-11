@@ -11,13 +11,13 @@ import Sidebar from "../Partials/Sidebar";
 import Page_Header from "../Partials/Page_Header";
 import { CSSProperties } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useAlert } from "react-alert";
 
 const Flexible_Benefit_Plan = () => {
   const navigate = useNavigate();
+  const alert = useAlert();
   let [loading, setLoading] = useState(false);
-
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
-
   const positions = {
     HR: [
       "Executive -HR & Ops",
@@ -192,7 +192,7 @@ const Flexible_Benefit_Plan = () => {
         headers: headersCors,
       });
       const resp = result.data;
-      alert(resp.message);
+      alert.show(resp.message);
       if (resp?.message === "Form has been submitted") {
         // setLoading(false);
 

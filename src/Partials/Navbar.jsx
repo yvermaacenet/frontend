@@ -6,11 +6,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [cookies, setCookie, removeCookie] = useCookies();
-  const [state, setState] = useState(false);
-  const [menu, setMenu] = useState(false);
-  useEffect(() => {
-    document.body.classList.toggle("sidebar-icon-only");
-  }, [state]);
+
   return (
     <>
       <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -28,7 +24,11 @@ const Navbar = () => {
             className="navbar-toggler navbar-toggler align-self-center"
             type="button"
             data-bs-toggle="minimize"
-            onClick={() => setState(!state)}
+            onClick={() =>
+              document
+                .getElementById("body")
+                .classList.toggle("sidebar-icon-only")
+            }
           >
             <span className="mdi mdi-menu"></span>
           </button>
@@ -66,7 +66,7 @@ const Navbar = () => {
                   <p className="mb-1 text-black">{LocalStorageData?.name}</p>
                 </div>
               </a>
-              {/* <div
+              <div
                 className="dropdown-menu navbar-dropdown"
                 aria-labelledby="profileDropdown"
               >
@@ -93,7 +93,7 @@ const Navbar = () => {
                   Off-Boarding
                 </NavLink>
                 <div className="dropdown-divider"></div>
-              </div> */}
+              </div>
             </li>
             <li className="nav-item d-none d-lg-block full-screen-link">
               <a className="nav-link">
@@ -258,7 +258,9 @@ const Navbar = () => {
             className="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
             type="button"
             onClick={() =>
-              document.getElementById("sidebar").classList.toggle("active")
+              document
+                .getElementById("body")
+                .classList.toggle("sidebar-icon-only")
             }
           >
             <span className="mdi mdi-menu"></span>

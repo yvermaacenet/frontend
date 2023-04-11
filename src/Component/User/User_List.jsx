@@ -67,7 +67,7 @@ const User_List = () => {
           <div class="main-panel">
             <div class="content-wrapper">
               <Page_Header
-                page_title="User"
+                page_title="Employees"
                 page_title_icon="mdi-account-multiple-outline"
                 page_title_button="Add"
                 page_title_button_link="/user_add"
@@ -104,7 +104,7 @@ const User_List = () => {
                     >
                       Pending Onboarding
                     </button>
-                    {(roless?.admin?.includes(LocalStorageData?.user_id) ||
+                    {(roless?.Admin?.includes(LocalStorageData?.user_id) ||
                       roless?.hr?.includes(LocalStorageData?.user_id)) && (
                       <button
                         type="button"
@@ -157,51 +157,35 @@ const User_List = () => {
                       <thead>
                         <tr>
                           <th>#</th>
+                          <th>Employee ID</th>
                           <th>Name</th>
-                          <th>Username</th>
-                          <th>Role</th>
-                          <th>Personal Email</th>
-                          <th>Phone No</th>
-                          <th>Official Email</th>
-                          <th>Designation</th>
-
+                          <th>Zoho Role</th>
+                          <th>Phone</th>
+                          <th>Email</th>
                           <th>Status</th>
-                          <th>Actions</th>
+                          <th>Boarding Type</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {getUserList.map((value, index) => {
+                        {getUserList?.map((value, index) => {
                           return (
                             <tr>
-                              <td class="py-1">{index + 1}</td>
-                              <td>
-                                {value.f_name} {value.m_name} {value.l_name}
+                              <td class="py-1">
+                                <img src={value?.Photo} alt="image" />
                               </td>
-                              <td> {value.username} </td>
+                              <td class="py-1">{value["Employee ID"]}</td>
                               <td>
-                                {value.role.map((res, index) => {
-                                  return (
-                                    <label
-                                      class="badge me-1"
-                                      style={{
-                                        background: `#${Math.random()
-                                          .toString(16)
-                                          .slice(2, 8)
-                                          .padEnd(6, 0)}`,
-                                      }}
-                                    >
-                                      {res.name}
-                                    </label>
-                                  );
-                                })}
+                                {value["First Name"]} {value["Last Name"]}
                               </td>
-                              <td> {value.personal_email} </td>
-                              <td> {value.phone} </td>
-                              <td> {value.company_email} </td>
-                              <td> {value.designation} </td>
-
+                              <td>{value["Zoho Role"]}</td>
                               <td>
-                                {value?.status ? (
+                                {value["Personal Mobile Number"] === ""
+                                  ? "NA"
+                                  : value["Personal Mobile Number"]}
+                              </td>
+                              <td> {value["Email address"]} </td>
+                              <td>
+                                {value["Employee Status"] === "Active" ? (
                                   <label class="badge badge-success">
                                     Active
                                   </label>
@@ -213,56 +197,30 @@ const User_List = () => {
                               </td>
 
                               <td>
-                                {/* ================ Edit Button ============= */}
-                                {roless?.admin?.includes(
-                                  LocalStorageData?.user_id
-                                ) ||
-                                roless?.hr?.includes(
-                                  LocalStorageData?.user_id
-                                ) ? (
-                                  <NavLink to={`/user_update/${value?._id}`}>
-                                    <button
-                                      type="button"
-                                      class="btn btn-sm btn-inverse-dark btn-icon"
-                                      title="Edit"
-                                    >
-                                      <i class="mdi mdi-table-edit"></i>
-                                    </button>
-                                  </NavLink>
-                                ) : (
-                                  <button
-                                    type="button"
-                                    class="btn btn-sm btn-inverse-dark btn-icon"
-                                    title="Edit"
-                                    disabled
-                                  >
-                                    <i class="mdi mdi-table-edit"></i>
-                                  </button>
-                                )}
                                 {/* ================ On Boarding Button ============= */}
 
-                                {roless?.admin?.includes(
+                                {roless?.Admin?.includes(
                                   LocalStorageData?.user_id
                                 ) ||
-                                roless?.hr?.includes(
+                                roless?.Hr?.includes(
                                   LocalStorageData?.user_id
                                 ) ||
-                                (roless?.finance?.includes(
+                                (roless?.Finance?.includes(
                                   LocalStorageData?.user_id
                                 ) &&
                                   value?.on_boarding_steper_counter >= 2) ||
-                                (roless?.management?.includes(
+                                (roless?.Management?.includes(
                                   LocalStorageData?.user_id
                                 ) &&
-                                  value?.on_boarding_steper_counter >= 4) ? (
+                                  value?.on_boarding_steper_counter >= 3) ? (
                                   <NavLink to={`/on_boarding/${value?._id}`}>
                                     <button
                                       type="button"
                                       class={`btn btn-sm ${
                                         value?.on_boarding_status
                                           ? "btn-inverse-success"
-                                          : value?.on_boarding_steper_counter >
-                                            0
+                                          : value?.on_boarding_steper_counter >=
+                                            1
                                           ? "btn-inverse-warning"
                                           : "btn-inverse-danger"
                                       } btn-icon ms-2`}
@@ -290,14 +248,14 @@ const User_List = () => {
                                 {/* ================ Off Boarding Button ============= */}
 
                                 {value?.on_boarding_status === true &&
-                                (roless?.admin?.includes(
+                                (roless?.Admin?.includes(
                                   LocalStorageData?.user_id
                                 ) ||
-                                  (roless?.hr?.includes(
+                                  (roless?.Hr?.includes(
                                     LocalStorageData?.user_id
                                   ) &&
-                                    value?.off_boarding_steper_counter >= 1) ||
-                                  (roless?.management?.includes(
+                                    value?.off_boarding_steper_counter >= 0) ||
+                                  (roless?.Management?.includes(
                                     LocalStorageData?.user_id
                                   ) &&
                                     value?.off_boarding_steper_counter >=
@@ -309,7 +267,7 @@ const User_List = () => {
                                         value?.off_boarding_status
                                           ? "btn-inverse-success"
                                           : value?.off_boarding_steper_counter >
-                                            0
+                                            1
                                           ? "btn-inverse-warning"
                                           : "btn-inverse-danger"
                                       } btn-icon ms-2`}

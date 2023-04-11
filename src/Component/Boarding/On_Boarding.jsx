@@ -40,15 +40,15 @@ const On_Boarding = () => {
       setSteperCounter(
         resp?.steper_counter === undefined
           ? 1
-          : resp?.steper_counter === 6
-          ? 6
+          : resp?.steper_counter === 3
+          ? 3
           : resp?.steper_counter + 1
       );
       setActive(
         resp?.steper_counter === undefined
           ? 1
-          : resp?.steper_counter === 6
-          ? 6
+          : resp?.steper_counter === 3
+          ? 3
           : resp?.steper_counter + 1
       );
       setRenderComponent(false);
@@ -77,7 +77,7 @@ const On_Boarding = () => {
     await axios
       .post(`/on_boarding/${_id}`, {
         ...inputData,
-        steper_counter: inputData?.on_boarding_status ? 6 : steperCounter,
+        steper_counter: inputData?.status ? 3 : steperCounter,
         updated_by: [
           {
             user_id: LocalStorageData?.user_id,
@@ -108,7 +108,7 @@ const On_Boarding = () => {
     await axios
       .put(`/on_boarding/${inputData?._id}`, {
         ...inputData,
-        steper_counter: inputData?.on_boarding_status ? 6 : steperCounter,
+        steper_counter: inputData?.status ? 3 : steperCounter,
         updated_by: [
           ...inputData?.updated_by,
           {
@@ -126,7 +126,7 @@ const On_Boarding = () => {
           setUpdated_data([]);
           await axios
             .put(`/user_update/${_id}`, {
-              on_boarding_steper_counter: steperCounter,
+              on_boarding_steper_counter: inputData?.status ? 3 : steperCounter,
             })
             .then((res) => {
               return console.log(res?.data.message);
@@ -141,8 +141,8 @@ const On_Boarding = () => {
     await axios
       .put(`/on_boarding/${inputData?._id}`, {
         ...inputData,
-        status: steperCounter === 6 ? true : false,
-        steper_counter: inputData?.on_boarding_status ? 6 : steperCounter,
+        status: steperCounter === 3 ? true : false,
+        steper_counter: inputData?.on_boarding_status ? 3 : steperCounter,
         updated_by: [
           ...inputData?.updated_by,
           {
@@ -262,7 +262,7 @@ const On_Boarding = () => {
                 <div class="card-body">
                   {/* <h4 class="card-title">Default form</h4> */}
                   <div className=" d-flex justify-content-between align-items-center">
-                    <span class="card-description">On Boarding Process </span>
+                    <span class="card-description">On Boarding Process</span>
                     <div>
                       <a
                         style={{ float: "right" }}
@@ -341,60 +341,31 @@ const On_Boarding = () => {
                   <table class="table table-bordered">
                     <thead>
                       <tr>
-                        <th> Full Name </th>
+                        <th> Employee Id </th>
+                        <th> Name </th>
                         <th> Designation </th>
                         <th> Joining Date </th>
-                        <th> Phone </th>
-                        <th> Current Address </th>
-                        <th> Permamnent Address </th>
+                        <th> Department </th>
+                        <th> Designation </th>
                         <th> Status </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
+                        <td>{getUserDetailsById["Employee ID"]}</td>
                         <td>
-                          {`${
-                            getUserDetailsById?.f_name !== undefined
-                              ? getUserDetailsById?.f_name
-                              : "NA"
-                          }
-                          ${
-                            getUserDetailsById?.m_name !== undefined
-                              ? getUserDetailsById?.m_name
-                              : ""
-                          }
-                          ${
-                            getUserDetailsById?.l_name !== undefined
-                              ? getUserDetailsById?.l_name
-                              : ""
-                          }`}
+                          {getUserDetailsById["First Name"]}{" "}
+                          {getUserDetailsById["Last Name"]}
                         </td>
                         <td>
-                          {getUserDetailsById?.designation !== undefined
-                            ? getUserDetailsById?.designation
+                          {getUserDetailsById?.Designation !== undefined
+                            ? getUserDetailsById?.Designation
                             : "NA"}
                         </td>
-                        <td>
-                          {getUserDetailsById?.joining_date !== undefined
-                            ? getUserDetailsById?.joining_date?.split("T")[0]
-                            : "NA"}
-                        </td>
-                        <td>
-                          {getUserDetailsById?.phone !== undefined
-                            ? getUserDetailsById?.phone
-                            : "NA"}
-                        </td>
-                        <td>
-                          {getUserDetailsById?.communication_address !==
-                          undefined
-                            ? getUserDetailsById?.communication_address
-                            : "NA"}
-                        </td>
-                        <td>
-                          {getUserDetailsById?.permanent_address !== undefined
-                            ? getUserDetailsById?.permanent_address
-                            : "NA"}
-                        </td>
+                        <td>{getUserDetailsById["Date of Joining"]}</td>
+
+                        <td>{getUserDetailsById["Department"]}</td>
+                        <td>{getUserDetailsById["Designation"]}</td>
                         <td>
                           {getUserDetailsById?.on_boarding_status ? (
                             <label class="badge badge-success">Completed</label>
@@ -408,10 +379,10 @@ const On_Boarding = () => {
 
                   <div style={{ margin: "40px" }}>
                     <form class="forms-sample">
-                      {!roless?.admin?.includes(LocalStorageData.user_id) &&
-                      !roless?.hr?.includes(LocalStorageData.user_id) &&
-                      !roless?.finance?.includes(LocalStorageData.user_id) &&
-                      !roless?.management?.includes(
+                      {!roless?.Admin?.includes(LocalStorageData.user_id) &&
+                      !roless?.Hr?.includes(LocalStorageData.user_id) &&
+                      !roless?.Finance?.includes(LocalStorageData.user_id) &&
+                      !roless?.Management?.includes(
                         LocalStorageData.user_id
                       ) ? (
                         <>
@@ -506,75 +477,40 @@ const On_Boarding = () => {
                         </>
                       ) : (
                         <>
+                          (Not Team member)
                           <MultiStepForm activeStep={active}>
                             <Step label="First Day Formalities (HR)">
                               <>
-                                {inputData?.steper_counter <= 6 &&
-                                  (inputData?.steper_counter >= 1 ? (
-                                    roless?.hr?.includes(
-                                      LocalStorageData?.user_id
-                                    ) && inputData?.steper_counter >= 1 ? (
-                                      <div
-                                        class="alert alert-success alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-check-circle-outline me-1"></i>
-                                        This step has been completed by You.
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        class="alert alert-success alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-check-circle-outline me-1"></i>
-                                        This step has been completed by HR
-                                        Department.
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    )
-                                  ) : roless?.hr?.includes(
-                                      LocalStorageData?.user_id
-                                    ) ? (
-                                    <div
-                                      class="alert alert-danger alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-alert-octagon me-1"></i>
-                                      "This step is not completed by you !!"
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      class="alert alert-warning alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-alert-octagon me-1"></i>
-                                      "This step is pending from Admin or HR
-                                      Department !!"
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  ))}
+                                {inputData?.steper_counter <= 3 &&
+                                inputData?.steper_counter >= 1 ? (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                ) : (
+                                  <div
+                                    class="alert alert-warning alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-alert-octagon me-1"></i>
+                                    "This step is pending !!"
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                )}
                               </>
                               <>
                                 <div className="row">
@@ -588,6 +524,9 @@ const On_Boarding = () => {
                                           </tr>
                                         </thead>
                                         <tbody>
+                                          <p class="card-description mt-2 mb-0 text-center">
+                                            First Day Formalities
+                                          </p>
                                           <tr>
                                             <td> Wifi Passwords </td>
                                             <td>
@@ -604,19 +543,19 @@ const On_Boarding = () => {
                                                       inputData?.wifi_passwords
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -643,19 +582,19 @@ const On_Boarding = () => {
                                                       inputData?.genrate_mail_id
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -682,19 +621,19 @@ const On_Boarding = () => {
                                                       inputData?.one_drive_access
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -721,19 +660,19 @@ const On_Boarding = () => {
                                                       inputData?.add_to_official_dls
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -760,19 +699,19 @@ const On_Boarding = () => {
                                                       inputData?.teams_access
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -799,19 +738,19 @@ const On_Boarding = () => {
                                                       inputData?.biometric
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -838,19 +777,19 @@ const On_Boarding = () => {
                                                       inputData?.induction_call
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -905,19 +844,19 @@ const On_Boarding = () => {
                                                       inputData?.acenet_laptop
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -944,19 +883,19 @@ const On_Boarding = () => {
                                                       inputData?.client_laptop
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -981,19 +920,19 @@ const On_Boarding = () => {
                                                     style={{ opacity: 0 }}
                                                     checked={inputData?.notpad}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1018,19 +957,19 @@ const On_Boarding = () => {
                                                     style={{ opacity: 0 }}
                                                     checked={inputData?.t_shirt}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1057,19 +996,19 @@ const On_Boarding = () => {
                                                       inputData?.welcome_kit
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1096,19 +1035,19 @@ const On_Boarding = () => {
                                                       inputData?.intro_slide_shared
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1119,161 +1058,9 @@ const On_Boarding = () => {
                                               </div>
                                             </td>
                                           </tr>
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  </div>
-                                </div>
-                              </>
-                            </Step>
-                            <Step label="Documents (HR)">
-                              <>
-                                {/* <>
-                                {inputData?.steper_counter === 3 ? (
-                                  roless?.hr?.includes(
-                                    LocalStorageData?.user_id
-                                  ) && inputData?.steper_counter === 3 ? (
-                                    <div
-                                      class="alert alert-success alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed by You.
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      class="alert alert-success alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed by HR
-                                      Department.
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  )
-                                ) : roless?.hr?.includes(
-                                    LocalStorageData?.user_id
-                                  ) ? (
-                                  <div
-                                    class="alert alert-danger alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is not completed by you !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    class="alert alert-warning alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is pending from Admin or HR
-                                    Department !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                )}
-                              </> */}
-                                <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 2 ? (
-                                      roless?.hr?.includes(
-                                        LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 2 ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by You.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by HR
-                                          Department.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )
-                                    ) : roless?.hr?.includes(
-                                        LocalStorageData?.user_id
-                                      ) ? (
-                                      <div
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is not completed by you !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        class="alert alert-warning alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is pending from Admin or HR
-                                        Department !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ))}
-                                </>
-                                <div className="row">
-                                  <div class="card">
-                                    <div class="card-body">
-                                      <table class="table table-hover">
-                                        <thead>
-                                          <tr>
-                                            <th> Field Name </th>
-                                            <th> Action </th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
+                                          <p class="card-description mt-2 mb-0 text-center">
+                                            Documents
+                                          </p>
                                           <tr>
                                             <td>Aadhar Card</td>
                                             <td>
@@ -1290,19 +1077,19 @@ const On_Boarding = () => {
                                                       inputData?.aadhar_card
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1329,19 +1116,19 @@ const On_Boarding = () => {
                                                       inputData?.pan_card
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1368,19 +1155,19 @@ const On_Boarding = () => {
                                                       inputData?.passport
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1405,19 +1192,19 @@ const On_Boarding = () => {
                                                     style={{ opacity: 0 }}
                                                     checked={inputData?.dl}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1442,19 +1229,19 @@ const On_Boarding = () => {
                                                     style={{ opacity: 0 }}
                                                     checked={inputData?.ten_th}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1481,19 +1268,19 @@ const On_Boarding = () => {
                                                       inputData?.tweleve_th
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1520,19 +1307,19 @@ const On_Boarding = () => {
                                                       inputData?.graduation
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1559,19 +1346,19 @@ const On_Boarding = () => {
                                                       inputData?.post_graduation
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1602,19 +1389,19 @@ const On_Boarding = () => {
                                                       inputData?.experience_proof
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1641,19 +1428,19 @@ const On_Boarding = () => {
                                                       inputData?.passport_size_photo
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1680,19 +1467,19 @@ const On_Boarding = () => {
                                                       inputData?.signed_offer_latter
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1719,19 +1506,19 @@ const On_Boarding = () => {
                                                       inputData?.documents_verification
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1758,19 +1545,19 @@ const On_Boarding = () => {
                                                       inputData?.covid_certificate
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1799,19 +1586,19 @@ const On_Boarding = () => {
                                                       inputData?.employee_data_sheet_bank_details
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1838,19 +1625,19 @@ const On_Boarding = () => {
                                                       inputData?.other_official_documents
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1877,19 +1664,19 @@ const On_Boarding = () => {
                                                       inputData?.pay_slips
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1922,19 +1709,19 @@ const On_Boarding = () => {
                                                       inputData?.forms_16
                                                     }
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.finance?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
                                                           ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
+                                                          (active < 2 ||
+                                                            active > 2)
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Management?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 5
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -1955,17 +1742,15 @@ const On_Boarding = () => {
 
                             <Step label="Compliance Documents (Finance)">
                               <>
-                                {/* <>
-                                {inputData?.steper_counter === 4 ? (
-                                  roless?.finance?.includes(
-                                    LocalStorageData?.user_id
-                                  ) && inputData?.steper_counter === 4 ? (
+                                <>
+                                  {inputData?.steper_counter <= 3 &&
+                                  inputData?.steper_counter >= 2 ? (
                                     <div
                                       class="alert alert-success alert-dismissible fade show"
                                       role="alert"
                                     >
                                       <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed by You.
+                                      This step has been completed.
                                       <button
                                         type="button"
                                         class="btn-close"
@@ -1975,12 +1760,11 @@ const On_Boarding = () => {
                                     </div>
                                   ) : (
                                     <div
-                                      class="alert alert-success alert-dismissible fade show"
+                                      class="alert alert-warning alert-dismissible fade show"
                                       role="alert"
                                     >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed by Finance
-                                      Department.
+                                      <i class="mdi mdi-alert-octagon me-1"></i>
+                                      "This step is pending !!"
                                       <button
                                         type="button"
                                         class="btn-close"
@@ -1988,107 +1772,7 @@ const On_Boarding = () => {
                                         aria-label="Close"
                                       ></button>
                                     </div>
-                                  )
-                                ) : roless?.finance?.includes(
-                                    LocalStorageData?.user_id
-                                  ) ? (
-                                  <div
-                                    class="alert alert-danger alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is not completed by you !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    class="alert alert-warning alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is pending from Admin or
-                                    Finance Department !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                )}
-                              </> */}
-                                <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 3 ? (
-                                      roless?.finance?.includes(
-                                        LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 3 ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by You.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by
-                                          Finance Department.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )
-                                    ) : roless?.finance?.includes(
-                                        LocalStorageData?.user_id
-                                      ) ? (
-                                      <div
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is not completed by you !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        class="alert alert-warning alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is pending from Admin or
-                                        finance Department !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ))}
+                                  )}
                                 </>
                                 <div className="row">
                                   <div class="card">
@@ -2101,6 +1785,9 @@ const On_Boarding = () => {
                                           </tr>
                                         </thead>
                                         <tbody>
+                                          <p class="card-description mt-2 mb-0 text-center">
+                                            Compliance Documents
+                                          </p>
                                           <tr>
                                             <td> PF Form Received</td>
                                             <td>
@@ -2114,13 +1801,19 @@ const On_Boarding = () => {
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 6
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -2149,13 +1842,19 @@ const On_Boarding = () => {
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 6
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -2187,13 +1886,19 @@ const On_Boarding = () => {
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 6
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -2220,13 +1925,19 @@ const On_Boarding = () => {
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 6
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -2256,13 +1967,19 @@ const On_Boarding = () => {
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 6
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -2289,13 +2006,19 @@ const On_Boarding = () => {
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 6
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -2322,13 +2045,19 @@ const On_Boarding = () => {
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 6
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
@@ -2355,18 +2084,185 @@ const On_Boarding = () => {
                                                     onChange={inputEvent}
                                                     style={{ opacity: 0 }}
                                                     disabled={
-                                                      roless?.hr?.includes(
+                                                      roless?.Hr?.includes(
                                                         LocalStorageData?.user_id
-                                                      ) && active > 2
+                                                      ) && active > 1
                                                         ? true
-                                                        : roless?.management?.includes(
+                                                        : roless?.Finance?.includes(
                                                             LocalStorageData?.user_id
-                                                          ) && active < 6
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
                                                         ? true
                                                         : false
                                                     }
                                                     checked={
                                                       inputData?.ghi_eCard_issued
+                                                    }
+                                                  />
+                                                  <span class="slider round"></span>
+                                                </label>
+                                                <span>Yes</span>
+                                              </div>
+                                            </td>
+                                          </tr>
+                                          <p class="card-description mt-2 mb-0 text-center">
+                                            HDFC Bank Details
+                                          </p>
+                                          <tr>
+                                            <td> HDFC Account Mapped</td>
+                                            <td>
+                                              <div className="board">
+                                                <span>No</span>
+                                                <label class="switch ms-1 me-1 mt-1 ">
+                                                  <input
+                                                    type="checkbox"
+                                                    name="hdfc_account_mapped"
+                                                    class="form-control form-control-sm"
+                                                    onChange={inputEvent}
+                                                    style={{ opacity: 0 }}
+                                                    disabled={
+                                                      roless?.Hr?.includes(
+                                                        LocalStorageData?.user_id
+                                                      ) && active > 1
+                                                        ? true
+                                                        : roless?.Finance?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
+                                                        ? true
+                                                        : false
+                                                    }
+                                                    checked={
+                                                      inputData?.hdfc_account_mapped
+                                                    }
+                                                  />
+                                                  <span class="slider round"></span>
+                                                </label>
+                                                <span>Yes</span>
+                                              </div>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td> HDFC Account Initiated</td>
+                                            <td>
+                                              <div className="board">
+                                                <span>No</span>
+                                                <label class="switch ms-1 me-1 mt-1 ">
+                                                  <input
+                                                    type="checkbox"
+                                                    name="hdfc_account_initiated"
+                                                    class="form-control form-control-sm"
+                                                    onChange={inputEvent}
+                                                    style={{ opacity: 0 }}
+                                                    disabled={
+                                                      roless?.Hr?.includes(
+                                                        LocalStorageData?.user_id
+                                                      ) && active > 1
+                                                        ? true
+                                                        : roless?.Finance?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
+                                                        ? true
+                                                        : false
+                                                    }
+                                                    checked={
+                                                      inputData?.hdfc_account_initiated
+                                                    }
+                                                  />
+                                                  <span class="slider round"></span>
+                                                </label>
+                                                <span>Yes</span>
+                                              </div>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td> HDFC Account Opened</td>
+                                            <td>
+                                              <div className="board">
+                                                <span>No</span>
+                                                <label class="switch ms-1 me-1 mt-1 ">
+                                                  <input
+                                                    type="checkbox"
+                                                    name="hdfc_account_opened"
+                                                    class="form-control form-control-sm"
+                                                    onChange={inputEvent}
+                                                    style={{ opacity: 0 }}
+                                                    disabled={
+                                                      roless?.Hr?.includes(
+                                                        LocalStorageData?.user_id
+                                                      ) && active > 1
+                                                        ? true
+                                                        : roless?.Finance?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
+                                                        ? true
+                                                        : false
+                                                    }
+                                                    checked={
+                                                      inputData?.hdfc_account_opened
+                                                    }
+                                                  />
+                                                  <span class="slider round"></span>
+                                                </label>
+                                                <span>Yes</span>
+                                              </div>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              HDFC Account Benefeciary added
+                                            </td>
+                                            <td>
+                                              <div className="board">
+                                                <span>No</span>
+                                                <label class="switch ms-1 me-1 mt-1 ">
+                                                  <input
+                                                    type="checkbox"
+                                                    name="hdfc_account_benefeciary_added"
+                                                    class="form-control form-control-sm"
+                                                    onChange={inputEvent}
+                                                    style={{ opacity: 0 }}
+                                                    disabled={
+                                                      roless?.Hr?.includes(
+                                                        LocalStorageData?.user_id
+                                                      ) && active > 1
+                                                        ? true
+                                                        : roless?.Finance?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) &&
+                                                          (active < 2 ||
+                                                            active > 2)
+                                                        ? true
+                                                        : roless?.Management?.includes(
+                                                            LocalStorageData?.user_id
+                                                          ) && active < 3
+                                                        ? true
+                                                        : false
+                                                    }
+                                                    checked={
+                                                      inputData?.hdfc_account_benefeciary_added
                                                     }
                                                   />
                                                   <span class="slider round"></span>
@@ -2382,378 +2278,17 @@ const On_Boarding = () => {
                                 </div>
                               </>
                             </Step>
-                            <Step label="HDFC Bank Details (Finance)">
-                              <>
-                                {/* <>
-                                {inputData?.steper_counter === 5 ? (
-                                  roless?.finance?.includes(
-                                    LocalStorageData?.user_id
-                                  ) && inputData?.steper_counter === 5 ? (
-                                    <div
-                                      class="alert alert-success alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed by You.
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      class="alert alert-success alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed by Finance
-                                      Department.
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  )
-                                ) : roless?.finance?.includes(
-                                    LocalStorageData?.user_id
-                                  ) ? (
-                                  <div
-                                    class="alert alert-danger alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is not completed by you !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    class="alert alert-warning alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is pending from Admin or
-                                    Finance Department !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                )}
-                              </> */}
-                                <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 4 ? (
-                                      roless?.finance?.includes(
-                                        LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 4 ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by You.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by
-                                          Finance Department.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )
-                                    ) : roless?.finance?.includes(
-                                        LocalStorageData?.user_id
-                                      ) ? (
-                                      <div
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is not completed by you !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        class="alert alert-warning alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is pending from Admin or
-                                        finance Department !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ))}
-                                </>
-                                <>
-                                  <div className="row">
-                                    <div class="card">
-                                      <div class="card-body">
-                                        <table class="table table-hover">
-                                          <thead>
-                                            <tr>
-                                              <th> Field Name </th>
-                                              <th> Action </th>
-                                            </tr>
-                                          </thead>
-                                          <tbody>
-                                            <tr>
-                                              <td> HDFC Account Mapped</td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="hdfc_account_mapped"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      disabled={
-                                                        roless?.hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 3
-                                                          ? true
-                                                          : roless?.management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 6
-                                                          ? true
-                                                          : false
-                                                      }
-                                                      checked={
-                                                        inputData?.hdfc_account_mapped
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td> HDFC Account Initiated</td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="hdfc_account_initiated"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      disabled={
-                                                        roless?.hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 3
-                                                          ? true
-                                                          : roless?.management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 6
-                                                          ? true
-                                                          : false
-                                                      }
-                                                      checked={
-                                                        inputData?.hdfc_account_initiated
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td> HDFC Account Opened</td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="hdfc_account_opened"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      disabled={
-                                                        roless?.hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 3
-                                                          ? true
-                                                          : roless?.management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 6
-                                                          ? true
-                                                          : false
-                                                      }
-                                                      checked={
-                                                        inputData?.hdfc_account_opened
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                            <tr>
-                                              <td>
-                                                HDFC Account Benefeciary added
-                                              </td>
-                                              <td>
-                                                <div className="board">
-                                                  <span>No</span>
-                                                  <label class="switch ms-1 me-1 mt-1 ">
-                                                    <input
-                                                      type="checkbox"
-                                                      name="hdfc_account_benefeciary_added"
-                                                      class="form-control form-control-sm"
-                                                      onChange={inputEvent}
-                                                      style={{ opacity: 0 }}
-                                                      disabled={
-                                                        roless?.hr?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active > 3
-                                                          ? true
-                                                          : roless?.management?.includes(
-                                                              LocalStorageData?.user_id
-                                                            ) && active < 6
-                                                          ? true
-                                                          : false
-                                                      }
-                                                      checked={
-                                                        inputData?.hdfc_account_benefeciary_added
-                                                      }
-                                                    />
-                                                    <span class="slider round"></span>
-                                                  </label>
-                                                  <span>Yes</span>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </>
-                              </>
-                            </Step>
+
                             <Step label="ZOHO Account (Management)">
                               <>
                                 <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 5 ? (
-                                      roless?.management?.includes(
-                                        LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 5 ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by You.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by
-                                          Management Department.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )
-                                    ) : roless?.management?.includes(
-                                        LocalStorageData?.user_id
-                                      ) ? (
-                                      <div
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is not completed by you !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        class="alert alert-warning alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is pending from Admin or
-                                        Management Department !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ))}
-                                </>
-                                {/* <>
-                                {inputData?.steper_counter === 6 ? (
-                                  roless?.management?.includes(
-                                    LocalStorageData?.user_id
-                                  ) && inputData?.steper_counter === 6 ? (
+                                  {inputData?.steper_counter === 3 ? (
                                     <div
                                       class="alert alert-success alert-dismissible fade show"
                                       role="alert"
                                     >
                                       <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed by You.
+                                      This step has been completed.
                                       <button
                                         type="button"
                                         class="btn-close"
@@ -2763,12 +2298,11 @@ const On_Boarding = () => {
                                     </div>
                                   ) : (
                                     <div
-                                      class="alert alert-success alert-dismissible fade show"
+                                      class="alert alert-warning alert-dismissible fade show"
                                       role="alert"
                                     >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed by
-                                      Management Department.
+                                      <i class="mdi mdi-alert-octagon me-1"></i>
+                                      "This step is pending !!"
                                       <button
                                         type="button"
                                         class="btn-close"
@@ -2776,46 +2310,18 @@ const On_Boarding = () => {
                                         aria-label="Close"
                                       ></button>
                                     </div>
-                                  )
-                                ) : roless?.management?.includes(
-                                    LocalStorageData?.user_id
-                                  ) ? (
-                                  <div
-                                    class="alert alert-danger alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is not completed by you !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    class="alert alert-warning alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is pending from Admin or
-                                    Management Department !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                )}
-                              </> */}
+                                  )}
+                                </>
+
                                 <>
                                   <div className="row">
                                     <div class="card">
                                       <div class="card-body">
                                         <table class="table table-hover">
                                           <thead>
+                                            <p class="card-description mt-2 mb-0 text-center">
+                                              Zoho Accounts
+                                            </p>
                                             <tr>
                                               <th> Field Name </th>
                                               <th> Action </th>
@@ -2837,17 +2343,17 @@ const On_Boarding = () => {
                                                       onChange={inputEvent}
                                                       style={{ opacity: 0 }}
                                                       disabled={
-                                                        roless?.hr?.includes(
+                                                        roless?.Hr?.includes(
                                                           LocalStorageData?.user_id
-                                                        ) && active > 2
+                                                        ) && active > 1
                                                           ? true
-                                                          : roless?.finance?.includes(
+                                                          : roless?.Finance?.includes(
                                                               LocalStorageData?.user_id
-                                                            ) && active > 4
+                                                            ) && active > 2
                                                           ? true
-                                                          : roless?.management?.includes(
+                                                          : roless?.Management?.includes(
                                                               LocalStorageData?.user_id
-                                                            ) && active < 6
+                                                            ) && active < 3
                                                           ? true
                                                           : false
                                                       }
@@ -2876,17 +2382,17 @@ const On_Boarding = () => {
                                                       onChange={inputEvent}
                                                       style={{ opacity: 0 }}
                                                       disabled={
-                                                        roless?.hr?.includes(
+                                                        roless?.Hr?.includes(
                                                           LocalStorageData?.user_id
-                                                        ) && active > 2
+                                                        ) && active > 1
                                                           ? true
-                                                          : roless?.finance?.includes(
+                                                          : roless?.Finance?.includes(
                                                               LocalStorageData?.user_id
-                                                            ) && active > 4
+                                                            ) && active > 2
                                                           ? true
-                                                          : roless?.management?.includes(
+                                                          : roless?.Management?.includes(
                                                               LocalStorageData?.user_id
-                                                            ) && active < 6
+                                                            ) && active < 3
                                                           ? true
                                                           : false
                                                       }
@@ -2913,22 +2419,173 @@ const On_Boarding = () => {
                                                       onChange={inputEvent}
                                                       style={{ opacity: 0 }}
                                                       disabled={
-                                                        roless?.hr?.includes(
+                                                        roless?.Hr?.includes(
                                                           LocalStorageData?.user_id
-                                                        ) && active > 2
+                                                        ) && active > 1
                                                           ? true
-                                                          : roless?.finance?.includes(
+                                                          : roless?.Finance?.includes(
                                                               LocalStorageData?.user_id
-                                                            ) && active > 4
+                                                            ) && active > 2
                                                           ? true
-                                                          : roless?.management?.includes(
+                                                          : roless?.Management?.includes(
                                                               LocalStorageData?.user_id
-                                                            ) && active < 6
+                                                            ) && active < 3
                                                           ? true
                                                           : false
                                                       }
                                                       checked={
                                                         inputData?.zoho_payroll_integrated
+                                                      }
+                                                    />
+                                                    <span class="slider round"></span>
+                                                  </label>
+                                                  <span>Yes</span>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                            <p class="card-description mt-2 mb-0 text-center">
+                                              Other Formalities
+                                            </p>
+                                            <tr>
+                                              <td> BGV Initiated</td>
+                                              <td>
+                                                <div className="board">
+                                                  <span>No</span>
+                                                  <label class="switch ms-1 me-1 mt-1 ">
+                                                    <input
+                                                      type="checkbox"
+                                                      name="bgv_initiated"
+                                                      class="form-control form-control-sm"
+                                                      onChange={inputEvent}
+                                                      style={{ opacity: 0 }}
+                                                      checked={
+                                                        inputData?.bgv_initiated
+                                                      }
+                                                      disabled={
+                                                        roless?.Hr?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active > 1
+                                                          ? true
+                                                          : roless?.Finance?.includes(
+                                                              LocalStorageData?.user_id
+                                                            ) && active > 2
+                                                          ? true
+                                                          : roless?.Management?.includes(
+                                                              LocalStorageData?.user_id
+                                                            ) && active < 3
+                                                          ? true
+                                                          : false
+                                                      }
+                                                    />
+                                                    <span class="slider round"></span>
+                                                  </label>
+                                                  <span>Yes</span>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td> BGV Invoice Paid</td>
+                                              <td>
+                                                <div className="board">
+                                                  <span>No</span>
+                                                  <label class="switch ms-1 me-1 mt-1 ">
+                                                    <input
+                                                      type="checkbox"
+                                                      name="bgv_invoice_Paid"
+                                                      class="form-control form-control-sm"
+                                                      onChange={inputEvent}
+                                                      style={{ opacity: 0 }}
+                                                      checked={
+                                                        inputData?.bgv_invoice_Paid
+                                                      }
+                                                      disabled={
+                                                        roless?.Hr?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active > 1
+                                                          ? true
+                                                          : roless?.Finance?.includes(
+                                                              LocalStorageData?.user_id
+                                                            ) && active > 2
+                                                          ? true
+                                                          : roless?.Management?.includes(
+                                                              LocalStorageData?.user_id
+                                                            ) && active < 3
+                                                          ? true
+                                                          : false
+                                                      }
+                                                    />
+                                                    <span class="slider round"></span>
+                                                  </label>
+                                                  <span>Yes</span>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td> BGV Report Received</td>
+                                              <td>
+                                                <div className="board">
+                                                  <span>No</span>
+                                                  <label class="switch ms-1 me-1 mt-1 ">
+                                                    <input
+                                                      type="checkbox"
+                                                      name="bgv_report_Received"
+                                                      class="form-control form-control-sm"
+                                                      onChange={inputEvent}
+                                                      style={{ opacity: 0 }}
+                                                      checked={
+                                                        inputData?.bgv_report_Received
+                                                      }
+                                                      disabled={
+                                                        roless?.Hr?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active > 1
+                                                          ? true
+                                                          : roless?.Finance?.includes(
+                                                              LocalStorageData?.user_id
+                                                            ) && active > 2
+                                                          ? true
+                                                          : roless?.Management?.includes(
+                                                              LocalStorageData?.user_id
+                                                            ) && active < 3
+                                                          ? true
+                                                          : false
+                                                      }
+                                                    />
+                                                    <span class="slider round"></span>
+                                                  </label>
+                                                  <span>Yes</span>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td> Update LinkedIn</td>
+                                              <td>
+                                                <div className="board">
+                                                  <span>No</span>
+                                                  <label class="switch ms-1 me-1 mt-1 ">
+                                                    <input
+                                                      type="checkbox"
+                                                      name="update_linkedIn"
+                                                      class="form-control form-control-sm"
+                                                      onChange={inputEvent}
+                                                      style={{ opacity: 0 }}
+                                                      checked={
+                                                        inputData?.update_linkedIn
+                                                      }
+                                                      disabled={
+                                                        roless?.Hr?.includes(
+                                                          LocalStorageData?.user_id
+                                                        ) && active > 1
+                                                          ? true
+                                                          : roless?.Finance?.includes(
+                                                              LocalStorageData?.user_id
+                                                            ) && active > 2
+                                                          ? true
+                                                          : roless?.Management?.includes(
+                                                              LocalStorageData?.user_id
+                                                            ) && active < 3
+                                                          ? true
+                                                          : false
                                                       }
                                                     />
                                                     <span class="slider round"></span>
@@ -2945,254 +2602,8 @@ const On_Boarding = () => {
                                 </>
                               </>
                             </Step>
-
-                            <Step label="Other Formalities (Management)">
-                              <>
-                                <>
-                                  {inputData?.steper_counter <= 6 &&
-                                    (inputData?.steper_counter >= 6 ? (
-                                      roless?.management?.includes(
-                                        LocalStorageData?.user_id
-                                      ) && inputData?.steper_counter >= 6 ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by You.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed by
-                                          Management Department.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )
-                                    ) : roless?.management?.includes(
-                                        LocalStorageData?.user_id
-                                      ) ? (
-                                      <div
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is not completed by you !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        class="alert alert-warning alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is pending from Admin or
-                                        Management Department !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ))}
-                                </>
-                                <div className="row">
-                                  <div class="card">
-                                    <div class="card-body">
-                                      <table class="table table-hover">
-                                        <thead>
-                                          <tr>
-                                            <th> Field Name </th>
-                                            <th> Action </th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr>
-                                            <td> BGV Initiated</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="bgv_initiated"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.bgv_initiated
-                                                    }
-                                                    disabled={
-                                                      roless?.hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 2
-                                                        ? true
-                                                        : roless?.finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
-                                                        ? true
-                                                        : roless?.management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 5
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> BGV Invoice Paid</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="bgv_invoice_Paid"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.bgv_invoice_Paid
-                                                    }
-                                                    disabled={
-                                                      roless?.hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 2
-                                                        ? true
-                                                        : roless?.finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
-                                                        ? true
-                                                        : roless?.management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 5
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> BGV Report Received</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="bgv_report_Received"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.bgv_report_Received
-                                                    }
-                                                    disabled={
-                                                      roless?.hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 2
-                                                        ? true
-                                                        : roless?.finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
-                                                        ? true
-                                                        : roless?.management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 5
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Update LinkedIn</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="update_linkedIn"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.update_linkedIn
-                                                    }
-                                                    disabled={
-                                                      roless?.hr?.includes(
-                                                        LocalStorageData?.user_id
-                                                      ) && active > 2
-                                                        ? true
-                                                        : roless?.finance?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) &&
-                                                          (active < 3 ||
-                                                            active > 4)
-                                                        ? true
-                                                        : roless?.management?.includes(
-                                                            LocalStorageData?.user_id
-                                                          ) && active < 5
-                                                        ? true
-                                                        : false
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  </div>
-                                </div>
-                              </>
-                            </Step>
                           </MultiStepForm>
                           {/* <!==========  Previous Button ============> */}
-
                           {active !== 1 && (
                             <>
                               <button
@@ -3210,8 +2621,7 @@ const On_Boarding = () => {
                             </>
                           )}
                           {/* <!==========  Next Button ============> */}
-
-                          {active !== 6 && (
+                          {active !== 3 && (
                             <button
                               class="btn btn-sm btn-gradient-primary me-2"
                               onClick={(e) => {
@@ -3227,8 +2637,7 @@ const On_Boarding = () => {
                             </button>
                           )}
                           {/* <!==========  Update & Save Button ============> */}
-
-                          {active >= 1 && active < 6 && (
+                          {active >= 1 && active < 3 && (
                             <>
                               {inputData?._id ? (
                                 <>
@@ -3238,37 +2647,21 @@ const On_Boarding = () => {
                                     style={{
                                       float: "right",
                                       display:
-                                        roless?.hr?.includes(
+                                        roless?.Hr?.includes(
                                           LocalStorageData?.user_id
-                                        ) && active > 2
+                                        ) && active > 1
                                           ? "none"
-                                          : roless?.finance?.includes(
+                                          : roless?.Finance?.includes(
                                               LocalStorageData?.user_id
                                             ) &&
-                                            (active < 3 || active > 4)
+                                            (active < 2 || active > 2)
                                           ? "none"
-                                          : roless?.management?.includes(
+                                          : roless?.Management?.includes(
                                               LocalStorageData?.user_id
                                             ) && active < 5
                                           ? "none"
                                           : "block",
                                     }}
-                                    // disabled={
-                                    //   roless?.hr?.includes(
-                                    //     LocalStorageData?.user_id
-                                    //   ) && active > 3
-                                    //     ? true
-                                    //     : roless?.finance?.includes(
-                                    //         LocalStorageData?.user_id
-                                    //       ) &&
-                                    //       (active < 4 || active > 5)
-                                    //     ? true
-                                    //     : roless?.management?.includes(
-                                    //         LocalStorageData?.user_id
-                                    //       ) && active < 6
-                                    //     ? true
-                                    //     : false
-                                    // }
                                   >
                                     Update & Next
                                   </button>
@@ -3280,39 +2673,22 @@ const On_Boarding = () => {
                                   style={{
                                     float: "right",
                                     display:
-                                      roless?.hr?.includes(
+                                      roless?.Hr?.includes(
                                         LocalStorageData?.user_id
                                       ) && active > 2
                                         ? "none"
-                                        : roless?.finance?.includes(
+                                        : roless?.Finance?.includes(
                                             LocalStorageData?.user_id
                                           ) &&
                                           active < 2 &&
-                                          active > 4
+                                          active > 2
                                         ? "none"
-                                        : roless?.management?.includes(
+                                        : roless?.Management?.includes(
                                             LocalStorageData?.user_id
                                           ) && active < 5
                                         ? "none"
                                         : "block",
                                   }}
-                                  // disabled={
-                                  //   roless?.hr?.includes(
-                                  //     LocalStorageData?.user_id
-                                  //   ) && active > 3
-                                  //     ? true
-                                  //     : roless?.finance?.includes(
-                                  //         LocalStorageData?.user_id
-                                  //       ) &&
-                                  //       active < 3 &&
-                                  //       active > 5
-                                  //     ? true
-                                  //     : roless?.management?.includes(
-                                  //         LocalStorageData?.user_id
-                                  //       ) && active < 6
-                                  //     ? true
-                                  //     : false
-                                  // }
                                 >
                                   Save & Next
                                 </button>
@@ -3320,25 +2696,25 @@ const On_Boarding = () => {
                             </>
                           )}
                           {/* <!========== onSubmittedButton ============> */}
-                          {active === 6 && (
+                          {active === 3 && (
                             <button
                               class="btn btn-sm btn-gradient-success me-2"
                               onClick={onSubmittedButton}
                               style={{
                                 float: "right",
                                 display:
-                                  roless?.management?.includes(
+                                  roless?.Management?.includes(
                                     LocalStorageData?.user_id
-                                  ) && active > 5
+                                  ) && active > 2
                                     ? "block"
-                                    : roless?.admin?.includes(
+                                    : roless?.Admin?.includes(
                                         LocalStorageData?.user_id
-                                      ) && active > 5
+                                      ) && active > 2
                                     ? "block"
                                     : "none",
                               }}
                             >
-                              Submitte
+                              Final Submit
                             </button>
                           )}
                         </>

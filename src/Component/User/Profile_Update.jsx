@@ -62,7 +62,7 @@ const Profile_Update = () => {
                 <div class="card">
                   <div class="card-body">
                     <Profile_Form
-                      multiselect_disabled={true}
+                      multiselect_disabled={false}
                       status_hide={true}
                     />
                   </div>

@@ -3,14 +3,15 @@ import { useNavigate, Outlet, Navigate, Route } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 
-const Private_Routes = ({ allowedRoles, children }) => {
+const Private_Routes = async ({ allowedRoles, children }) => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
-  const user = [];
-  const role = LocalStorageData?.role.filter((val) => user.push(val.name));
-  const isAuthorized = allowedRoles?.some((role) => user?.includes(role));
-
+  const role = LocalStorageData?.zoho_role;
+  const isAuthorized = await allowedRoles?.some((roles) =>
+    roles?.includes(role)
+  );
+  console.log("isAuthorized", isAuthorized);
   useEffect(() => {
     if (!cookies["Access_Token"]) {
       navigate("/");
@@ -18,7 +19,9 @@ const Private_Routes = ({ allowedRoles, children }) => {
   }, [cookies, navigate]);
 
   if (!isAuthorized) {
-    return removeCookie("Access_Token"), (<Navigate to="/" />);
+    return (
+      removeCookie("Access_Token"), localStorage.clear(), (<Navigate to="/" />)
+    );
   }
 
   return children;
@@ -34,3 +37,40 @@ export default Private_Routes;
 // };
 
 // export default Private_Routes;
+
+// import { useNavigate, Outlet, Navigate, Route } from "react-router-dom";
+
+// import React, { useEffect, useState } from "react";
+// import { useCookies } from "react-cookie";
+
+// const Private_Routes = ({ allowedRoles, children }) => {
+//   const navigate = useNavigate();
+//   const [cookies, setCookie, removeCookie] = useCookies([]);
+//   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
+//   const user = [];
+//   const role = LocalStorageData?.role.filter((val) => user.push(val.name));
+//   const isAuthorized = allowedRoles?.some((role) => user?.includes(role));
+
+//   useEffect(() => {
+//     if (!cookies["Access_Token"]) {
+//       navigate("/");
+//     }
+//   }, [cookies, navigate]);
+
+//   if (!isAuthorized) {
+//     return removeCookie("Access_Token"), (<Navigate to="/" />);
+//   }
+
+//   return children;
+// };
+
+// export default Private_Routes;
+// // import { Navigate, Outlet } from "react-router-dom";
+// // import { useCookies } from "react-cookie";
+
+// // const Private_Routes = () => {
+// //   const [cookies, setCookie, removeCookie] = useCookies([]);
+// //   return cookies?.Access_Token ? <Outlet /> : <Navigate to="/" />;
+// // };
+
+// // export default Private_Routes;

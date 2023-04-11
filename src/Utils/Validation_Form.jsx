@@ -320,7 +320,7 @@ export const editJobsValidation = yup.object({
 });
 export const form12bb_validation = yup.object({
   /*=========> Login Information Validation ==========>*/
-  name: yup.string().required("This field is required"),
+  // name: yup.string().required("This field is required"),
   // email: yup
   //   .string()
   //   .required("This field is required")

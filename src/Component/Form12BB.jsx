@@ -14,6 +14,7 @@ import Sidebar from "../Partials/Sidebar";
 import Page_Header from "../Partials/Page_Header";
 import { CSSProperties } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useAlert } from "react-alert";
 const section_80C = [
   {
     name: "Life Insurance Premiums",
@@ -178,54 +179,19 @@ const section_80U = [
 
 const Form12BB = () => {
   const navigate = useNavigate();
-
+  const alert = useAlert();
   let [loading, setLoading] = useState(false);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [button_id, setbutton_id] = useState(1);
   const [getFormDataByID, setGetFormDataByID] = useState([]);
   const date = new Date();
-  let day = `0${date.getDate()}`;
-  let month = `0${date.getMonth() + 1}`;
+  let day = `${date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`}`;
+  let month = `${
+    date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`
+  }`;
   let year = date.getFullYear();
   let currentDate = `${year}-${month}-${day}`;
-  // const aa = {
-  //   financial_year: "2023-2024",
-  //   date: currentDate,
-  //   address: " ",
-  //   address_of_the_lender: " ",
-  //   address_of_the_rental_property: " ",
-  //   designation: " ",
-  //   father_name: " ",
-  //   interest_payable_paid_to_the_lender: "0",
-  //   leave_travel_concessions_or_assistance_amount: "0",
-  //   name: " ",
-  //   name_of_the_landlord: " ",
-  //   name_of_the_lender: " ",
-  //   permanent_account_number_of_the_employee: "ABC1234567",
-  //   permanent_account_number_of_the_landloard: " ",
-  //   permanent_account_number_of_the_lender: " ",
-  //   place: " ",
-  //   rent_paid_to_the_landlord: "0",
-  // };
-  // const bb = {
-  //   financial_year: "2023-2024",
-  //   date: currentDate,
-  //   address: "",
-  //   address_of_the_lender: "",
-  //   address_of_the_rental_property: "",
-  //   designation: "",
-  //   father_name: "",
-  //   interest_payable_paid_to_the_lender: "",
-  //   leave_travel_concessions_or_assistance_amount: "",
-  //   name: "",
-  //   name_of_the_landlord: "",
-  //   name_of_the_lender: "",
-  //   permanent_account_number_of_the_employee: "",
-  //   permanent_account_number_of_the_landloard: "",
-  //   permanent_account_number_of_the_lender: "",
-  //   place: "",
-  //   rent_paid_to_the_landlord: "",
-  // };
+  console.log("currentDate", currentDate);
   const {
     register,
     handleSubmit,
@@ -313,10 +279,7 @@ const Form12BB = () => {
       leave_travel_concessions_or_assistance:
         leavetravelconcessionsorassistance,
       deduction_of_interest_on_borrowing: deductionofinterestonborrowing,
-      name:
-        inputData?.name !== undefined
-          ? capitalizeBothStrings(inputData?.name)
-          : inputData?.name,
+      name: LocalStorageData?.name,
       vpf_apply:
         inputData?.vpf_apply === undefined ? "No" : inputData?.vpf_apply,
 
@@ -419,7 +382,8 @@ const Form12BB = () => {
           headers: headersCors,
         });
         const resp = result.data;
-        alert(resp.message);
+        alert.show(resp.message);
+
         if (resp?.message === "Form has been submitted") {
           navigate("/");
         }
@@ -433,7 +397,7 @@ const Form12BB = () => {
           }
         );
         const resp = result.data;
-        alert(resp.message);
+        alert.show(resp.message);
         if (resp?.message === "Form has been submitted") {
           navigate("/");
         }
@@ -528,52 +492,56 @@ const Form12BB = () => {
                           className="forms-sample"
                           onSubmit={handleSubmit(onSaveButton)}
                         >
-                          <div className="form-group">
-                            <label>Name</label>
-                            <span style={style}> *</span>
-                            <input
-                              className={classNames(
-                                "form-control form-control-sm",
-                                {
-                                  "is-invalid": errors.name,
-                                }
-                              )}
-                              {...register("name")}
-                              name="name"
-                              onChange={inputEvent}
-                              placeholder="Enter Name"
-                              value={inputData?.name}
-                              // autoSave
-                              disabled={inputData?.status && true}
-                            />
-                            <small className="invalid-feedback">
-                              {errors.name?.message}
-                            </small>
+                          <div className="row">
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label>Name</label>
+                                <span style={style}> *</span>
+                                <input
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors.name,
+                                    }
+                                  )}
+                                  {...register("name")}
+                                  name="name"
+                                  onChange={inputEvent}
+                                  placeholder="Enter Name"
+                                  value={LocalStorageData?.name}
+                                  disabled
+                                />
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label>Email</label>
+                                <input
+                                  className="form-control form-control-sm"
+                                  name="email"
+                                  onChange={inputEvent}
+                                  placeholder="Enter Email"
+                                  value={LocalStorageData?.email}
+                                  disabled
+                                />
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label>Employee Id</label>
+
+                                <input
+                                  className="form-control form-control-sm"
+                                  name="emp_id"
+                                  onChange={inputEvent}
+                                  placeholder="Enter Employee id"
+                                  value={LocalStorageData?.emp_id}
+                                  disabled
+                                />
+                              </div>
+                            </div>
                           </div>
 
-                          <div className="form-group">
-                            <label>Email</label>
-                            <input
-                              className="form-control form-control-sm"
-                              name="email"
-                              onChange={inputEvent}
-                              placeholder="Enter Email"
-                              value={LocalStorageData?.email}
-                              disabled
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label>Employee Id</label>
-
-                            <input
-                              className="form-control form-control-sm"
-                              name="emp_id"
-                              onChange={inputEvent}
-                              placeholder="Enter Employee id"
-                              value={LocalStorageData?.emp_id}
-                              disabled
-                            />
-                          </div>
                           <div className="form-group">
                             <label>Address</label>
                             <span style={style}> *</span>
@@ -1308,7 +1276,12 @@ const Form12BB = () => {
                                     </td>
 
                                     <td> {val?.section_type} </td>
-                                    <td> {val?.section_amount} </td>
+                                    <td>
+                                      {" "}
+                                      {val?.section_amount === "NA"
+                                        ? 0
+                                        : val?.section_amount}{" "}
+                                    </td>
                                     {!inputData?.status && (
                                       <td>
                                         <i
@@ -1553,7 +1526,7 @@ const Form12BB = () => {
                                   value={
                                     inputData?.status !== undefined
                                       ? convertDateFormate(inputData?.date)
-                                      : inputData?.date
+                                      : currentDate
                                   }
                                   disabled
                                 />

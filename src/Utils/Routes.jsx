@@ -25,89 +25,85 @@ const Routes_Array = [
   {
     path: "/user_list/:status_code",
     component: User_List,
-    allowedRoles: ["Admin", "HR", "Finance", "Management"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
   },
   {
     path: "/user_add",
     component: User_Add,
-    allowedRoles: ["Admin"],
+    allowedRoles: ["Admin", "Team member"],
   },
   {
     path: "/user_update/:_id",
     component: User_Update,
-    allowedRoles: ["Admin", "Employee"],
+    allowedRoles: ["Admin", "Team member"],
   },
   {
     path: "/profile_update/:_id",
     component: Profile_Update,
-    allowedRoles: ["Employee"],
+    allowedRoles: ["Admin", "Team member"],
   },
   //   <!================= Department ==================>
   {
     path: "/department_list",
     component: Department_List,
-    allowedRoles: ["Admin"],
+    allowedRoles: ["Admin", "Team member"],
   },
   {
     path: "/department_add",
     component: Department_Add,
-    allowedRoles: ["Admin"],
+    allowedRoles: ["Admin", "Team member"],
   },
   {
     path: "/department_update/:_id",
     component: Department_Update,
-    allowedRoles: ["Admin"],
+    allowedRoles: ["Admin", "Team member"],
   },
   //   <!================= Cabin ==================>
 
   {
     path: "/cabin_add",
     component: Cabin_Add,
-    allowedRoles: ["Admin"],
+    allowedRoles: ["Admin", "Team member"],
   },
   {
     path: "/cabin_list",
     component: Cabin_List,
-    allowedRoles: ["Admin"],
+    allowedRoles: ["Admin", "Team member"],
   },
   {
     path: "/cabin_update/:_id",
     component: Cabin_Update,
-    allowedRoles: ["Admin"],
+    allowedRoles: ["Admin", "Team member"],
   },
   //   <!================= Cabin Slot Booking ==================>
   {
     path: "/cabin_slot_booking",
     component: Cabin_Slot_Booking,
-    allowedRoles: ["Admin", "Employee"],
+    allowedRoles: ["Admin", "Team member"],
   },
 
   //   <!================= Boarding ==================>
   {
     path: "/on_boarding/:_id",
     component: On_Boarding,
-    allowedRoles: ["Admin", "Employee", "HR", "Finance", "Management"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
   },
   {
     path: "/off_boarding/:_id",
     component: Off_Boarding,
-    allowedRoles: ["Admin", "Employee", "HR", "Management"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Managment", "Team member"],
   },
   //   <!================= Form's ==================>
   {
     path: "/form12bb",
     component: Form12BB,
-    allowedRoles: ["Employee"],
+    allowedRoles: ["Admin", "Team member"],
   },
-  {
-    path: "/form12BB_final_submit",
-    component: Form12BB_Final_Submit,
-    allowedRoles: ["Employee"],
-  },
+
   {
     path: "/flexible_benefit_plan",
     component: Flexible_Benefit_Plan,
-    allowedRoles: ["Employee"],
+    allowedRoles: ["Admin", "Team member"],
   },
 ];
 
