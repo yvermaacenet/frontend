@@ -105,7 +105,7 @@ const Dashboard = () => {
         .catch((err) => console.log(err));
     }
     get_counterList();
-    // sendCode();
+    sendCode();
   }, []);
   const cardArray = [
     // {
@@ -178,14 +178,14 @@ const Dashboard = () => {
   //     },
   //   ],
   // };
-  // async function sendCode() {
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const code = urlParams.get("code");
-  //   if (code) {
-  //     const result = await axios.post(`sign_in_zoho_get_access_token/${code}`);
-  //     localStorage.setItem("loggedin", JSON.stringify(result.data));
-  //   }
-  // }
+  async function sendCode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
+    if (code) {
+      const result = await axios.post(`sign_in_zoho_get_access_token/${code}`);
+      localStorage.setItem("loggedin", JSON.stringify(result.data));
+    }
+  }
   const data01 = [
     { name: "Active", value: 700 },
     { name: "Deactive", value: 300 },
