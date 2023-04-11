@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Footer from "../../Partials/Footer";
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
@@ -10,8 +10,19 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import PureModal from "react-pure-modal";
 import "react-pure-modal/dist/react-pure-modal.min.css";
 import CustomTooltipForCalender from "../../Utils/CustomTooltipForCalender";
+import { Views, DateLocalizer } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-pure-modal/dist/react-pure-modal.min.css";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
+import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
+import ClockLoader from "react-spinners/ClockLoader";
+import { useAlert } from "react-alert";
+
+const DragAndDropCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 const Cabin_Slot_Booking = () => {
+  const alert = useAlert();
+  const [loading, setLoading] = useState(false);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getCabinSlotBookingList, setGetCabinSlotBookingList] = useState([]);
   const [getCabinList, setGetCabinList] = useState([]);
@@ -48,8 +59,8 @@ const Cabin_Slot_Booking = () => {
       const getAllEvents = await resp__get_cabin_slot_booking_list?.map(
         (val) => ({
           ...val,
-          start: new Date(val.start),
-          end: new Date(val.end),
+          start: new Date(val?.start),
+          end: new Date(val?.end),
         })
       );
       setGetCabinSlotBookingList(getAllEvents);
@@ -79,9 +90,9 @@ const Cabin_Slot_Booking = () => {
       );
     });
     if (selectCabin_id === "all") {
-      alert("Please select cabin");
+      alert.show("Please select cabin");
     } else if (overlap) {
-      alert("This time slot is already booked!");
+      alert.show("This time slot is already booked!");
     } else {
       setAddEventModal(true);
       const newEvent = {
@@ -120,7 +131,7 @@ const Cabin_Slot_Booking = () => {
       })
       .then((res) => {
         return (
-          alert(res.data.message),
+          alert.show(res.data.message),
           setAddEventModal(false),
           setAllDay(false),
           setRenderComponent(true)
@@ -137,7 +148,7 @@ const Cabin_Slot_Booking = () => {
       })
       .then((res) => {
         return (
-          alert(res.data.message),
+          alert.show(res.data.message),
           setEditEventModal(false),
           setAllDay(false),
           setRenderComponent(true)
@@ -145,13 +156,14 @@ const Cabin_Slot_Booking = () => {
       })
       .catch((err) => console.log(err));
   };
+
   const onRemoveCabinSlotBookingButton = async (e) => {
     e.preventDefault();
     const result = await axios
       .delete(`cabin_slot_booking/${inputData?._id}`)
       .then((res) => {
         return (
-          alert(res.data.message),
+          alert.show(res.data.message),
           setEditEventModal(false),
           setAllDay(false),
           setRenderComponent(true)
@@ -188,6 +200,103 @@ const Cabin_Slot_Booking = () => {
     today.getDate(),
     19
   );
+
+  const resizeEvent = useCallback(({ event, start, end }) => {
+    setGetCabinSlotBookingList((prev) => {
+      const existing = prev.find((ev) => ev._id === event._id) ?? {};
+      const filtered = prev.filter((ev) => ev._id !== event._id);
+      const updated = [...filtered, { ...existing, start, end }];
+      const lastObject = updated[updated.length - 1];
+      const overlappingBooking = getCabinSlotBookingList.find(
+        (booking) =>
+          (booking.start >= start && booking.start < end) ||
+          (booking.end > start && booking.end <= end) ||
+          (booking.start <= start && booking.end >= end)
+      );
+
+      if (selectCabin_id === "all") {
+        alert.show("Please select cabin");
+      } else if (event.start === event.end) {
+        alert.show("Are you sure you want to delete this event?");
+        // onDeleteEvent(event);
+      } else if (overlappingBooking && event._id !== overlappingBooking._id) {
+        alert.show("already booked");
+      } else {
+        async function dragndrop() {
+          setLoading(true);
+          await axios
+            .put(`cabin_slot_booking/${event?._id}`, lastObject)
+            .then((res) => {
+              return (
+                setLoading(false),
+                alert.show(res.data.message),
+                setRenderComponent(true)
+              );
+            })
+            .catch((err) => console.log(err));
+        }
+        dragndrop();
+      }
+    });
+  });
+
+  const moveEvent = useCallback(
+    ({
+      event,
+      start,
+      end,
+      _id,
+      resourceId,
+      allDay: droppedOnAllDaySlot = false,
+    }) => {
+      const { allDay } = event;
+
+      if (!allDay && droppedOnAllDaySlot) {
+        // if the event is moved to an all-day slot, update the allDay property
+        event.allDay = true;
+      } else if (allDay && !droppedOnAllDaySlot) {
+        // if the event is moved to a regular slot, update the allDay property
+        event.allDay = false;
+      }
+      console.log("yes", droppedOnAllDaySlot);
+      const overlappingBooking = getCabinSlotBookingList.find(
+        (booking) =>
+          (booking.start >= start && booking.start < end) ||
+          (booking.end > start && booking.end <= end) ||
+          (booking.start <= start && booking.end >= end)
+      );
+      console.log(event.allDay);
+      if (selectCabin_id === "all") {
+        alert.show("Please select cabin");
+      } else if (overlappingBooking && event._id !== overlappingBooking._id) {
+        alert.show("already booked");
+      } else {
+        setGetCabinSlotBookingList((prev) => {
+          const existing = prev?.find((ev) => ev?._id === event?._id) ?? {};
+          const filtered = prev?.filter((ev) => ev?._id !== event?._id);
+          const result2 = [...filtered, { ...existing, start, end, allDay }];
+          const lastObject = result2[result2.length - 1];
+          console.log(lastObject);
+          async function dragndrop() {
+            setLoading(true);
+            await axios
+              .put(`cabin_slot_booking/${event?._id}`, lastObject)
+              .then((res) => {
+                return (
+                  setLoading(false),
+                  alert.show(res.data.message),
+                  setRenderComponent(true)
+                );
+              })
+              .catch((err) => console.log(err));
+          }
+          dragndrop();
+          // console.log("hel", [...filtered, { ...existing, start, end, allDay }]);
+        });
+      }
+    }
+  );
+
   return (
     <div className="container-scroller">
       <Navbar />
@@ -201,294 +310,248 @@ const Cabin_Slot_Booking = () => {
               page_title_button="Back"
               page_title_button_link="/dashboard"
             />
-            <div className="row">
-              <div className="card">
-                <div className="card-body">
-                  <form className="forms-sample">
-                    <div className="row">
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label> Cabin </label>
-                          <select
-                            name="_id"
-                            className="form-control form-control-sm"
-                            onChange={(e) => setSelectCabin_id(e.target.value)}
-                          >
-                            <option
-                              value="all"
-                              selected="selected"
-                              // disabled="disabled"
+            {loading ? (
+              <div className="loader-container">
+                <div class="loader"></div>
+              </div>
+            ) : (
+              <div className="row">
+                <div className="card">
+                  <div className="card-body">
+                    <form className="forms-sample">
+                      <div className="row">
+                        <div className="col-md-3">
+                          <div className="form-group">
+                            <label> Cabin </label>
+                            <select
+                              name="_id"
+                              className="form-control form-control-sm"
+                              onChange={(e) =>
+                                setSelectCabin_id(e.target.value)
+                              }
                             >
-                              All Booking
-                            </option>
-                            {getCabinList?.map((val, index) => {
-                              return (
-                                <>
-                                  <option value={val?._id}>{val?.name}</option>
-                                </>
-                              );
-                            })}
-                          </select>
+                              <option
+                                value="all"
+                                selected="selected"
+                                // disabled="disabled"
+                              >
+                                All Booking
+                              </option>
+                              {getCabinList?.map((val, index) => {
+                                return (
+                                  <>
+                                    <option value={val?._id}>
+                                      {val?.name}
+                                    </option>
+                                  </>
+                                );
+                              })}
+                            </select>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </form>
-                  <Calendar
-                    localizer={localizer}
-                    events={getCabinSlotBookingList}
-                    startAccessor="start"
-                    endAccessor="end"
-                    defaultView={"week"}
-                    min={minDate_time}
-                    max={maxDate_time}
-                    style={{ height: "100vh" }}
-                    step={15}
-                    timeslots={4}
-                    selectable
-                    onSelectSlot={handleSelect}
-                    onSelectEvent={onSelectEvent}
-                    eventPropGetter={eventStyleGetter}
-                  />
-                  <PureModal
-                    header="Cabin Booking"
-                    isOpen={addEventModal}
-                    // closeButtonPosition="bottom"
-                    onClose={() => {
-                      setAddEventModal(false);
-                      setAllDay(false);
-                      return true;
-                    }}
-                    width={"40%"}
-                  >
-                    <div className="card">
-                      <div className="card-body">
-                        <form className="forms-sample">
-                          <div className="form-group">
-                            <label>Title</label>
-                            <input
-                              type="text"
-                              className="form-control form-control-sm"
-                              name="title"
-                              placeholder="Username"
-                              onChange={inputEvent}
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label>Description</label>
-                            <input
-                              type="text"
-                              className="form-control form-control-sm"
-                              name="description"
-                              placeholder="Username"
-                              onChange={inputEvent}
-                            />
-                          </div>
-                          <div className="form-group">
-                            <div className="row">
-                              <div className="col-md-6">
-                                <label>Start Date</label>
-                                <input
-                                  type="date"
-                                  className="form-control form-control-sm"
-                                  placeholder="Username"
-                                  // onChange={inputEvent}
-                                  value={inputData?.convertStartDate}
-                                  disabled
-                                />
-                              </div>
-                              <div className="col-md-6">
-                                <label>Start Time</label>
-                                <input
-                                  type="time"
-                                  className="form-control form-control-sm"
-                                  placeholder="Username"
-                                  onChange={inputEvent}
-                                  name="time"
-                                  value={inputData?.convertStartTime}
-                                  disabled
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="form-group">
-                            <div className="row">
-                              <div className="col-md-6">
-                                <label>End Date</label>
-                                <input
-                                  type="date"
-                                  className="form-control form-control-sm"
-                                  placeholder="Username"
-                                  // onChange={inputEvent}
-                                  value={inputData?.convertEndDate}
-                                  disabled
-                                />
-                              </div>
-                              <div className="col-md-6">
-                                <label>End Time</label>
-
-                                <input
-                                  type="time"
-                                  className="form-control form-control-sm"
-                                  placeholder="Username"
-                                  onChange={inputEvent}
-                                  name="time"
-                                  value={inputData?.convertEndTime}
-                                  disabled
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="form-check form-check-flat form-check-primary">
-                            <label className="form-check-label">
+                    </form>
+                    <DragAndDropCalendar
+                      // defaultDate={defaultDate}
+                      events={getCabinSlotBookingList}
+                      localizer={localizer}
+                      onEventDrop={moveEvent}
+                      onEventResize={resizeEvent}
+                      resizable={true}
+                      selectable
+                      onSelectSlot={handleSelect}
+                      resourceIdAccessor="resourceId"
+                      // resources={resourceMap}
+                      onSelectEvent={onSelectEvent}
+                      resourceTitleAccessor="resourceTitle"
+                      // scrollToTime={scrollToTime}
+                      startAccessor="start"
+                      endAccessor="end"
+                      defaultView={"week"}
+                      eventPropGetter={eventStyleGetter}
+                      min={minDate_time}
+                      max={maxDate_time}
+                      style={{ height: "100vh" }}
+                      showMultiDayTimes={true}
+                      step={15}
+                    />
+                    <PureModal
+                      header="Cabin Booking"
+                      isOpen={addEventModal}
+                      // closeButtonPosition="bottom"
+                      onClose={() => {
+                        setAddEventModal(false);
+                        setAllDay(false);
+                        return true;
+                      }}
+                      width={"40%"}
+                    >
+                      <div className="card">
+                        <div className="card-body">
+                          <form className="forms-sample">
+                            <div className="form-group">
+                              <label>Title</label>
                               <input
-                                type="checkbox"
-                                className="form-check-input"
-                                name="allDay"
-                                onChange={(e) => setAllDay(e.target.checked)}
-                                checked={allDay}
+                                type="text"
+                                className="form-control form-control-sm"
+                                name="title"
+                                placeholder="Username"
+                                onChange={inputEvent}
                               />
-                              Booking all days <i className="input-helper"></i>
-                            </label>
-                          </div>
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-gradient-primary me-2"
-                            onClick={onAddCabinSlotBookingButton}
-                          >
-                            Submit
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </PureModal>
-                  <PureModal
-                    header="Cabin Booking"
-                    isOpen={editEventModal}
-                    // closeButtonPosition="bottom"
-                    onClose={() => {
-                      setEditEventModal(false);
-                      // setAllDay(false);
-                      return true;
-                    }}
-                    width={"40%"}
-                  >
-                    <div className="card">
-                      <div className="card-body">
-                        <form className="forms-sample">
-                          <div className="form-group">
-                            <label>Title</label>
-                            <input
-                              type="text"
-                              className="form-control form-control-sm"
-                              name="title"
-                              placeholder="Username"
-                              onChange={inputEvent}
-                              value={inputData?.title}
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label>Description</label>
-                            <input
-                              type="text"
-                              className="form-control form-control-sm"
-                              name="description"
-                              placeholder="Username"
-                              onChange={inputEvent}
-                              value={inputData?.description}
-                            />
-                          </div>
-                          <div className="form-group">
-                            <div className="row">
-                              <div className="col-md-6">
-                                <label>Start Date</label>
-                                <input
-                                  type="date"
-                                  className="form-control form-control-sm"
-                                  placeholder="Username"
-                                  // onChange={inputEvent}
-                                  value={inputData?.convertStartDate}
-                                  disabled
-                                />
-                              </div>
-                              <div className="col-md-6">
-                                <label>Start Time</label>
-                                <input
-                                  type="time"
-                                  className="form-control form-control-sm"
-                                  placeholder="Username"
-                                  onChange={inputEvent}
-                                  name="time"
-                                  value={inputData?.convertStartTime}
-                                  disabled
-                                />
-                              </div>
                             </div>
-                          </div>
-                          <div className="form-group">
-                            <div className="row">
-                              <div className="col-md-6">
-                                <label>End Date</label>
-                                <input
-                                  type="date"
-                                  className="form-control form-control-sm"
-                                  placeholder="Username"
-                                  // onChange={inputEvent}
-                                  value={inputData?.convertEndDate}
-                                  disabled
-                                />
-                              </div>
-                              <div className="col-md-6">
-                                <label>End Time</label>
-
-                                <input
-                                  type="time"
-                                  className="form-control form-control-sm"
-                                  placeholder="Username"
-                                  onChange={inputEvent}
-                                  name="time"
-                                  value={inputData?.convertEndTime}
-                                  disabled
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="form-check form-check-flat form-check-primary">
-                            <label className="form-check-label">
+                            <div className="form-group">
+                              <label>Description</label>
                               <input
-                                type="checkbox"
-                                className="form-check-input"
-                                name="allDay"
-                                onChange={(e) => setAllDay(e.target.checked)}
-                                checked={allDay}
+                                type="text"
+                                className="form-control form-control-sm"
+                                name="description"
+                                placeholder="Username"
+                                onChange={inputEvent}
                               />
-                              Booking all days <i className="input-helper"></i>
-                            </label>
-                          </div>
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-gradient-primary me-2"
-                            onClick={onEditCabinSlotBookingButton}
-                          >
-                            Update
-                          </button>
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-gradient-danger me-2"
-                            onClick={onRemoveCabinSlotBookingButton}
-                          >
-                            Remove
-                          </button>
-                        </form>
+                            </div>
+                            <div className="form-group">
+                              <div className="row">
+                                <div className="col-md-6">
+                                  <label>Start Date</label>
+                                  <input
+                                    type="date"
+                                    className="form-control form-control-sm"
+                                    placeholder="Username"
+                                    // onChange={inputEvent}
+                                    value={inputData?.convertStartDate}
+                                    disabled
+                                  />
+                                </div>
+                                <div className="col-md-6">
+                                  <label>Start Time</label>
+                                  <input
+                                    type="time"
+                                    className="form-control form-control-sm"
+                                    placeholder="Username"
+                                    onChange={inputEvent}
+                                    name="time"
+                                    value={inputData?.convertStartTime}
+                                    disabled
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="form-group">
+                              <div className="row">
+                                <div className="col-md-6">
+                                  <label>End Date</label>
+                                  <input
+                                    type="date"
+                                    className="form-control form-control-sm"
+                                    placeholder="Username"
+                                    // onChange={inputEvent}
+                                    value={inputData?.convertEndDate}
+                                    disabled
+                                  />
+                                </div>
+                                <div className="col-md-6">
+                                  <label>End Time</label>
+
+                                  <input
+                                    type="time"
+                                    className="form-control form-control-sm"
+                                    placeholder="Username"
+                                    onChange={inputEvent}
+                                    name="time"
+                                    value={inputData?.convertEndTime}
+                                    disabled
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="form-check form-check-flat form-check-primary">
+                              <label className="form-check-label">
+                                <input
+                                  type="checkbox"
+                                  className="form-check-input"
+                                  name="allDay"
+                                  onChange={(e) => setAllDay(e.target.checked)}
+                                  checked={allDay}
+                                />
+                                Booking all days{" "}
+                                <i className="input-helper"></i>
+                              </label>
+                            </div>
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-primary me-2"
+                              onClick={onAddCabinSlotBookingButton}
+                            >
+                              Submit
+                            </button>
+                          </form>
+                        </div>
                       </div>
-                    </div>
-                  </PureModal>
+                    </PureModal>
+
+                    {/* =======edit========== */}
+                    <PureModal
+                      header="Cabin Booking"
+                      isOpen={editEventModal}
+                      // closeButtonPosition="bottom"
+                      onClose={() => {
+                        setEditEventModal(false);
+                        // setAllDay(false);
+                        return true;
+                      }}
+                      width={"40%"}
+                    >
+                      <div className="card">
+                        <div className="card-body">
+                          <form className="forms-sample">
+                            <div className="form-group">
+                              <label>Title</label>
+                              <input
+                                type="text"
+                                className="form-control form-control-sm"
+                                name="title"
+                                placeholder="Username"
+                                onChange={inputEvent}
+                                value={inputData?.title}
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>Description</label>
+                              <input
+                                type="text"
+                                className="form-control form-control-sm"
+                                name="description"
+                                placeholder="Username"
+                                onChange={inputEvent}
+                                value={inputData?.description}
+                              />
+                            </div>
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-primary me-2"
+                              onClick={() => {
+                                setEditEventModal(false);
+                              }}
+                            >
+                              close
+                            </button>
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-danger me-2"
+                              onClick={onRemoveCabinSlotBookingButton}
+                            >
+                              Remove
+                            </button>
+                          </form>
+                        </div>
+                      </div>
+                    </PureModal>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
-          <footer className="footer">
-            <Footer />
-          </footer>
+          <footer className="footer">{/* <Footer /> */}</footer>
         </div>
       </div>
     </div>
