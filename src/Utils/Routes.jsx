@@ -2,7 +2,7 @@ import On_Boarding from "../Component/Boarding/On_Boarding";
 import Off_Boarding from "../Component/Boarding/Off_Boarding";
 import Cabin_Add from "../Component/Cabin/Cabin_Add";
 import Cabin_List from "../Component/Cabin/Cabin_List";
-import Cabin_Slot_Booking from "../Component/Cabin/Cabin_Slot_Booking";
+import Cabin_Slot_Booking from "../Component/Cabin/Cabin_Slot_Bookings_old";
 import Cabin_Update from "../Component/Cabin/Cabin_Update";
 import Dashboard from "../Component/Dashboard";
 import Department_Add from "../Component/Department/Department_Add";
