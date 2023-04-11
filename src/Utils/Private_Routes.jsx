@@ -8,7 +8,7 @@ const Private_Routes = ({ allowedRoles, children }) => {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const role = LocalStorageData?.zoho_role;
-  const isAuthorized = allowedRoles?.some((roles) => role?.includes(roles));
+  const isAuthorized = allowedRoles?.some((roles) => roles?.includes(role));
 
   useEffect(() => {
     if (!cookies["Access_Token"]) {

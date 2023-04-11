@@ -187,9 +187,10 @@ const Dashboard = () => {
     }
   }
   const data01 = [
-    { name: "Active", value: 700 },
-    { name: "Deactive", value: 300 },
+    { name: "Active", value: counterList?.Active_Users },
+    { name: "Deactive", value: counterList?.Deactive_Users },
   ];
+
   const renderActiveShape = (props) => {
     const RADIAN = Math.PI / 180;
     const {
