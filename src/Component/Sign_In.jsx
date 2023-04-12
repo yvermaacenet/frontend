@@ -38,11 +38,12 @@ const Sign_In = () => {
         .get(`sign_in_zoho`)
         .then((result) => {
           const resp = result.data;
-          return window.location.replace(resp), setLoading(false);
+          return window.location.replace(resp);
         })
         .catch((err) => err.response.status === 403 && navigate("/"));
     }
     postData();
+    setLoading(false);
   };
   useEffect(() => {
     async function sendCode() {
