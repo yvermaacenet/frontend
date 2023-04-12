@@ -79,12 +79,12 @@ const Cabin_Add = () => {
   const onCabinAddButton = (e) => {
     e.preventDefault();
     async function add_cabin() {
-      const result = await axios
+      await axios
         .post(`/cabin_add`, inputData)
-        .then((res) => {
-          return alert(res?.data.message), navigate("/cabin_list");
+        .then((resp) => {
+          return alert(resp?.data.message), navigate("/cabin_list");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     add_cabin();
   };

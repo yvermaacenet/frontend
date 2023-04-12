@@ -33,15 +33,18 @@ const Cabin_Update = () => {
   };
   useEffect(() => {
     async function get_user_data() {
-      const result_get_cabin_data_by_id = await axios(
-        `/cabin_list_by_id/${_id}`
-      );
-      const resp_get_cabin_data_by_id = result_get_cabin_data_by_id?.data;
-      setInputData(resp_get_cabin_data_by_id);
-      setGetChooseColor({
-        ...getChooseColor,
-        color: resp_get_cabin_data_by_id?.color_code,
-      });
+      await axios
+        .get(`/cabin_list_by_id/${_id}`)
+        .then((resp) => {
+          return (
+            setInputData(resp?.data),
+            setGetChooseColor({
+              ...getChooseColor,
+              color: resp?.data?.color_code,
+            })
+          );
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     get_user_data();
   }, []);
@@ -98,7 +101,7 @@ const Cabin_Update = () => {
         .then((res) => {
           return alert(res?.data.message), navigate("/cabin_list");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     add_cabin();
   };

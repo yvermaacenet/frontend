@@ -8,12 +8,14 @@ import Dashboard from "../Component/Dashboard";
 import User_List from "../Component/User/User_List";
 import Form12BB from "../Component/Forms/Form12BB";
 import Flexible_Benefit_Plan from "../Component/Forms/Flexible_Benefit_Plan";
+import Get_Form_Flexi_Benefit_Data from "../Component/Forms/Get_Form_Flexi_Benefit_Data";
+import Get_Form12bb_Data from "../Component/Forms/Get_Form12bb_Data";
 const Routes_Array = [
   //   <!================= User ==================>
   {
-    path: "/dashboard/*",
+    path: "/dashboard",
     component: Dashboard,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
   },
   {
     path: "/user_list/:status_code",
@@ -64,6 +66,16 @@ const Routes_Array = [
   {
     path: "/flexible_benefit_plan",
     component: Flexible_Benefit_Plan,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  },
+  {
+    path: "/get_form12bb_data",
+    component: Get_Form12bb_Data,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  },
+  {
+    path: "/get_form_flexi_benefit_data",
+    component: Get_Form_Flexi_Benefit_Data,
     allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
 ];

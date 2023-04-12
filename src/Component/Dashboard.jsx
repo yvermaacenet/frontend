@@ -1,140 +1,31 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { NavLink, urlParams } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../Partials/Footer";
 import Navbar from "../Partials/Navbar";
 import Page_Header from "../Partials/Page_Header";
 import Sidebar from "../Partials/Sidebar";
-import ReactApexChart from "react-apexcharts";
-// import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-// import { Pie, Doughnut } from "react-chartjs-2";
-// import React, { PureComponent } from "react";
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
-
-// ChartJS.register(ArcElement, Tooltip, Legend);
-// import {ReactApexChart} from "react-apexcharts";
+import { PieChart, Pie, Sector } from "recharts";
 const Dashboard = () => {
+  const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
-  const [userCreationDate, setUserCreationDate] = useState();
-  const [cabinSlotBookingCreationDate, setCabinSlotBookingCreationDate] =
-    useState();
   const [counterList, setCounterList] = useState([]);
-  const [state, setState] = useState({
-    series: [7, 3],
-    options: {
-      chart: {
-        // width: 280,
-        type: "pie",
-        // background: "#fff",
-      },
-      // labels: ["Active", "Deactivated"],
-      fill: {
-        colors: ["rgb(0, 227, 150)", "rgb(255, 69, 96)"],
-      },
-      legend: {
-        show: true,
-        position: "bottom",
-        customLegendItems: ["Active", "Deactivated"],
-        markers: {
-          width: 12,
-          height: 12,
-          fillColors: ["rgb(0, 227, 150)", "rgb(255, 69, 96)"],
-        },
-      },
-      dataLabels: {
-        style: {
-          colors: ["#f8f8f8", "#f8f8f8"],
-        },
-        enabled: true,
-        // textAnchor: "middle",
-        // background: {
-        //   enabled: true,
-        //   opacity: 1,
-        //   dropShadow: {
-        //     enabled: true,
-        //     top: 1,
-        //     left: 1,
-        //     blur: 1,
-        //     color: "red",
-        //     opacity: 0.45,
-        //   },
-        // },
-      },
-      tooltip: {
-        enabled: false,
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              // width: 10,
-              // background: "#fff",
-            },
-          },
-        },
-      ],
-    },
-  });
   const [states, setStates] = useState({ activeIndex: 0 });
-  function convertDateFormate(str) {
-    const date = new Date(str),
-      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-      day = ("0" + date.getDate()).slice(-2);
-    return [day, mnth, date.getFullYear()].join("-");
-  }
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
+    setLoading(true);
     async function get_counterList() {
-      const result = await axios
+      await axios
         .get("/documents_counter")
         .then((res) => {
-          return (
-            setCounterList(res?.data),
-            setUserCreationDate(
-              convertDateFormate(
-                res?.data?.Active_User_Creation_Date?.creation_date
-              )
-            ),
-            setCabinSlotBookingCreationDate(
-              convertDateFormate(
-                res?.data?.Cabin_Booking_Creation_Date?.creation_date
-              )
-            )
-          );
+          return setCounterList(res?.data), setLoading(false);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     get_counterList();
-    sendCode();
   }, []);
   const cardArray = [
-    // {
-    //   card_background: "bg-gradient-info",
-    //   path: "/user_list/all_users",
-    //   card_title: "Total Users",
-    //   card_icon: "mdi-account-multiple-plus",
-    //   card_counter_data: counterList?.Total_Users,
-    //   card_last_update: userCreationDate,
-    //   card_allowed_access: ["Admin", "HR", "Finance", "Management"],
-    // },
-
-    // {
-    //   card_background: "bg-gradient-success",
-    //   path: "/user_list/active_users",
-    //   card_title: "Acrive Users",
-    //   card_icon: "mdi-account-check",
-    //   card_counter_data: counterList?.Active_Users,
-    //   card_last_update: userCreationDate,
-    //   card_allowed_access: ["Admin", "HR", "Finance", "Management"],
-    // },
-    // {
-    //   card_background: "bg-gradient-danger",
-    //   path: "/user_list/deactive_users",
-    //   card_title: "Deacrive Users",
-    //   card_icon: "mdi-account-remove",
-    //   card_counter_data: counterList?.Deactive_Users,
-    //   card_allowed_access: ["Admin", "HR", "Finance", "Management"],
-    // },
     {
       card_background: "bg-gradient-primary",
       path: "/user_list/pending_onboarding_users",
@@ -166,26 +57,7 @@ const Dashboard = () => {
       ],
     },
   ];
-  // const data = {
-  //   labels: ["Active", "Deactivated"],
-  //   datasets: [
-  //     {
-  //       label: "# of Votes",
-  //       data: [3, 7],
-  //       backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)"],
-  //       borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)"],
-  //       borderWidth: 1,
-  //     },
-  //   ],
-  // };
-  async function sendCode() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
-    if (code) {
-      const result = await axios.post(`sign_in_zoho_get_access_token/${code}`);
-      localStorage.setItem("loggedin", JSON.stringify(result.data));
-    }
-  }
+
   const data01 = [
     { name: "Active", value: counterList?.Active_Users },
     { name: "Deactive", value: counterList?.Deactive_Users },
@@ -281,11 +153,18 @@ const Dashboard = () => {
                 page_title_button="Overview"
                 page_title_icon="mdi-home"
               />
-
+              {loading && (
+                <div className="loader-container">
+                  <div class="loader"></div>
+                </div>
+              )}
               <div class="row">
-                {!LocalStorageData?.zoho_role === "Team member" && (
-                  <div class="col-md-4 grid-margin">
-                    <PieChart width={400} height={220}>
+                {(LocalStorageData?.zoho_role === "Admin" ||
+                  LocalStorageData?.zoho_role === "Hr" ||
+                  LocalStorageData?.zoho_role === "Finance" ||
+                  LocalStorageData?.zoho_role === "Management") && (
+                  <div class="col-md-6 grid-margin">
+                    <PieChart width={600} height={220}>
                       <Pie
                         activeIndex={states?.activeIndex}
                         activeShape={renderActiveShape}
@@ -347,7 +226,7 @@ const Dashboard = () => {
                         result?.card_allowed_access.includes(
                           LocalStorageData?.zoho_role
                         ) && (
-                          <div class="col-md-4 stretch-card grid-margin">
+                          <div class="col-md-6 stretch-card grid-margin">
                             <div
                               class={`card ${result?.card_background} card-img-holder text-white`}
                             >

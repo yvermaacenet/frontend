@@ -28,20 +28,6 @@ const Sidebar = () => {
               </div>
               <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
             </NavLink>
-            {/* <a href="#" className="nav-link">
-              <div className="nav-profile-image">
-                <img src="../assets/images/faces/face1.jpg" alt="profile" />
-                <span className="login-status online"></span>
-                <!--change to offline or busy as needed-->
-              </div>
-              <div className="nav-profile-text d-flex flex-column">
-                <span className="font-weight-bold mb-2">David Grey. H</span>
-                <span className="text-secondary text-small">
-                  Project Manager
-                </span>
-              </div>
-              <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-            </a> */}
           </li>
           <li className="nav-item">
             <NavLink className="nav-link" to="/">
@@ -49,58 +35,31 @@ const Sidebar = () => {
               <i className="mdi mdi-home menu-icon"></i>
             </NavLink>
           </li>
-
           {!LocalStorageData?.zoho_role === "Team member" && (
-            <>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  data-bs-toggle="collapse"
-                  href="#ui-basic"
-                  aria-expanded="false"
-                  aria-controls="ui-basic"
-                >
-                  <span class="menu-title">Users</span>
-                  <i class="menu-arrow"></i>
-                  <i class="mdi mdi-account-multiple-outline menu-icon"></i>
-                </a>
-                <div class="collapse" id="ui-basic">
-                  <ul class="nav flex-column sub-menu">
-                    <ul className="nav flex-column sub-menu">
-                      <li className="nav-item">
-                        <NavLink className="nav-link" to="/user_list/all_users">
-                          Users List
-                        </NavLink>
-                      </li>
-                    </ul>
-                  </ul>
-                </div>
-              </li>
-              {/* <li class="nav-item">
+            <li class="nav-item">
               <a
                 class="nav-link"
                 data-bs-toggle="collapse"
-                href="#ui-role"
+                href="#ui-basic"
                 aria-expanded="false"
                 aria-controls="ui-basic"
               >
-                <span class="menu-title">Department</span>
+                <span class="menu-title">Users</span>
                 <i class="menu-arrow"></i>
-                <i class="mdi mdi-crosshairs-gps menu-icon"></i>
+                <i class="mdi mdi-account-multiple-outline menu-icon"></i>
               </a>
-              <div class="collapse" id="ui-role">
+              <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                   <ul className="nav flex-column sub-menu">
                     <li className="nav-item">
-                      <NavLink className="nav-link" to="/department_list">
-                        Department List
+                      <NavLink className="nav-link" to="/user_list/all_users">
+                        Users List
                       </NavLink>
                     </li>
                   </ul>
                 </ul>
               </div>
-            </li> */}
-            </>
+            </li>
           )}
           <li class="nav-item">
             <a
@@ -134,8 +93,7 @@ const Sidebar = () => {
               </ul>
             </div>
           </li>
-          {/* )
-          )} */}
+
           <li class="nav-item">
             <a
               class="nav-link"
@@ -182,15 +140,18 @@ const Sidebar = () => {
                 <ul class="nav flex-column sub-menu">
                   <ul className="nav flex-column sub-menu">
                     <li className="nav-item">
-                      <NavLink className="nav-link" to="/forms_data_download">
-                        {/* Form 12 BB */}
-                        forms_data_download
+                      <NavLink className="nav-link" to="/get_form12bb_data">
+                        {/* Form Flexible Benefit */}
+                        Form 12 BB
                       </NavLink>
                     </li>
                     <li className="nav-item">
-                      <NavLink className="nav-link" to="/get_form12bb_data">
-                        {/* Form Flexible Benefit */}
-                        Get_Form12bb_Data
+                      <NavLink
+                        className="nav-link"
+                        to="/get_form_flexi_benefit_data"
+                      >
+                        {/* Form 12 BB */}
+                        Form Flexible Benefit
                       </NavLink>
                     </li>
                   </ul>
@@ -198,36 +159,6 @@ const Sidebar = () => {
               </div>
             </li>
           )}
-
-          {/* <li class="nav-item">
-            <a
-              class="nav-link"
-              data-bs-toggle="collapse"
-              href="#ui-boarding"
-              aria-expanded="false"
-              aria-controls="ui-basic"
-            >
-              <span class="menu-title">Boaring</span>
-              <i class="menu-arrow"></i>
-              <i class="mdi mdi-airplane menu-icon"></i>
-            </a>
-            <div class="collapse" id="ui-boarding">
-              <ul class="nav flex-column sub-menu">
-                <ul className="nav flex-column sub-menu">
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/on_boarding">
-                      On Boaring
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/">
-                      Off Boaring
-                    </NavLink>
-                  </li>
-                </ul>
-              </ul>
-            </div>
-          </li> */}
         </ul>
       </nav>
     </>

@@ -206,29 +206,36 @@ const Form12BB = () => {
   const [inputData, setInputData] = useState([]);
   useEffect(() => {
     async function getData() {
-      const result = await axios.get(
-        `${BaseURL}/get_form_12_bb_controller_by_id/${LocalStorageData?.user_id}`
-      );
-      const resp = result?.data[0];
-      setGetFormDataByID(resp);
-      setInputData(resp);
-
-      setDeductions(resp?.deductions === undefined ? [] : resp?.deductions);
-      sethouseRentAllowance(
-        resp?.house_rent_allowance === undefined
-          ? true
-          : resp?.house_rent_allowance
-      );
-      setleavetravelconcessionsorassistance(
-        resp?.leave_travel_concessions_or_assistance === undefined
-          ? true
-          : resp?.leave_travel_concessions_or_assistance
-      );
-      setDeductionofinterestonborrowing(
-        resp?.deduction_of_interest_on_borrowing === undefined
-          ? true
-          : resp?.deduction_of_interest_on_borrowing
-      );
+      const result = await axios
+        .get(`get_form_12_bb_controller_by_id/${LocalStorageData?.user_id}`)
+        .then((resp) => {
+          return (
+            setGetFormDataByID(resp?.data[0]),
+            setInputData(resp?.data[0]),
+            setDeductions(
+              resp?.data[0]?.deductions === undefined
+                ? []
+                : resp?.data[0]?.deductions
+            ),
+            sethouseRentAllowance(
+              resp?.data[0]?.house_rent_allowance === undefined
+                ? true
+                : resp?.data[0]?.house_rent_allowance
+            ),
+            setleavetravelconcessionsorassistance(
+              resp?.data[0]?.leave_travel_concessions_or_assistance ===
+                undefined
+                ? true
+                : resp?.data[0]?.leave_travel_concessions_or_assistance
+            ),
+            setDeductionofinterestonborrowing(
+              resp?.data[0]?.deduction_of_interest_on_borrowing === undefined
+                ? true
+                : resp?.data[0]?.deduction_of_interest_on_borrowing
+            )
+          );
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     getData();
   }, []);
@@ -378,32 +385,25 @@ const Form12BB = () => {
       // setLoading(true);
 
       if (inputData?.status === undefined) {
-        const result = await axios.post(`${BaseURL}/form_12_bb`, jsonDate, {
-          headers: headersCors,
-        });
-        const resp = result.data;
-        alert.show(resp.message);
-
-        if (resp?.message === "Form has been submitted") {
-          navigate("/");
-        }
-        setLoading(false);
+        const result = await axios
+          .post(`form_12_bb`, jsonDate)
+          .then((resp) => {
+            return (
+              alert.show(resp.data.message),
+              resp.data?.message === "Form has been submitted" && navigate("/")
+            );
+          })
+          .catch((err) => err.response.status === 403 && navigate("/"));
       } else {
-        const result = await axios.put(
-          `${BaseURL}/form_12_bb/${inputData?._id}`,
-          jsonDate,
-          {
-            headers: headersCors,
-          }
-        );
-        const resp = result.data;
-        alert.show(resp.message);
-        if (resp?.message === "Form has been submitted") {
-          navigate("/");
-        }
-        // setLoading(false);
+        const result = await axios
+          .put(`form_12_bb/${inputData?._id}`, jsonDate)
+          .then((resp) => {
+            return (
+              alert.show(resp.data.message),
+              resp.data?.message === "Form has been submitted" && navigate("/")
+            );
+          });
       }
-      console.log(jsonDate);
     }
     postData();
   };

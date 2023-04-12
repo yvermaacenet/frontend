@@ -12,62 +12,60 @@ import Page_Header from "../../Partials/Page_Header";
 import { CSSProperties } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useAlert } from "react-alert";
-
+const positions = {
+  HR: [
+    "Executive -HR & Ops",
+    "Sr. Executive-HR & Ops",
+    "Lead Executive -HR & Ops",
+    "Assistant Manager -HR & Ops",
+    "Manager -HR & Ops",
+    "Associate Vice President -HR & Ops",
+    "Vice President -HR& Ops",
+    "Associate Director -HR & Ops",
+    "Director -HR & Ops",
+    "CXO/Managing Partner",
+  ],
+  "Business Consulting": [
+    "Analyst Consulting",
+    "Associate Consultant",
+    "Consultant",
+    "Senior Consultant",
+    "Managing Consultant",
+    "Principal Consultant",
+    "Senior Principal Consultant",
+    "Associate Partner",
+    "Partner",
+    "CXO/Managing Partner",
+  ],
+  "Technology Consulting": [
+    "Junior Software Engineer",
+    "Software Engineer",
+    "Senior Software Engineer",
+    "Lead-Technology/Associate project Manager-Technology",
+    "Manger Technology",
+    "Associate Vice-President Technology",
+    "Vice-President Technology",
+    "Director Technology",
+    "CXO/Managing Partner",
+  ],
+  Management: [
+    "Analyst",
+    "Associate Vice President-Program Management ",
+    "Vice President-Program Management",
+    "Associate Director-Program Management",
+    "Director-Program Management",
+    "CXO/Managing Partner",
+    "Associate Project Management /Senior Business Analyst",
+    "Project Manager/ Managing Consultant",
+    "Business Analyst",
+    "Associate BA",
+  ],
+};
 const Flexible_Benefit_Plan = () => {
   const navigate = useNavigate();
   const alert = useAlert();
   let [loading, setLoading] = useState(false);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
-  const positions = {
-    HR: [
-      "Executive -HR & Ops",
-      "Sr. Executive-HR & Ops",
-      "Lead Executive -HR & Ops",
-      "Assistant Manager -HR & Ops",
-      "Manager -HR & Ops",
-      "Associate Vice President -HR & Ops",
-      "Vice President -HR& Ops",
-      "Associate Director -HR & Ops",
-      "Director -HR & Ops",
-      "CXO/Managing Partner",
-    ],
-    "Business Consulting": [
-      "Analyst Consulting",
-      "Associate Consultant",
-      "Consultant",
-      "Senior Consultant",
-      "Managing Consultant",
-      "Principal Consultant",
-      "Senior Principal Consultant",
-      "Associate Partner",
-      "Partner",
-      "CXO/Managing Partner",
-    ],
-    "Technology Consulting": [
-      "Junior Software Engineer",
-      "Software Engineer",
-      "Senior Software Engineer",
-      "Lead-Technology/Associate project Manager-Technology",
-      "Manger Technology",
-      "Associate Vice-President Technology",
-      "Vice-President Technology",
-      "Director Technology",
-      "CXO/Managing Partner",
-    ],
-    Management: [
-      "Analyst",
-      "Associate Vice President-Program Management ",
-      "Vice President-Program Management",
-      "Associate Director-Program Management",
-      "Director-Program Management",
-      "CXO/Managing Partner",
-      "Associate Project Management /Senior Business Analyst",
-      "Project Manager/ Managing Consultant",
-      "Business Analyst",
-      "Associate BA",
-    ],
-  };
-
   const [selectedBand, setselectedBand] = useState("Band 1");
   const [selectedStream, setSelectedStream] = useState("HR");
   const [selectedPosition, setSelectedPosition] = useState("");
@@ -82,28 +80,31 @@ const Flexible_Benefit_Plan = () => {
   });
   useEffect(() => {
     async function getData() {
-      const result = await axios.get(
-        `${BaseURL}/get_form_flexible_by_id/${LocalStorageData?.user_id}`
-      );
-      const resp = result?.data[0];
-      setInputData({
-        ...resp,
-        children_allowance:
-          resp?.children_allowance !== undefined
-            ? resp?.children_allowance / 100
-            : resp?.children_allowance,
-      });
-
-      setselectedBand(
-        resp?.salary_band === undefined ? "Band 1" : resp?.salary_band
-      );
-      setSelectedStream(resp?.stream === undefined ? "HR" : resp?.stream);
-      setSelectedPosition(resp?.position === undefined ? "" : resp?.position);
-      // setDeductionofinterestonborrowing(
-      //   resp?.deduction_of_interest_on_borrowing === undefined
-      //     ? true
-      //     : resp?.deduction_of_interest_on_borrowing
-      // );
+      const result = await axios
+        .get(`get_form_flexible_by_id/${LocalStorageData?.user_id}`)
+        .then((resp) => {
+          return (
+            setInputData({
+              ...resp.data[0],
+              children_allowance:
+                resp.data[0]?.children_allowance !== undefined
+                  ? resp.data[0]?.children_allowance / 100
+                  : resp.data[0]?.children_allowance,
+            }),
+            setselectedBand(
+              resp.data[0]?.salary_band === undefined
+                ? "Band 1"
+                : resp.data[0]?.salary_band
+            ),
+            setSelectedStream(
+              resp.data[0]?.stream === undefined ? "HR" : resp.data[0]?.stream
+            ),
+            setSelectedPosition(
+              resp.data[0]?.position === undefined ? "" : resp.data[0]?.position
+            )
+          );
+        })
+        .catch((err) => err.response.status === 404 && navigate("/"));
     }
     getData();
   }, []);
@@ -188,16 +189,16 @@ const Flexible_Benefit_Plan = () => {
     };
     async function postData() {
       // setLoading(true);
-      const result = await axios.post(`${BaseURL}/form_flexi`, jsonDate, {
-        headers: headersCors,
-      });
-      const resp = result.data;
-      alert.show(resp.message);
-      if (resp?.message === "Form has been submitted") {
-        // setLoading(false);
-
-        navigate("/");
-      }
+      const result = await axios
+        .post(`form_flexi`, jsonDate)
+        .then((resp) => {
+          return (
+            alert.show(resp.data.message),
+            resp?.message === "Form has been submitted" &&
+              navigate("/dashboard")
+          );
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     postData();
   };

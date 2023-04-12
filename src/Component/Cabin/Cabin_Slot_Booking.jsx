@@ -16,10 +16,12 @@ import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import ClockLoader from "react-spinners/ClockLoader";
 import { useAlert } from "react-alert";
+import { useNavigate } from "react-router-dom";
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 const Cabin_Slot_Booking = () => {
   const alert = useAlert();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getCabinSlotBookingList, setGetCabinSlotBookingList] = useState([]);
@@ -41,28 +43,32 @@ const Cabin_Slot_Booking = () => {
   };
   useEffect(() => {
     async function get_cabin_list() {
-      const result_get_cabin_list = await axios("cabin_list");
-      const resp__get_cabin_list = result_get_cabin_list?.data;
-      setGetCabinList(resp__get_cabin_list);
+      await axios
+        .get("cabin_list")
+        .then((resp) => {
+          return setGetCabinList(resp?.data);
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     get_cabin_list();
   }, []);
   useEffect(() => {
     async function get_cabin_slot_booking_list() {
-      const result_get_cabin_slot_booking_list = await axios(
-        `cabin_slot_booking/${selectCabin_id}`
-      );
-      const resp__get_cabin_slot_booking_list =
-        result_get_cabin_slot_booking_list?.data;
-      const getAllEvents = await resp__get_cabin_slot_booking_list?.map(
-        (val) => ({
-          ...val,
-          start: new Date(val?.start),
-          end: new Date(val?.end),
+      await axios
+        .get(`cabin_slot_booking/${selectCabin_id}`)
+        .then((resp) => {
+          const resp__get_cabin_slot_booking_list = resp?.data;
+          const getAllEvents = resp__get_cabin_slot_booking_list?.map(
+            (val) => ({
+              ...val,
+              start: new Date(val?.start),
+              end: new Date(val?.end),
+            })
+          );
+          return getAllEvents;
         })
-      );
-      setGetCabinSlotBookingList(getAllEvents);
-      setRenderComponent(false);
+        .then((rr) => setGetCabinSlotBookingList(rr), setRenderComponent(false))
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     get_cabin_slot_booking_list();
   }, [renderComponent === true, selectCabin_id]);
@@ -122,37 +128,20 @@ const Cabin_Slot_Booking = () => {
   };
   const onAddCabinSlotBookingButton = async (e) => {
     e.preventDefault();
-    const result = await axios
+    await axios
       .post("cabin_slot_booking", {
         ...inputData,
         allDay,
       })
-      .then((res) => {
+      .then((resp) => {
         return (
-          alert?.show(res.data.message),
+          alert?.show(resp.data.message),
           setAddEventModal(false),
           setAllDay(false),
           setRenderComponent(true)
         );
       })
-      .catch((err) => console.log(err));
-  };
-  const onEditCabinSlotBookingButton = async (e) => {
-    e.preventDefault();
-    const result = await axios
-      .put(`cabin_slot_booking/${inputData?._id}`, {
-        ...inputData,
-        allDay,
-      })
-      .then((res) => {
-        return (
-          alert?.show(res.data.message),
-          setEditEventModal(false),
-          setAllDay(false),
-          setRenderComponent(true)
-        );
-      })
-      .catch((err) => console.log(err));
+      .catch((err) => err?.response?.status === 403 && navigate("/"));
   };
 
   const onRemoveCabinSlotBookingButton = async (e) => {
@@ -167,7 +156,7 @@ const Cabin_Slot_Booking = () => {
           setRenderComponent(true)
         );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => err.response.status === 403 && navigate("/"));
   };
   // ====Coloring====
   const eventStyleGetter = (event, start, end, isSelected) => {
@@ -233,7 +222,7 @@ const Cabin_Slot_Booking = () => {
                 setRenderComponent(true)
               );
             })
-            .catch((err) => console.log(err));
+            .catch((err) => err.response.status === 403 && navigate("/"));
         }
         dragndrop();
       }
@@ -258,14 +247,12 @@ const Cabin_Slot_Booking = () => {
         // if the event is moved to a regular slot, update the allDay property
         event.allDay = false;
       }
-      console.log("yes", droppedOnAllDaySlot);
       const overlappingBooking = getCabinSlotBookingList.find(
         (booking) =>
           (booking.start >= start && booking.start < end) ||
           (booking.end > start && booking.end <= end) ||
           (booking.start <= start && booking.end >= end)
       );
-      console.log(event.allDay);
       if (selectCabin_id === "all") {
         alert?.show("Please select cabin");
       } else if (overlappingBooking && event._id !== overlappingBooking._id) {
@@ -288,10 +275,9 @@ const Cabin_Slot_Booking = () => {
                   setRenderComponent(true)
                 );
               })
-              .catch((err) => console.log(err));
+              .catch((err) => err.response.status === 403 && navigate("/"));
           }
           dragndrop();
-          // console.log("hel", [...filtered, { ...existing, start, end, allDay }]);
         });
       }
     }

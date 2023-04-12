@@ -25,40 +25,50 @@ const Off_Boarding = () => {
   };
   useEffect(() => {
     async function get_off_boarding_list() {
-      const result = await axios.get(`/off_boarding/${_id}`);
-      const resp = result.data[0];
-      setInputData(resp);
-      setSteperCounter(
-        resp?.steper_counter === undefined
-          ? 1
-          : resp?.steper_counter === 3
-          ? 3
-          : resp?.steper_counter + 1
-      );
-      setActive(
-        resp?.steper_counter === undefined
-          ? 1
-          : resp?.steper_counter === 3
-          ? 3
-          : resp?.steper_counter + 1
-      );
-      setRenderComponent(false);
+      await axios
+        .get(`/off_boarding/${_id}`)
+        .then((result) => {
+          const resp = result.data[0];
+          return (
+            setInputData(resp),
+            setSteperCounter(
+              resp?.steper_counter === undefined
+                ? 1
+                : resp?.steper_counter === 3
+                ? 3
+                : resp?.steper_counter + 1
+            ),
+            setActive(
+              resp?.steper_counter === undefined
+                ? 1
+                : resp?.steper_counter === 3
+                ? 3
+                : resp?.steper_counter + 1
+            ),
+            setRenderComponent(false)
+          );
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     get_off_boarding_list();
     async function get_user_list_by_role_name() {
-      const result = await axios.get(`/get_user_list_by_role_name`);
-      const resp = result.data;
-      setRoless(resp);
-      setRenderComponent(false);
+      await axios
+        .get(`/get_user_list_by_role_name`)
+        .then((result) => {
+          const resp = result.data;
+          return setRoless(resp), setRenderComponent(false);
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     get_user_list_by_role_name();
     async function get_user_details_by_id() {
-      const result_user_list_by_id = await axios.get(
-        `/get_user_details_By_Id/${_id}`
-      );
-      const resp_user_list_by_id = result_user_list_by_id.data[0];
-      console.log("resp_user_list_by_id", resp_user_list_by_id);
-      setGetUserDetailsById(resp_user_list_by_id);
+      const result_user_list_by_id = await axios
+        .get(`/get_user_details_By_Id/${_id}`)
+        .then((resp) => {
+          const resp_user_list_by_id = resp?.data[0];
+          return setGetUserDetailsById(resp_user_list_by_id);
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     get_user_details_by_id();
   }, [renderComponent === true]);
@@ -82,10 +92,10 @@ const Off_Boarding = () => {
             .then((res) => {
               return console.log(res?.data.message);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => err.response.status === 403 && navigate("/"));
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => err.response.status === 403 && navigate("/"));
   };
   const onUpdateNextButton = async (event) => {
     event.preventDefault();
@@ -106,10 +116,10 @@ const Off_Boarding = () => {
             .then((res) => {
               return console.log(res?.data.message);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => err.response.status === 403 && navigate("/"));
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => err.response.status === 403 && navigate("/"));
   };
   const onSubmittedButton = async (event) => {
     event.preventDefault();
@@ -133,10 +143,10 @@ const Off_Boarding = () => {
             .then((res) => {
               return console.log(res?.data.message);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => err.response.status === 403 && navigate("/"));
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => err.response.status === 403 && navigate("/"));
   };
 
   return (

@@ -10,7 +10,7 @@ function App() {
     <>
       <Router>
         <Routes>
-          {Routes_Array.map((val) => (
+          {Routes_Array?.map((val) => (
             <Route
               path={val?.path}
               element={
@@ -20,7 +20,6 @@ function App() {
               }
             />
           ))}
-          <Route exact path="/dashboard/*" element={<Dashboard />} />
           <Route exact path="/" element={<Sign_In />} />
           <Route exact path="*" element={<Sign_In />} />
         </Routes>

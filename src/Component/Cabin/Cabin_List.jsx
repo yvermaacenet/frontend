@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../../Partials/Footer";
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
@@ -8,6 +8,7 @@ import Sidebar from "../../Partials/Sidebar";
 import { SketchPicker } from "react-color";
 import reactCSS from "reactcss";
 const Cabin_List = () => {
+  const navigate = useNavigate();
   const [getCabinList, setGetCabinList] = useState([]);
   const [getChooseColor, setGetChooseColor] = useState({
     displayColorPicker: true,
@@ -21,10 +22,12 @@ const Cabin_List = () => {
   console.log("getCabinList", getCabinList);
   useEffect(() => {
     async function get_cabin_list() {
-      const result_cabin_list = await axios.get("cabin_list");
-      const resp_cabin_list = result_cabin_list.data;
-      console.log("resp_cabin_list", resp_cabin_list);
-      setGetCabinList(resp_cabin_list);
+      const result_cabin_list = await axios
+        .get("cabin_list")
+        .then((resp) => {
+          return setGetCabinList(resp?.data);
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     get_cabin_list();
   }, []);
@@ -56,19 +59,7 @@ const Cabin_List = () => {
       },
     },
   });
-  // const handleClick = () => {
-  //   setGetChooseColor({
-  //     displayColorPicker: !getChooseColor?.displayColorPicker,
-  //   });
-  // };
 
-  // const handleClose = () => {
-  //   setGetChooseColor({ displayColorPicker: false });
-  // };
-
-  // const handleChange = (color) => {
-  //   setGetChooseColor({ color: color?.rgb });
-  // };
   return (
     <>
       <div class="container-scroller">

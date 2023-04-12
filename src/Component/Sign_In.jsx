@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate, Navigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { user_sign_in_validation } from "../Utils/Validation_Form";
@@ -11,6 +11,8 @@ const Sign_In = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [inputData, setInputData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -28,162 +30,95 @@ const Sign_In = () => {
       };
     });
   };
-  const onSignInButton = () => {
-    async function postData() {
-      const result = await axios.post(`sign_in`, inputData);
-      const resp = result.data;
-      if (resp?.message === "loggedin successfully") {
-        localStorage.setItem("loggedin", JSON.stringify(resp));
-        navigate("/dashboard");
-      } else {
-        alert(resp?.message);
-      }
-      alert(resp?.message);
-    }
-    postData();
-  };
+
   const onSignInZoho = () => {
+    setLoading(true);
     async function postData() {
-      const result = await axios.get(`sign_in_zoho`);
-      const resp = result.data;
-      window.location.replace(resp);
+      await axios
+        .get(`sign_in_zoho`)
+        .then((result) => {
+          const resp = result.data;
+          return window.location.replace(resp), setLoading(false);
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     postData();
   };
+  useEffect(() => {
+    async function sendCode() {
+      setLoading(true);
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      if (code) {
+        await axios
+          .post(`sign_in_zoho_get_access_token/${code}`)
+          .then((result) => {
+            return (
+              localStorage.setItem("loggedin", JSON.stringify(result.data)),
+              navigate("/dashboard")
+            );
+          })
+          .catch((err) => err.response.status === 403 && navigate("/"));
+      }
+      setLoading(false);
+    }
+    sendCode();
+  }, []);
+
   if (cookies?.Access_Token) {
     return <Navigate to={"/dashboard"} />;
+  } else {
+    <Navigate to={"/"} />;
   }
+  const myStyles = {
+    backgroundImage: `url("../assets/login_bg.png")`,
+    width: "100%",
+    backgroundPosition: "right",
+    height: "100%",
+    backgroundSize: "cover",
+    zIndex: 9999,
+    display: "flex",
+    minHeight: "100vh",
+    width: "100vw",
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundAttachment: "fixed",
+    transition: "background-color 0.5s ease",
 
+    // Add any other styles you want to apply here
+  };
   return (
     <div className="container-scroller">
       <div className="container-fluid page-body-wrapper full-page-wrapper">
-        <div className="content-wrapper d-flex align-items-center auth">
-          <div className="row flex-grow">
+        <div
+          className="content-wrapper d-flex align-items-center auth"
+          style={myStyles}
+        >
+          {loading && (
+            <div className="loader-container">
+              <div class="loader"></div>
+            </div>
+          )}
+          <div className="row flex-grow text-center">
             <div className="col-lg-4 mx-auto">
-              <div className="auth-form-light text-left p-5">
-                <div className="brand-logo">
+              <div
+                className="auth-form-light text-left p-5"
+                style={{ borderRadius: "20px", transparent: "0.5" }}
+              >
+                <div className="brand-logo mb-0">
                   <img src="../../assets/images/logo.svg" />
                 </div>
-                <h4>Hello! let's get started</h4>
-                <h6 className="font-weight-light">Sign in to continue.</h6>
-                <form className="pt-3" onSubmit={handleSubmit(onSignInButton)}>
-                  <div className="form-group">
-                    <input
-                      className={classNames("form-control form-control-sm", {
-                        "is-invalid": errors.username,
-                      })}
-                      {...register("username", {
-                        value: inputData?.username,
-                      })}
-                      name="username"
-                      onChange={inputEvent}
-                      placeholder="Enter Username"
-                      value={inputData?.username}
-                      // autoSave
-                    />
-                    <small class="invalid-feedback">
-                      {errors.username?.message}
-                    </small>
-                  </div>
-                  <div className="form-group">
-                    <input
-                      className={classNames("form-control form-control-sm", {
-                        "is-invalid": errors.password,
-                      })}
-                      {...register("password", {
-                        value: inputData?.password,
-                      })}
-                      type="password"
-                      name="password"
-                      onChange={inputEvent}
-                      placeholder="Enter Password"
-                      value={inputData?.password}
-                      // autoSave
-                    />
-                    <small class="invalid-feedback">
-                      {errors.password?.message}
-                    </small>
-                  </div>
-                  <div className="mt-3">
-                    <button
-                      className="btn btn-block btn-gradient-primary btn-sm font-weight-medium"
-                      type="submit"
-                    >
-                      SIGN IN
-                    </button>
-                    <button
-                      className="btn btn-block btn-gradient-secondary btn-sm font-weight-medium ms-4"
-                      type="button"
-                      onClick={onSignInZoho}
-                    >
-                      SIGN IN WITH ZOHO
-                    </button>
-                  </div>
-                  {/* <div className="my-2 d-flex justify-content-between align-items-center">
-                    <div className="form-check">
-                      <label className="form-check-label text-muted">
-                        <input type="checkbox" className="form-check-input" />
-                        Keep me signed in
-                      </label>
-                    </div>
-                    <a href="#" className="auth-link text-black">
-                      Forgot password?
-                    </a>
-                  </div> */}
-                  {/* <div className="mb-2">
-                    <button
-                      type="button"
-                      className="btn btn-block btn-facebook auth-form-btn"
-                    >
-                      <i className="mdi mdi-facebook me-2"></i>Connect using
-                      facebook
-                    </button>
-                  </div> */}
-                  {/* <div className="text-center mt-4 font-weight-light">
-                    Don't have an account?
-                    <NavLink to="sign_up" className="text-primary ms-2">
-                      Create
-                    </NavLink>
-                  </div> */}
-                </form>
-                {/* <div className="mt-3 border bg-light p-3">
-                  <small>Click here for Forms </small>
-                  <ul class="list-arrow fw-bolder">
-                    <li>
-                      <NavLink
-                        to="form12bb"
-                        className="text-success ms-2 text-decoration-none fw-lighter fs-6"
-                      >
-                        Form 12BB
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to="get_form12bb_data"
-                        className="text-success ms-2 text-decoration-none fw-lighter fs-6"
-                      >
-                        Download Form 12BB Data
-                      </NavLink>
-                    </li>
-
-                    <li>
-                      <NavLink
-                        to="flexible_benefit_plan"
-                        className="text-success ms-2 text-decoration-none fw-lighter fs-6"
-                      >
-                        Flexible Benefit Form
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        to="get_flexi_form_data"
-                        className="text-success ms-2 text-decoration-none fw-lighter fs-6"
-                      >
-                        Download Flexible Benefit Form
-                      </NavLink>
-                    </li>
-                  </ul>
-                </div> */}
+                <div>
+                  <h4>Hello! let's get started</h4>
+                  <img src="assets/images/zoho.svg" style={{ width: "8rem" }} />
+                  <button
+                    className="btn btn-sm btn-grad w-100 mt-4"
+                    onClick={onSignInZoho}
+                  >
+                    SIGN IN WITH ZOHO
+                  </button>
+                </div>
               </div>
             </div>
           </div>

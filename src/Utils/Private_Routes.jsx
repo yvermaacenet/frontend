@@ -1,25 +1,23 @@
-import { useNavigate, Outlet, Navigate, Route } from "react-router-dom";
-
-import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-
+import { Navigate, useNavigate, useLocation } from "react-router-dom";
+import { Cookies, useCookies } from "react-cookie";
+import { useEffect, useState } from "react";
 const Private_Routes = ({ allowedRoles, children }) => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies([]);
+  const location = useLocation();
+
+  const [getLocation, setGetLocation] = useState();
+  const [cookies, removeCookie] = useCookies([]);
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const role = LocalStorageData?.zoho_role;
   const isAuthorized = allowedRoles?.some((roles) => roles?.includes(role));
 
-  useEffect(() => {
-    if (!cookies["Access_Token"]) {
-      navigate("/");
-    }
-  }, [cookies, navigate]);
-
+  // useEffect(() => {
+  //    if (!cookies.Access_Token) {
+  //     navigate("/");
+  //   }
+  // }, [cookies, navigate]);
   if (!isAuthorized) {
-    return (
-      removeCookie("Access_Token"), localStorage.clear()(<Navigate to="/" />)
-    );
+    return removeCookie(), localStorage.clear(), (<Navigate to="/" />);
   }
 
   return children;

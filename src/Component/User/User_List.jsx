@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../../Partials/Footer";
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
@@ -10,6 +10,7 @@ import PureModal from "react-pure-modal";
 import { useParams } from "react-router-dom";
 
 const User_List = () => {
+  const navigate = useNavigate();
   const { status_code } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getUserList, setGetUserList] = useState([]);
@@ -35,26 +36,25 @@ const User_List = () => {
   }
   console.log("upload data", uploadData);
   useEffect(() => {
+    async function get_user_list(resp) {
+      await axios
+        .get(`/user_list/${getStatus_code}`)
+        .then((result_user_list) => {
+          const resp_user_list = result_user_list.data;
+          return setGetUserList(resp_user_list);
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
+    }
     async function get_user_list_by_role_name() {
-      const result = await axios.get(`/get_user_list_by_role_name`);
-      const resp = result.data;
-      setRoless(resp);
-      get_user_list(resp);
+      await axios
+        .get(`/get_user_list_by_role_name`)
+        .then((result) => {
+          const resp = result.data;
+          return setRoless(resp), get_user_list(resp);
+        })
+        .catch((err) => err.response.status === 403 && navigate("/"));
     }
     get_user_list_by_role_name();
-    async function get_user_list(resp) {
-      // const result_user_list = await axios.get(
-      //   resp?.finance?.includes(LocalStorageData?.user_id)
-      //     ? `/get_user_list_by_on_boarding_counter/3/${getStatus_code}`
-      //     : resp?.management?.includes(LocalStorageData?.user_id)
-      //     ? `/get_user_list_by_on_boarding_counter/5/${getStatus_code}`
-      //     : `/user_list/${getStatus_code}`
-      // );
-      const result_user_list = await axios.get(`/user_list/${getStatus_code}`);
-      const resp_user_list = result_user_list.data;
-      console.log("resp_user_list", resp_user_list);
-      setGetUserList(resp_user_list);
-    }
   }, [getStatus_code]);
   const dd = roless?.management?.includes(LocalStorageData.user_id);
   console.log(dd);
