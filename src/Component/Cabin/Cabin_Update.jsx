@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Footer from "../../Partials/Footer";
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
@@ -10,6 +10,9 @@ import reactCSS from "reactcss";
 const Cabin_Update = () => {
   const { _id } = useParams();
   const navigate = useNavigate();
+  const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
+  const [loading, setLoading] = useState(false);
+
   const [inputData, setInputData] = useState({
     status: false,
   });
@@ -32,9 +35,12 @@ const Cabin_Update = () => {
     });
   };
   useEffect(() => {
+    setLoading(true);
     async function get_user_data() {
       await axios
-        .get(`/cabin_list_by_id/${_id}`)
+        .get(`/cabin_list_by_id/${_id}`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           return (
             setInputData(resp?.data),
@@ -51,6 +57,7 @@ const Cabin_Update = () => {
             navigate("/error_403");
           }
         });
+      setLoading(false);
     }
     get_user_data();
   }, []);
@@ -101,9 +108,12 @@ const Cabin_Update = () => {
   };
   const onCabinUpdateButton = (e) => {
     e.preventDefault();
+    setLoading(true);
     async function add_cabin() {
       const result = await axios
-        .put(`/cabin_update/${_id}`, inputData)
+        .put(`/cabin_update/${_id}`, inputData, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((res) => {
           return alert(res?.data.message), navigate("/cabin_list");
         })
@@ -114,6 +124,7 @@ const Cabin_Update = () => {
             navigate("/error_403");
           }
         });
+      setLoading(false);
     }
     add_cabin();
   };
@@ -132,6 +143,11 @@ const Cabin_Update = () => {
                 page_title_button="Back"
                 page_title_button_link="/cabin_list"
               />
+              {loading && (
+                <div className="loader-container">
+                  <div class="loader"></div>
+                </div>
+              )}
               <div class="row">
                 <div class="card">
                   <div class="card-body">

@@ -9,6 +9,9 @@ import { SketchPicker } from "react-color";
 import reactCSS from "reactcss";
 const Cabin_List = () => {
   const navigate = useNavigate();
+  const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
+  const [loading, setLoading] = useState(false);
+
   const [getCabinList, setGetCabinList] = useState([]);
   const [getChooseColor, setGetChooseColor] = useState({
     displayColorPicker: true,
@@ -21,9 +24,12 @@ const Cabin_List = () => {
   });
   console.log("getCabinList", getCabinList);
   useEffect(() => {
+    setLoading(true);
     async function get_cabin_list() {
       const result_cabin_list = await axios
-        .get("cabin_list")
+        .get("cabin_list", {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           return setGetCabinList(resp?.data);
         })
@@ -34,6 +40,7 @@ const Cabin_List = () => {
             navigate("/error_403");
           }
         });
+      setLoading(false);
     }
     get_cabin_list();
   }, []);
@@ -80,6 +87,11 @@ const Cabin_List = () => {
                 page_title_button="Add"
                 page_title_button_link="/cabin_add"
               />
+              {loading && (
+                <div className="loader-container">
+                  <div class="loader"></div>
+                </div>
+              )}
               <div class="row">
                 <div class="card">
                   <div class="card-body">

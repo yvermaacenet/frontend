@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { form12bb_validation } from "../../Utils/Validation_Form";
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useCookies } from "react-cookie";
-import { BaseURL, headersCors } from "../../Utils/AxiosApi";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 import Navbar from "../../Partials/Navbar";
 import Sidebar from "../../Partials/Sidebar";
 import Page_Header from "../../Partials/Page_Header";
-import { CSSProperties } from "react";
 import { useAlert } from "react-alert";
 const section_80C = [
   {
@@ -207,7 +202,9 @@ const Form12BB = () => {
     async function getData() {
       setLoading(true);
       const result = await axios
-        .get(`get_form_12_bb_controller_by_id/${LocalStorageData?.user_id}`)
+        .get(`get_form_12_bb_controller_by_id/${LocalStorageData?.user_id}`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           return (
             setGetFormDataByID(resp?.data[0]),
@@ -394,7 +391,9 @@ const Form12BB = () => {
 
       if (inputData?.status === undefined) {
         const result = await axios
-          .post(`form_12_bb`, jsonDate)
+          .post(`form_12_bb`, jsonDate, {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          })
           .then((resp) => {
             return (
               alert.show(resp.data.message),
@@ -412,7 +411,9 @@ const Form12BB = () => {
           });
       } else {
         const result = await axios
-          .put(`form_12_bb/${inputData?._id}`, jsonDate)
+          .put(`form_12_bb/${inputData?._id}`, jsonDate, {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          })
           .then((resp) => {
             return (
               alert.show(resp.data.message),

@@ -9,13 +9,17 @@ import Sidebar from "../../Partials/Sidebar";
 import { useNavigate } from "react-router-dom";
 const Get_Form_Flexi_Benefit_Data = () => {
   const navigate = useNavigate();
+  const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
+
   const [getForm12bbdata, setForm12bbdata] = useState([]);
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getData() {
       setLoading(true);
       await axios
-        .get(`form_flexi`)
+        .get(`form_flexi`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((result) => {
           const resp = result.data;
           return setForm12bbdata(resp), setLoading(false);
@@ -34,7 +38,9 @@ const Get_Form_Flexi_Benefit_Data = () => {
   const clickbuttonalldata = async () => {
     setLoading(true);
     await axios
-      .get(`form_flexi`)
+      .get(`form_flexi`, {
+        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+      })
       .then((result) => {
         const resp = result.data;
         const ArrayData = [];
@@ -84,7 +90,9 @@ const Get_Form_Flexi_Benefit_Data = () => {
   const clickbuttondata = async (id) => {
     setLoading(true);
     const result = await axios
-      .get(`get_form_flexible_by_id/${id}`)
+      .get(`get_form_flexible_by_id/${id}`, {
+        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+      })
       .then((result) => {
         const resp = result.data[0];
         const ded = [

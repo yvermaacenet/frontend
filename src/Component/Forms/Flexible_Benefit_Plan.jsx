@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, NavLink, useNavigate } from "react-router-dom";
-import { BaseURL, headersCors } from "../../Utils/AxiosApi";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { form_flexible_validation } from "../../Utils/Validation_Form";
-import classNames from "classnames";
 import { useForm } from "react-hook-form";
 import Navbar from "../../Partials/Navbar";
 import Sidebar from "../../Partials/Sidebar";
 import Page_Header from "../../Partials/Page_Header";
-import { CSSProperties } from "react";
 import { useAlert } from "react-alert";
 const positions = {
   HR: [
@@ -81,7 +78,9 @@ const Flexible_Benefit_Plan = () => {
     async function getData() {
       setLoading(true);
       await axios
-        .get(`get_form_flexible_by_id/${LocalStorageData?.user_id}`)
+        .get(`get_form_flexible_by_id/${LocalStorageData?.user_id}`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           return (
             setInputData({
@@ -197,7 +196,9 @@ const Flexible_Benefit_Plan = () => {
     async function postData() {
       // setLoading(true);
       const result = await axios
-        .post(`form_flexi`, jsonDate)
+        .post(`form_flexi`, jsonDate, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           return (
             alert.show(resp.data.message),

@@ -20,6 +20,8 @@ const User_List = () => {
   const [show, setShow] = useState(false);
   const [addEventModal, setAddEventModal] = useState(false);
   const [getStatus_code, setStatus_code] = useState(status_code);
+  const [loading, setLoading] = useState(false);
+
   function handleFileUpload(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -36,9 +38,12 @@ const User_List = () => {
   }
   console.log("upload data", uploadData);
   useEffect(() => {
+    setLoading(true);
     async function get_user_list(resp) {
       await axios
-        .get(`/user_list/${getStatus_code}`)
+        .get(`/user_list/${getStatus_code}`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((result_user_list) => {
           const resp_user_list = result_user_list.data;
           return setGetUserList(resp_user_list);
@@ -53,7 +58,9 @@ const User_List = () => {
     }
     async function get_user_list_by_role_name() {
       await axios
-        .get(`/get_user_list_by_role_name`)
+        .get(`/get_user_list_by_role_name`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((result) => {
           const resp = result.data;
           return setRoless(resp), get_user_list(resp);
@@ -65,11 +72,10 @@ const User_List = () => {
             navigate("/error_403");
           }
         });
+      setLoading(false);
     }
     get_user_list_by_role_name();
   }, [getStatus_code]);
-  const dd = roless?.management?.includes(LocalStorageData.user_id);
-  console.log(dd);
   return (
     <>
       <div class="container-scroller">
@@ -84,7 +90,11 @@ const User_List = () => {
                 page_title_button="Back"
                 page_title_button_link="/dashboard"
               />
-
+              {loading && (
+                <div className="loader-container">
+                  <div class="loader"></div>
+                </div>
+              )}
               <div class="row">
                 <div class="card">
                   <div class="card-body">
@@ -362,7 +372,12 @@ const User_List = () => {
                     <button
                       onClick={async () => {
                         const res = await axios
-                          .post("/users_upload_by_file", uploadData)
+                          .post("/users_upload_by_file", uploadData, {
+                            headers: {
+                              Access_Token:
+                                LocalStorageData?.generate_auth_token,
+                            },
+                          })
                           .then((res) => alert(res.data.message))
                           .catch((err) => {
                             console.log(err.response.data.duplicates);

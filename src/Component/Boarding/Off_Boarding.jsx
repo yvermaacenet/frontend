@@ -18,15 +18,20 @@ const Off_Boarding = () => {
   const [getUserDetailsById, setGetUserDetailsById] = useState({});
   const [roless, setRoless] = useState([]);
   const [state, setState] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const inputEvent = (e) => {
     console.log("e", e);
     const { name, checked } = e.target;
     setInputData({ ...inputData, [name]: checked });
   };
   useEffect(() => {
+    setLoading(true);
     async function get_off_boarding_list() {
       await axios
-        .get(`/off_boarding/${_id}`)
+        .get(`/off_boarding/${_id}`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((result) => {
           const resp = result.data[0];
           return (
@@ -59,7 +64,9 @@ const Off_Boarding = () => {
     get_off_boarding_list();
     async function get_user_list_by_role_name() {
       await axios
-        .get(`/get_user_list_by_role_name`)
+        .get(`/get_user_list_by_role_name`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((result) => {
           const resp = result.data;
           return setRoless(resp), setRenderComponent(false);
@@ -75,7 +82,9 @@ const Off_Boarding = () => {
     get_user_list_by_role_name();
     async function get_user_details_by_id() {
       const result_user_list_by_id = await axios
-        .get(`/get_user_details_By_Id/${_id}`)
+        .get(`/get_user_details_By_Id/${_id}`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           const resp_user_list_by_id = resp?.data[0];
           return setGetUserDetailsById(resp_user_list_by_id);
@@ -87,26 +96,42 @@ const Off_Boarding = () => {
             navigate("/error_403");
           }
         });
+      setLoading(false);
     }
     get_user_details_by_id();
   }, [renderComponent === true]);
 
   const onSaveNextButton = async (event) => {
     event.preventDefault();
+    setLoading(true);
     await axios
-      .post(`/off_boarding/${_id}`, {
-        ...inputData,
-        steper_counter: inputData?.status ? 3 : steperCounter,
-      })
+      .post(
+        `/off_boarding/${_id}`,
+        {
+          ...inputData,
+          steper_counter: inputData?.status ? 3 : steperCounter,
+        },
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      )
       .then(async (res) => {
         if (res.data.message === "created") {
           setActive(active + 1);
           setSteperCounter(steperCounter + 1);
           setRenderComponent(true);
           await axios
-            .put(`/user_update/${_id}`, {
-              off_boarding_steper_counter: steperCounter,
-            })
+            .put(
+              `/user_update/${_id}`,
+              {
+                off_boarding_steper_counter: steperCounter,
+              },
+              {
+                headers: {
+                  Access_Token: LocalStorageData?.generate_auth_token,
+                },
+              }
+            )
             .then((res) => {
               return console.log(res?.data.message);
             })
@@ -126,23 +151,39 @@ const Off_Boarding = () => {
           navigate("/error_403");
         }
       });
+    setLoading(false);
   };
   const onUpdateNextButton = async (event) => {
     event.preventDefault();
+    setLoading(true);
     await axios
-      .put(`/off_boarding/${inputData?._id}`, {
-        ...inputData,
-        steper_counter: inputData?.status ? 3 : steperCounter,
-      })
+      .put(
+        `/off_boarding/${inputData?._id}`,
+        {
+          ...inputData,
+          steper_counter: inputData?.status ? 3 : steperCounter,
+        },
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      )
       .then(async (res) => {
         if (res.data.message === "updated") {
           setActive(active + 1);
           setSteperCounter(steperCounter + 1);
           setRenderComponent(true);
           await axios
-            .put(`/user_update/${_id}`, {
-              off_boarding_steper_counter: steperCounter,
-            })
+            .put(
+              `/user_update/${_id}`,
+              {
+                off_boarding_steper_counter: steperCounter,
+              },
+              {
+                headers: {
+                  Access_Token: LocalStorageData?.generate_auth_token,
+                },
+              }
+            )
             .then((res) => {
               return console.log(res?.data.message);
             })
@@ -162,26 +203,42 @@ const Off_Boarding = () => {
           navigate("/error_403");
         }
       });
+    setLoading(false);
   };
   const onSubmittedButton = async (event) => {
     event.preventDefault();
+    setLoading(true);
     await axios
-      .put(`/off_boarding/${inputData?._id}`, {
-        ...inputData,
-        status: steperCounter === 3 ? true : false,
-        steper_counter: inputData?.status ? 3 : steperCounter,
-        off_boarding_status: true,
-      })
+      .put(
+        `/off_boarding/${inputData?._id}`,
+        {
+          ...inputData,
+          status: steperCounter === 3 ? true : false,
+          steper_counter: inputData?.status ? 3 : steperCounter,
+          off_boarding_status: true,
+        },
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      )
       .then(async (res) => {
         if (res.data.message === "updated") {
           setActive(1);
           setRenderComponent(true);
           navigate("/user_list/all");
           await axios
-            .put(`/user_update/${_id}`, {
-              off_boarding_steper_counter: steperCounter,
-              off_boarding_status: true,
-            })
+            .put(
+              `/user_update/${_id}`,
+              {
+                off_boarding_steper_counter: steperCounter,
+                off_boarding_status: true,
+              },
+              {
+                headers: {
+                  Access_Token: LocalStorageData?.generate_auth_token,
+                },
+              }
+            )
             .then((res) => {
               return console.log(res?.data.message);
             })
@@ -201,6 +258,7 @@ const Off_Boarding = () => {
           navigate("/error_403");
         }
       });
+    setLoading(false);
   };
 
   return (
@@ -216,6 +274,11 @@ const Off_Boarding = () => {
               page_title_button="Back"
               page_title_button_link="/user_list/all"
             />
+            {loading && (
+              <div className="loader-container">
+                <div class="loader"></div>
+              </div>
+            )}
             <div class="row">
               <div class="card">
                 <div class="card-body">

@@ -42,7 +42,9 @@ const Cabin_Slot_Booking = () => {
   useEffect(() => {
     async function get_cabin_list() {
       await axios
-        .get("cabin_list")
+        .get("cabin_list", {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           return setGetCabinList(resp?.data);
         })
@@ -59,7 +61,9 @@ const Cabin_Slot_Booking = () => {
   useEffect(() => {
     async function get_cabin_slot_booking_list() {
       await axios
-        .get(`cabin_slot_booking/${selectCabin_id}`)
+        .get(`cabin_slot_booking/${selectCabin_id}`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           const resp__get_cabin_slot_booking_list = resp?.data;
           const getAllEvents = resp__get_cabin_slot_booking_list?.map(
@@ -139,10 +143,16 @@ const Cabin_Slot_Booking = () => {
   const onAddCabinSlotBookingButton = async (e) => {
     e.preventDefault();
     await axios
-      .post("cabin_slot_booking", {
-        ...inputData,
-        allDay,
-      })
+      .post(
+        "cabin_slot_booking",
+        {
+          ...inputData,
+          allDay,
+        },
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      )
       .then((resp) => {
         return (
           alert?.show(resp.data.message),
@@ -157,7 +167,9 @@ const Cabin_Slot_Booking = () => {
   const onRemoveCabinSlotBookingButton = async (e) => {
     e.preventDefault();
     const result = await axios
-      .delete(`cabin_slot_booking/${inputData?._id}`)
+      .delete(`cabin_slot_booking/${inputData?._id}`, {
+        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+      })
       .then((res) => {
         return (
           alert?.show(res.data.message),
@@ -230,7 +242,9 @@ const Cabin_Slot_Booking = () => {
         async function dragndrop() {
           setLoading(true);
           await axios
-            .put(`cabin_slot_booking/${event?._id}`, lastObject)
+            .put(`cabin_slot_booking/${event?._id}`, lastObject, {
+              headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            })
             .then((res) => {
               return (
                 setLoading(false),
@@ -289,7 +303,11 @@ const Cabin_Slot_Booking = () => {
           async function dragndrop() {
             setLoading(true);
             await axios
-              .put(`cabin_slot_booking/${event?._id}`, lastObject)
+              .put(`cabin_slot_booking/${event?._id}`, lastObject, {
+                headers: {
+                  Access_Token: LocalStorageData?.generate_auth_token,
+                },
+              })
               .then((res) => {
                 return (
                   setLoading(false),

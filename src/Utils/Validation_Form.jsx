@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import AxiosApi, { BaseURL, headersCors } from "./AxiosApi";
+// import AxiosApi, { BaseURL, headersCors } from "./AxiosApi";
 // import { mixed } from "yup";
 export const user_sign_in_validation = yup.object({
   /*=========> Login Information Validation ==========>*/
@@ -16,56 +16,56 @@ export const user_sign_up_validation = yup.object({
   phone: yup.string().required("This field is required"),
   personal_email: yup.string().required("This field is required"),
 });
-export const signupValidation = yup.object({
-  saluation: yup.string().notRequired("Please select Saluation"),
-  firstName: yup.string().required("Please Enter First Name"),
-  lastName: yup.string().required("Please Enter Last Name"),
-  phone: yup
-    .string()
-    .required("Please Enter Mobile No")
-    .min(10, "Mobile No Must be 10 characters")
-    .max(10, "Mobile No Must be 10 characters")
-    .matches(/^[0-9]+$/, "Mobile no must be only digits")
-    .test(
-      "Unique Phone No",
-      "Phone no already exists", // <- key, message
-      function (value) {
-        if (value !== "") {
-          return new Promise((resolve, reject) => {
-            //debugger
-            AxiosApi.get(
-              `${BaseURL}/validation/phone/${value}`,
-              headersCors
-            ).then((res) => {
-              resolve(res.data.detail === true ? false : true);
-            });
-          });
-        }
-      }
-    ),
-  email: yup
-    .string()
-    .email("Email should be valid and contain @")
-    .required("Please Enter Email")
-    .test(
-      "Unique Email",
-      "Email ID already exists", // <- key, message
-      function (value) {
-        if (value !== "") {
-          return new Promise((resolve, reject) => {
-            //debugger
-            AxiosApi.get(
-              `${BaseURL}/validation/email/${value}`,
-              headersCors
-            ).then((res) => {
-              resolve(res.data.detail === true ? false : true);
-            });
-          });
-        }
-      }
-    ),
-  password: yup.string().required("Please Enter your password"),
-});
+// export const signupValidation = yup.object({
+//   saluation: yup.string().notRequired("Please select Saluation"),
+//   firstName: yup.string().required("Please Enter First Name"),
+//   lastName: yup.string().required("Please Enter Last Name"),
+//   phone: yup
+//     .string()
+//     .required("Please Enter Mobile No")
+//     .min(10, "Mobile No Must be 10 characters")
+//     .max(10, "Mobile No Must be 10 characters")
+//     .matches(/^[0-9]+$/, "Mobile no must be only digits")
+//     .test(
+//       "Unique Phone No",
+//       "Phone no already exists", // <- key, message
+//       function (value) {
+//         if (value !== "") {
+//           return new Promise((resolve, reject) => {
+//             //debugger
+//             AxiosApi.get(
+//               `${BaseURL}/validation/phone/${value}`,
+//               headersCors
+//             ).then((res) => {
+//               resolve(res.data.detail === true ? false : true);
+//             });
+//           });
+//         }
+//       }
+//     ),
+//   email: yup
+//     .string()
+//     .email("Email should be valid and contain @")
+//     .required("Please Enter Email")
+//     .test(
+//       "Unique Email",
+//       "Email ID already exists", // <- key, message
+//       function (value) {
+//         if (value !== "") {
+//           return new Promise((resolve, reject) => {
+//             //debugger
+//             AxiosApi.get(
+//               `${BaseURL}/validation/email/${value}`,
+//               headersCors
+//             ).then((res) => {
+//               resolve(res.data.detail === true ? false : true);
+//             });
+//           });
+//         }
+//       }
+//     ),
+//   password: yup.string().required("Please Enter your password"),
+// });
 export const addNewClientValidation = yup.object({
   /*=========> Login Information Validation ==========>*/
   client_code: yup.string().required("Please Enter Client Id"),
@@ -242,82 +242,82 @@ export const editCandidateDocumentsValidation = yup.object({
 //   cv: yup.string().required("Please Enter Client Id"),
 // });
 
-export const addCandidateValidation = yup.object({
-  /*=========> Login Information Validation ==========>*/
+// export const addCandidateValidation = yup.object({
+//   /*=========> Login Information Validation ==========>*/
 
-  first_name_old: yup.string().required("Please Enter First Name"),
-  last_name_old: yup.string().required("Please Enter Last Name"),
-  primary_phone_country_id: yup.string().required("Please Selecy Country Id"),
-  phone: yup
-    .string()
-    .required("Please Enter Phone No")
-    .test(
-      "Unique Phone No",
-      "Phone no already exists", // <- key, message
-      function (value) {
-        if (value !== "") {
-          return new Promise((resolve, reject) => {
-            //debugger
-            AxiosApi.get(
-              `${BaseURL}validation/phone/${value}`,
-              headersCors
-            ).then((res) => {
-              resolve(res.data.detail === true ? false : true);
-            });
-          });
-        }
-      }
-    ),
-  email_old: yup
-    .string()
-    .required("Please Enter Valid Mail ")
-    .test(
-      "Unique Email",
-      "Email ID already exists", // <- key, message
-      function (value) {
-        if (value !== "") {
-          return new Promise((resolve, reject) => {
-            //debugger
-            AxiosApi.get(
-              `${BaseURL}validation/email/${value}`,
-              headersCors
-            ).then((res) => {
-              resolve(res.data.detail === true ? false : true);
-            });
-          });
-        }
-      }
-    ),
-  address: yup.string().required("Please Enter Valid Address"),
-  password: yup.string().required("Please Enter password"),
-  zipcode: yup.string().required("Please Enter Zip Code "),
-  linkedin: yup.string().required("Please Enter Linkedin Profile "),
-  experience_years: yup.string().required("Please Enter Year's of Experience "),
-  experience_months: yup
-    .string()
-    .required("Please Enter Month's of Experience "),
-  profile_summary: yup.string().required("Please Enter Profile Summary "),
-  profile_headline: yup.string().required("Please Enter Profile HeadLine"),
-  phone2: yup.string().required("Please Enter Phone Number "),
-  email2: yup.string().required("Please Enter Valid Mail"),
-  alternate_phone_country_id: yup.string().required("Please Choose Country "),
-  expertise_id: yup.string().required("Please Choose Experties "),
-  role: yup.string().required("Please Enter Role"),
-  organization: yup.string().required("Please Enter Organization Name "),
-});
-export const editJobsValidation = yup.object({
-  /*=========> Login Information Validation ==========>*/
+//   first_name_old: yup.string().required("Please Enter First Name"),
+//   last_name_old: yup.string().required("Please Enter Last Name"),
+//   primary_phone_country_id: yup.string().required("Please Selecy Country Id"),
+//   phone: yup
+//     .string()
+//     .required("Please Enter Phone No")
+//     .test(
+//       "Unique Phone No",
+//       "Phone no already exists", // <- key, message
+//       function (value) {
+//         if (value !== "") {
+//           return new Promise((resolve, reject) => {
+//             //debugger
+//             AxiosApi.get(
+//               `${BaseURL}validation/phone/${value}`,
+//               headersCors
+//             ).then((res) => {
+//               resolve(res.data.detail === true ? false : true);
+//             });
+//           });
+//         }
+//       }
+//     ),
+//   email_old: yup
+//     .string()
+//     .required("Please Enter Valid Mail ")
+//     .test(
+//       "Unique Email",
+//       "Email ID already exists", // <- key, message
+//       function (value) {
+//         if (value !== "") {
+//           return new Promise((resolve, reject) => {
+//             //debugger
+//             AxiosApi.get(
+//               `${BaseURL}validation/email/${value}`,
+//               headersCors
+//             ).then((res) => {
+//               resolve(res.data.detail === true ? false : true);
+//             });
+//           });
+//         }
+//       }
+//     ),
+//   address: yup.string().required("Please Enter Valid Address"),
+//   password: yup.string().required("Please Enter password"),
+//   zipcode: yup.string().required("Please Enter Zip Code "),
+//   linkedin: yup.string().required("Please Enter Linkedin Profile "),
+//   experience_years: yup.string().required("Please Enter Year's of Experience "),
+//   experience_months: yup
+//     .string()
+//     .required("Please Enter Month's of Experience "),
+//   profile_summary: yup.string().required("Please Enter Profile Summary "),
+//   profile_headline: yup.string().required("Please Enter Profile HeadLine"),
+//   phone2: yup.string().required("Please Enter Phone Number "),
+//   email2: yup.string().required("Please Enter Valid Mail"),
+//   alternate_phone_country_id: yup.string().required("Please Choose Country "),
+//   expertise_id: yup.string().required("Please Choose Experties "),
+//   role: yup.string().required("Please Enter Role"),
+//   organization: yup.string().required("Please Enter Organization Name "),
+// });
+// export const editJobsValidation = yup.object({
+//   /*=========> Login Information Validation ==========>*/
 
-  title: yup.string().required("Please Enter Title"),
-  slug: yup.string().required("Please Enter Slug"),
-  description: yup.string().required("Please Enter Description "),
-  // client_id: yup.string().required("Please Choose Client Name "),
-  job_type: yup.string().required("Please Choose Job Type"),
-  min_experience: yup.string().required("Please Enter  Minimum Experience"),
-  max_experience: yup.string().required("Please Enter Maximum Experience "),
-  display_order: yup.string().required("Please Enter Display Order "),
-  display_date: yup.string().required("Please Choose date "),
-});
+//   title: yup.string().required("Please Enter Title"),
+//   slug: yup.string().required("Please Enter Slug"),
+//   description: yup.string().required("Please Enter Description "),
+//   // client_id: yup.string().required("Please Choose Client Name "),
+//   job_type: yup.string().required("Please Choose Job Type"),
+//   min_experience: yup.string().required("Please Enter  Minimum Experience"),
+//   max_experience: yup.string().required("Please Enter Maximum Experience "),
+//   display_order: yup.string().required("Please Enter Display Order "),
+//   display_date: yup.string().required("Please Choose date "),
+// });
 export const form12bb_validation = yup.object({
   /*=========> Login Information Validation ==========>*/
   // name: yup.string().required("This field is required"),

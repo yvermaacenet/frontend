@@ -19,6 +19,8 @@ const On_Boarding = () => {
   const [roless, setRoless] = useState([]);
   const [state, setState] = useState(false);
   const [updated_data, setUpdated_data] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const inputEvent = (e) => {
     console.log("e", e);
     const { name, checked } = e.target;
@@ -26,9 +28,12 @@ const On_Boarding = () => {
     setUpdated_data({ ...updated_data, [name]: checked });
   };
   useEffect(() => {
+    setLoading(true);
     async function get_on_boarding_list() {
       await axios
-        .get(`/on_boarding/${_id}`)
+        .get(`/on_boarding/${_id}`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((result) => {
           const resp = result.data[0];
           return (
@@ -61,7 +66,9 @@ const On_Boarding = () => {
     get_on_boarding_list();
     async function get_user_list_by_role_name() {
       const result = await axios
-        .get(`/get_user_list_by_role_name`)
+        .get(`/get_user_list_by_role_name`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           return setRoless(resp.data), setRenderComponent(false);
         })
@@ -76,7 +83,9 @@ const On_Boarding = () => {
     get_user_list_by_role_name();
     async function get_user_details_by_id() {
       await axios
-        .get(`/get_user_details_By_Id/${_id}`)
+        .get(`/get_user_details_By_Id/${_id}`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           const resp_user_list_by_id = resp?.data[0];
           return setGetUserDetailsById(resp_user_list_by_id);
@@ -88,6 +97,7 @@ const On_Boarding = () => {
             navigate("/error_403");
           }
         });
+      setLoading(false);
     }
     get_user_details_by_id();
   }, [renderComponent === true]);
@@ -95,26 +105,40 @@ const On_Boarding = () => {
   const onSaveNextButton = async (event) => {
     event.preventDefault();
     await axios
-      .post(`/on_boarding/${_id}`, {
-        ...inputData,
-        steper_counter: inputData?.status ? 3 : steperCounter,
-        updated_by: [
-          {
-            user_id: LocalStorageData?.user_id,
-            user_name: LocalStorageData?.name,
-            updated_data,
-          },
-        ],
-      })
+      .post(
+        `/on_boarding/${_id}`,
+        {
+          ...inputData,
+          steper_counter: inputData?.status ? 3 : steperCounter,
+          updated_by: [
+            {
+              user_id: LocalStorageData?.user_id,
+              user_name: LocalStorageData?.name,
+              updated_data,
+            },
+          ],
+        },
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      )
       .then(async (res) => {
         if (res.data.message === "created") {
           setActive(active + 1);
           setSteperCounter(steperCounter + 1);
           setRenderComponent(true);
           await axios
-            .put(`/user_update/${_id}`, {
-              on_boarding_steper_counter: steperCounter,
-            })
+            .put(
+              `/user_update/${_id}`,
+              {
+                on_boarding_steper_counter: steperCounter,
+              },
+              {
+                headers: {
+                  Access_Token: LocalStorageData?.generate_auth_token,
+                },
+              }
+            )
             .then((res) => {
               return console.log(res?.data.message);
             })
@@ -138,18 +162,24 @@ const On_Boarding = () => {
   const onUpdateNextButton = async (event) => {
     event.preventDefault();
     await axios
-      .put(`/on_boarding/${inputData?._id}`, {
-        ...inputData,
-        steper_counter: inputData?.status ? 3 : steperCounter,
-        updated_by: [
-          ...inputData?.updated_by,
-          {
-            user_id: LocalStorageData?.user_id,
-            user_name: LocalStorageData?.name,
-            updated_data,
-          },
-        ],
-      })
+      .put(
+        `/on_boarding/${inputData?._id}`,
+        {
+          ...inputData,
+          steper_counter: inputData?.status ? 3 : steperCounter,
+          updated_by: [
+            ...inputData?.updated_by,
+            {
+              user_id: LocalStorageData?.user_id,
+              user_name: LocalStorageData?.name,
+              updated_data,
+            },
+          ],
+        },
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      )
       .then(async (res) => {
         if (res.data.message === "updated") {
           setActive(active + 1);
@@ -157,9 +187,19 @@ const On_Boarding = () => {
           setRenderComponent(true);
           setUpdated_data([]);
           await axios
-            .put(`/user_update/${_id}`, {
-              on_boarding_steper_counter: inputData?.status ? 3 : steperCounter,
-            })
+            .put(
+              `/user_update/${_id}`,
+              {
+                on_boarding_steper_counter: inputData?.status
+                  ? 3
+                  : steperCounter,
+              },
+              {
+                headers: {
+                  Access_Token: LocalStorageData?.generate_auth_token,
+                },
+              }
+            )
             .then((res) => {
               return console.log(res?.data.message);
             })
@@ -183,29 +223,43 @@ const On_Boarding = () => {
   const onSubmittedButton = async (event) => {
     event.preventDefault();
     await axios
-      .put(`/on_boarding/${inputData?._id}`, {
-        ...inputData,
-        status: steperCounter === 3 ? true : false,
-        steper_counter: inputData?.on_boarding_status ? 3 : steperCounter,
-        updated_by: [
-          ...inputData?.updated_by,
-          {
-            user_id: LocalStorageData?.user_id,
-            user_name: LocalStorageData?.name,
-            updated_data,
-          },
-        ],
-      })
+      .put(
+        `/on_boarding/${inputData?._id}`,
+        {
+          ...inputData,
+          status: steperCounter === 3 ? true : false,
+          steper_counter: inputData?.on_boarding_status ? 3 : steperCounter,
+          updated_by: [
+            ...inputData?.updated_by,
+            {
+              user_id: LocalStorageData?.user_id,
+              user_name: LocalStorageData?.name,
+              updated_data,
+            },
+          ],
+        },
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      )
       .then(async (res) => {
         if (res.data.message === "updated") {
           setActive(1);
           setRenderComponent(true);
           navigate("/user_list/all");
           await axios
-            .put(`/user_update/${_id}`, {
-              on_boarding_steper_counter: steperCounter,
-              on_boarding_status: true,
-            })
+            .put(
+              `/user_update/${_id}`,
+              {
+                on_boarding_steper_counter: steperCounter,
+                on_boarding_status: true,
+              },
+              {
+                headers: {
+                  Access_Token: LocalStorageData?.generate_auth_token,
+                },
+              }
+            )
             .then((res) => {
               return console.log(res?.data.message);
             })
@@ -254,6 +308,11 @@ const On_Boarding = () => {
               page_title_button="Back"
               page_title_button_link="/user_list/all"
             />
+            {loading && (
+              <div className="loader-container">
+                <div class="loader"></div>
+              </div>
+            )}
             <div class="row">
               <div class="card">
                 <div class="card-body">

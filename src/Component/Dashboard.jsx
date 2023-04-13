@@ -17,7 +17,9 @@ const Dashboard = () => {
     setLoading(true);
     async function get_counterList() {
       await axios
-        .get("/documents_counter")
+        .get("/documents_counter", {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((res) => {
           return setCounterList(res?.data), setLoading(false);
         })

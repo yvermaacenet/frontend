@@ -9,6 +9,9 @@ import { SketchPicker } from "react-color";
 import reactCSS from "reactcss";
 const Cabin_Add = () => {
   const navigate = useNavigate();
+  const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
+  const [loading, setLoading] = useState(false);
+
   const [inputData, setInputData] = useState({
     status: false,
   });
@@ -78,9 +81,12 @@ const Cabin_Add = () => {
   };
   const onCabinAddButton = (e) => {
     e.preventDefault();
+    setLoading(true);
     async function add_cabin() {
       await axios
-        .post(`/cabin_add`, inputData)
+        .post(`/cabin_add`, inputData, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
         .then((resp) => {
           return alert(resp?.data.message), navigate("/cabin_list");
         })
@@ -91,6 +97,7 @@ const Cabin_Add = () => {
             navigate("/error_403");
           }
         });
+      setLoading(false);
     }
     add_cabin();
   };
@@ -109,6 +116,11 @@ const Cabin_Add = () => {
                 page_title_button="Back"
                 page_title_button_link="/cabin_list"
               />
+              {loading && (
+                <div className="loader-container">
+                  <div class="loader"></div>
+                </div>
+              )}
               <div class="row">
                 <div class="card">
                   <div class="card-body">
