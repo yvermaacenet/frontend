@@ -342,246 +342,240 @@ const Cabin_Slot_Booking = () => {
               page_title_button="Back"
               page_title_button_link="/dashboard"
             />
-            {loading ? (
+            {loading && (
               <div className="loader-container">
                 <div class="loader"></div>
               </div>
-            ) : (
-              <div className="row">
-                <div className="card">
-                  <div className="card-body">
-                    <form className="forms-sample">
-                      <div className="row">
-                        <div className="col-md-3">
+            )}
+            <div className="row">
+              <div className="card">
+                <div className="card-body">
+                  <form className="forms-sample">
+                    <div className="row">
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label> Cabin </label>
+                          <select
+                            name="_id"
+                            className="form-control form-control-sm"
+                            onChange={(e) => setSelectCabin_id(e.target.value)}
+                          >
+                            <option
+                              value="all"
+                              selected="selected"
+                              // disabled="disabled"
+                            >
+                              All Booking
+                            </option>
+                            {getCabinList?.map((val, index) => {
+                              return (
+                                <>
+                                  <option value={val?._id}>{val?.name}</option>
+                                </>
+                              );
+                            })}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <DragAndDropCalendar
+                    // defaultDate={defaultDate}
+                    events={getCabinSlotBookingList}
+                    localizer={localizer}
+                    onEventDrop={moveEvent}
+                    onEventResize={resizeEvent}
+                    resizable={true}
+                    selectable
+                    onSelectSlot={handleSelect}
+                    resourceIdAccessor="resourceId"
+                    // resources={resourceMap}
+                    onSelectEvent={onSelectEvent}
+                    resourceTitleAccessor="resourceTitle"
+                    // scrollToTime={scrollToTime}
+                    startAccessor="start"
+                    endAccessor="end"
+                    defaultView={"week"}
+                    min={minDate_time}
+                    max={maxDate_time}
+                    style={{ height: "100vh" }}
+                    showMultiDayTimes={true}
+                    step={15}
+                    eventPropGetter={eventStyleGetter}
+                  />
+                  <PureModal
+                    header="Cabin Booking"
+                    isOpen={addEventModal}
+                    // closeButtonPosition="bottom"
+                    onClose={() => {
+                      setAddEventModal(false);
+                      setAllDay(false);
+                      return true;
+                    }}
+                    width={"40%"}
+                  >
+                    <div className="card">
+                      <div className="card-body">
+                        <form className="forms-sample">
                           <div className="form-group">
-                            <label> Cabin </label>
-                            <select
-                              name="_id"
+                            <label>Title</label>
+                            <input
+                              type="text"
                               className="form-control form-control-sm"
-                              onChange={(e) =>
-                                setSelectCabin_id(e.target.value)
-                              }
-                            >
-                              <option
-                                value="all"
-                                selected="selected"
-                                // disabled="disabled"
-                              >
-                                All Booking
-                              </option>
-                              {getCabinList?.map((val, index) => {
-                                return (
-                                  <>
-                                    <option value={val?._id}>
-                                      {val?.name}
-                                    </option>
-                                  </>
-                                );
-                              })}
-                            </select>
+                              name="title"
+                              placeholder="Username"
+                              onChange={inputEvent}
+                            />
                           </div>
-                        </div>
-                      </div>
-                    </form>
-                    <DragAndDropCalendar
-                      // defaultDate={defaultDate}
-                      events={getCabinSlotBookingList}
-                      localizer={localizer}
-                      onEventDrop={moveEvent}
-                      onEventResize={resizeEvent}
-                      resizable={true}
-                      selectable
-                      onSelectSlot={handleSelect}
-                      resourceIdAccessor="resourceId"
-                      // resources={resourceMap}
-                      onSelectEvent={onSelectEvent}
-                      resourceTitleAccessor="resourceTitle"
-                      // scrollToTime={scrollToTime}
-                      startAccessor="start"
-                      endAccessor="end"
-                      defaultView={"week"}
-                      min={minDate_time}
-                      max={maxDate_time}
-                      style={{ height: "100vh" }}
-                      showMultiDayTimes={true}
-                      step={15}
-                      eventPropGetter={eventStyleGetter}
-                    />
-                    <PureModal
-                      header="Cabin Booking"
-                      isOpen={addEventModal}
-                      // closeButtonPosition="bottom"
-                      onClose={() => {
-                        setAddEventModal(false);
-                        setAllDay(false);
-                        return true;
-                      }}
-                      width={"40%"}
-                    >
-                      <div className="card">
-                        <div className="card-body">
-                          <form className="forms-sample">
-                            <div className="form-group">
-                              <label>Title</label>
-                              <input
-                                type="text"
-                                className="form-control form-control-sm"
-                                name="title"
-                                placeholder="Username"
-                                onChange={inputEvent}
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Description</label>
-                              <input
-                                type="text"
-                                className="form-control form-control-sm"
-                                name="description"
-                                placeholder="Username"
-                                onChange={inputEvent}
-                              />
-                            </div>
-                            <div className="form-group">
-                              <div className="row">
-                                <div className="col-md-6">
-                                  <label>Start Date</label>
-                                  <input
-                                    type="date"
-                                    className="form-control form-control-sm"
-                                    placeholder="Username"
-                                    // onChange={inputEvent}
-                                    value={inputData?.convertStartDate}
-                                    disabled
-                                  />
-                                </div>
-                                <div className="col-md-6">
-                                  <label>Start Time</label>
-                                  <input
-                                    type="time"
-                                    className="form-control form-control-sm"
-                                    placeholder="Username"
-                                    onChange={inputEvent}
-                                    name="time"
-                                    value={inputData?.convertStartTime}
-                                    disabled
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="form-group">
-                              <div className="row">
-                                <div className="col-md-6">
-                                  <label>End Date</label>
-                                  <input
-                                    type="date"
-                                    className="form-control form-control-sm"
-                                    placeholder="Username"
-                                    // onChange={inputEvent}
-                                    value={inputData?.convertEndDate}
-                                    disabled
-                                  />
-                                </div>
-                                <div className="col-md-6">
-                                  <label>End Time</label>
-
-                                  <input
-                                    type="time"
-                                    className="form-control form-control-sm"
-                                    placeholder="Username"
-                                    onChange={inputEvent}
-                                    name="time"
-                                    value={inputData?.convertEndTime}
-                                    disabled
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="form-check form-check-flat form-check-primary">
-                              <label className="form-check-label">
+                          <div className="form-group">
+                            <label>Description</label>
+                            <input
+                              type="text"
+                              className="form-control form-control-sm"
+                              name="description"
+                              placeholder="Username"
+                              onChange={inputEvent}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <div className="row">
+                              <div className="col-md-6">
+                                <label>Start Date</label>
                                 <input
-                                  type="checkbox"
-                                  className="form-check-input"
-                                  name="allDay"
-                                  onChange={(e) => setAllDay(e.target.checked)}
-                                  checked={allDay}
+                                  type="date"
+                                  className="form-control form-control-sm"
+                                  placeholder="Username"
+                                  // onChange={inputEvent}
+                                  value={inputData?.convertStartDate}
+                                  disabled
                                 />
-                                Booking all days{" "}
-                                <i className="input-helper"></i>
-                              </label>
+                              </div>
+                              <div className="col-md-6">
+                                <label>Start Time</label>
+                                <input
+                                  type="time"
+                                  className="form-control form-control-sm"
+                                  placeholder="Username"
+                                  onChange={inputEvent}
+                                  name="time"
+                                  value={inputData?.convertStartTime}
+                                  disabled
+                                />
+                              </div>
                             </div>
-                            <button
-                              type="submit"
-                              className="btn btn-sm btn-gradient-primary me-2"
-                              onClick={onAddCabinSlotBookingButton}
-                            >
-                              Submit
-                            </button>
-                          </form>
-                        </div>
-                      </div>
-                    </PureModal>
+                          </div>
+                          <div className="form-group">
+                            <div className="row">
+                              <div className="col-md-6">
+                                <label>End Date</label>
+                                <input
+                                  type="date"
+                                  className="form-control form-control-sm"
+                                  placeholder="Username"
+                                  // onChange={inputEvent}
+                                  value={inputData?.convertEndDate}
+                                  disabled
+                                />
+                              </div>
+                              <div className="col-md-6">
+                                <label>End Time</label>
 
-                    {/* =======edit========== */}
-                    <PureModal
-                      header="Cabin Booking"
-                      isOpen={editEventModal}
-                      // closeButtonPosition="bottom"
-                      onClose={() => {
-                        setEditEventModal(false);
-                        // setAllDay(false);
-                        return true;
-                      }}
-                      width={"40%"}
-                    >
-                      <div className="card">
-                        <div className="card-body">
-                          <form className="forms-sample">
-                            <div className="form-group">
-                              <label>Title</label>
-                              <input
-                                type="text"
-                                className="form-control form-control-sm"
-                                name="title"
-                                placeholder="Username"
-                                onChange={inputEvent}
-                                value={inputData?.title}
-                              />
+                                <input
+                                  type="time"
+                                  className="form-control form-control-sm"
+                                  placeholder="Username"
+                                  onChange={inputEvent}
+                                  name="time"
+                                  value={inputData?.convertEndTime}
+                                  disabled
+                                />
+                              </div>
                             </div>
-                            <div className="form-group">
-                              <label>Description</label>
+                          </div>
+                          <div className="form-check form-check-flat form-check-primary">
+                            <label className="form-check-label">
                               <input
-                                type="text"
-                                className="form-control form-control-sm"
-                                name="description"
-                                placeholder="Username"
-                                onChange={inputEvent}
-                                value={inputData?.description}
+                                type="checkbox"
+                                className="form-check-input"
+                                name="allDay"
+                                onChange={(e) => setAllDay(e.target.checked)}
+                                checked={allDay}
                               />
-                            </div>
-                            <button
-                              type="submit"
-                              className="btn btn-sm btn-gradient-primary me-2"
-                              onClick={() => {
-                                setEditEventModal(false);
-                              }}
-                            >
-                              close
-                            </button>
-                            <button
-                              type="submit"
-                              className="btn btn-sm btn-gradient-danger me-2"
-                              onClick={onRemoveCabinSlotBookingButton}
-                            >
-                              Remove
-                            </button>
-                          </form>
-                        </div>
+                              Booking all days <i className="input-helper"></i>
+                            </label>
+                          </div>
+                          <button
+                            type="submit"
+                            className="btn btn-sm btn-gradient-primary me-2"
+                            onClick={onAddCabinSlotBookingButton}
+                          >
+                            Submit
+                          </button>
+                        </form>
                       </div>
-                    </PureModal>
-                  </div>
+                    </div>
+                  </PureModal>
+
+                  {/* =======edit========== */}
+                  <PureModal
+                    header="Cabin Booking"
+                    isOpen={editEventModal}
+                    // closeButtonPosition="bottom"
+                    onClose={() => {
+                      setEditEventModal(false);
+                      // setAllDay(false);
+                      return true;
+                    }}
+                    width={"40%"}
+                  >
+                    <div className="card">
+                      <div className="card-body">
+                        <form className="forms-sample">
+                          <div className="form-group">
+                            <label>Title</label>
+                            <input
+                              type="text"
+                              className="form-control form-control-sm"
+                              name="title"
+                              placeholder="Username"
+                              onChange={inputEvent}
+                              value={inputData?.title}
+                            />
+                          </div>
+                          <div className="form-group">
+                            <label>Description</label>
+                            <input
+                              type="text"
+                              className="form-control form-control-sm"
+                              name="description"
+                              placeholder="Username"
+                              onChange={inputEvent}
+                              value={inputData?.description}
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            className="btn btn-sm btn-gradient-primary me-2"
+                            onClick={() => {
+                              setEditEventModal(false);
+                            }}
+                          >
+                            close
+                          </button>
+                          <button
+                            type="submit"
+                            className="btn btn-sm btn-gradient-danger me-2"
+                            onClick={onRemoveCabinSlotBookingButton}
+                          >
+                            Remove
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </PureModal>
                 </div>
               </div>
-            )}
+            </div>
           </div>
           <footer className="footer">
             <Footer />
