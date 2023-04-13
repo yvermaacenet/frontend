@@ -27,7 +27,13 @@ const Cabin_List = () => {
         .then((resp) => {
           return setGetCabinList(resp?.data);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     get_cabin_list();
   }, []);

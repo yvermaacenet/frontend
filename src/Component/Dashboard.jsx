@@ -21,7 +21,13 @@ const Dashboard = () => {
         .then((res) => {
           return setCounterList(res?.data), setLoading(false);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     get_counterList();
   }, []);
@@ -59,8 +65,8 @@ const Dashboard = () => {
   ];
 
   const data01 = [
-    { name: "Active", value: counterList?.Active_Users },
-    { name: "Deactive", value: counterList?.Deactive_Users },
+    { name: "Active User", value: counterList?.Active_Users },
+    { name: "Deactive User", value: counterList?.Deactive_Users },
   ];
 
   const renderActiveShape = (props) => {

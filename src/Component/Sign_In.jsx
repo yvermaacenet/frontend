@@ -10,40 +10,24 @@ import { useCookies } from "react-cookie";
 const Sign_In = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
-  const [inputData, setInputData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: "onTouched",
-    resolver: yupResolver(user_sign_in_validation),
-  });
-  const inputEvent = (event) => {
-    const { name, value } = event.target;
-    setInputData((preValue) => {
-      return {
-        ...preValue,
-        [name]: value,
-      };
-    });
-  };
-
   const onSignInZoho = () => {
-    setLoading(true);
     async function postData() {
+      setLoading(true);
+
       await axios
         .get(`sign_in_zoho`)
         .then((result) => {
           const resp = result.data;
           return window.location.replace(resp);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          console.log(err);
+        });
+      // setLoading(false);
     }
     postData();
-    setLoading(false);
   };
   useEffect(() => {
     async function sendCode() {
@@ -59,7 +43,7 @@ const Sign_In = () => {
               navigate("/dashboard")
             );
           })
-          .catch((err) => err.response.status === 403 && navigate("/"));
+          .catch((err) => console.log(err));
       }
       setLoading(false);
     }
@@ -68,8 +52,6 @@ const Sign_In = () => {
 
   if (cookies?.Access_Token) {
     return <Navigate to={"/dashboard"} />;
-  } else {
-    <Navigate to={"/"} />;
   }
   const myStyles = {
     backgroundImage: `url("../assets/login_bg.png")`,
@@ -90,44 +72,49 @@ const Sign_In = () => {
     // Add any other styles you want to apply here
   };
   return (
-    <div className="container-scroller">
-      <div className="container-fluid page-body-wrapper full-page-wrapper">
-        <div
-          className="content-wrapper d-flex align-items-center auth"
-          style={myStyles}
-        >
-          {loading && (
-            <div className="loader-container">
-              <div class="loader"></div>
-            </div>
-          )}
-          <div className="row flex-grow text-center">
-            <div className="col-lg-4 mx-auto">
-              <div
-                className="auth-form-light text-left p-5"
-                style={{ borderRadius: "20px", transparent: "0.5" }}
-              >
-                <div className="brand-logo mb-0">
-                  <img src="../../assets/images/logo.svg" />
-                </div>
-                <div>
-                  <h4>Hello! let's get started</h4>
-                  <img src="assets/images/zoho.svg" style={{ width: "8rem" }} />
-                  <button
-                    className="btn btn-sm btn-grad w-100 mt-4"
-                    onClick={onSignInZoho}
-                  >
-                    SIGN IN WITH ZOHO
-                  </button>
+    <>
+      <div className="container-scroller">
+        <div className="container-fluid page-body-wrapper full-page-wrapper">
+          <div
+            className="content-wrapper d-flex align-items-center auth"
+            style={myStyles}
+          >
+            <div className="row flex-grow text-center">
+              <div className="col-lg-4 mx-auto">
+                <div
+                  className="auth-form-light text-left p-5"
+                  style={{ borderRadius: "20px", transparent: "0.5" }}
+                >
+                  {loading && (
+                    <div className="loader-container">
+                      <div class="loader"></div>
+                    </div>
+                  )}
+                  <div className="brand-logo mb-0">
+                    <img src="../../assets/images/logo.svg" />
+                  </div>
+                  <div>
+                    <h4>Hello! let's get started with</h4>
+                    <img
+                      src="assets/images/zoho.svg"
+                      style={{ width: "8rem" }}
+                    />
+                    <button
+                      className="btn btn-sm btn-grad w-100 mt-4"
+                      onClick={onSignInZoho}
+                    >
+                      SIGN IN WITH ZOHO
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          {/* <!-- content-wrapper ends --> */}
         </div>
-        {/* <!-- content-wrapper ends --> */}
+        {/* <!-- page-body-wrapper ends --> */}
       </div>
-      {/* <!-- page-body-wrapper ends --> */}
-    </div>
+    </>
   );
 };
 

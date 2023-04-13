@@ -46,7 +46,13 @@ const Cabin_Slot_Booking = () => {
         .then((resp) => {
           return setGetCabinList(resp?.data);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     get_cabin_list();
   }, []);
@@ -66,7 +72,13 @@ const Cabin_Slot_Booking = () => {
           return getAllEvents;
         })
         .then((rr) => setGetCabinSlotBookingList(rr), setRenderComponent(false))
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     get_cabin_slot_booking_list();
   }, [renderComponent === true, selectCabin_id]);
@@ -154,7 +166,13 @@ const Cabin_Slot_Booking = () => {
           setRenderComponent(true)
         );
       })
-      .catch((err) => err.response.status === 403 && navigate("/"));
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
   };
   // ====Coloring====
   const eventStyleGetter = (event, start, end, isSelected) => {
@@ -220,7 +238,13 @@ const Cabin_Slot_Booking = () => {
                 setRenderComponent(true)
               );
             })
-            .catch((err) => err.response.status === 403 && navigate("/"));
+            .catch((err) => {
+              if (err.response.status === 500) {
+                navigate("/error_500");
+              } else {
+                navigate("/error_403");
+              }
+            });
         }
         dragndrop();
       }
@@ -273,7 +297,13 @@ const Cabin_Slot_Booking = () => {
                   setRenderComponent(true)
                 );
               })
-              .catch((err) => err.response.status === 403 && navigate("/"));
+              .catch((err) => {
+                if (err.response.status === 500) {
+                  navigate("/error_500");
+                } else {
+                  navigate("/error_403");
+                }
+              });
           }
           dragndrop();
         });

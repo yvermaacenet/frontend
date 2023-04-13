@@ -20,7 +20,13 @@ const Get_Form_Flexi_Benefit_Data = () => {
           const resp = result.data;
           return setForm12bbdata(resp), setLoading(false);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     getData();
   }, []);
@@ -67,7 +73,13 @@ const Get_Form_Flexi_Benefit_Data = () => {
         downloadExcel();
         setLoading(false);
       })
-      .catch((err) => err.response.status === 403 && navigate("/"));
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
   };
   const clickbuttondata = async (id) => {
     setLoading(true);
@@ -111,7 +123,13 @@ const Get_Form_Flexi_Benefit_Data = () => {
         downloadExcel();
         setLoading(false);
       })
-      .catch((err) => err.response.status === 403 && navigate("/"));
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
   };
 
   return (

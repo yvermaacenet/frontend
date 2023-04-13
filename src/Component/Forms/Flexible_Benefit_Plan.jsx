@@ -105,7 +105,13 @@ const Flexible_Benefit_Plan = () => {
             setLoading(false)
           );
         })
-        .catch((err) => err.response.status === 404 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     getData();
   }, []);
@@ -195,7 +201,7 @@ const Flexible_Benefit_Plan = () => {
         .then((resp) => {
           return (
             alert.show(resp.data.message),
-            resp?.message === "Form has been submitted" &&
+            resp.data.message === "Form has been submitted" &&
               navigate("/dashboard")
           );
         })
@@ -267,13 +273,7 @@ const Flexible_Benefit_Plan = () => {
                               <label>Name</label>
 
                               <input
-                                className={classNames(
-                                  "form-control form-control-sm",
-                                  {
-                                    "is-invalid": errors.name,
-                                  }
-                                )}
-                                {...register("name")}
+                                className="form-control form-control-sm"
                                 name="name"
                                 placeholder="Enter Name"
                                 value={LocalStorageData?.name}

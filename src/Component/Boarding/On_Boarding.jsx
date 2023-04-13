@@ -50,7 +50,13 @@ const On_Boarding = () => {
             setRenderComponent(false)
           );
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     get_on_boarding_list();
     async function get_user_list_by_role_name() {
@@ -59,7 +65,13 @@ const On_Boarding = () => {
         .then((resp) => {
           return setRoless(resp.data), setRenderComponent(false);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     get_user_list_by_role_name();
     async function get_user_details_by_id() {
@@ -69,7 +81,13 @@ const On_Boarding = () => {
           const resp_user_list_by_id = resp?.data[0];
           return setGetUserDetailsById(resp_user_list_by_id);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     get_user_details_by_id();
   }, [renderComponent === true]);
@@ -100,10 +118,22 @@ const On_Boarding = () => {
             .then((res) => {
               return console.log(res?.data.message);
             })
-            .catch((err) => err.response.status === 403 && navigate("/"));
+            .catch((err) => {
+              if (err.response.status === 500) {
+                navigate("/error_500");
+              } else {
+                navigate("/error_403");
+              }
+            });
         }
       })
-      .catch((err) => err.response.status === 403 && navigate("/"));
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
   };
   const onUpdateNextButton = async (event) => {
     event.preventDefault();
@@ -133,10 +163,22 @@ const On_Boarding = () => {
             .then((res) => {
               return console.log(res?.data.message);
             })
-            .catch((err) => err.response.status === 403 && navigate("/"));
+            .catch((err) => {
+              if (err.response.status === 500) {
+                navigate("/error_500");
+              } else {
+                navigate("/error_403");
+              }
+            });
         }
       })
-      .catch((err) => err.response.status === 403 && navigate("/"));
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
   };
   const onSubmittedButton = async (event) => {
     event.preventDefault();
@@ -167,10 +209,22 @@ const On_Boarding = () => {
             .then((res) => {
               return console.log(res?.data.message);
             })
-            .catch((err) => err.response.status === 403 && navigate("/"));
+            .catch((err) => {
+              if (err.response.status === 500) {
+                navigate("/error_500");
+              } else {
+                navigate("/error_403");
+              }
+            });
         }
       })
-      .catch((err) => err.response.status === 403 && navigate("/"));
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
   };
 
   function convertDateFormate(str) {

@@ -43,7 +43,13 @@ const User_List = () => {
           const resp_user_list = result_user_list.data;
           return setGetUserList(resp_user_list);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     async function get_user_list_by_role_name() {
       await axios
@@ -52,7 +58,13 @@ const User_List = () => {
           const resp = result.data;
           return setRoless(resp), get_user_list(resp);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     get_user_list_by_role_name();
   }, [getStatus_code]);

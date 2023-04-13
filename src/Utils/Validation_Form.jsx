@@ -452,7 +452,7 @@ export const form12bb_validation = yup.object({
 });
 
 export const form_flexible_validation = yup.object({
-  name: yup.string().required("This field is required"),
+  // name: yup.string().required("This field is required"),
   // email: yup
   //   .string()
   //   .required("This field is required")

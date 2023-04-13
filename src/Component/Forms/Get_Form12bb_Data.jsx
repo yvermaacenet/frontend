@@ -20,7 +20,13 @@ const Get_Form12bb_Data = () => {
           const resp = result.data;
           return setForm12bbdata(resp), setLoading(false);
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     getData();
   }, []);
@@ -163,7 +169,13 @@ const Get_Form12bb_Data = () => {
         downloadExcel();
         setLoading(false);
       })
-      .catch((err) => err.response.status === 403 && navigate("/"));
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
   };
 
   return (

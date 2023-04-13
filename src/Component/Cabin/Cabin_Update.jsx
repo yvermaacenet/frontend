@@ -44,7 +44,13 @@ const Cabin_Update = () => {
             })
           );
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     get_user_data();
   }, []);
@@ -101,7 +107,13 @@ const Cabin_Update = () => {
         .then((res) => {
           return alert(res?.data.message), navigate("/cabin_list");
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     add_cabin();
   };

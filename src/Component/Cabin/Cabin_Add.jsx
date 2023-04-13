@@ -84,7 +84,13 @@ const Cabin_Add = () => {
         .then((resp) => {
           return alert(resp?.data.message), navigate("/cabin_list");
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     add_cabin();
   };

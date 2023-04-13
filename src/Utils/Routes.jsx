@@ -10,6 +10,9 @@ import Form12BB from "../Component/Forms/Form12BB";
 import Flexible_Benefit_Plan from "../Component/Forms/Flexible_Benefit_Plan";
 import Get_Form_Flexi_Benefit_Data from "../Component/Forms/Get_Form_Flexi_Benefit_Data";
 import Get_Form12bb_Data from "../Component/Forms/Get_Form12bb_Data";
+import Error_404 from "../Partials/Error_404";
+import Error_403 from "../Partials/Error_403";
+import Error_500 from "../Partials/Error_500";
 const Routes_Array = [
   //   <!================= User ==================>
   {
@@ -71,12 +74,32 @@ const Routes_Array = [
   {
     path: "/get_form12bb_data",
     component: Get_Form12bb_Data,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+    allowedRoles: ["CA"],
   },
   {
     path: "/get_form_flexi_benefit_data",
     component: Get_Form_Flexi_Benefit_Data,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+    allowedRoles: ["CA"],
+  },
+  // {
+  //   path: "*",
+  //   component: Dashboard,
+  //   allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+  // },
+  {
+    path: "/error_404",
+    component: Error_404,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+  },
+  {
+    path: "/error_403",
+    component: Error_403,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+  },
+  {
+    path: "/error_500",
+    component: Error_500,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
   },
 ];
 

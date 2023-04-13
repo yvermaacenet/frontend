@@ -35,7 +35,11 @@ const Sidebar = () => {
               <i className="mdi mdi-home menu-icon"></i>
             </NavLink>
           </li>
-          {!LocalStorageData?.zoho_role === "Team member" && (
+
+          {(LocalStorageData?.zoho_role === "Admin" ||
+            LocalStorageData?.zoho_role === "Hr" ||
+            LocalStorageData?.zoho_role === "Finance" ||
+            LocalStorageData?.zoho_role === "Management") && (
             <li class="nav-item">
               <a
                 class="nav-link"

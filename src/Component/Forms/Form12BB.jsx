@@ -236,7 +236,13 @@ const Form12BB = () => {
             setLoading(false)
           );
         })
-        .catch((err) => err.response.status === 403 && navigate("/"));
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     getData();
   }, []);
@@ -392,11 +398,18 @@ const Form12BB = () => {
           .then((resp) => {
             return (
               alert.show(resp.data.message),
-              resp.data?.message === "Form has been submitted" && navigate("/"),
+              resp?.data?.message === "Form has been submitted" &&
+                navigate("/"),
               setLoading(false)
             );
           })
-          .catch((err) => err.response.status === 403 && navigate("/"));
+          .catch((err) => {
+            if (err.response.status === 500) {
+              navigate("/error_500");
+            } else {
+              navigate("/error_403");
+            }
+          });
       } else {
         const result = await axios
           .put(`form_12_bb/${inputData?._id}`, jsonDate)
