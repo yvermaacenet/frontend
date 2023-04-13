@@ -135,42 +135,6 @@ const User_List = () => {
                     >
                       Pending Offboarding
                     </button>
-                    {/* {(roless?.Admin?.includes(LocalStorageData?.user_id) ||
-                      roless?.hr?.includes(LocalStorageData?.user_id)) && (
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-outline-info btn-icon-text"
-                        onClick={() => setAddEventModal(true)}
-                        style={{ float: "right" }}
-                      >
-                        <i class="mdi mdi-upload btn-icon-prepend"></i> Upload
-                        File
-                      </button>
-                    )}
-                    {show
-                      ? duplcates?.map((item) => {
-                          return (
-                            <>
-                              <div
-                                class="alert alert-danger alert-dismissible fade show"
-                                role="alert"
-                              >
-                                <span className="text-dark">
-                                  Duplicate Values:
-                                </span>
-                                <i class="mdi mdi-check-circle-outline me-1"></i>
-                                {item.personal_email}
-                                <button
-                                  type="button"
-                                  class="btn-close"
-                                  data-bs-dismiss="alert"
-                                  aria-label="Close"
-                                ></button>
-                              </div>
-                            </>
-                          );
-                        })
-                      : ""} */}
                   </div>
                 </div>
               </div>
