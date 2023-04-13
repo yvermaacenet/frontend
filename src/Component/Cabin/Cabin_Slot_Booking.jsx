@@ -40,6 +40,7 @@ const Cabin_Slot_Booking = () => {
     });
   };
   useEffect(() => {
+    setLoading(true);
     async function get_cabin_list() {
       await axios
         .get("cabin_list", {
@@ -83,6 +84,7 @@ const Cabin_Slot_Booking = () => {
             navigate("/error_403");
           }
         });
+      setLoading(true);
     }
     get_cabin_slot_booking_list();
   }, [renderComponent === true, selectCabin_id]);
@@ -142,6 +144,7 @@ const Cabin_Slot_Booking = () => {
   };
   const onAddCabinSlotBookingButton = async (e) => {
     e.preventDefault();
+    setLoading(true);
     await axios
       .post(
         "cabin_slot_booking",
@@ -162,10 +165,12 @@ const Cabin_Slot_Booking = () => {
         );
       })
       .catch((err) => err?.response?.status === 403 && navigate("/"));
+    setLoading(false);
   };
 
   const onRemoveCabinSlotBookingButton = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const result = await axios
       .delete(`cabin_slot_booking/${inputData?._id}`, {
         headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -185,6 +190,7 @@ const Cabin_Slot_Booking = () => {
           navigate("/error_403");
         }
       });
+    setLoading(false);
   };
   // ====Coloring====
   const eventStyleGetter = (event, start, end, isSelected) => {
@@ -228,9 +234,9 @@ const Cabin_Slot_Booking = () => {
           (booking.end > start && booking.end <= end) ||
           (booking.start <= start && booking.end >= end)
       );
-      console.log("start", event.start);
-      console.log("end", event.end);
-      console.log("event", event);
+      // console.log("start", event.start);
+      // console.log("end", event.end);
+      // console.log("event", event);
       if (selectCabin_id === "all") {
         alert?.show("Please select cabin");
       } else if (event.start === event.end) {
@@ -239,18 +245,14 @@ const Cabin_Slot_Booking = () => {
       } else if (overlappingBooking && event._id !== overlappingBooking._id) {
         alert?.show("already booked");
       } else {
+        setLoading(true);
         async function dragndrop() {
-          setLoading(true);
           await axios
             .put(`cabin_slot_booking/${event?._id}`, lastObject, {
               headers: { Access_Token: LocalStorageData?.generate_auth_token },
             })
             .then((res) => {
-              return (
-                setLoading(false),
-                alert?.show(res.data.message),
-                setRenderComponent(true)
-              );
+              return alert?.show(res.data.message), setRenderComponent(true);
             })
             .catch((err) => {
               if (err.response.status === 500) {
@@ -259,6 +261,7 @@ const Cabin_Slot_Booking = () => {
                 navigate("/error_403");
               }
             });
+          setLoading(false);
         }
         dragndrop();
       }
@@ -299,9 +302,9 @@ const Cabin_Slot_Booking = () => {
           const filtered = prev?.filter((ev) => ev?._id !== event?._id);
           const result2 = [...filtered, { ...existing, start, end, allDay }];
           const lastObject = result2[result2.length - 1];
-          console.log(lastObject);
+          // console.log(lastObject);
+          setLoading(true);
           async function dragndrop() {
-            setLoading(true);
             await axios
               .put(`cabin_slot_booking/${event?._id}`, lastObject, {
                 headers: {
@@ -309,11 +312,7 @@ const Cabin_Slot_Booking = () => {
                 },
               })
               .then((res) => {
-                return (
-                  setLoading(false),
-                  alert?.show(res.data.message),
-                  setRenderComponent(true)
-                );
+                return alert?.show(res.data.message), setRenderComponent(true);
               })
               .catch((err) => {
                 if (err.response.status === 500) {
@@ -322,6 +321,7 @@ const Cabin_Slot_Booking = () => {
                   navigate("/error_403");
                 }
               });
+            setLoading(false);
           }
           dragndrop();
         });
