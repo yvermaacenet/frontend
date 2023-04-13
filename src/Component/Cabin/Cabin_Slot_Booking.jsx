@@ -84,7 +84,7 @@ const Cabin_Slot_Booking = () => {
             navigate("/error_403");
           }
         });
-      setLoading(true);
+      setLoading(false);
     }
     get_cabin_slot_booking_list();
   }, [renderComponent === true, selectCabin_id]);

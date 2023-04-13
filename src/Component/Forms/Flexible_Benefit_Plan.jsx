@@ -226,7 +226,8 @@ const Flexible_Benefit_Plan = () => {
             <div class="content-wrapper">
               <Page_Header
                 page_title="Declaration - Flexible Benefit Plan (See rule 26C)"
-                page_title_button="Overview"
+                page_title_button="Back"
+                page_title_button_link="/dashboard"
                 page_title_icon="mdi-book-plus"
               />
               {loading && (

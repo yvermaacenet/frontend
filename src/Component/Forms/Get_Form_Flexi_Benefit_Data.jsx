@@ -148,7 +148,7 @@ const Get_Form_Flexi_Benefit_Data = () => {
         <div className="main-panel">
           <div className="content-wrapper">
             <Page_Header
-              page_title="Cabin"
+              page_title="Declaration - Flexible Benefit Plan (See rule 26C)"
               page_title_icon="mdi-home-modern"
               page_title_button="Back"
               page_title_button_link="/dashboard"
