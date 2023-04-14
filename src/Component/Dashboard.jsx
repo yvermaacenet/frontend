@@ -9,6 +9,8 @@ import { PieChart, Pie, Sector } from "recharts";
 const Dashboard = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
+  const [state, setState] = useState(LocalStorageData);
+
   const [counterList, setCounterList] = useState([]);
   const [states, setStates] = useState({ activeIndex: 0 });
   const [loading, setLoading] = useState(false);
@@ -166,114 +168,80 @@ const Dashboard = () => {
                   <div class="loader"></div>
                 </div>
               )}
-              <div class="row">
-                {(LocalStorageData?.zoho_role === "Admin" ||
-                  LocalStorageData?.zoho_role === "Hr" ||
-                  LocalStorageData?.zoho_role === "Finance" ||
-                  LocalStorageData?.zoho_role === "Management") && (
-                  <div class="col-md-6 grid-margin">
-                    <PieChart width={600} height={220}>
-                      <Pie
-                        activeIndex={states?.activeIndex}
-                        activeShape={renderActiveShape}
-                        data={data01}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={80}
-                        fill="#82ca9d"
-                        dataKey="value"
-                        onMouseEnter={onPieEnter}
-                      />
-                    </PieChart>
-                  </div>
-                )}
+              {state?.zoho_role === "CA" ? (
+                ""
+              ) : (
+                <div class="row">
+                  {(LocalStorageData?.zoho_role === "Admin" ||
+                    LocalStorageData?.zoho_role === "Hr" ||
+                    LocalStorageData?.zoho_role === "Finance" ||
+                    LocalStorageData?.zoho_role === "Management") && (
+                    <div class="col-md-6 grid-margin">
+                      <PieChart width={600} height={220}>
+                        <Pie
+                          activeIndex={states?.activeIndex}
+                          activeShape={renderActiveShape}
+                          data={data01}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={80}
+                          fill="#82ca9d"
+                          dataKey="value"
+                          onMouseEnter={onPieEnter}
+                        />
+                      </PieChart>
+                    </div>
+                  )}
 
-                {/* <div class="col-md-3 stretch-card grid-margin">
-                  <div class="card bg-gradient-info card-img-holder text-white">
-                    <div class="card-body">
-                      <NavLink
-                        to="/user_list/active_users"
-                        style={{
-                          color: "#f8f8f8",
-                          textDecoration: "none",
-                        }}
-                      >
-                        <div>
-                          <img
-                            src="assets/images/dashboard/circle.svg"
-                            class="card-img-absolute"
-                            alt="circle-image"
-                          />
-                          <h4 class="font-weight-normal mb-3 mt-2">
-                            <span className="me-4">
-                              Total Users - {counterList?.Total_Users}
-                            </span>
-                            <i
-                              class="mdi mdi-account-multiple-plus mdi-24px float-right"
-                              style={{ float: "right" }}
-                            ></i>
-                          </h4>
-                          <h1 class="mb-4 text-center">
-                            <ReactApexChart
-                              options={state.options}
-                              series={state.series}
-                              type="pie"
-                              // width={380}
-                            />
-                          </h1>
-                        </div>
-                      </NavLink>
+                  <div class="col-md-6 grid-margin">
+                    <div className="row">
+                      {cardArray?.map(
+                        (result) =>
+                          result?.card_allowed_access.includes(
+                            LocalStorageData?.zoho_role
+                          ) && (
+                            <div class="col-md-6 stretch-card grid-margin">
+                              <div
+                                class={`card ${result?.card_background} card-img-holder text-white`}
+                              >
+                                <NavLink
+                                  to={result?.path}
+                                  style={{
+                                    color: "#f8f8f8",
+                                    textDecoration: "none",
+                                  }}
+                                >
+                                  <div class="card-body">
+                                    <div>
+                                      <img
+                                        src="assets/images/dashboard/circle.svg"
+                                        class="card-img-absolute"
+                                        alt="circle-image"
+                                      />
+                                      <h4 class="font-weight-normal mb-3 mt-2">
+                                        <span className="me-4">
+                                          {result?.card_title}
+                                        </span>
+                                        <i
+                                          class={`mdi ${result?.card_icon} mdi-24px float-right`}
+                                          style={{ float: "right" }}
+                                        ></i>
+                                      </h4>
+                                      <h1 class="mb-4 text-center">
+                                        {result?.card_counter_data}
+                                      </h1>
+                                    </div>
+                                  </div>
+                                </NavLink>
+                              </div>
+                            </div>
+                          )
+                      )}
                     </div>
                   </div>
-                </div> */}
-                <div class="col-md-6 grid-margin">
-                  <div className="row">
-                    {cardArray?.map(
-                      (result) =>
-                        result?.card_allowed_access.includes(
-                          LocalStorageData?.zoho_role
-                        ) && (
-                          <div class="col-md-6 stretch-card grid-margin">
-                            <div
-                              class={`card ${result?.card_background} card-img-holder text-white`}
-                            >
-                              <NavLink
-                                to={result?.path}
-                                style={{
-                                  color: "#f8f8f8",
-                                  textDecoration: "none",
-                                }}
-                              >
-                                <div class="card-body">
-                                  <div>
-                                    <img
-                                      src="assets/images/dashboard/circle.svg"
-                                      class="card-img-absolute"
-                                      alt="circle-image"
-                                    />
-                                    <h4 class="font-weight-normal mb-3 mt-2">
-                                      <span className="me-4">
-                                        {result?.card_title}
-                                      </span>
-                                      <i
-                                        class={`mdi ${result?.card_icon} mdi-24px float-right`}
-                                        style={{ float: "right" }}
-                                      ></i>
-                                    </h4>
-                                    <h1 class="mb-4 text-center">
-                                      {result?.card_counter_data}
-                                    </h1>
-                                  </div>
-                                </div>
-                              </NavLink>
-                            </div>
-                          </div>
-                        )
-                    )}
-                  </div>
                 </div>
-              </div>
+              )}
             </div>
             <footer class="footer">
               <Footer />

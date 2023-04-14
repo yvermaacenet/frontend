@@ -94,7 +94,7 @@ const Sign_In = () => {
                     <img src="../../assets/images/logo.svg" />
                   </div>
                   <div>
-                    <h4>Hello! let's get started with</h4>
+                    <h4>Hello! let's get started</h4>
                     <img
                       src="assets/images/zoho.svg"
                       style={{ width: "8rem" }}

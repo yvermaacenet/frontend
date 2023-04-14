@@ -23,63 +23,63 @@ const Routes_Array = [
   {
     path: "/user_list/:status_code",
     component: User_List,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management"],
   },
 
   {
     path: "/cabin_add",
     component: Cabin_Add,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["Admin"],
   },
   {
     path: "/cabin_list",
     component: Cabin_List,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["Admin"],
   },
   {
     path: "/cabin_update/:_id",
     component: Cabin_Update,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["Admin"],
   },
   //   <!================= Cabin Slot Booking ==================>
   {
     path: "/cabin_slot_booking",
     component: Cabin_Slot_Booking,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
 
   //   <!================= Boarding ==================>
   {
     path: "/on_boarding/:_id",
     component: On_Boarding,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management"],
   },
   {
     path: "/off_boarding/:_id",
     component: Off_Boarding,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["Admin", "Hr", "Management"],
   },
   //   <!================= Form's ==================>
   {
     path: "/form12bb",
     component: Form12BB,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
 
   {
     path: "/flexible_benefit_plan",
     component: Flexible_Benefit_Plan,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
   {
     path: "/get_form12bb_data",
     component: Get_Form12bb_Data,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["CA"],
   },
   {
     path: "/get_form_flexi_benefit_data",
     component: Get_Form_Flexi_Benefit_Data,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member", "CA"],
+    allowedRoles: ["CA"],
   },
   {
     path: "*",
