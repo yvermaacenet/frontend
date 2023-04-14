@@ -260,9 +260,7 @@ const Navbar = () => {
             className="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
             type="button"
             onClick={() =>
-              document
-                .getElementById("body")
-                .classList.toggle("sidebar-icon-only")
+              document.getElementById("sidebar").classList.toggle("active")
             }
           >
             <span className="mdi mdi-menu"></span>
