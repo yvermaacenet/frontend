@@ -76,7 +76,7 @@ const Cabin_Slot_Booking = () => {
           );
           return getAllEvents;
         })
-        .then((rr) => setGetCabinSlotBookingList(rr), setRenderComponent(false))
+        .then((rr) => setGetCabinSlotBookingList(rr))
         .catch((err) => {
           if (err.response.status === 500) {
             navigate("/error_500");
@@ -164,7 +164,13 @@ const Cabin_Slot_Booking = () => {
           setRenderComponent(true)
         );
       })
-      .catch((err) => err?.response?.status === 403 && navigate("/"));
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
     setLoading(false);
   };
 
@@ -194,7 +200,7 @@ const Cabin_Slot_Booking = () => {
   };
   // ====Coloring====
   const eventStyleGetter = (event, start, end, isSelected) => {
-    let backgroundColorCode = getCabinList.filter(
+    let backgroundColorCode = getCabinList?.filter(
       (val) => val._id === event.cabin_id
     );
     const style = {
