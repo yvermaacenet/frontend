@@ -5,7 +5,7 @@ const Private_Routes = ({ allowedRoles, children }) => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const role = LocalStorageData?.zoho_role;
   const isAuthorized = allowedRoles?.some((roles) => roles?.includes(role));
-  console.log("isAuthorized", isAuthorized);
+  // console.log("isAuthorized", isAuthorized);
   useEffect(() => {
     if (!isAuthorized) {
       navigate("/error_404");

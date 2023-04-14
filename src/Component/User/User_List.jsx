@@ -45,8 +45,7 @@ const User_List = () => {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((result_user_list) => {
-          const resp_user_list = result_user_list.data;
-          return setGetUserList(resp_user_list);
+          return setGetUserList(result_user_list?.data);
         })
         .catch((err) => {
           if (err.response.status === 500) {
@@ -62,8 +61,7 @@ const User_List = () => {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
-          const resp = result.data;
-          return setRoless(resp), get_user_list(resp);
+          return setRoless(result.data), get_user_list(result.data);
         })
         .catch((err) => {
           if (err.response.status === 500) {
@@ -164,7 +162,7 @@ const User_List = () => {
                       <tbody>
                         {getUserList?.map((value, index) => {
                           return (
-                            <tr>
+                            <tr key={index}>
                               <td class="py-1">
                                 <img src={value?.Photo} alt="image" />
                               </td>

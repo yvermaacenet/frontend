@@ -39,7 +39,6 @@ const Sign_In = () => {
           .post(`sign_in_zoho_get_access_token/${code}`)
           .then((result) => {
             return (
-              console.log("ewewe", result.headers),
               localStorage.setItem("loggedin", JSON.stringify(result.data)),
               navigate("/dashboard")
             );
