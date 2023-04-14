@@ -22,7 +22,6 @@ const Cabin_List = () => {
       a: "1",
     },
   });
-  console.log("getCabinList", getCabinList);
   useEffect(() => {
     setLoading(true);
     async function get_cabin_list() {
