@@ -7,7 +7,9 @@ import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import { SketchPicker } from "react-color";
 import reactCSS from "reactcss";
+import { useAlert } from "react-alert";
 const Cabin_Update = () => {
+  const alert = useAlert;
   const { _id } = useParams();
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
@@ -115,7 +117,7 @@ const Cabin_Update = () => {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((res) => {
-          return alert(res?.data.message), navigate("/cabin_list");
+          return alert.success(res?.data.message), navigate("/cabin_list");
         })
         .catch((err) => {
           if (err.response.status === 500) {

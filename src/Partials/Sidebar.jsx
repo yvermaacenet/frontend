@@ -73,38 +73,38 @@ const Sidebar = () => {
             </li>
           ) : (
             <>
-              {state?.zoho_role === "Admin" ||
+              {(state?.zoho_role === "Admin" ||
                 state?.zoho_role === "Hr" ||
                 state?.zoho_role === "Finance" ||
-                (state?.zoho_role === "Management" && (
-                  <li class="nav-item">
-                    <a
-                      class="nav-link"
-                      data-bs-toggle="collapse"
-                      href="#ui-basic"
-                      aria-expanded="false"
-                      aria-controls="ui-basic"
-                    >
-                      <span class="menu-title">Users</span>
-                      <i class="menu-arrow"></i>
-                      <i class="mdi mdi-account-multiple-outline menu-icon"></i>
-                    </a>
-                    <div class="collapse" id="ui-basic">
-                      <ul class="nav flex-column sub-menu">
-                        <ul className="nav flex-column sub-menu">
-                          <li className="nav-item">
-                            <NavLink
-                              className="nav-link"
-                              to="/user_list/all_users"
-                            >
-                              Users List
-                            </NavLink>
-                          </li>
-                        </ul>
+                state?.zoho_role === "Management") && (
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    data-bs-toggle="collapse"
+                    href="#ui-basic"
+                    aria-expanded="false"
+                    aria-controls="ui-basic"
+                  >
+                    <span class="menu-title">Users</span>
+                    <i class="menu-arrow"></i>
+                    <i class="mdi mdi-account-multiple-outline menu-icon"></i>
+                  </a>
+                  <div class="collapse" id="ui-basic">
+                    <ul class="nav flex-column sub-menu">
+                      <ul className="nav flex-column sub-menu">
+                        <li className="nav-item">
+                          <NavLink
+                            className="nav-link"
+                            to="/user_list/all_users"
+                          >
+                            Users List
+                          </NavLink>
+                        </li>
                       </ul>
-                    </div>
-                  </li>
-                ))}
+                    </ul>
+                  </div>
+                </li>
+              )}
               <li class="nav-item">
                 <a
                   class="nav-link"
@@ -121,26 +121,11 @@ const Sidebar = () => {
                   <ul class="nav flex-column sub-menu">
                     <ul className="nav flex-column sub-menu">
                       {state?.zoho_role === "Admin" && (
-                        <>
-                          <li className="nav-item">
-                            <NavLink className="nav-link" to="/cabin_add">
-                              Cabin Add
-                            </NavLink>
-                          </li>
-                          <li className="nav-item">
-                            <NavLink
-                              className="nav-link"
-                              to="/cabin_update/:_id"
-                            >
-                              Cabin Update
-                            </NavLink>
-                          </li>
-                          <li className="nav-item">
-                            <NavLink className="nav-link" to="/cabin_list">
-                              Cabin List
-                            </NavLink>
-                          </li>
-                        </>
+                        <li className="nav-item">
+                          <NavLink className="nav-link" to="/cabin_list">
+                            Cabin List
+                          </NavLink>
+                        </li>
                       )}
 
                       <li className="nav-item">

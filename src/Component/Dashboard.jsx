@@ -10,6 +10,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [state, setState] = useState(LocalStorageData);
+  const [clr, setClr] = useState("#1bcfb4");
 
   const [counterList, setCounterList] = useState([]);
   const [states, setStates] = useState({ activeIndex: 0 });
@@ -69,8 +70,14 @@ const Dashboard = () => {
   ];
 
   const data01 = [
-    { name: "Active User", value: counterList?.Active_Users },
-    { name: "Deactive User", value: counterList?.Deactive_Users },
+    {
+      name: `Active User`,
+      value: counterList?.Active_Users,
+    },
+    {
+      name: `Deactive User`,
+      value: counterList?.Deactive_Users,
+    },
   ];
 
   const renderActiveShape = (props) => {
@@ -100,8 +107,11 @@ const Dashboard = () => {
 
     return (
       <g>
-        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+        <text x={cx} y={cy} textAnchor="middle" fill={fill}>
           {payload.name}
+        </text>
+        <text x={cx} y={cy} dy={25} textAnchor="middle" fill={fill}>
+          {payload.value}
         </text>
         <Sector
           cx={cx}
@@ -121,18 +131,19 @@ const Dashboard = () => {
           outerRadius={outerRadius + 10}
           fill={fill}
         />
-        <path
+
+        {/* <path
           d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
           stroke={fill}
           fill="none"
-        />
-        <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-        <text
+        /> */}
+        {/* <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" /> */}
+        {/* <text
           x={ex + (cos >= 0 ? 1 : -1) * 12}
           y={ey}
           textAnchor={textAnchor}
           fill="#333"
-        >{`Total ${value}`}</text>
+        >{` ${value}`}</text> */}
         {/* <text
           x={ex + (cos >= 0 ? 1 : -1) * 12}
           y={ey}
@@ -149,6 +160,7 @@ const Dashboard = () => {
     setStates({
       activeIndex: index,
     });
+    setClr(index === 0 ? "#1bcfb4" : "#fe7c96");
   };
   return (
     <>
@@ -176,8 +188,8 @@ const Dashboard = () => {
                     LocalStorageData?.zoho_role === "Hr" ||
                     LocalStorageData?.zoho_role === "Finance" ||
                     LocalStorageData?.zoho_role === "Management") && (
-                    <div class="col-md-6 grid-margin">
-                      <PieChart width={600} height={220}>
+                    <div class="col-md-3 grid-margin text-center">
+                      <PieChart width={250} height={180}>
                         <Pie
                           activeIndex={states?.activeIndex}
                           activeShape={renderActiveShape}
@@ -186,22 +198,23 @@ const Dashboard = () => {
                           cy="50%"
                           innerRadius={60}
                           outerRadius={80}
-                          fill="#82ca9d"
+                          fill={clr}
                           dataKey="value"
                           onMouseEnter={onPieEnter}
+                          // onClick={() => navigate("/user_list/active_users")}
                         />
                       </PieChart>
                     </div>
                   )}
 
-                  <div class="col-md-6 grid-margin">
+                  <div class="col-md-9 grid-margin mt-3">
                     <div className="row">
                       {cardArray?.map(
                         (result) =>
                           result?.card_allowed_access.includes(
                             LocalStorageData?.zoho_role
                           ) && (
-                            <div class="col-md-6 stretch-card grid-margin">
+                            <div class="col-md-4 stretch-card grid-margin">
                               <div
                                 class={`card ${result?.card_background} card-img-holder text-white`}
                               >

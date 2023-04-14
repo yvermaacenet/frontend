@@ -5,23 +5,13 @@ import Footer from "../../Partials/Footer";
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
-import { SketchPicker } from "react-color";
 import reactCSS from "reactcss";
 const Cabin_List = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [loading, setLoading] = useState(false);
-
   const [getCabinList, setGetCabinList] = useState([]);
-  const [getChooseColor, setGetChooseColor] = useState({
-    displayColorPicker: true,
-    color: {
-      r: "241",
-      g: "112",
-      b: "19",
-      a: "1",
-    },
-  });
+
   useEffect(() => {
     setLoading(true);
     async function get_cabin_list() {

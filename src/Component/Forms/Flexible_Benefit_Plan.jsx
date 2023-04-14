@@ -195,13 +195,13 @@ const Flexible_Benefit_Plan = () => {
     };
     async function postData() {
       // setLoading(true);
-      const result = await axios
+      await axios
         .post(`form_flexi`, jsonDate, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
           return (
-            alert.show(resp.data.message),
+            alert.success(resp.data.message),
             resp.data.message === "Form has been submitted" &&
               navigate("/dashboard")
           );

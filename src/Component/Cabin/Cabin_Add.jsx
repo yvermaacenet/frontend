@@ -6,9 +6,12 @@ import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import { SketchPicker } from "react-color";
+import { useAlert } from "react-alert";
+
 import reactCSS from "reactcss";
 const Cabin_Add = () => {
   const navigate = useNavigate();
+  const alert = useAlert();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [loading, setLoading] = useState(false);
 
@@ -88,7 +91,7 @@ const Cabin_Add = () => {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
-          return alert(resp?.data.message), navigate("/cabin_list");
+          return alert.success(resp?.data.message), navigate("/cabin_list");
         })
         .catch((err) => {
           if (err.response.status === 500) {
@@ -134,6 +137,7 @@ const Cabin_Add = () => {
                               name="name"
                               class="form-control form-control-sm"
                               onChange={inputEvent}
+                              placeholder="Enter cabin name"
                               value={inputData?.name}
                             />
                           </div>

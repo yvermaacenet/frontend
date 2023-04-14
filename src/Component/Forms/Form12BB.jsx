@@ -388,40 +388,25 @@ const Form12BB = () => {
     async function postData() {
       // setLoading(true);
       setLoading(true);
-
-      if (inputData?.status === undefined) {
-        const result = await axios
-          .post(`form_12_bb`, jsonDate, {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
-          })
-          .then((resp) => {
-            return (
-              alert.show(resp.data.message),
-              resp?.data?.message === "Form has been submitted" &&
-                navigate("/"),
-              setLoading(false)
-            );
-          })
-          .catch((err) => {
-            if (err.response.status === 500) {
-              navigate("/error_500");
-            } else {
-              navigate("/error_403");
-            }
-          });
-      } else {
-        const result = await axios
-          .put(`form_12_bb/${inputData?._id}`, jsonDate, {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
-          })
-          .then((resp) => {
-            return (
-              alert.show(resp.data.message),
-              resp.data?.message === "Form has been submitted" && navigate("/"),
-              setLoading(false)
-            );
-          });
-      }
+      console.log("jsonDate", jsonDate);
+      await axios
+        .post(`form_12_bb`, jsonDate, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
+        .then((resp) => {
+          return (
+            alert.success(resp.data.message),
+            resp?.data?.message === "Form has been submitted" && navigate("/"),
+            setLoading(false)
+          );
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
     }
     postData();
   };
@@ -477,32 +462,6 @@ const Form12BB = () => {
                 <div className="row flex-grow">
                   <div className="col-lg-12 mx-auto">
                     <div className="auth-form-light text-left p-5">
-                      {/* <h2 className="text-center">
-                        FORM NO.12BB (See rule 26C)
-                      </h2>
-
-                      <h6 className="font-weight-light text-center">
-                        (See rule 26C)
-                      </h6> */}
-                      {/* <div className="text-end mb-4">
-                    <button className="btn btn-success">
-                      <NavLink
-                        to="/get_form12bb_data"
-                        className="text-light ms-2 text-decoration-none fw-lighter fs-6"
-                      >
-                        Download 12BB Data
-                      </NavLink>
-                    </button>
-                    <button className="btn btn-success ms-3">
-                      <NavLink
-                        to="/flexible_benefit_plan"
-                        className="text-light ms-2 text-decoration-none fw-lighter fs-6"
-                      >
-                        Flexible Benefit Plan
-                      </NavLink>
-                    </button>
-                  </div> */}
-
                       <form
                         className="forms-sample"
                         onSubmit={handleSubmit(onSaveButton)}
@@ -635,8 +594,7 @@ const Form12BB = () => {
                         <div className="d-flex flex-row align-items-center mb-3">
                           <i className="mdi mdi-hand-pointing-right icon-md text-secondary"></i>
                           <p className="mb-0 ms-1">
-                            {" "}
-                            Investment Declaration Self{" "}
+                            Investment Declaration Self
                           </p>
                         </div>
 
@@ -1272,10 +1230,9 @@ const Form12BB = () => {
 
                                   <td> {val?.section_type} </td>
                                   <td>
-                                    {" "}
                                     {val?.section_amount === "NA"
                                       ? 0
-                                      : val?.section_amount}{" "}
+                                      : val?.section_amount}
                                   </td>
                                   {!inputData?.status && (
                                     <td>
