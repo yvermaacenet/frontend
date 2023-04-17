@@ -237,9 +237,7 @@ const Navbar = () => {
                 className="nav-link"
                 onClick={() => {
                   return (
-                    localStorage.clear(),
-                    removeCookie("Access_Token"),
-                    navigate("/")
+                    localStorage.clear(), removeCookie(), navigate("/")
                     // alert("");
                   );
                 }}

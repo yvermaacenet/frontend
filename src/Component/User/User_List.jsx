@@ -83,7 +83,7 @@ const User_List = () => {
           <div class="main-panel">
             <div class="content-wrapper">
               <Page_Header
-                page_title="Employees"
+                page_title="User"
                 page_title_icon="mdi-account-multiple-outline"
                 page_title_button="Back"
                 page_title_button_link="/dashboard"
@@ -103,20 +103,20 @@ const User_List = () => {
                     >
                       All
                     </button>
-                    <button
+                    {/* <button
                       type="button"
                       class="btn btn-sm btn-inverse-success btn-fw ms-1"
                       onClick={() => setStatus_code("active_users")}
                     >
                       Active
-                    </button>
-                    <button
+                    </button> */}
+                    {/* <button
                       type="button"
                       class="btn btn-sm btn-inverse-danger btn-fw ms-1"
                       onClick={() => setStatus_code("deactive_users")}
                     >
                       Deactivated
-                    </button>
+                    </button> */}
                     <button
                       type="button"
                       class="btn btn-sm btn-inverse-primary btn-fw ms-1"
@@ -126,7 +126,7 @@ const User_List = () => {
                     </button>
                     <button
                       type="button"
-                      class="btn btn-sm btn-inverse-secondary btn-fw ms-1"
+                      class="btn btn-sm btn-inverse-dark btn-fw ms-1"
                       onClick={() =>
                         setStatus_code("pending_offboarding_users")
                       }
