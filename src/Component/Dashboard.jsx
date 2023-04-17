@@ -214,89 +214,86 @@ const Dashboard = () => {
                   <div className="loader"></div>
                 </div>
               )}
-              {state?.zoho_role === "CA" ? (
-                ""
-              ) : (
-                <>
-                  <div className="row">
-                    {cardArray?.map(
-                      (result) =>
-                        result?.card_allowed_access.includes(
-                          LocalStorageData?.zoho_role
-                        ) && (
-                          <div className="col-md-3 stretch-card grid-margin">
-                            <div
-                              className={`card ${result?.card_background} card-img-holder text-white`}
+
+              <>
+                <div className="row">
+                  {cardArray?.map(
+                    (result) =>
+                      result?.card_allowed_access.includes(
+                        LocalStorageData?.zoho_role
+                      ) && (
+                        <div className="col-md-3 stretch-card grid-margin">
+                          <div
+                            className={`card ${result?.card_background} card-img-holder text-white`}
+                          >
+                            <NavLink
+                              to={result?.path}
+                              style={{
+                                color: "#f8f8f8",
+                                textDecoration: "none",
+                              }}
                             >
-                              <NavLink
-                                to={result?.path}
-                                style={{
-                                  color: "#f8f8f8",
-                                  textDecoration: "none",
-                                }}
-                              >
-                                <div className="card-body">
-                                  <div>
-                                    <img
-                                      src="assets/images/dashboard/circle.svg"
-                                      className="card-img-absolute"
-                                      alt="circle-image"
-                                    />
-                                    <h4 className="font-weight-normal mb-3 mt-2">
-                                      <span className="me-4">
-                                        {result?.card_title}
-                                      </span>
-                                      <i
-                                        className={`mdi ${result?.card_icon} mdi-24px float-right`}
-                                        style={{ float: "right" }}
-                                      ></i>
-                                    </h4>
-                                    <h1 className="mb-4 text-center">
-                                      {result?.card_counter_data}
-                                    </h1>
-                                  </div>
+                              <div className="card-body">
+                                <div>
+                                  <img
+                                    src="assets/images/dashboard/circle.svg"
+                                    className="card-img-absolute"
+                                    alt="circle-image"
+                                  />
+                                  <h4 className="font-weight-normal mb-3 mt-2">
+                                    <span className="me-4">
+                                      {result?.card_title}
+                                    </span>
+                                    <i
+                                      className={`mdi ${result?.card_icon} mdi-24px float-right`}
+                                      style={{ float: "right" }}
+                                    ></i>
+                                  </h4>
+                                  <h1 className="mb-4 text-center">
+                                    {result?.card_counter_data}
+                                  </h1>
                                 </div>
-                              </NavLink>
-                            </div>
+                              </div>
+                            </NavLink>
                           </div>
-                        )
-                    )}
-                  </div>
+                        </div>
+                      )
+                  )}
+                </div>
 
-                  <div className="row">
-                    <div className="col-md-12">
-                      <div className="template-demo mt-2">
-                        <NavLink
-                          to="/form12bb"
-                          className="btn btn-outline-dark btn-icon-text"
-                        >
-                          <i className="mdi mdi-book-plus btn-icon-prepend  "></i>
-                          <span className="d-inline-block text-left">
-                            <small className="font-weight-light d-block">
-                              Available on the
-                            </small>
-                            12 BB
-                          </span>
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="template-demo mt-2">
+                      <NavLink
+                        to="/form12bb"
+                        className="btn btn-outline-dark btn-icon-text"
+                      >
+                        <i className="mdi mdi-book-plus btn-icon-prepend  "></i>
+                        <span className="d-inline-block text-left">
+                          <small className="font-weight-light d-block">
+                            Available on the
+                          </small>
+                          12 BB
+                        </span>
 
-                          {/*  */}
-                        </NavLink>
-                        <NavLink
-                          to="/flexible_benefit_plan"
-                          className="btn btn-outline-dark btn-icon-text"
-                        >
-                          <i className="mdi mdi-book-plus btn-icon-prepend  "></i>
-                          <span className="d-inline-block text-left">
-                            <small className="font-weight-light d-block">
-                              Get it on the
-                            </small>
-                            Flexible Benifit
-                          </span>
-                        </NavLink>
-                      </div>
+                        {/*  */}
+                      </NavLink>
+                      <NavLink
+                        to="/flexible_benefit_plan"
+                        className="btn btn-outline-dark btn-icon-text"
+                      >
+                        <i className="mdi mdi-book-plus btn-icon-prepend  "></i>
+                        <span className="d-inline-block text-left">
+                          <small className="font-weight-light d-block">
+                            Get it on the
+                          </small>
+                          Flexible Benifit
+                        </span>
+                      </NavLink>
                     </div>
                   </div>
-                </>
-              )}
+                </div>
+              </>
             </div>
             <footer className="footer">
               <Footer />
