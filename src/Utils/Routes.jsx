@@ -74,12 +74,12 @@ const Routes_Array = [
   {
     path: "/get_form12bb_data",
     component: Get_Form12bb_Data,
-    allowedRoles: ["CA"],
+    allowedRoles: ["Admin"],
   },
   {
     path: "/get_form_flexi_benefit_data",
     component: Get_Form_Flexi_Benefit_Data,
-    allowedRoles: ["CA"],
+    allowedRoles: ["Admin"],
   },
   {
     path: "*",

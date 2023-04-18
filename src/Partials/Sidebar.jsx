@@ -36,141 +36,115 @@ const Sidebar = () => {
             </NavLink>
           </li>
 
-          {state?.zoho_role === "CA" ? (
+          <>
+            {(state?.zoho_role === "Admin" ||
+              state?.zoho_role === "Hr" ||
+              state?.zoho_role === "Finance" ||
+              state?.zoho_role === "Management") && (
+              <li class="nav-item">
+                <a
+                  class="nav-link"
+                  data-bs-toggle="collapse"
+                  href="#ui-basic"
+                  aria-expanded="false"
+                  aria-controls="ui-basic"
+                >
+                  <span class="menu-title">Users</span>
+                  <i class="menu-arrow"></i>
+                  <i class="mdi mdi-account-multiple-outline menu-icon"></i>
+                </a>
+                <div class="collapse" id="ui-basic">
+                  <ul class="nav flex-column sub-menu">
+                    <ul className="nav flex-column sub-menu">
+                      <li className="nav-item">
+                        <NavLink className="nav-link" to="/user_list/all_users">
+                          Users List
+                        </NavLink>
+                      </li>
+                    </ul>
+                  </ul>
+                </div>
+              </li>
+            )}
             <li class="nav-item">
               <a
                 class="nav-link"
                 data-bs-toggle="collapse"
-                href="#ui-form-download"
+                href="#ui-cabin"
                 aria-expanded="false"
                 aria-controls="ui-basic"
               >
-                <span class="menu-title">Forms </span>
+                <span class="menu-title">Cabin</span>
                 <i class="menu-arrow"></i>
-                <i class="mdi mdi-book-plus menu-icon"></i>
+                <i class="mdi mdi-home-modern menu-icon"></i>
               </a>
-              <div class="collapse" id="ui-form-download">
+              <div class="collapse" id="ui-cabin">
                 <ul class="nav flex-column sub-menu">
                   <ul className="nav flex-column sub-menu">
+                    {state?.zoho_role === "Admin" && (
+                      <li className="nav-item">
+                        <NavLink className="nav-link" to="/cabin_list">
+                          Cabin List
+                        </NavLink>
+                      </li>
+                    )}
+
                     <li className="nav-item">
-                      <NavLink className="nav-link" to="/get_form12bb_data">
-                        {/* Form Flexible Benefit */}
-                        Form 12 BB
-                      </NavLink>
-                    </li>
-                    <li className="nav-item">
-                      <NavLink
-                        className="nav-link"
-                        to="/get_form_flexi_benefit_data"
-                      >
-                        {/* Form 12 BB */}
-                        Form Flexible Benefit
+                      <NavLink className="nav-link" to="/cabin_slot_booking">
+                        Cabin Booking
                       </NavLink>
                     </li>
                   </ul>
                 </ul>
               </div>
             </li>
-          ) : (
-            <>
-              {(state?.zoho_role === "Admin" ||
-                state?.zoho_role === "Hr" ||
-                state?.zoho_role === "Finance" ||
-                state?.zoho_role === "Management") && (
-                <li class="nav-item">
-                  <a
-                    class="nav-link"
-                    data-bs-toggle="collapse"
-                    href="#ui-basic"
-                    aria-expanded="false"
-                    aria-controls="ui-basic"
-                  >
-                    <span class="menu-title">Users</span>
-                    <i class="menu-arrow"></i>
-                    <i class="mdi mdi-account-multiple-outline menu-icon"></i>
-                  </a>
-                  <div class="collapse" id="ui-basic">
-                    <ul class="nav flex-column sub-menu">
-                      <ul className="nav flex-column sub-menu">
-                        <li className="nav-item">
-                          <NavLink
-                            className="nav-link"
-                            to="/user_list/all_users"
-                          >
-                            Users List
-                          </NavLink>
-                        </li>
-                      </ul>
-                    </ul>
-                  </div>
-                </li>
-              )}
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  data-bs-toggle="collapse"
-                  href="#ui-cabin"
-                  aria-expanded="false"
-                  aria-controls="ui-basic"
-                >
-                  <span class="menu-title">Cabin</span>
-                  <i class="menu-arrow"></i>
-                  <i class="mdi mdi-home-modern menu-icon"></i>
-                </a>
-                <div class="collapse" id="ui-cabin">
-                  <ul class="nav flex-column sub-menu">
-                    <ul className="nav flex-column sub-menu">
-                      {state?.zoho_role === "Admin" && (
-                        <li className="nav-item">
-                          <NavLink className="nav-link" to="/cabin_list">
-                            Cabin List
-                          </NavLink>
-                        </li>
-                      )}
-
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                data-bs-toggle="collapse"
+                href="#ui-form"
+                aria-expanded="false"
+                aria-controls="ui-basic"
+              >
+                <span class="menu-title">Forms</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-book-plus menu-icon"></i>
+              </a>
+              <div class="collapse" id="ui-form">
+                <ul class="nav flex-column sub-menu">
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/form12bb">
+                      Form 12 BB
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/flexible_benefit_plan">
+                      Form Flexible Benefit
+                    </NavLink>
+                  </li>
+                  {LocalStorageData?.zoho_role === "Finance" && (
+                    <>
                       <li className="nav-item">
-                        <NavLink className="nav-link" to="/cabin_slot_booking">
-                          Cabin Booking
-                        </NavLink>
-                      </li>
-                    </ul>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  data-bs-toggle="collapse"
-                  href="#ui-form"
-                  aria-expanded="false"
-                  aria-controls="ui-basic"
-                >
-                  <span class="menu-title">Forms</span>
-                  <i class="menu-arrow"></i>
-                  <i class="mdi mdi-book-plus menu-icon"></i>
-                </a>
-                <div class="collapse" id="ui-form">
-                  <ul class="nav flex-column sub-menu">
-                    <ul className="nav flex-column sub-menu">
-                      <li className="nav-item">
-                        <NavLink className="nav-link" to="/form12bb">
-                          Form 12 BB
+                        <NavLink className="nav-link" to="/get_form12bb_data">
+                          {/* Form Flexible Benefit */}
+                          Download Form 12 BB <br /> Data
                         </NavLink>
                       </li>
                       <li className="nav-item">
                         <NavLink
                           className="nav-link"
-                          to="/flexible_benefit_plan"
+                          to="/get_form_flexi_benefit_data"
                         >
-                          Form Flexible Benefit
+                          {/* Form 12 BB */}
+                          Download Form Flexible <br /> Benefit Data
                         </NavLink>
                       </li>
-                    </ul>
-                  </ul>
-                </div>
-              </li>
-            </>
-          )}
+                    </>
+                  )}
+                </ul>
+              </div>
+            </li>
+          </>
         </ul>
       </nav>
     </>

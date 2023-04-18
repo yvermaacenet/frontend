@@ -6,6 +6,8 @@ import Navbar from "../Partials/Navbar";
 import Page_Header from "../Partials/Page_Header";
 import Sidebar from "../Partials/Sidebar";
 import { PieChart, Pie, Sector } from "recharts";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Dashboard = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
@@ -15,6 +17,13 @@ const Dashboard = () => {
   const [counterList, setCounterList] = useState([]);
   const [states, setStates] = useState({ activeIndex: 0 });
   const [loading, setLoading] = useState(false);
+  const toaster = () => {
+    const messageDisplayed = localStorage.getItem("messageDisplayed");
+    if (!messageDisplayed) {
+      toast.success(`Welcome ${LocalStorageData?.name}!`);
+      localStorage.setItem("messageDisplayed", true);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -34,6 +43,7 @@ const Dashboard = () => {
           }
         });
     }
+    toaster();
     get_counterList();
   }, []);
   const cardArray = [
@@ -41,7 +51,7 @@ const Dashboard = () => {
       card_background: "bg-gradient-success",
       path: "/user_list/active_users",
       card_title: "Users",
-      card_icon: "mdi-account",
+      card_icon: "mdi-account-multiple-outline",
       card_counter_data: counterList?.Active_Users,
       card_allowed_access: ["Admin", "Hr", "Finance", "Management"],
     },
@@ -89,7 +99,14 @@ const Dashboard = () => {
       ],
     },
     {
-      card_background: "bg-gradient-info",
+      card_background: "bg-gradient-dark",
+      path: "/get_form12bb_data",
+      card_title: "Download Form 12 BB Data",
+      card_icon: "mdi-book-plus",
+      card_allowed_access: ["Finance"],
+    },
+    {
+      card_background: "bg-gradient-danger",
       path: "/flexible_benefit_plan",
       card_title: "Form Flexible Benefit",
       card_icon: "mdi-book-plus",
@@ -100,6 +117,13 @@ const Dashboard = () => {
         "Management",
         "Team member",
       ],
+    },
+    {
+      card_background: "bg-gradient-primary",
+      path: "/get_form_flexi_benefit_data",
+      card_title: "Download Form Flexible Benefit Data",
+      card_icon: "mdi-book-plus",
+      card_allowed_access: ["Finance"],
     },
   ];
 
@@ -216,6 +240,21 @@ const Dashboard = () => {
               )}
 
               <>
+                <div>
+                  {/* Other dashboard content */}
+                  <ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                  />
+                </div>
                 <div className="row">
                   {cardArray?.map(
                     (result) =>

@@ -436,7 +436,6 @@ const On_Boarding = () => {
                   <div style={{ margin: "40px" }}>
                     <form class="forms-sample">
                       <>
-                        (Not Team member)
                         <MultiStepForm activeStep={active}>
                           <Step label="First Day Formalities (HR)">
                             <>

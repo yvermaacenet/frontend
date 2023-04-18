@@ -10,6 +10,7 @@ import PureModal from "react-pure-modal";
 import { useParams } from "react-router-dom";
 
 const User_List = () => {
+  const specificDate = "2023-04-17";
   const navigate = useNavigate();
   const { status_code } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
@@ -74,14 +75,38 @@ const User_List = () => {
     }
     get_user_list_by_role_name();
   }, [getStatus_code]);
+  const compareDates = (d1, d2) => {
+    let date1 = new Date(d1);
+    let date2 = new Date(d2);
+    // console.log("date1", date1);
+    // console.log("date2", date2);
+    if (date1 < date2) {
+      return false;
+    } else if (date1 > date2) {
+      // const s1 = new Date(Date.now(date1) + 10 * 24 * 60 * 60 * 1000);
+      // const s2 = new Date(Date.now());
+      // console.log("s1", s1);
+      // console.log("s2", s2);
+      if (
+        new Date(Date.now(date1) - 10 * 24 * 60 * 60 * 1000) >
+        new Date(Date.now())
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  };
   return (
     <>
-      <div class="container-scroller">
+      <div className="container-scroller">
         <Navbar />
-        <div class="container-fluid page-body-wrapper">
+        <div className="container-fluid page-body-wrapper">
           <Sidebar />
-          <div class="main-panel">
-            <div class="content-wrapper">
+          <div className="main-panel">
+            <div className="content-wrapper">
               <Page_Header
                 page_title="User"
                 page_title_icon="mdi-account-multiple-outline"
@@ -90,43 +115,43 @@ const User_List = () => {
               />
               {loading && (
                 <div className="loader-container">
-                  <div class="loader"></div>
+                  <div className="loader"></div>
                 </div>
               )}
-              <div class="row">
-                <div class="card">
-                  <div class="card-body">
+              <div className="row">
+                <div className="card">
+                  <div className="card-body">
                     <button
                       type="button"
-                      class="btn btn-sm btn-inverse-info btn-fw ms-1"
+                      className="btn btn-sm btn-inverse-info btn-fw ms-1"
                       onClick={() => setStatus_code("all_users")}
                     >
                       All
                     </button>
                     {/* <button
                       type="button"
-                      class="btn btn-sm btn-inverse-success btn-fw ms-1"
+                      className="btn btn-sm btn-inverse-success btn-fw ms-1"
                       onClick={() => setStatus_code("active_users")}
                     >
                       Active
                     </button> */}
                     {/* <button
                       type="button"
-                      class="btn btn-sm btn-inverse-danger btn-fw ms-1"
+                      className="btn btn-sm btn-inverse-danger btn-fw ms-1"
                       onClick={() => setStatus_code("deactive_users")}
                     >
                       Deactivated
                     </button> */}
                     <button
                       type="button"
-                      class="btn btn-sm btn-inverse-primary btn-fw ms-1"
+                      className="btn btn-sm btn-inverse-primary btn-fw ms-1"
                       onClick={() => setStatus_code("pending_onboarding_users")}
                     >
                       Pending Onboarding
                     </button>
                     <button
                       type="button"
-                      class="btn btn-sm btn-inverse-dark btn-fw ms-1"
+                      className="btn btn-sm btn-inverse-dark btn-fw ms-1"
                       onClick={() =>
                         setStatus_code("pending_offboarding_users")
                       }
@@ -136,17 +161,17 @@ const User_List = () => {
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="card">
+              <div className="row">
+                <div className="card">
                   <div
-                    class="card-body"
+                    className="card-body"
                     style={{
                       maxWidth: "100%",
                       overflow: "hidden",
                       overflowX: "scroll",
                     }}
                   >
-                    <table class="table table-striped">
+                    <table className="table table-striped">
                       <thead>
                         <tr>
                           <th>#</th>
@@ -155,7 +180,8 @@ const User_List = () => {
                           <th>Zoho Role</th>
                           <th>Phone</th>
                           <th>Email</th>
-                          <th>Status</th>
+                          {/* <th>Status</th> */}
+
                           <th>Boarding Type</th>
                         </tr>
                       </thead>
@@ -163,12 +189,27 @@ const User_List = () => {
                         {getUserList?.map((value, index) => {
                           return (
                             <tr key={index}>
-                              <td class="py-1">
+                              <td className="py-1">
                                 <img src={value?.Photo} alt="image" />
                               </td>
-                              {/* <td class="py-1">{value["Employee ID"]}</td> */}
+                              {/* <td className="py-1">{value["Employee ID"]}</td> */}
                               <td>
-                                {value["First Name"]} {value["Last Name"]}
+                                {value["First Name"]} {value["Last Name"]}{" "}
+                                <span
+                                  className="badge badge-success"
+                                  style={{
+                                    borderRadius: "20px",
+                                    display:
+                                      compareDates(
+                                        value?.creation_date?.split("T")[0],
+                                        specificDate
+                                      ) === true
+                                        ? "inline-block"
+                                        : "none",
+                                  }}
+                                >
+                                  New Joining
+                                </span>
                               </td>
                               <td>{value["Zoho Role"]}</td>
                               <td>
@@ -177,120 +218,126 @@ const User_List = () => {
                                   : value["Personal Mobile Number"]}
                               </td>
                               <td> {value["Email address"]} </td>
-                              <td>
+                              {/* <td>
                                 {value["Employee Status"] === "Active" ? (
-                                  <label class="badge badge-success">
+                                  <label className="badge badge-success">
                                     Active
                                   </label>
                                 ) : (
-                                  <label class="badge badge-danger">
+                                  <label className="badge badge-danger">
                                     Deactive
                                   </label>
                                 )}
-                              </td>
+                              </td> */}
 
                               <td>
                                 {/* ================ On Boarding Button ============= */}
-
-                                {roless?.Admin?.includes(
-                                  LocalStorageData?.user_id
-                                ) ||
-                                roless?.Hr?.includes(
-                                  LocalStorageData?.user_id
-                                ) ||
-                                (roless?.Finance?.includes(
-                                  LocalStorageData?.user_id
-                                ) &&
-                                  value?.on_boarding_steper_counter >= 1) ||
-                                (roless?.Management?.includes(
-                                  LocalStorageData?.user_id
-                                ) &&
-                                  value?.on_boarding_steper_counter >= 2) ? (
-                                  <NavLink to={`/on_boarding/${value?._id}`}>
+                                {compareDates(
+                                  value?.creation_date?.split("T")[0],
+                                  specificDate
+                                ) === true ? (
+                                  roless?.Admin?.includes(
+                                    LocalStorageData?.user_id
+                                  ) ||
+                                  roless?.Hr?.includes(
+                                    LocalStorageData?.user_id
+                                  ) ||
+                                  (roless?.Finance?.includes(
+                                    LocalStorageData?.user_id
+                                  ) &&
+                                    value?.on_boarding_steper_counter >= 1) ||
+                                  (roless?.Management?.includes(
+                                    LocalStorageData?.user_id
+                                  ) &&
+                                    value?.on_boarding_steper_counter >= 2) ? (
+                                    <NavLink to={`/on_boarding/${value?._id}`}>
+                                      <button
+                                        type="button"
+                                        className={`btn btn-sm ${
+                                          value?.on_boarding_status
+                                            ? "btn-inverse-success"
+                                            : value?.on_boarding_steper_counter >=
+                                              1
+                                            ? "btn-inverse-warning"
+                                            : "btn-inverse-danger"
+                                        } btn-icon ms-2`}
+                                        title="Onboarding"
+                                      >
+                                        <i className="mdi mdi-airplane"></i>
+                                      </button>
+                                    </NavLink>
+                                  ) : (
                                     <button
                                       type="button"
-                                      class={`btn btn-sm ${
+                                      className={`btn btn-sm ${
                                         value?.on_boarding_status
                                           ? "btn-inverse-success"
-                                          : value?.on_boarding_steper_counter >=
-                                            1
+                                          : value?.on_boarding_steper_counter >
+                                            0
                                           ? "btn-inverse-warning"
                                           : "btn-inverse-danger"
                                       } btn-icon ms-2`}
                                       title="Onboarding"
+                                      disabled
                                     >
-                                      <i class="mdi mdi-airplane"></i>
+                                      <i className="mdi mdi-airplane"></i>
                                     </button>
-                                  </NavLink>
+                                  )
                                 ) : (
-                                  <button
-                                    type="button"
-                                    class={`btn btn-sm ${
-                                      value?.on_boarding_status
-                                        ? "btn-inverse-success"
-                                        : value?.on_boarding_steper_counter > 0
-                                        ? "btn-inverse-warning"
-                                        : "btn-inverse-danger"
-                                    } btn-icon ms-2`}
-                                    title="Onboarding"
-                                    disabled
-                                  >
-                                    <i class="mdi mdi-airplane"></i>
-                                  </button>
+                                  ""
                                 )}
+
                                 {/* ================ Off Boarding Button ============= */}
 
-                                {value?.on_boarding_status === true &&
-                                (roless?.Admin?.includes(
+                                {roless?.Admin?.includes(
                                   LocalStorageData?.user_id
                                 ) ||
-                                  (roless?.Hr?.includes(
-                                    LocalStorageData?.user_id
-                                  ) &&
-                                    value?.off_boarding_steper_counter >= 0) ||
-                                  (roless?.Management?.includes(
-                                    LocalStorageData?.user_id
-                                  ) &&
-                                    value?.off_boarding_steper_counter >=
-                                      2)) ? (
+                                (roless?.Hr?.includes(
+                                  LocalStorageData?.user_id
+                                ) &&
+                                  value?.off_boarding_steper_counter >= 0) ||
+                                (roless?.Management?.includes(
+                                  LocalStorageData?.user_id
+                                ) &&
+                                  value?.off_boarding_steper_counter >= 2) ? (
                                   <NavLink to={`/off_boarding/${value?._id}`}>
                                     <button
                                       type="button"
-                                      class={`btn btn-sm ${
+                                      className={`btn btn-sm ${
                                         value?.off_boarding_status
                                           ? "btn-inverse-success"
-                                          : value?.off_boarding_steper_counter >
+                                          : value?.off_boarding_steper_counter >=
                                             1
-                                          ? "btn-inverse-warning"
-                                          : "btn-inverse-danger"
-                                      } btn-icon ms-2`}
+                                          ? "btn-inverse-danger"
+                                          : "btn-inverse-info"
+                                      } ms-2`}
                                       title="Offboarding"
-                                      // style={{
-                                      //   display:
-                                      //     roless?.finance?.includes(
-                                      //       LocalStorageData?.user_id
-                                      //     ) && "none",
-                                      // }}
-                                      // disabled
                                     >
-                                      <i class="mdi mdi-airplane-off"></i>
+                                      {value?.off_boarding_status
+                                        ? "Resignation is completed"
+                                        : value?.off_boarding_steper_counter >=
+                                          1
+                                        ? "Resignation is pending"
+                                        : "Initiate Resignation"}
                                     </button>
                                   </NavLink>
                                 ) : (
-                                  <button
-                                    type="button"
-                                    class={`btn btn-sm  btn-inverse-dark btn-icon ms-2`}
-                                    title="Offboarding"
-                                    // style={{
-                                    //   display:
-                                    //     roless?.finance?.includes(
-                                    //       LocalStorageData?.user_id
-                                    //     ) && "none",
-                                    // }}
-                                    disabled
-                                  >
-                                    <i class="mdi mdi-airplane-off"></i>
-                                  </button>
+                                  // <button
+                                  //   type="button"
+                                  //   className="btn btn-sm btn-inverse-info  ms-2"
+                                  //   title="Offboarding"
+                                  //   onClick={() => {
+                                  //     const confirmationButton = window.confirm(
+                                  //       "Do you really want to Initiate Resignation?"
+                                  //     );
+                                  //     if (confirmationButton === true) {
+                                  //       navigate(`/off_boarding/${value?._id}`);
+                                  //     }
+                                  //   }}
+                                  // >
+                                  //   Initiate Resignation
+                                  // </button>
+                                  "ff"
                                 )}
                               </td>
                             </tr>
@@ -330,7 +377,7 @@ const User_List = () => {
                       ></i>
                     </a>
                   </h6>
-                  <div class="modal-footer">
+                  <div className="modal-footer">
                     <button
                       onClick={async () => {
                         const res = await axios
@@ -348,7 +395,7 @@ const User_List = () => {
                           });
                       }}
                       type="button"
-                      class="btn btn-sm btn-success mt-4"
+                      className="btn btn-sm btn-success mt-4"
                     >
                       Upload File
                     </button>
@@ -357,7 +404,7 @@ const User_List = () => {
               </PureModal>
             </div>
 
-            <footer class="footer">
+            <footer className="footer">
               <Footer />
             </footer>
           </div>
