@@ -65,7 +65,7 @@ const Dashboard = () => {
     },
     {
       card_background: "bg-gradient-secondary",
-      path: "/",
+      path: "/user_list/pending_offboarding_users",
       card_title: "Pending Offboarding",
       card_icon: "mdi-airplane-off",
       card_counter_data: counterList?.Pending_Offboarding,

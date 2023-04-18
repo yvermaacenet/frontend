@@ -15,7 +15,7 @@ const Cabin_List = () => {
   useEffect(() => {
     setLoading(true);
     async function get_cabin_list() {
-      const result_cabin_list = await axios
+      await axios
         .get("cabin_list", {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
@@ -89,17 +89,19 @@ const Cabin_List = () => {
                         <tr>
                           <th>#</th>
                           <th>Name</th>
+                          <th>Location</th>
                           <th>Color code</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {getCabinList.map((value, index) => {
+                        {getCabinList?.map((value, index) => {
                           return (
-                            <tr>
+                            <tr key={index}>
                               <td>{index + 1}</td>
-                              <td>{value.name}</td>
+                              <td>{value?.name}</td>
+                              <td>{value?.location}</td>
                               <td>
                                 <div
                                   style={styles.swatch}

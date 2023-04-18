@@ -10,7 +10,7 @@ import PureModal from "react-pure-modal";
 import { useParams } from "react-router-dom";
 
 const User_List = () => {
-  const specificDate = "2023-04-17";
+  const specificDate = "2023-04-01";
   const navigate = useNavigate();
   const { status_code } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
@@ -37,7 +37,6 @@ const User_List = () => {
 
     reader.readAsArrayBuffer(file);
   }
-  console.log("upload data", uploadData);
   useEffect(() => {
     setLoading(true);
     async function get_user_list(resp) {
@@ -78,20 +77,32 @@ const User_List = () => {
   const compareDates = (d1, d2) => {
     let date1 = new Date(d1);
     let date2 = new Date(d2);
-    // console.log("date1", date1);
-    // console.log("date2", date2);
+
     if (date1 < date2) {
       return false;
-    } else if (date1 > date2) {
-      // const s1 = new Date(Date.now(date1) + 10 * 24 * 60 * 60 * 1000);
-      // const s2 = new Date(Date.now());
-      // console.log("s1", s1);
-      // console.log("s2", s2);
-      if (
-        new Date(Date.now(date1) - 10 * 24 * 60 * 60 * 1000) >
-        new Date(Date.now())
-      ) {
+    } else if (date1 >= date2) {
+      const s1 = new Date(date1.getTime() + 10 * 24 * 60 * 60 * 1000);
+      const s2 = new Date(Date.now());
+      if (s1 > s2) {
+        return true;
+      } else {
         return false;
+      }
+    } else {
+      return false;
+    }
+  };
+  const compareDates1 = (d1, d2) => {
+    let date1 = new Date(d1);
+    let date2 = new Date(d2);
+
+    if (date1 < date2) {
+      return false;
+    } else if (date1 >= date2) {
+      const s1 = new Date(date1.getTime() + 10 * 24 * 60 * 60 * 1000);
+      const s2 = new Date(Date.now());
+      if (s1 > s2) {
+        return true;
       } else {
         return true;
       }
@@ -99,6 +110,7 @@ const User_List = () => {
       return false;
     }
   };
+
   return (
     <>
       <div className="container-scroller">
@@ -175,14 +187,12 @@ const User_List = () => {
                       <thead>
                         <tr>
                           <th>#</th>
-                          {/* <th>Employee ID</th> */}
+                          <th>Employee ID</th>
                           <th>Name</th>
                           <th>Zoho Role</th>
                           <th>Phone</th>
                           <th>Email</th>
-                          {/* <th>Status</th> */}
-
-                          <th>Boarding Type</th>
+                          <th>Onboarding/Offboarding </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -192,9 +202,9 @@ const User_List = () => {
                               <td className="py-1">
                                 <img src={value?.Photo} alt="image" />
                               </td>
-                              {/* <td className="py-1">{value["Employee ID"]}</td> */}
+                              <td className="py-1">{value["Employee ID"]}</td>
                               <td>
-                                {value["First Name"]} {value["Last Name"]}{" "}
+                                {value["First Name"]} {value["Last Name"]}
                                 <span
                                   className="badge badge-success"
                                   style={{
@@ -218,25 +228,14 @@ const User_List = () => {
                                   : value["Personal Mobile Number"]}
                               </td>
                               <td> {value["Email address"]} </td>
-                              {/* <td>
-                                {value["Employee Status"] === "Active" ? (
-                                  <label className="badge badge-success">
-                                    Active
-                                  </label>
-                                ) : (
-                                  <label className="badge badge-danger">
-                                    Deactive
-                                  </label>
-                                )}
-                              </td> */}
-
+                              <td>{value?.creation_date}</td>
                               <td>
                                 {/* ================ On Boarding Button ============= */}
-                                {compareDates(
+                                {compareDates1(
                                   value?.creation_date?.split("T")[0],
                                   specificDate
-                                ) === true ? (
-                                  roless?.Admin?.includes(
+                                ) === true &&
+                                  (roless?.Admin?.includes(
                                     LocalStorageData?.user_id
                                   ) ||
                                   roless?.Hr?.includes(
@@ -250,42 +249,39 @@ const User_List = () => {
                                     LocalStorageData?.user_id
                                   ) &&
                                     value?.on_boarding_steper_counter >= 2) ? (
-                                    <NavLink to={`/on_boarding/${value?._id}`}>
-                                      <button
-                                        type="button"
-                                        className={`btn btn-sm ${
-                                          value?.on_boarding_status
-                                            ? "btn-inverse-success"
-                                            : value?.on_boarding_steper_counter >=
-                                              1
-                                            ? "btn-inverse-warning"
-                                            : "btn-inverse-danger"
-                                        } btn-icon ms-2`}
-                                        title="Onboarding"
-                                      >
-                                        <i className="mdi mdi-airplane"></i>
-                                      </button>
-                                    </NavLink>
-                                  ) : (
                                     <button
                                       type="button"
                                       className={`btn btn-sm ${
                                         value?.on_boarding_status
                                           ? "btn-inverse-success"
-                                          : value?.on_boarding_steper_counter >
-                                            0
-                                          ? "btn-inverse-warning"
+                                          : value?.on_boarding_steper_counter >=
+                                            1
+                                          ? "btn-inverse-primary"
                                           : "btn-inverse-danger"
-                                      } btn-icon ms-2`}
+                                      } ms-2`}
                                       title="Onboarding"
-                                      disabled
+                                      onClick={() => {
+                                        const confirmationButton =
+                                          window.confirm(
+                                            "Do you really want to Initiate Onboarding?"
+                                          );
+                                        if (confirmationButton === true) {
+                                          navigate(
+                                            `/on_boarding/${value?._id}`
+                                          );
+                                        }
+                                      }}
                                     >
-                                      <i className="mdi mdi-airplane"></i>
+                                      {value?.on_boarding_status
+                                        ? "Onboarding is completed"
+                                        : value?.off_boarding_steper_counter >=
+                                          1
+                                        ? "Onboarding is pending"
+                                        : "Initiate Onboarding"}
                                     </button>
-                                  )
-                                ) : (
-                                  ""
-                                )}
+                                  ) : (
+                                    ""
+                                  ))}
 
                                 {/* ================ Off Boarding Button ============= */}
 
@@ -300,44 +296,34 @@ const User_List = () => {
                                   LocalStorageData?.user_id
                                 ) &&
                                   value?.off_boarding_steper_counter >= 2) ? (
-                                  <NavLink to={`/off_boarding/${value?._id}`}>
-                                    <button
-                                      type="button"
-                                      className={`btn btn-sm ${
-                                        value?.off_boarding_status
-                                          ? "btn-inverse-success"
-                                          : value?.off_boarding_steper_counter >=
-                                            1
-                                          ? "btn-inverse-danger"
-                                          : "btn-inverse-info"
-                                      } ms-2`}
-                                      title="Offboarding"
-                                    >
-                                      {value?.off_boarding_status
-                                        ? "Resignation is completed"
+                                  <button
+                                    type="button"
+                                    className={`btn btn-sm ${
+                                      value?.off_boarding_status
+                                        ? "btn-inverse-success"
                                         : value?.off_boarding_steper_counter >=
                                           1
-                                        ? "Resignation is pending"
-                                        : "Initiate Resignation"}
-                                    </button>
-                                  </NavLink>
+                                        ? "btn-inverse-danger"
+                                        : "btn-inverse-info"
+                                    } ms-2`}
+                                    title="Offboarding"
+                                    onClick={() => {
+                                      const confirmationButton = window.confirm(
+                                        "Do you really want to Initiate Resignation?"
+                                      );
+                                      if (confirmationButton === true) {
+                                        navigate(`/off_boarding/${value?._id}`);
+                                      }
+                                    }}
+                                  >
+                                    {value?.off_boarding_status
+                                      ? "Resignation is completed"
+                                      : value?.off_boarding_steper_counter >= 1
+                                      ? "Resignation is pending"
+                                      : "Initiate Resignation"}
+                                  </button>
                                 ) : (
-                                  // <button
-                                  //   type="button"
-                                  //   className="btn btn-sm btn-inverse-info  ms-2"
-                                  //   title="Offboarding"
-                                  //   onClick={() => {
-                                  //     const confirmationButton = window.confirm(
-                                  //       "Do you really want to Initiate Resignation?"
-                                  //     );
-                                  //     if (confirmationButton === true) {
-                                  //       navigate(`/off_boarding/${value?._id}`);
-                                  //     }
-                                  //   }}
-                                  // >
-                                  //   Initiate Resignation
-                                  // </button>
-                                  "ff"
+                                  ""
                                 )}
                               </td>
                             </tr>
@@ -351,7 +337,7 @@ const User_List = () => {
 
               {/* ============= Modal =================== */}
 
-              <PureModal
+              {/* <PureModal
                 header="Upload Users Data"
                 isOpen={addEventModal}
                 onClose={() => {
@@ -401,7 +387,7 @@ const User_List = () => {
                     </button>
                   </div>
                 </form>
-              </PureModal>
+              </PureModal> */}
             </div>
 
             <footer className="footer">
