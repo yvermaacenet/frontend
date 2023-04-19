@@ -87,7 +87,7 @@ const Sign_In = () => {
                     </div>
                   )}
                   <div className="brand-logo mb-0">
-                    <img src="../../assets/images/logo.svg" />
+                    <img src="../../assets/images/logo.png" />
                   </div>
                   <div>
                     <h4>Hello! let's get started</h4>
