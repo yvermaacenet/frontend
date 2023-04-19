@@ -29,7 +29,7 @@ const Dashboard = () => {
     setLoading(true);
     async function get_counterList() {
       await axios
-        .get("/documents_counter", {
+        .get(`/documents_counter/${LocalStorageData?.user_id}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((res) => {
@@ -285,7 +285,7 @@ const Dashboard = () => {
                                     </span>
                                     <i
                                       className={`mdi ${result?.card_icon} mdi-24px float-right`}
-                                      style={{ float: "right" }}
+                                      // style={{ float: "right" }}
                                     ></i>
                                   </h4>
                                   <h1 className="mb-4 text-center">
@@ -312,7 +312,7 @@ const Dashboard = () => {
                           <small className="font-weight-light d-block">
                             Available on the
                           </small>
-                          12 BB
+                          Form 12 BB
                         </span>
 
                         {/*  */}
@@ -326,7 +326,7 @@ const Dashboard = () => {
                           <small className="font-weight-light d-block">
                             Get it on the
                           </small>
-                          Flexible Benifit
+                          Form Flexible Benifit
                         </span>
                       </NavLink>
                     </div>
