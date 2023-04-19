@@ -88,7 +88,8 @@ const Cabin_Slot_Booking = () => {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
-          return setGetCabinList(resp?.data);
+          const filterdata = resp?.data?.filter((x) => x.status === true);
+          return setGetCabinList(filterdata);
         })
         .catch((err) => {
           if (err.response.status === 500) {
