@@ -9,11 +9,12 @@ import { SketchPicker } from "react-color";
 import reactCSS from "reactcss";
 import { useAlert } from "react-alert";
 const Cabin_Update = () => {
-  const alert = useAlert;
+  const alert = useAlert();
   const { _id } = useParams();
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState([]);
 
   const [inputData, setInputData] = useState({
     status: false,
@@ -27,6 +28,7 @@ const Cabin_Update = () => {
       a: "1",
     },
   });
+
   const inputEvent = (event) => {
     const { name, value } = event.target;
     setInputData((preValue) => {
@@ -36,6 +38,15 @@ const Cabin_Update = () => {
       };
     });
   };
+  useEffect(() => {
+    const get_user_list = async () => {
+      const res = await axios.get("/get_location", {
+        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+      });
+      setLocation(res.data);
+    };
+    get_user_list();
+  }, []);
   useEffect(() => {
     setLoading(true);
     async function get_user_data() {
@@ -112,13 +123,14 @@ const Cabin_Update = () => {
     e.preventDefault();
     setLoading(true);
     async function add_cabin() {
-      const result = await axios
+      await axios
         .put(`/cabin_update/${_id}`, inputData, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
-        .then((res) => {
-          return alert.success(res?.data.message), navigate("/cabin_list");
+        .then((resp) => {
+          return alert.success(resp.data.message), navigate("/cabin_list");
         })
+
         .catch((err) => {
           if (err.response.status === 500) {
             navigate("/error_500");
@@ -155,6 +167,25 @@ const Cabin_Update = () => {
                   <div class="card-body">
                     <form class="forms-sample">
                       <div className="row">
+                        <div className="col-md-3">
+                          <div class="form-group">
+                            <label>Location</label>
+                            <select
+                              className="form-control h-100"
+                              name="location"
+                              value={inputData.location}
+                              onChange={inputEvent}
+                              disabled
+                            >
+                              <option>Select Location</option>
+                              {location.map((item) => {
+                                return (
+                                  <option value={item.name}>{item.name}</option>
+                                );
+                              })}
+                            </select>
+                          </div>
+                        </div>
                         <div className="col-md-3">
                           <div class="form-group">
                             <label>Cabin Name </label>

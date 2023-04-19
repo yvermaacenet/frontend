@@ -19,14 +19,14 @@ const Cabin_Add = () => {
   const [location, setLocation] = useState([]);
   const [locationList, setLocationList] = useState([]);
   const [inputData, setInputData] = useState({
-    status: false,
+    status: true,
   });
   const [getChooseColor, setGetChooseColor] = useState({
     displayColorPicker: false,
     color: {
-      r: "150",
-      g: "85",
-      b: "255",
+      r: Math?.floor(Math?.random() * 255),
+      g: Math?.floor(Math?.random() * 255),
+      b: Math?.floor(Math?.random() * 255),
       a: "1",
     },
   });
@@ -54,7 +54,7 @@ const Cabin_Add = () => {
       color: {
         height: "20px",
         borderRadius: "2px",
-        background: `rgba(${getChooseColor?.color.r}, ${getChooseColor?.color.g}, ${getChooseColor?.color.b}, ${getChooseColor?.color.a})`,
+        background: `rgba(${getChooseColor?.color?.r}, ${getChooseColor?.color?.g}, ${getChooseColor?.color?.b}, ${getChooseColor?.color?.a})`,
       },
       swatch: {
         width: "30%",
@@ -101,7 +101,11 @@ const Cabin_Add = () => {
       await axios
         .post(
           `/cabin_add`,
-          { ...inputData, location: locationList.location },
+          {
+            ...inputData,
+            location: locationList.location,
+            color_code: getChooseColor?.color,
+          },
           {
             headers: { Access_Token: LocalStorageData?.generate_auth_token },
           }
@@ -110,7 +114,7 @@ const Cabin_Add = () => {
           return alert.show(resp?.data.message), navigate("/cabin_list");
         })
         .catch((err) => {
-          if (err.response.status === 500) {
+          if (err?.response.status === 500) {
             navigate("/error_500");
           } else {
             navigate("/error_403");
@@ -286,6 +290,7 @@ const Cabin_Add = () => {
                                   });
                                   // onStatusChange(!checkedStatus)
                                 }}
+                                checked={inputData.status}
                               />
                               <span className="slider round"></span>
                             </label>

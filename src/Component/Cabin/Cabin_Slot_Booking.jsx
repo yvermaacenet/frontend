@@ -44,32 +44,11 @@ const Cabin_Slot_Booking = () => {
   };
 
   const fetch_Location = async () => {
-    const res = await axios.get("/get_location");
-    setLocation(res.data);
-  };
-  const fetch_cabin_slot_booking_by_location = async (loc) => {
     const res = await axios
-
-      .get(`/cabin_slot_booking_by_location/${loc}`, {
+      .get("/get_location", {
         headers: { Access_Token: LocalStorageData?.generate_auth_token },
       })
-
-      .then((resp) => {
-        const resp__get_cabin_slot_booking_list = resp?.data;
-
-        const getAllEvents = resp__get_cabin_slot_booking_list?.map((val) => ({
-          ...val,
-
-          start: new Date(val?.start),
-
-          end: new Date(val?.end),
-        }));
-
-        return getAllEvents;
-      })
-
-      .then((rr) => setGetCabinSlotBookingList(rr))
-
+      .then((rr) => setLocation(rr?.data))
       .catch((err) => {
         if (err.response.status === 500) {
           navigate("/error_500");
@@ -77,8 +56,29 @@ const Cabin_Slot_Booking = () => {
           navigate("/error_403");
         }
       });
-
-    // await setGetCabinSlotBookingList(res?.data);
+  };
+  const fetch_cabin_slot_booking_by_location = async (loc) => {
+    const res = await axios
+      .get(`/cabin_slot_booking_by_location/${loc}`, {
+        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+      })
+      .then((resp) => {
+        const resp__get_cabin_slot_booking_list = resp?.data;
+        const getAllEvents = resp__get_cabin_slot_booking_list?.map((val) => ({
+          ...val,
+          start: new Date(val?.start),
+          end: new Date(val?.end),
+        }));
+        return getAllEvents;
+      })
+      .then((rr) => setGetCabinSlotBookingList(rr))
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
   };
   useEffect(() => {
     setLoading(true);
@@ -248,7 +248,7 @@ const Cabin_Slot_Booking = () => {
       (val) => val._id === event.cabin_id
     );
     const style = {
-      backgroundColor: `rgba(${backgroundColorCode[0].color_code.r},${backgroundColorCode[0].color_code.g},${backgroundColorCode[0].color_code.b},${backgroundColorCode[0].color_code.a})`,
+      backgroundColor: `rgba(${backgroundColorCode[0]?.color_code?.r},${backgroundColorCode[0]?.color_code?.g},${backgroundColorCode[0]?.color_code?.b},${backgroundColorCode[0]?.color_code?.a})`,
       borderRadius: "0px",
       opacity: 0.8,
       color: "white",

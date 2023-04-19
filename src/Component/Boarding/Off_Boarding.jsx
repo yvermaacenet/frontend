@@ -322,43 +322,52 @@ const Off_Boarding = () => {
                       </tr>
                     </tbody>
                   </table>
+                  <div
+                    className="mt-4 mb-4"
+                    style={{ marginLeft: "80px", marginRight: "80px" }}
+                  >
+                    {/* <!==========  Previous Button ============> */}
+                    <>
+                      <button
+                        class="btn btn-sm btn-gradient-primary"
+                        onClick={(e) => {
+                          return (
+                            e.preventDefault(),
+                            setActive(active - 1),
+                            setSteperCounter(steperCounter - 1)
+                          );
+                        }}
+                        style={{
+                          visibility: active !== 1 ? "visible" : "hidden",
+                        }}
+                        disabled={active !== 1 ? false : true}
+                      >
+                        Previous
+                      </button>
+                    </>
+
+                    {/* <!==========  Next Button ============> */}
+                    {active !== 3 && (
+                      <button
+                        class="btn btn-sm btn-gradient-primary"
+                        onClick={(e) => {
+                          return (
+                            e.preventDefault(),
+                            setActive(active + 1),
+                            setSteperCounter(steperCounter + 1)
+                          );
+                        }}
+                        style={{ float: "right" }}
+                      >
+                        Next
+                      </button>
+                    )}
+                  </div>
                   <div style={{ margin: "50px" }}>
                     <form class="forms-sample">
                       <>
                         <MultiStepForm activeStep={active}>
                           <Step label="Supervisor Clearance (HR)">
-                            <>
-                              {inputData?.steper_counter <= 3 &&
-                              inputData?.steper_counter >= 1 ? (
-                                <div
-                                  class="alert alert-success alert-dismissible fade show"
-                                  role="alert"
-                                >
-                                  <i class="mdi mdi-check-circle-outline me-1"></i>
-                                  This step has been completed.
-                                  <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="alert"
-                                    aria-label="Close"
-                                  ></button>
-                                </div>
-                              ) : (
-                                <div
-                                  class="alert alert-warning alert-dismissible fade show"
-                                  role="alert"
-                                >
-                                  <i class="mdi mdi-alert-octagon me-1"></i>
-                                  "This step is pending !!"
-                                  <button
-                                    type="button"
-                                    class="btn-close"
-                                    data-bs-dismiss="alert"
-                                    aria-label="Close"
-                                  ></button>
-                                </div>
-                              )}
-                            </>
                             <>
                               <div className="row">
                                 <div class="card">
@@ -510,38 +519,6 @@ const Off_Boarding = () => {
                           </Step>
                           <Step label="Admin Clearance (Admin)">
                             <>
-                              <>
-                                {inputData?.steper_counter <= 3 &&
-                                inputData?.steper_counter >= 2 ? (
-                                  <div
-                                    class="alert alert-success alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-check-circle-outline me-1"></i>
-                                    This step has been completed.
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    class="alert alert-warning alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is pending !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                )}
-                              </>
                               <div className="row">
                                 <div class="card">
                                   <div class="card-body">
@@ -816,37 +793,6 @@ const Off_Boarding = () => {
                           </Step>
                           <Step label="Other Formalities (Management)">
                             <>
-                              <>
-                                {inputData?.steper_counter === 3 ? (
-                                  <div
-                                    class="alert alert-success alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-check-circle-outline me-1"></i>
-                                    This step has been completed.
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    class="alert alert-warning alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is pending !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                )}
-                              </>
                               <div className="row">
                                 <div class="card">
                                   <div class="card-body">

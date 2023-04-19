@@ -6,7 +6,6 @@ import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import axios from "axios";
-import { MultiStep } from "react-multistep";
 const On_Boarding = () => {
   const navigate = useNavigate();
   const { _id } = useParams();
