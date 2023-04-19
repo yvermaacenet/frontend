@@ -131,17 +131,17 @@ const Cabin_Add = () => {
     });
   };
 
-  // const add_location_submit = async (e) => {
-  //   e.preventDefault();
-  //   const res = await axios.post("/location_add", locationList, {
-  //     headers: { Access_Token: LocalStorageData?.generate_auth_token },
-  //   });
-  //   alert?.success(res.data.message);
-  //   // setLocationList("");
-  //   if (res.data.message === "created") {
-  //     setModal(false);
-  //   }
-  // };
+  const add_location_submit = async (e) => {
+    e.preventDefault();
+    const res = await axios.post("/location_add", locationList, {
+      headers: { Access_Token: LocalStorageData?.generate_auth_token },
+    });
+    alert?.success(res.data.message);
+    setLocationList("");
+    if (res.data.message === "created") {
+      setModal(false);
+    }
+  };
 
   return (
     <>
@@ -152,8 +152,8 @@ const Cabin_Add = () => {
           <div className="main-panel">
             <div className="content-wrapper">
               <Page_Header
-                page_title="Form 12 BB (See rule 26C)"
-                page_title_icon="mdi-book-plus"
+                page_title="Cabin"
+                page_title_icon="mdi-home-modern"
                 page_title_button="Back"
                 page_title_button_link="/cabin_list"
               />
@@ -222,7 +222,7 @@ const Cabin_Add = () => {
                                     />
                                     <button
                                       type="submit"
-                                      // onClick={add_location_submit}
+                                      onClick={add_location_submit}
                                       className="btn btn-primary mt-2"
                                     >
                                       Create

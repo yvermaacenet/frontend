@@ -270,7 +270,7 @@ const Off_Boarding = () => {
           <div class="content-wrapper">
             <Page_Header
               page_title="Boarding"
-              page_title_icon="mdi-airplane"
+              page_title_icon="mdi-view-dashboard"
               page_title_button="Back"
               page_title_button_link="/user_list/all"
             />

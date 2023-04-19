@@ -256,8 +256,8 @@ const User_List = () => {
                                           ? "btn-inverse-success"
                                           : value?.on_boarding_steper_counter >=
                                             1
-                                          ? "btn-inverse-primary"
-                                          : "btn-inverse-danger"
+                                          ? "btn-inverse-danger"
+                                          : "btn-inverse-info"
                                       } ms-2`}
                                       title="Onboarding"
                                       onClick={() => {
@@ -274,8 +274,7 @@ const User_List = () => {
                                     >
                                       {value?.on_boarding_status
                                         ? "Onboarding is completed"
-                                        : value?.off_boarding_steper_counter >=
-                                          1
+                                        : value?.on_boarding_steper_counter >= 1
                                         ? "Onboarding is pending"
                                         : "Initiate Onboarding"}
                                     </button>

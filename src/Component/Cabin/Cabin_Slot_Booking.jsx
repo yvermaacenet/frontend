@@ -30,6 +30,9 @@ const Cabin_Slot_Booking = () => {
   const [editEventModal, setEditEventModal] = useState(false);
   const [allDay, setAllDay] = useState(false);
   const [renderComponent, setRenderComponent] = useState(false);
+  const [location, setLocation] = useState([]);
+  const [locationValue, setLocationValue] = useState("all_location");
+  const [filteredCabinList, setFilteredCabinList] = useState([]);
   const inputEvent = (event) => {
     const { name, value } = event.target;
     setInputData((preValue) => {
@@ -38,6 +41,44 @@ const Cabin_Slot_Booking = () => {
         [name]: value,
       };
     });
+  };
+
+  const fetch_Location = async () => {
+    const res = await axios.get("/get_location");
+    setLocation(res.data);
+  };
+  const fetch_cabin_slot_booking_by_location = async (loc) => {
+    const res = await axios
+
+      .get(`/cabin_slot_booking_by_location/${loc}`, {
+        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+      })
+
+      .then((resp) => {
+        const resp__get_cabin_slot_booking_list = resp?.data;
+
+        const getAllEvents = resp__get_cabin_slot_booking_list?.map((val) => ({
+          ...val,
+
+          start: new Date(val?.start),
+
+          end: new Date(val?.end),
+        }));
+
+        return getAllEvents;
+      })
+
+      .then((rr) => setGetCabinSlotBookingList(rr))
+
+      .catch((err) => {
+        if (err.response.status === 500) {
+          navigate("/error_500");
+        } else {
+          navigate("/error_403");
+        }
+      });
+
+    // await setGetCabinSlotBookingList(res?.data);
   };
   useEffect(() => {
     setLoading(true);
@@ -57,6 +98,7 @@ const Cabin_Slot_Booking = () => {
           }
         });
     }
+    fetch_Location();
     get_cabin_list();
   }, []);
   useEffect(() => {
@@ -76,7 +118,7 @@ const Cabin_Slot_Booking = () => {
           );
           return getAllEvents;
         })
-        .then((rr) => setGetCabinSlotBookingList(rr))
+        .then((rr) => setGetCabinSlotBookingList(rr), setRenderComponent(false))
         .catch((err) => {
           if (err.response.status === 500) {
             navigate("/error_500");
@@ -151,6 +193,7 @@ const Cabin_Slot_Booking = () => {
         {
           ...inputData,
           allDay,
+          location: locationValue,
         },
         {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -162,6 +205,7 @@ const Cabin_Slot_Booking = () => {
           setAddEventModal(false),
           setAllDay(false),
           setRenderComponent(true)
+          // window.location.reload()
         );
       })
       .catch((err) => {
@@ -335,6 +379,17 @@ const Cabin_Slot_Booking = () => {
     }
   );
 
+  const handleLocationChange = (e) => {
+    setLocationValue(e.target.value);
+    setSelectCabin_id("all");
+    let filteredCabinList = [];
+    let filtered = getCabinList?.filter((x) => x.location === e.target.value);
+    filteredCabinList.push(filtered);
+    setFilteredCabinList(filteredCabinList);
+    fetch_cabin_slot_booking_by_location(e.target.value);
+  };
+  console.log("filteredCabinList", filteredCabinList);
+
   return (
     <div className="container-scroller">
       <Navbar />
@@ -360,6 +415,26 @@ const Cabin_Slot_Booking = () => {
                     <div className="row">
                       <div className="col-md-3">
                         <div className="form-group">
+                          <label>Select Your Location</label>
+                          <select
+                            value={locationValue}
+                            className="form-control form-control-sm"
+                            onChange={handleLocationChange}
+                          >
+                            <option
+                              value="all_location"
+                              selected="selected"
+                              // disabled="disabled"
+                            >
+                              All Booking
+                            </option>
+                            {location?.map((item) => {
+                              return (
+                                <option value={item.name}>{item.name}</option>
+                              );
+                            })}
+                          </select>
+
                           <label> Cabin </label>
                           <select
                             name="_id"
@@ -373,7 +448,7 @@ const Cabin_Slot_Booking = () => {
                             >
                               All Booking
                             </option>
-                            {getCabinList?.map((val, index) => {
+                            {filteredCabinList[0]?.map((val, index) => {
                               return (
                                 <>
                                   <option value={val?._id}>{val?.name}</option>

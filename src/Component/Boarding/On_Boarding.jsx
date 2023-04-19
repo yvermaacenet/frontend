@@ -6,7 +6,7 @@ import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import axios from "axios";
-
+import { MultiStep } from "react-multistep";
 const On_Boarding = () => {
   const navigate = useNavigate();
   const { _id } = useParams();
@@ -304,7 +304,7 @@ const On_Boarding = () => {
           <div class="content-wrapper">
             <Page_Header
               page_title="Boarding"
-              page_title_icon="mdi-airplane"
+              page_title_icon="mdi-view-dashboard"
               page_title_button="Back"
               page_title_button_link="/user_list/all"
             />
@@ -432,13 +432,54 @@ const On_Boarding = () => {
                       </tr>
                     </tbody>
                   </table>
+                  <div
+                    className="mt-4 mb-4"
+                    style={{ marginLeft: "80px", marginRight: "80px" }}
+                  >
+                    {/* <!==========  Previous Button ============> */}
 
-                  <div style={{ margin: "40px" }}>
+                    <>
+                      <button
+                        class="btn btn-sm btn-gradient-primary"
+                        onClick={(e) => {
+                          return (
+                            e.preventDefault(),
+                            setActive(active - 1),
+                            setSteperCounter(steperCounter - 1)
+                          );
+                        }}
+                        style={{
+                          visibility: active !== 1 ? "visible" : "hidden",
+                        }}
+                        disabled={active !== 1 ? false : true}
+                      >
+                        Previous
+                      </button>
+                    </>
+
+                    {/* <!==========  Next Button ============> */}
+                    {active !== 3 && (
+                      <button
+                        class="btn btn-sm btn-gradient-primary"
+                        onClick={(e) => {
+                          return (
+                            e.preventDefault(),
+                            setActive(active + 1),
+                            setSteperCounter(steperCounter + 1)
+                          );
+                        }}
+                        style={{ float: "right" }}
+                      >
+                        Next
+                      </button>
+                    )}
+                  </div>
+                  <div style={{ marginLeft: "80px", marginRight: "80px" }}>
                     <form class="forms-sample">
                       <>
                         <MultiStepForm activeStep={active}>
                           <Step label="First Day Formalities (HR)">
-                            <>
+                            {/* <>
                               {inputData?.steper_counter <= 3 &&
                               inputData?.steper_counter >= 1 ? (
                                 <div
@@ -469,7 +510,7 @@ const On_Boarding = () => {
                                   ></button>
                                 </div>
                               )}
-                            </>
+                            </> */}
                             <>
                               <div className="row">
                                 <div class="card">
@@ -1687,9 +1728,12 @@ const On_Boarding = () => {
                             </>
                           </Step>
 
-                          <Step label="Compliance Documents (Finance)">
+                          <Step
+                            onClick={() => alert()}
+                            label="Compliance Documents (Finance)"
+                          >
                             <>
-                              <>
+                              {/* <>
                                 {inputData?.steper_counter <= 3 &&
                                 inputData?.steper_counter >= 2 ? (
                                   <div
@@ -1720,7 +1764,7 @@ const On_Boarding = () => {
                                     ></button>
                                   </div>
                                 )}
-                              </>
+                              </> */}
                               <div className="row">
                                 <div class="card">
                                   <div class="card-body">
@@ -2225,7 +2269,7 @@ const On_Boarding = () => {
 
                           <Step label="ZOHO Account (Management)">
                             <>
-                              <>
+                              {/* <>
                                 {inputData?.steper_counter === 3 ? (
                                   <div
                                     class="alert alert-success alert-dismissible fade show"
@@ -2255,7 +2299,7 @@ const On_Boarding = () => {
                                     ></button>
                                   </div>
                                 )}
-                              </>
+                              </> */}
 
                               <>
                                 <div className="row">
