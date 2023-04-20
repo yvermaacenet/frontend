@@ -10,7 +10,7 @@ import PureModal from "react-pure-modal";
 import { useParams } from "react-router-dom";
 
 const User_List = () => {
-  const specificDate = "2023-04-01";
+  const specificDate = "2023-04-20";
   const navigate = useNavigate();
   const { status_code } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
@@ -114,7 +114,6 @@ const User_List = () => {
       return false;
     }
   };
-  console.log("getUserList", getUserList);
   return (
     <>
       <div className="container-scroller">
