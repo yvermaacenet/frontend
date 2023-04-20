@@ -61,7 +61,11 @@ const User_List = () => {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
-          return setRoless(result.data), get_user_list(result.data);
+          return (
+            console.log(result.data),
+            setRoless(result.data),
+            get_user_list(result.data)
+          );
         })
         .catch((err) => {
           if (err.response.status === 500) {
@@ -110,7 +114,7 @@ const User_List = () => {
       return false;
     }
   };
-
+  console.log("getUserList", getUserList);
   return (
     <>
       <div className="container-scroller">
@@ -189,7 +193,7 @@ const User_List = () => {
                           <th>#</th>
                           <th>Employee ID</th>
                           <th>Name</th>
-                          <th>Zoho Role</th>
+                          <th>Acenet Role</th>
                           <th>Phone</th>
                           <th>Email</th>
                           <th>Onboarding/Offboarding </th>
@@ -221,14 +225,14 @@ const User_List = () => {
                                   New Joining
                                 </span>
                               </td>
-                              <td>{value["Zoho Role"]}</td>
+                              <td>{value["Acenet Role"]}</td>
                               <td>
                                 {value["Personal Mobile Number"] === ""
                                   ? "NA"
                                   : value["Personal Mobile Number"]}
                               </td>
                               <td> {value["Email address"]} </td>
-                              <td>{value?.creation_date}</td>
+                              {/* <td>{value?.creation_date}</td> */}
                               <td>
                                 {/* ================ On Boarding Button ============= */}
                                 {compareDates1(
@@ -279,7 +283,7 @@ const User_List = () => {
                                         : "Initiate Onboarding"}
                                     </button>
                                   ) : (
-                                    ""
+                                    "ss"
                                   ))}
 
                                 {/* ================ Off Boarding Button ============= */}
@@ -322,7 +326,7 @@ const User_List = () => {
                                       : "Initiate Resignation"}
                                   </button>
                                 ) : (
-                                  ""
+                                  "sw"
                                 )}
                               </td>
                             </tr>

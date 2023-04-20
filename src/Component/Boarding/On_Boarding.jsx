@@ -1728,7 +1728,7 @@ const On_Boarding = () => {
                           </Step>
 
                           <Step
-                            onClick={() => alert()}
+                            // onClick={() => alert()}
                             label="Compliance Documents (Finance)"
                           >
                             <>
