@@ -282,7 +282,7 @@ const User_List = () => {
                                         : "Initiate Onboarding"}
                                     </button>
                                   ) : (
-                                    "ss"
+                                    ""
                                   ))}
 
                                 {/* ================ Off Boarding Button ============= */}
@@ -325,7 +325,7 @@ const User_List = () => {
                                       : "Initiate Resignation"}
                                   </button>
                                 ) : (
-                                  "sw"
+                                  ""
                                 )}
                               </td>
                             </tr>

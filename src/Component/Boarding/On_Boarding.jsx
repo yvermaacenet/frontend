@@ -1727,10 +1727,7 @@ const On_Boarding = () => {
                             </>
                           </Step>
 
-                          <Step
-                            // onClick={() => alert()}
-                            label="Compliance Documents (Finance)"
-                          >
+                          <Step label="Compliance Documents (Finance)">
                             <>
                               {/* <>
                                 {inputData?.steper_counter <= 3 &&
@@ -2664,9 +2661,7 @@ const On_Boarding = () => {
                                       ? "none"
                                       : roless?.Finance?.includes(
                                           LocalStorageData?.user_id
-                                        ) &&
-                                        active < 2 &&
-                                        active > 2
+                                        ) && active < 2
                                       ? "none"
                                       : roless?.Management?.includes(
                                           LocalStorageData?.user_id
