@@ -10,7 +10,7 @@ import PureModal from "react-pure-modal";
 import { useParams } from "react-router-dom";
 
 const User_List = () => {
-  const specificDate = "2023-04-18";
+  const specificDate = "2023-04-20";
   const navigate = useNavigate();
   const { status_code } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
@@ -39,14 +39,14 @@ const User_List = () => {
   }
   useEffect(() => {
     setLoading(true);
-    async function get_user_list(resp) {
+    async function get_user_list() {
       await axios
         .get(`/user_list/${getStatus_code}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then(async (result_user_list) => {
           return await axios
-            .get(`/off_boarding`, {
+            .get(`/on_boarding`, {
               headers: {
                 Access_Token: LocalStorageData?.generate_auth_token,
               },
@@ -55,9 +55,30 @@ const User_List = () => {
               const resp = result.data;
               const tt = await result_user_list?.data.map((a) => ({
                 ...a,
-                ...resp.find((b) => b.employee_id === a._id),
+                ...resp.find((b) => b.user_id === a._id),
               }));
-              return setGetUserList(tt);
+              return await axios
+                .get(`/off_boarding`, {
+                  headers: {
+                    Access_Token: LocalStorageData?.generate_auth_token,
+                  },
+                })
+                .then(async (result) => {
+                  const resp = result.data;
+                  const pp = await tt.map((aa) => ({
+                    ...aa,
+                    ...resp.find((bb) => bb.employee_id === aa._id),
+                  }));
+                  console.log("resp", pp);
+                  return setGetUserList(pp);
+                })
+                .catch((err) => {
+                  if (err.response.status === 500) {
+                    navigate("/error_500");
+                  } else {
+                    navigate("/error_403");
+                  }
+                });
             })
             .catch((err) => {
               if (err.response.status === 500) {
@@ -122,16 +143,8 @@ const User_List = () => {
 
     if (date1 < date2) {
       return false;
-    } else if (date1 >= date2) {
-      const s1 = new Date(date1.getTime() + 10 * 24 * 60 * 60 * 1000);
-      const s2 = new Date(Date.now());
-      if (s1 > s2) {
-        return true;
-      } else {
-        return true;
-      }
     } else {
-      return false;
+      return true;
     }
   };
   // const result = getUserList.map((a) => ({
@@ -280,9 +293,13 @@ const User_List = () => {
                                     <button
                                       type="button"
                                       className={`btn btn-sm ${
-                                        value?.on_boarding_status
+                                        value?.hr_on_boarding_status === true &&
+                                        value?.finance_on_boarding_status ===
+                                          true &&
+                                        value?.management_on_boarding_status ===
+                                          true
                                           ? "btn-inverse-success"
-                                          : value?.on_boarding_steper_counter >=
+                                          : value?.off_boarding_steper_counter >=
                                             1
                                           ? "btn-inverse-danger"
                                           : "btn-inverse-info"
@@ -291,7 +308,14 @@ const User_List = () => {
                                       onClick={() => {
                                         const confirmationButton =
                                           window.confirm(
-                                            "Do you really want to Initiate Onboarding?"
+                                            value?.hr_on_boarding_status ===
+                                              true &&
+                                              value?.finance_on_boarding_status ===
+                                                true &&
+                                              value?.management_on_boarding_status ===
+                                                true
+                                              ? "Do you really want to check onboarding?"
+                                              : "Do you really want to initiate onboarding?"
                                           );
                                         if (confirmationButton === true) {
                                           navigate(
@@ -300,7 +324,11 @@ const User_List = () => {
                                         }
                                       }}
                                     >
-                                      {value?.on_boarding_status
+                                      {value?.hr_on_boarding_status === true &&
+                                      value?.finance_on_boarding_status ===
+                                        true &&
+                                      value?.management_on_boarding_status ===
+                                        true
                                         ? "Onboarding is completed"
                                         : value?.on_boarding_steper_counter >= 1
                                         ? "Onboarding is pending"
@@ -367,7 +395,13 @@ const User_List = () => {
                                   title="Offboarding"
                                   onClick={() => {
                                     const confirmationButton = window.confirm(
-                                      "Do you really want to Initiate Resignation?"
+                                      value?.hr_off_boarding_status === true &&
+                                        value?.finance_off_boarding_status ===
+                                          true &&
+                                        value?.management_off_boarding_status ===
+                                          true
+                                        ? "Do you really want to check resignation?"
+                                        : "Do you really want to initiate resignation?"
                                     );
                                     if (confirmationButton === true) {
                                       navigate(`/off_boarding/${value?._id}`);

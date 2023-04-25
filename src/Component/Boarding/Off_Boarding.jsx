@@ -165,12 +165,18 @@ const Off_Boarding = () => {
         if (res.data.message === "created") {
           setActive(active + 1);
           setRenderComponent(true);
-          navigate("/user_list/all");
+          navigate("/user_list/active_users");
           await axios
             .put(
               `/user_update/${_id}`,
               {
                 off_boarding_steper_counter: active,
+                off_boarding_status:
+                  inputData?.hr_off_boarding_status === true &&
+                  inputData?.finance_off_boarding_status === true &&
+                  inputData?.management_off_boarding_status === true
+                    ? true
+                    : false,
               },
               {
                 headers: {
@@ -247,12 +253,18 @@ const Off_Boarding = () => {
         if (res.data.message === "updated") {
           setActive(active + 1);
           setRenderComponent(true);
-          navigate("/user_list/all");
+          navigate("/user_list/active_users");
           await axios
             .put(
               `/user_update/${_id}`,
               {
                 off_boarding_steper_counter: active,
+                off_boarding_status:
+                  inputData?.hr_off_boarding_status === true &&
+                  inputData?.finance_off_boarding_status === true &&
+                  inputData?.management_off_boarding_status === true
+                    ? true
+                    : false,
               },
               {
                 headers: {
@@ -312,7 +324,7 @@ const Off_Boarding = () => {
   //       if (res.data.message === "updated") {
   //         setActive(1);
   //         setRenderComponent(true);
-  //         navigate("/user_list/all");
+  //         navigate("/user_list/active_users");
   //         await axios
   //           .put(
   //             `/user_update/${_id}`,
@@ -359,7 +371,7 @@ const Off_Boarding = () => {
               page_title="Boarding"
               page_title_icon="mdi-view-dashboard"
               page_title_button="Back"
-              page_title_button_link="/user_list/all"
+              page_title_button_link="/user_list/active_users"
             />
             {loading && (
               <div className="loader-container">
@@ -407,7 +419,7 @@ const Off_Boarding = () => {
                               Completed
                             </label>
                           ) : (
-                            <label className="badge badge-warning">
+                            <label className="badge badge-danger">
                               Pending
                             </label>
                           )}
@@ -454,6 +466,37 @@ const Off_Boarding = () => {
                         <MultiStepForm activeStep={active}>
                           <Step label="Supervisor Clearance (HR)">
                             <>
+                              <>
+                                {inputData?.hr_off_boarding_status ? (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                ) : (
+                                  <div
+                                    class="alert alert-danger alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-alert-octagon me-1"></i>
+                                    "This step is pending !!"
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                )}
+                              </>
                               <div className="row">
                                 <div className="card">
                                   <div className="card-body">
@@ -604,6 +647,37 @@ const Off_Boarding = () => {
                           </Step>
                           <Step label="Admin Clearance (Admin)">
                             <>
+                              <>
+                                {inputData?.finance_off_boarding_status ? (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                ) : (
+                                  <div
+                                    class="alert alert-danger alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-alert-octagon me-1"></i>
+                                    "This step is pending !!"
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                )}
+                              </>
                               <div className="row">
                                 <div className="card">
                                   <div className="card-body">
@@ -878,6 +952,37 @@ const Off_Boarding = () => {
                           </Step>
                           <Step label="Other Formalities (Management)">
                             <>
+                              <>
+                                {inputData?.management_off_boarding_status ? (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                ) : (
+                                  <div
+                                    class="alert alert-danger alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-alert-octagon me-1"></i>
+                                    "This step is pending !!"
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                )}
+                              </>
                               <div className="row">
                                 <div className="card">
                                   <div className="card-body">
@@ -1212,7 +1317,7 @@ const Off_Boarding = () => {
                                     : "none",
                               }}
                             >
-                              onUpdateNextButton
+                              Submit
                             </button>
                           </>
                         ) : (
@@ -1241,7 +1346,7 @@ const Off_Boarding = () => {
                                   : "none",
                             }}
                           >
-                            onSaveNextButton1
+                            Submit
                           </button>
                         )}
 

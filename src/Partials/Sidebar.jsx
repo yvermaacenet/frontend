@@ -57,7 +57,10 @@ const Sidebar = () => {
                   <ul class="nav flex-column sub-menu">
                     <ul className="nav flex-column sub-menu">
                       <li className="nav-item">
-                        <NavLink className="nav-link" to="/user_list/all_users">
+                        <NavLink
+                          className="nav-link"
+                          to="/user_list/active_users"
+                        >
                           Users List
                         </NavLink>
                       </li>
