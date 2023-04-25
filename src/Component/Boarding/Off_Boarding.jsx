@@ -11,22 +11,44 @@ const Off_Boarding = () => {
   const navigate = useNavigate();
   const { _id } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
-  const [inputData, setInputData] = useState([]);
+  const [inputData, setInputData] = useState({
+    informed_client_on_exit: false,
+    project_official_duties_handover: false,
+    important_mails_transferred: false,
+    official_document_handover: false,
+    acenet_laptop: false,
+    id_card: false,
+    data_card_hotspot: false,
+    client_asset: false,
+    biometric_disabled: false,
+    office_365_account_deletion: false,
+    email_forwarded: false,
+    zoho_account_deleted: false,
+    relieving_letter_shared: false,
+    fnf_statement_shared: false,
+    fnf_cleared: false,
+    employee_datasheet_updated: false,
+    ghi_deletion: false,
+    employee_folder_moved_to_past_employee_folder: false,
+    ghi_initiated: false,
+    ghi_e_card_issued: false,
+    hr_off_boarding_status: false,
+    finance_off_boarding_status: false,
+    management_off_boarding_status: false,
+  });
   const [renderComponent, setRenderComponent] = useState(false);
   const [active, setActive] = useState();
-  const [steperCounter, setSteperCounter] = useState(1);
   const [getUserDetailsById, setGetUserDetailsById] = useState({});
   const [roless, setRoless] = useState([]);
-  const [state, setState] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const inputEvent = (e) => {
-    console.log("e", e);
     const { name, checked } = e.target;
     setInputData({ ...inputData, [name]: checked });
   };
   useEffect(() => {
     setLoading(true);
+
     async function get_off_boarding_list() {
       await axios
         .get(`/off_boarding/${_id}`, {
@@ -35,22 +57,7 @@ const Off_Boarding = () => {
         .then((result) => {
           const resp = result.data[0];
           return (
-            setInputData(resp),
-            setSteperCounter(
-              resp?.steper_counter === undefined
-                ? 1
-                : resp?.steper_counter === 3
-                ? 3
-                : resp?.steper_counter + 1
-            ),
-            setActive(
-              resp?.steper_counter === undefined
-                ? 1
-                : resp?.steper_counter === 3
-                ? 3
-                : resp?.steper_counter + 1
-            ),
-            setRenderComponent(false)
+            setInputData({ ...inputData, ...resp }), setRenderComponent(false)
           );
         })
         .catch((err) => {
@@ -69,7 +76,18 @@ const Off_Boarding = () => {
         })
         .then((result) => {
           const resp = result.data;
-          return setRoless(resp), setRenderComponent(false);
+          return (
+            setRoless(resp),
+            setActive(
+              resp?.Hr?.includes(LocalStorageData?.user_id) === true ||
+                resp?.Admin?.includes(LocalStorageData?.user_id) === true
+                ? 1
+                : resp?.Finance?.includes(LocalStorageData?.user_id) === true
+                ? 2
+                : 3
+            ),
+            setRenderComponent(false)
+          );
         })
         .catch((err) => {
           if (err.response.status === 500) {
@@ -109,7 +127,35 @@ const Off_Boarding = () => {
         `/off_boarding/${_id}`,
         {
           ...inputData,
-          steper_counter: inputData?.status ? 3 : steperCounter,
+          hr_off_boarding_status:
+            inputData?.informed_client_on_exit === true &&
+            inputData?.project_official_duties_handover === true &&
+            inputData?.important_mails_transferred === true &&
+            inputData?.official_document_handover === true
+              ? true
+              : false,
+          finance_off_boarding_status:
+            inputData?.acenet_laptop === true &&
+            inputData?.id_card === true &&
+            inputData?.data_card_hotspot === true &&
+            inputData?.client_asset === true &&
+            inputData?.biometric_disabled === true &&
+            inputData?.office_365_account_deletion === true &&
+            inputData?.email_forwarded === true &&
+            inputData?.zoho_account_deleted === true
+              ? true
+              : false,
+          management_off_boarding_status:
+            inputData?.relieving_letter_shared === true &&
+            inputData?.fnf_statement_shared === true &&
+            inputData?.fnf_cleared === true &&
+            inputData?.employee_datasheet_updated === true &&
+            inputData?.ghi_deletion === true &&
+            inputData?.employee_folder_moved_to_past_employee_folder === true &&
+            inputData?.ghi_initiated === true &&
+            inputData?.ghi_e_card_issued === true
+              ? true
+              : false,
         },
         {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -118,13 +164,13 @@ const Off_Boarding = () => {
       .then(async (res) => {
         if (res.data.message === "created") {
           setActive(active + 1);
-          setSteperCounter(steperCounter + 1);
           setRenderComponent(true);
+          navigate("/user_list/all");
           await axios
             .put(
               `/user_update/${_id}`,
               {
-                off_boarding_steper_counter: steperCounter,
+                off_boarding_steper_counter: active,
               },
               {
                 headers: {
@@ -161,8 +207,38 @@ const Off_Boarding = () => {
         `/off_boarding/${inputData?._id}`,
         {
           ...inputData,
-          steper_counter: inputData?.status ? 3 : steperCounter,
+          // steper_counter: inputData?.status ? 3 : steperCounter,
+          hr_off_boarding_status:
+            inputData?.informed_client_on_exit === true &&
+            inputData?.project_official_duties_handover === true &&
+            inputData?.important_mails_transferred === true &&
+            inputData?.official_document_handover === true
+              ? true
+              : false,
+          finance_off_boarding_status:
+            inputData?.acenet_laptop === true &&
+            inputData?.id_card === true &&
+            inputData?.data_card_hotspot === true &&
+            inputData?.client_asset === true &&
+            inputData?.biometric_disabled === true &&
+            inputData?.office_365_account_deletion === true &&
+            inputData?.email_forwarded === true &&
+            inputData?.zoho_account_deleted === true
+              ? true
+              : false,
+          management_off_boarding_status:
+            inputData?.relieving_letter_shared === true &&
+            inputData?.fnf_statement_shared === true &&
+            inputData?.fnf_cleared === true &&
+            inputData?.employee_datasheet_updated === true &&
+            inputData?.ghi_deletion === true &&
+            inputData?.employee_folder_moved_to_past_employee_folder === true &&
+            inputData?.ghi_initiated === true &&
+            inputData?.ghi_e_card_issued === true
+              ? true
+              : false,
         },
+
         {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         }
@@ -170,68 +246,13 @@ const Off_Boarding = () => {
       .then(async (res) => {
         if (res.data.message === "updated") {
           setActive(active + 1);
-          setSteperCounter(steperCounter + 1);
-          setRenderComponent(true);
-          await axios
-            .put(
-              `/user_update/${_id}`,
-              {
-                off_boarding_steper_counter: steperCounter,
-              },
-              {
-                headers: {
-                  Access_Token: LocalStorageData?.generate_auth_token,
-                },
-              }
-            )
-            .then((res) => {
-              return console.log(res?.data.message);
-            })
-            .catch((err) => {
-              if (err.response.status === 500) {
-                navigate("/error_500");
-              } else {
-                navigate("/error_403");
-              }
-            });
-        }
-      })
-      .catch((err) => {
-        if (err.response.status === 500) {
-          navigate("/error_500");
-        } else {
-          navigate("/error_403");
-        }
-      });
-    setLoading(false);
-  };
-  const onSubmittedButton = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    await axios
-      .put(
-        `/off_boarding/${inputData?._id}`,
-        {
-          ...inputData,
-          status: steperCounter === 3 ? true : false,
-          steper_counter: inputData?.status ? 3 : steperCounter,
-          off_boarding_status: true,
-        },
-        {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        }
-      )
-      .then(async (res) => {
-        if (res.data.message === "updated") {
-          setActive(1);
           setRenderComponent(true);
           navigate("/user_list/all");
           await axios
             .put(
               `/user_update/${_id}`,
               {
-                off_boarding_steper_counter: steperCounter,
-                off_boarding_status: true,
+                off_boarding_steper_counter: active,
               },
               {
                 headers: {
@@ -261,13 +282,79 @@ const Off_Boarding = () => {
     setLoading(false);
   };
 
+  // const onSubmittedButton = async (event) => {
+  //   event.preventDefault();
+  //   setLoading(true);
+  //   await axios
+  //     .put(
+  //       `/off_boarding/${inputData?._id}`,
+  //       {
+  //         ...inputData,
+  //         steper_counter: inputData?.status ? 3 : steperCounter,
+  //         management_off_boarding_status:
+  //           inputData?.relieving_letter_shared === true &&
+  //           inputData?.fnf_statement_shared === true &&
+  //           inputData?.fnf_cleared === true &&
+  //           inputData?.employee_datasheet_updated === true &&
+  //           inputData?.ghi_deletion === true &&
+  //           inputData?.employee_folder_moved_to_past_employee_folder === true &&
+  //           inputData?.ghi_initiated === true &&
+  //           inputData?.ghi_e_card_issued === true
+  //             ? true
+  //             : false,
+  //         off_boarding_status: true,
+  //       },
+  //       {
+  //         headers: { Access_Token: LocalStorageData?.generate_auth_token },
+  //       }
+  //     )
+  //     .then(async (res) => {
+  //       if (res.data.message === "updated") {
+  //         setActive(1);
+  //         setRenderComponent(true);
+  //         navigate("/user_list/all");
+  //         await axios
+  //           .put(
+  //             `/user_update/${_id}`,
+  //             {
+  //               off_boarding_steper_counter: steperCounter,
+  //               off_boarding_status: status_Count > 1 ? false : true,
+  //             },
+  //             {
+  //               headers: {
+  //                 Access_Token: LocalStorageData?.generate_auth_token,
+  //               },
+  //             }
+  //           )
+  //           .then((res) => {
+  //             return console.log(res?.data.message);
+  //           })
+  //           .catch((err) => {
+  //             if (err.response.status === 500) {
+  //               navigate("/error_500");
+  //             } else {
+  //               navigate("/error_403");
+  //             }
+  //           });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       if (err.response.status === 500) {
+  //         navigate("/error_500");
+  //       } else {
+  //         navigate("/error_403");
+  //       }
+  //     });
+  //   setLoading(false);
+  // };
+
   return (
-    <div class="container-scroller">
+    <div className="container-scroller">
       <Navbar />
-      <div class="container-fluid page-body-wrapper">
+      <div className="container-fluid page-body-wrapper">
         <Sidebar />
-        <div class="main-panel">
-          <div class="content-wrapper">
+        <div className="main-panel">
+          <div className="content-wrapper">
             <Page_Header
               page_title="Boarding"
               page_title_icon="mdi-view-dashboard"
@@ -276,15 +363,15 @@ const Off_Boarding = () => {
             />
             {loading && (
               <div className="loader-container">
-                <div class="loader"></div>
+                <div className="loader"></div>
               </div>
             )}
-            <div class="row">
-              <div class="card">
-                <div class="card-body">
-                  {/* <h3 class="card-title">Default form</h3> */}
-                  <p class="card-description"> Off Boarding Process </p>
-                  <table class="table table-bordered">
+            <div className="row">
+              <div className="card">
+                <div className="card-body">
+                  {/* <h3 className="card-title">Default form</h3> */}
+                  <p className="card-description"> Off Boarding Process </p>
+                  <table className="table table-bordered">
                     <thead>
                       <tr>
                         <th> Employee Id </th>
@@ -313,10 +400,16 @@ const Off_Boarding = () => {
                         <td>{getUserDetailsById["Department"]}</td>
                         <td>{getUserDetailsById["Designation"]}</td>
                         <td>
-                          {getUserDetailsById?.off_boarding_status ? (
-                            <label class="badge badge-success">Completed</label>
+                          {inputData?.hr_off_boarding_status === true &&
+                          inputData?.finance_off_boarding_status === true &&
+                          inputData?.management_off_boarding_status === true ? (
+                            <label className="badge badge-success">
+                              Completed
+                            </label>
                           ) : (
-                            <label class="badge badge-warning">Pending</label>
+                            <label className="badge badge-warning">
+                              Pending
+                            </label>
                           )}
                         </td>
                       </tr>
@@ -329,13 +422,9 @@ const Off_Boarding = () => {
                     {/* <!==========  Previous Button ============> */}
                     <>
                       <button
-                        class="btn btn-sm btn-gradient-primary"
+                        className="btn btn-sm btn-gradient-primary"
                         onClick={(e) => {
-                          return (
-                            e.preventDefault(),
-                            setActive(active - 1),
-                            setSteperCounter(steperCounter - 1)
-                          );
+                          return e.preventDefault(), setActive(active - 1);
                         }}
                         style={{
                           visibility: active !== 1 ? "visible" : "hidden",
@@ -349,13 +438,9 @@ const Off_Boarding = () => {
                     {/* <!==========  Next Button ============> */}
                     {active !== 3 && (
                       <button
-                        class="btn btn-sm btn-gradient-primary"
+                        className="btn btn-sm btn-gradient-primary"
                         onClick={(e) => {
-                          return (
-                            e.preventDefault(),
-                            setActive(active + 1),
-                            setSteperCounter(steperCounter + 1)
-                          );
+                          return e.preventDefault(), setActive(active + 1);
                         }}
                         style={{ float: "right" }}
                       >
@@ -364,15 +449,15 @@ const Off_Boarding = () => {
                     )}
                   </div>
                   <div style={{ margin: "50px" }}>
-                    <form class="forms-sample">
+                    <form className="forms-sample">
                       <>
                         <MultiStepForm activeStep={active}>
                           <Step label="Supervisor Clearance (HR)">
                             <>
                               <div className="row">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <table class="table table-hover">
+                                <div className="card">
+                                  <div className="card-body">
+                                    <table className="table table-hover">
                                       <thead>
                                         <tr>
                                           <th> Field Name </th>
@@ -385,28 +470,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="informed_client_on_exit"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
                                                     roless?.Hr?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.informed_client_on_exit
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -419,28 +504,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="project_official_duties_handover"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
                                                     roless?.Hr?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.project_official_duties_handover
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -451,28 +536,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="important_mails_transferred"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
                                                     roless?.Hr?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.important_mails_transferred
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -483,28 +568,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="official_document_handover"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
                                                     roless?.Hr?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.official_document_handover
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -520,9 +605,9 @@ const Off_Boarding = () => {
                           <Step label="Admin Clearance (Admin)">
                             <>
                               <div className="row">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <table class="table table-hover">
+                                <div className="card">
+                                  <div className="card-body">
+                                    <table className="table table-hover">
                                       <thead>
                                         <tr>
                                           <th> Field Name </th>
@@ -535,28 +620,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="acenet_laptop"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   checked={
                                                     inputData?.acenet_laptop
                                                   }
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Finance?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -567,26 +652,26 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="id_card"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Finance?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={inputData?.id_card}
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -597,28 +682,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="data_card_hotspot"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Finance?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.data_card_hotspot
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -629,28 +714,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="client_asset"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Finance?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.client_asset
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -661,28 +746,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="biometric_disabled"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Finance?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.biometric_disabled
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -693,28 +778,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="office_365_account_deletion"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Finance?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.office_365_account_deletion
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -725,28 +810,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="email_forwarded"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Finance?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.email_forwarded
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -757,28 +842,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="zoho_account_deleted"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Finance?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.zoho_account_deleted
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -794,9 +879,9 @@ const Off_Boarding = () => {
                           <Step label="Other Formalities (Management)">
                             <>
                               <div className="row">
-                                <div class="card">
-                                  <div class="card-body">
-                                    <table class="table table-hover">
+                                <div className="card">
+                                  <div className="card-body">
+                                    <table className="table table-hover">
                                       <thead>
                                         <tr>
                                           <th> Field Name </th>
@@ -809,28 +894,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="relieving_letter_shared"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Management?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.relieving_letter_shared
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -841,28 +926,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="fnf_statement_shared"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Management?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.fnf_statement_shared
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -873,28 +958,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="fnf_cleared"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Management?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.fnf_cleared
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -905,28 +990,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="employee_datasheet_updated"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Management?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.employee_datasheet_updated
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -937,28 +1022,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="ghi_deletion"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Management?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                   checked={
                                                     inputData?.ghi_deletion
                                                   }
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -972,28 +1057,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="employee_folder_moved_to_past_employee_folder"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   checked={
                                                     inputData?.employee_folder_moved_to_past_employee_folder
                                                   }
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Management?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -1004,28 +1089,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
                                                   name="ghi_initiated"
-                                                  class="form-control form-control-sm"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   checked={
                                                     inputData?.ghi_initiated
                                                   }
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Management?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -1036,28 +1121,28 @@ const Off_Boarding = () => {
                                           <td>
                                             <div className="board">
                                               <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
+                                              <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
-                                                  name="ghi_eCard_issued"
-                                                  class="form-control form-control-sm"
+                                                  name="ghi_e_card_issued"
+                                                  className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   checked={
-                                                    inputData?.ghi_eCard_issued
+                                                    inputData?.ghi_e_card_issued
                                                   }
                                                   disabled={
-                                                    roless?.Hr?.includes(
+                                                    roless?.Management?.includes(
                                                       LocalStorageData?.user_id
-                                                    ) && active > 1
-                                                      ? true
-                                                      : roless?.Management?.includes(
-                                                          LocalStorageData?.user_id
-                                                        ) && active < 3
-                                                      ? true
-                                                      : false
+                                                    ) ||
+                                                    roless?.Admin?.includes(
+                                                      LocalStorageData?.user_id
+                                                    )
+                                                      ? false
+                                                      : true
                                                   }
+                                                  style={{ opacity: "0" }}
                                                 />
-                                                <span class="slider round"></span>
+                                                <span className="slider round"></span>
                                               </label>
                                               <span>Yes</span>
                                             </div>
@@ -1075,12 +1160,10 @@ const Off_Boarding = () => {
                         {active !== 1 && (
                           <>
                             <button
-                              class="btn btn-sm btn-gradient-primary me-2"
+                              className="btn btn-sm btn-gradient-primary me-2"
                               onClick={(e) => {
                                 return (
-                                  e.preventDefault(),
-                                  setActive(active - 1),
-                                  setSteperCounter(steperCounter - 1)
+                                  e.preventDefault(), setActive(active - 1)
                                 );
                               }}
                             >
@@ -1091,13 +1174,9 @@ const Off_Boarding = () => {
                         {/* <!==========  Next Button ============> */}
                         {active !== 3 && (
                           <button
-                            class="btn btn-sm btn-gradient-primary me-2"
+                            className="btn btn-sm btn-gradient-primary me-2"
                             onClick={(e) => {
-                              return (
-                                e.preventDefault(),
-                                setActive(active + 1),
-                                setSteperCounter(steperCounter + 1)
-                              );
+                              return e.preventDefault(), setActive(active + 1);
                             }}
                             style={{ float: "right" }}
                           >
@@ -1105,83 +1184,88 @@ const Off_Boarding = () => {
                           </button>
                         )}
                         {/* <!==========  Update & Save Button ============> */}
-                        {active >= 1 && active < 3 && (
+
+                        {inputData?._id ? (
                           <>
-                            {inputData?._id ? (
-                              <>
-                                <button
-                                  class="btn btn-sm btn-gradient-success me-2"
-                                  onClick={onUpdateNextButton}
-                                  style={{
-                                    float: "right",
-                                    display:
-                                      roless?.Hr?.includes(
+                            <button
+                              className="btn btn-sm btn-gradient-success me-2"
+                              onClick={onUpdateNextButton}
+                              style={{
+                                float: "right",
+                                display:
+                                  roless?.Hr?.includes(
+                                    LocalStorageData?.user_id
+                                  ) && active === 1
+                                    ? "block"
+                                    : roless?.Finance?.includes(
                                         LocalStorageData?.user_id
-                                      ) && active > 1
-                                        ? "none"
-                                        : roless?.finance?.includes(
-                                            LocalStorageData?.user_id
-                                          ) && active === 2
-                                        ? "none"
-                                        : roless?.Management?.includes(
-                                            LocalStorageData?.user_id
-                                          ) && active < 3
-                                        ? "none"
-                                        : "block",
-                                  }}
-                                >
-                                  Submit
-                                </button>
-                              </>
-                            ) : (
-                              <button
-                                class="btn btn-sm btn-gradient-success me-2"
-                                onClick={onSaveNextButton}
-                                style={{
-                                  float: "right",
-                                  display:
-                                    roless?.Hr?.includes(
-                                      LocalStorageData?.user_id
-                                    ) && active > 1
-                                      ? "none"
-                                      : roless?.finance?.includes(
-                                          LocalStorageData?.user_id
-                                        ) && active === 2
-                                      ? "none"
-                                      : roless?.Management?.includes(
-                                          LocalStorageData?.user_id
-                                        ) && active < 3
-                                      ? "none"
-                                      : "block",
-                                }}
-                              >
-                                Submit
-                              </button>
-                            )}
+                                      ) && active === 2
+                                    ? "block"
+                                    : roless?.Management?.includes(
+                                        LocalStorageData?.user_id
+                                      ) && active === 3
+                                    ? "block"
+                                    : roless?.Admin?.includes(
+                                        LocalStorageData?.user_id
+                                      )
+                                    ? "block"
+                                    : "none",
+                              }}
+                            >
+                              onUpdateNextButton
+                            </button>
                           </>
-                        )}
-                        {/* <!========== onSubmittedButton ============> */}
-                        {active === 3 && (
+                        ) : (
                           <button
-                            class="btn btn-sm btn-gradient-success me-2"
-                            onClick={onSubmittedButton}
+                            className="btn btn-sm btn-gradient-success me-2"
+                            onClick={onSaveNextButton}
                             style={{
                               float: "right",
                               display:
-                                roless?.Management?.includes(
+                                roless?.Hr?.includes(
                                   LocalStorageData?.user_id
-                                ) && active > 2
+                                ) && active === 1
+                                  ? "block"
+                                  : roless?.Finance?.includes(
+                                      LocalStorageData?.user_id
+                                    ) && active === 2
+                                  ? "block"
+                                  : roless?.Management?.includes(
+                                      LocalStorageData?.user_id
+                                    ) && active === 3
                                   ? "block"
                                   : roless?.Admin?.includes(
                                       LocalStorageData?.user_id
-                                    ) && active > 2
+                                    )
                                   ? "block"
                                   : "none",
                             }}
                           >
-                            Submit
+                            onSaveNextButton1
                           </button>
                         )}
+
+                        {/* <!========== onSubmittedButton ============> */}
+
+                        {/* <button
+                          className="btn btn-sm btn-gradient-success me-2"
+                          onClick={onUpdateNextButton}
+                          style={{
+                            float: "right",
+                            display:
+                              roless?.Management?.includes(
+                                LocalStorageData?.user_id
+                              ) && active === 3
+                                ? "block"
+                                : roless?.Admin?.includes(
+                                    LocalStorageData?.user_id
+                                  )
+                                ? "block"
+                                : "none",
+                          }}
+                        >
+                          onUpdateNextButton2
+                        </button> */}
                       </>
                     </form>
                   </div>
@@ -1189,7 +1273,7 @@ const Off_Boarding = () => {
               </div>
             </div>
           </div>
-          <footer class="footer">
+          <footer className="footer">
             <Footer />
           </footer>
         </div>

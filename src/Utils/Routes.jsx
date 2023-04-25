@@ -57,7 +57,7 @@ const Routes_Array = [
   {
     path: "/off_boarding/:_id",
     component: Off_Boarding,
-    allowedRoles: ["Admin", "Hr", "Management"],
+    allowedRoles: ["Admin", "Hr", "Management", "Finance"],
   },
   //   <!================= Form's ==================>
   {

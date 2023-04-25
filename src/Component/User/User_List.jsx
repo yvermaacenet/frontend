@@ -10,14 +10,14 @@ import PureModal from "react-pure-modal";
 import { useParams } from "react-router-dom";
 
 const User_List = () => {
-  const specificDate = "2023-04-21";
+  const specificDate = "2023-04-18";
   const navigate = useNavigate();
   const { status_code } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getUserList, setGetUserList] = useState([]);
   const [roless, setRoless] = useState([]);
   const [uploadData, setUploadData] = useState([]);
-  const [duplcates, setDuplicates] = useState([]);
+  // const [offbordingdata, setOffBoardingData] = useState([]);
   const [show, setShow] = useState(false);
   const [addEventModal, setAddEventModal] = useState(false);
   const [getStatus_code, setStatus_code] = useState(status_code);
@@ -44,8 +44,28 @@ const User_List = () => {
         .get(`/user_list/${getStatus_code}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
-        .then((result_user_list) => {
-          return setGetUserList(result_user_list?.data);
+        .then(async (result_user_list) => {
+          return await axios
+            .get(`/off_boarding`, {
+              headers: {
+                Access_Token: LocalStorageData?.generate_auth_token,
+              },
+            })
+            .then(async (result) => {
+              const resp = result.data;
+              const tt = await result_user_list?.data.map((a) => ({
+                ...a,
+                ...resp.find((b) => b.employee_id === a._id),
+              }));
+              return setGetUserList(tt);
+            })
+            .catch((err) => {
+              if (err.response.status === 500) {
+                navigate("/error_500");
+              } else {
+                navigate("/error_403");
+              }
+            });
         })
         .catch((err) => {
           if (err.response.status === 500) {
@@ -114,6 +134,12 @@ const User_List = () => {
       return false;
     }
   };
+  // const result = getUserList.map((a) => ({
+  //   ...a,
+  //   ...offbordingdata.find((b) => b.employee_id === a._id),
+  // }));
+
+  // console.log(result);
   return (
     <>
       <div className="container-scroller">
@@ -203,7 +229,8 @@ const User_List = () => {
                           return (
                             <tr key={index}>
                               <td className="py-1">
-                                <img src={value?.Photo} alt="image" />
+                                <img src={value?.Photo} alt="image" />{" "}
+                                {index + 1}
                               </td>
                               <td className="py-1">{value["Employee ID"]}</td>
                               <td>
@@ -244,14 +271,12 @@ const User_List = () => {
                                   roless?.Hr?.includes(
                                     LocalStorageData?.user_id
                                   ) ||
-                                  (roless?.Finance?.includes(
+                                  roless?.Finance?.includes(
                                     LocalStorageData?.user_id
-                                  ) &&
-                                    value?.on_boarding_steper_counter >= 1) ||
-                                  (roless?.Management?.includes(
+                                  ) ||
+                                  roless?.Management?.includes(
                                     LocalStorageData?.user_id
-                                  ) &&
-                                    value?.on_boarding_steper_counter >= 2) ? (
+                                  ) ? (
                                     <button
                                       type="button"
                                       className={`btn btn-sm ${
@@ -287,17 +312,15 @@ const User_List = () => {
 
                                 {/* ================ Off Boarding Button ============= */}
 
-                                {roless?.Admin?.includes(
+                                {/* {roless?.Admin?.includes(
                                   LocalStorageData?.user_id
                                 ) ||
-                                (roless?.Hr?.includes(
+                                roless?.Hr?.includes(
                                   LocalStorageData?.user_id
-                                ) &&
-                                  value?.off_boarding_steper_counter >= 0) ||
-                                (roless?.Management?.includes(
+                                ) ||
+                                roless?.Management?.includes(
                                   LocalStorageData?.user_id
-                                ) &&
-                                  value?.off_boarding_steper_counter >= 2) ? (
+                                ) ? (
                                   <button
                                     type="button"
                                     className={`btn btn-sm ${
@@ -319,14 +342,46 @@ const User_List = () => {
                                     }}
                                   >
                                     {value?.off_boarding_status
-                                      ? "Resignation is completed"
+                                      ? "Resignation is completedddddd"
                                       : value?.off_boarding_steper_counter >= 1
                                       ? "Resignation is pending"
                                       : "Initiate Resignation"}
                                   </button>
                                 ) : (
                                   ""
-                                )}
+                                )} */}
+
+                                <button
+                                  type="button"
+                                  className={`btn btn-sm ${
+                                    value?.hr_off_boarding_status === true &&
+                                    value?.finance_off_boarding_status ===
+                                      true &&
+                                    value?.management_off_boarding_status ===
+                                      true
+                                      ? "btn-inverse-success"
+                                      : value?.off_boarding_steper_counter >= 1
+                                      ? "btn-inverse-danger"
+                                      : "btn-inverse-info"
+                                  } ms-2`}
+                                  title="Offboarding"
+                                  onClick={() => {
+                                    const confirmationButton = window.confirm(
+                                      "Do you really want to Initiate Resignation?"
+                                    );
+                                    if (confirmationButton === true) {
+                                      navigate(`/off_boarding/${value?._id}`);
+                                    }
+                                  }}
+                                >
+                                  {value?.hr_off_boarding_status === true &&
+                                  value?.finance_off_boarding_status === true &&
+                                  value?.management_off_boarding_status === true
+                                    ? "Resignation is completed"
+                                    : value?.off_boarding_steper_counter >= 1
+                                    ? "Resignation is pending"
+                                    : "Initiate Resignation"}
+                                </button>
                               </td>
                             </tr>
                           );
