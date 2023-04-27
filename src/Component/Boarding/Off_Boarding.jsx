@@ -170,7 +170,8 @@ const Off_Boarding = () => {
             .put(
               `/user_update/${_id}`,
               {
-                off_boarding_steper_counter: active,
+                // off_boarding_steper_counter: active,
+                initiate_off_boarding_status: true,
                 off_boarding_status:
                   inputData?.hr_off_boarding_status === true &&
                   inputData?.finance_off_boarding_status === true &&
@@ -254,34 +255,34 @@ const Off_Boarding = () => {
           setActive(active + 1);
           setRenderComponent(true);
           navigate("/user_list/active_users");
-          await axios
-            .put(
-              `/user_update/${_id}`,
-              {
-                off_boarding_steper_counter: active,
-                off_boarding_status:
-                  inputData?.hr_off_boarding_status === true &&
-                  inputData?.finance_off_boarding_status === true &&
-                  inputData?.management_off_boarding_status === true
-                    ? true
-                    : false,
-              },
-              {
-                headers: {
-                  Access_Token: LocalStorageData?.generate_auth_token,
-                },
-              }
-            )
-            .then((res) => {
-              return console.log(res?.data.message);
-            })
-            .catch((err) => {
-              if (err.response.status === 500) {
-                navigate("/error_500");
-              } else {
-                navigate("/error_403");
-              }
-            });
+          // await axios
+          //   .put(
+          //     `/user_update/${_id}`,
+          //     {
+          //       // off_boarding_steper_counter: active,
+          //       off_boarding_status:
+          //         inputData?.hr_off_boarding_status === true &&
+          //         inputData?.finance_off_boarding_status === true &&
+          //         inputData?.management_off_boarding_status === true
+          //           ? true
+          //           : false,
+          //     },
+          //     {
+          //       headers: {
+          //         Access_Token: LocalStorageData?.generate_auth_token,
+          //       },
+          //     }
+          //   )
+          //   .then((res) => {
+          //     return console.log(res?.data.message);
+          //   })
+          //   .catch((err) => {
+          //     if (err.response.status === 500) {
+          //       navigate("/error_500");
+          //     } else {
+          //       navigate("/error_403");
+          //     }
+          //   });
         }
       })
       .catch((err) => {

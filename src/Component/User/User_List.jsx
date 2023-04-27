@@ -299,8 +299,8 @@ const User_List = () => {
                                         value?.management_on_boarding_status ===
                                           true
                                           ? "btn-inverse-success"
-                                          : value?.off_boarding_steper_counter >=
-                                            1
+                                          : value?.initiate_on_boarding_status ===
+                                            true
                                           ? "btn-inverse-danger"
                                           : "btn-inverse-info"
                                       } ms-2`}
@@ -330,7 +330,8 @@ const User_List = () => {
                                       value?.management_on_boarding_status ===
                                         true
                                         ? "Onboarding is completed"
-                                        : value?.on_boarding_steper_counter >= 1
+                                        : value?.initiate_on_boarding_status ===
+                                          true
                                         ? "Onboarding is pending"
                                         : "Initiate Onboarding"}
                                     </button>
@@ -388,7 +389,8 @@ const User_List = () => {
                                     value?.management_off_boarding_status ===
                                       true
                                       ? "btn-inverse-success"
-                                      : value?.off_boarding_steper_counter >= 1
+                                      : value?.initiate_off_boarding_status ===
+                                        true
                                       ? "btn-inverse-danger"
                                       : "btn-inverse-info"
                                   } ms-2`}
@@ -412,7 +414,8 @@ const User_List = () => {
                                   value?.finance_off_boarding_status === true &&
                                   value?.management_off_boarding_status === true
                                     ? "Resignation is completed"
-                                    : value?.off_boarding_steper_counter >= 1
+                                    : value?.initiate_off_boarding_status ===
+                                      true
                                     ? "Resignation is pending"
                                     : "Initiate Resignation"}
                                 </button>

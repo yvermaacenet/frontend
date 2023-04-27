@@ -10,6 +10,10 @@ import Form12BB from "../Component/Forms/Form12BB";
 import Flexible_Benefit_Plan from "../Component/Forms/Flexible_Benefit_Plan";
 import Get_Form_Flexi_Benefit_Data from "../Component/Forms/Get_Form_Flexi_Benefit_Data";
 import Get_Form12bb_Data from "../Component/Forms/Get_Form12bb_Data";
+import TravelRequestForm from "../Component/Travel/TravelRequestForm";
+import GetTravelRequestForm_Data from "../Component/Travel/GetTravelRequestForm_Data";
+import TravelApprovalRequest from "../Component/Travel/TravelApprovalRequest";
+import Travel_Action from "../Component/Travel/Travel_Action";
 import Error_404 from "../Partials/Error_404";
 import Error_403 from "../Partials/Error_403";
 import Error_500 from "../Partials/Error_500";
@@ -80,6 +84,29 @@ const Routes_Array = [
     path: "/get_form_flexi_benefit_data",
     component: Get_Form_Flexi_Benefit_Data,
     allowedRoles: ["Admin"],
+  },
+  {
+    path: "/travelrequestform",
+    component: TravelRequestForm,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  },
+
+  {
+    path: "/alltravelrequest",
+    component: GetTravelRequestForm_Data,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  },
+
+  {
+    path: "/travelrequestreceived",
+    component: TravelApprovalRequest,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  },
+
+  {
+    path: "/travelactionpage/:_id",
+    component: Travel_Action,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
   {
     path: "*",

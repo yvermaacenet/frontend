@@ -13,7 +13,7 @@ const Dashboard = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [state, setState] = useState(LocalStorageData);
   const [clr, setClr] = useState("#1bcfb4");
-
+  const [roless, setRoless] = useState();
   const [counterList, setCounterList] = useState([]);
   const [states, setStates] = useState({ activeIndex: 0 });
   const [loading, setLoading] = useState(false);
@@ -43,9 +43,27 @@ const Dashboard = () => {
           }
         });
     }
+    async function get_user_list_by_role_name() {
+      const result = await axios
+        .get(`/get_user_list_by_role_name`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
+        .then((resp) => {
+          return setRoless(resp.data);
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+    }
+    get_user_list_by_role_name();
     toaster();
     get_counterList();
   }, []);
+  console.log("roless?.Reporting_Manager", roless?.Reporting_Manager);
   const cardArray = [
     {
       card_background: "bg-gradient-success",
@@ -125,8 +143,34 @@ const Dashboard = () => {
       card_icon: "mdi-book-plus",
       card_allowed_access: ["Finance"],
     },
+    {
+      card_background: "bg-gradient-success",
+      path: "/alltravelrequest",
+      card_title: "Travel Request Form",
+      card_icon: "mdi-book-plus",
+      card_allowed_access: [
+        "Admin",
+        "Hr",
+        "Finance",
+        "Management",
+        "Team member",
+      ],
+    },
+    {
+      card_background: "bg-gradient-info",
+      path: "/travelrequestreceived",
+      card_title: "Travel Request Approvals",
+      card_icon: "mdi-book-plus",
+      display_none: roless?.Reporting_Manager.includes("60") ? "block" : "none",
+      card_allowed_access: [
+        "Admin",
+        "Hr",
+        "Finance",
+        "Management",
+        "Team member",
+      ],
+    },
   ];
-
   const data01 = [
     {
       name: `Active User`,
@@ -261,7 +305,10 @@ const Dashboard = () => {
                       result?.card_allowed_access.includes(
                         LocalStorageData?.zoho_role
                       ) && (
-                        <div className="col-md-3 stretch-card grid-margin">
+                        <div
+                          className="col-md-3 stretch-card grid-margin "
+                          style={{ display: result?.display_none }}
+                        >
                           <div
                             className={`card ${result?.card_background} card-img-holder text-white`}
                           >
