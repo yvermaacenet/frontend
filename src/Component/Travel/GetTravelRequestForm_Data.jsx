@@ -16,11 +16,12 @@ const GetTravelRequestForm_Data = () => {
     async function getData() {
       setLoading(true);
       await axios
-        .get(`all_travel_request`, {
+        .get(`get_travel_request_by_email_id/${LocalStorageData?.email}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
           const resp = result.data;
+
           return setGetleaverequestdata(resp), setLoading(false);
         })
         .catch((err) => {
@@ -33,111 +34,6 @@ const GetTravelRequestForm_Data = () => {
     }
     getData();
   }, []);
-
-  //   const clickbuttonalldata = async () => {
-  //     setLoading(true);
-  //     await axios
-  //       .get(`form_flexi`, {
-  //         headers: { Access_Token: LocalStorageData?.generate_auth_token },
-  //       })
-  //       .then((result) => {
-  //         const resp = result.data;
-  //         const ArrayData = [];
-  //         resp.map((val) => {
-  //           return ArrayData.push({
-  //             Name: val?.name,
-  //             Email: val?.email,
-  //             "Employee ID": val?.emp_id,
-  //             "Salary band": val?.salary_band,
-  //             Stream: val?.stream,
-  //             Position: val?.position,
-  //             "Children allowance": val?.children_allowance,
-  //             "Telephone Allowance": val?.telephone_allowance,
-  //             Fuel: val?.fuel_allowance,
-  //             Driver: val?.driver_allowance,
-  //             "Meals Allowance": val?.meals_allowance,
-  //             "Books and Periodicals": val?.books_and_periodicals_allowance,
-  //           });
-  //         });
-
-  //         const worksheet = XLSX.utils.json_to_sheet(ArrayData);
-  //         const workbook = XLSX.utils.book_new();
-  //         XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
-  //         const excelBuffer = XLSX.write(workbook, {
-  //           bookType: "xlsx",
-  //           type: "array",
-  //         });
-  //         // console.log(excelBuffer);
-  //         const downloadExcel = async () => {
-  //           const blob = await new Blob([excelBuffer], {
-  //             type: "application/octet-stream",
-  //           });
-  //           const fileName = `All_Data_Of_Flexible_Benefit_Plan_Form.xlsx`;
-  //           saveAs(blob, fileName);
-  //         };
-  //         downloadExcel();
-  //         setLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         if (err.response.status === 500) {
-  //           navigate("/error_500");
-  //         } else {
-  //           navigate("/error_403");
-  //         }
-  //       });
-  //   };
-  //   const clickbuttondata = async (id) => {
-  //     setLoading(true);
-  //     const result = await axios
-  //       .get(`get_form_flexible_by_id/${id}`, {
-  //         headers: { Access_Token: LocalStorageData?.generate_auth_token },
-  //       })
-  //       .then((result) => {
-  //         const resp = result.data[0];
-  //         const ded = [
-  //           ["Sr.No", "#", "Value"],
-  //           ["1", "Name", resp.name],
-  //           ["2", "Email", resp.email],
-  //           ["3", "Employee ID", resp.emp_id],
-  //           ["4", "Salary band", resp.salary_band],
-  //           ["5", "Stream", resp.stream],
-  //           ["6", "Position", resp.position],
-  //           ["7", "Children allowance", resp.children_allowance],
-  //           ["8", "Telephone Allowance", resp.telephone_allowance],
-  //           ["9", "Fuel", resp.fuel_allowance],
-  //           ["10", "Driver", resp.driver_allowance],
-  //           ["11", "Meals Allowance", resp.meals_allowance],
-  //           ["12", "Books and Periodicals", resp.books_and_periodicals_allowance],
-  //         ];
-
-  //         const worksheet = XLSX.utils.aoa_to_sheet(ded);
-  //         worksheet["!cols"] = [{ width: 15 }, { width: 15 }];
-  //         const workbook = XLSX.utils.book_new();
-  //         // console.log("workbook", workbook);
-  //         XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
-  //         const excelBuffer = XLSX.write(workbook, {
-  //           bookType: "xlsx",
-  //           type: "array",
-  //         });
-  //         // console.log(excelBuffer);
-  //         const downloadExcel = async () => {
-  //           const blob = await new Blob([excelBuffer], {
-  //             type: "application/octet-stream",
-  //           });
-  //           const fileName = `${resp.name}_Flexible_Benefit_Plan_Form.xlsx`;
-  //           saveAs(blob, fileName);
-  //         };
-  //         downloadExcel();
-  //         setLoading(false);
-  //       })
-  //       .catch((err) => {
-  //         if (err.response.status === 500) {
-  //           navigate("/error_500");
-  //         } else {
-  //           navigate("/error_403");
-  //         }
-  //       });
-  //   };
 
   return (
     <div className="container-scroller">

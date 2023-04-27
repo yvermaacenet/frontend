@@ -51,12 +51,19 @@ const Travel_Action = (props) => {
         alert.show("Approved Successfully");
         navigate("/travelrequestreceived");
       }
-    } else {
-      console.log("not manabe");
-
+    } else if (LocalStorageData?.zoho_role === "Management") {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         ...remarks,
         management_status: "Approved",
+      });
+      if (res.data === "Updated Sucessfully") {
+        alert.show("Approved Successfully");
+        navigate("/travelrequestreceived");
+      }
+    } else {
+      const res = await axios.put(`/update_travel_request/${_id}`, {
+        ...remarks,
+        manager_status: "Approved",
       });
       if (res.data === "Updated Sucessfully") {
         alert.show("Approved Successfully");
@@ -123,6 +130,14 @@ const Travel_Action = (props) => {
                           </div>
                           <div className="row">
                             <div className="col-6">
+                              <p className="fw-bold"> Requested on:</p>
+                            </div>
+                            <div className="col-6">
+                              <p> {modalData?.creation_date?.split("T")[0]}</p>
+                            </div>
+                          </div>
+                          <div className="row">
+                            <div className="col-6">
                               <p className="fw-bold"> Request Type: </p>
                             </div>
                             <div className="col-6">
@@ -155,15 +170,19 @@ const Travel_Action = (props) => {
                           </div>
                           <div className="row">
                             <div className="col-6">
-                              <p className="fw-bold"> Requested on:</p>
+                              <p className="fw-bold"> Travelling Dates:</p>
                             </div>
                             <div className="col-6">
-                              <p> {modalData?.creation_date?.split("T")[0]}</p>
+                              <p>
+                                {(modalData?.start_date).split("T")[0]}
+                                {" to "} {modalData?.end_date.split("T")[0]}
+                              </p>
                             </div>
                           </div>
+
                           <div className="row">
                             <div className="col-6">
-                              <p className="fw-bold"> Est. Amount:</p>
+                              <p className="fw-bold"> Est. Amount(INR):</p>
                             </div>
                             <div className="col-6">
                               <p> {modalData?.estimated_amount}</p>
