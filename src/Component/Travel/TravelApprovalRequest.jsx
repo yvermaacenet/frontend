@@ -23,7 +23,7 @@ const TravelApprovalRequest = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getData() {
-      setLoading(true);
+      setLoading(false);
       await axios
         .get(`all_travel_request`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -33,6 +33,7 @@ const TravelApprovalRequest = () => {
           const filtered = resp.filter(
             (x) => x?.reporting_manager.slice(-2) === LocalStorageData?.emp_id
           );
+          console.log("fill", filtered);
           return setGettravelrequestdata(filtered), setLoading(false);
         })
         .catch((err) => {
@@ -43,9 +44,9 @@ const TravelApprovalRequest = () => {
           }
         });
     }
-    getData();
+    getData("asd", gettravelrequestdata);
   }, []);
-
+  console.log();
   //   //   ====Handle Remarks
 
   //   const handleRemarksChange = (e) => {
