@@ -83,206 +83,211 @@ const TravelRequestForm = () => {
                 page_title_button="Back"
                 page_title_button_link="/alltravelrequest"
               />
-              <div className="d-flex align-items-center justify-content-center justify-content-lg-end">
+              {/* <div className="d-flex my-3 align-items-center justify-content-center justify-content-lg-end">
                 {/* <NavLink to="/alltravelrequest">
                   <button className="btn btn-primary align-center">
                     Your Travel Requests
                   </button>
-                </NavLink> */}
+                </NavLink> 
 
                 <NavLink to="/travelrequestreceived">
                   <button className="btn btn-primary align-center">
                     Received Requests for Approvals
                   </button>
                 </NavLink>
-              </div>
+              </div> */}
               {loading && (
                 <div className="loader-container">
                   <div class="loader"></div>
                 </div>
               )}
-
-              <div className="content-wrapper">
-                <form onSubmit={handleSubmit}>
-                  <div className="row my-2">
-                    <div className="col-12 col-lg-4">
-                      <div>
-                        <label>Name</label>
-                        <input
-                          className="form-control form-control-sm"
-                          type="text"
-                          name="fullName"
-                          value={LocalStorageData?.name}
-                          disabled
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                      <div controlId="formEmail">
-                        <label>Email address</label>
-                        <input
-                          className="form-control form-control-sm"
-                          type="email"
-                          value={LocalStorageData?.email}
-                          name="email"
-                          disabled
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                      <div controlId="formEmail">
-                        <label>Billable</label>
-                        <select
-                          className="form-control form-control-sm"
-                          value={formData?.billable}
-                          onChange={handleChange}
-                          name="billable"
-                        >
-                          <option selected>Select</option>
-                          <option value="yes">YES</option>
-                          <option value="no">NO</option>
-                        </select>
-                      </div>
-                    </div>
-                    {/* <div className="col-4">
+              <div className="row">
+                <div className="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body ">
+                      <form onSubmit={handleSubmit}>
+                        <div className="row my-2">
+                          <div className="col-12 col-lg-4">
+                            <div>
+                              <label>Name</label>
+                              <input
+                                className="form-control form-control-sm"
+                                type="text"
+                                name="fullName"
+                                value={LocalStorageData?.name}
+                                disabled
+                              />
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-4">
+                            <div controlId="formEmail">
+                              <label>Email address</label>
+                              <input
+                                className="form-control form-control-sm"
+                                type="email"
+                                value={LocalStorageData?.email}
+                                name="email"
+                                disabled
+                              />
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-4">
+                            <div controlId="formEmail">
+                              <label>Billable</label>
+                              <select
+                                className="form-control form-control-sm"
+                                value={formData?.billable}
+                                onChange={handleChange}
+                                name="billable"
+                              >
+                                <option selected>Select</option>
+                                <option value="yes">YES</option>
+                                <option value="no">NO</option>
+                              </select>
+                            </div>
+                          </div>
+                          {/* <div className="col-4">
                     </div> */}
-                  </div>
+                        </div>
 
-                  <div className="row my-2">
-                    <div className="col-12 col-lg-4">
-                      {" "}
-                      <div controlId="formTravelDestination">
-                        <label>Type of Request</label>
+                        <div className="row my-2">
+                          <div className="col-12 col-lg-4">
+                            {" "}
+                            <div controlId="formTravelDestination">
+                              <label>Type of Request</label>
 
-                        <select
-                          className="form-control form-control-sm"
-                          name="type_of_request"
-                          id=""
-                          value={formData?.type_of_request}
-                          onChange={handleChange}
+                              <select
+                                className="form-control form-control-sm"
+                                name="type_of_request"
+                                id=""
+                                value={formData?.type_of_request}
+                                onChange={handleChange}
+                              >
+                                <option selected>Select</option>
+                                <option value="Flight">Flight</option>
+                                <option value="Hotel">Hotel</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-4">
+                            <div controlId="formPhoneNumber">
+                              <label>Travelling From</label>
+                              <input
+                                className="form-control form-control-sm"
+                                type="tel"
+                                placeholder="Enter Phone Number"
+                                name="from_location"
+                                value={formData?.from_location}
+                                onChange={handleChange}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-4">
+                            {" "}
+                            <div controlId="formTravelDestination">
+                              <label>Travel To</label>
+                              <input
+                                className="form-control form-control-sm"
+                                type="text"
+                                placeholder="Enter Travel Destination"
+                                name="destination"
+                                value={formData?.destination}
+                                onChange={handleChange}
+                                required
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="row my-2">
+                          <div className="col-12 col-lg-6">
+                            {" "}
+                            <div controlId="formTravelStartDate">
+                              <label>Travel Start Date</label>
+                              <input
+                                className="form-control form-control-sm"
+                                type="date"
+                                name="start_date"
+                                value={start_date}
+                                onChange={handleChange}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-6">
+                            <div controlId="formTravelEndDate">
+                              <label>Travel End Date</label>
+                              <input
+                                className="form-control form-control-sm"
+                                type="date"
+                                name="end_date"
+                                value={end_date}
+                                onChange={handleChange}
+                                required
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row my-2">
+                          <div className="col-12 col-lg-6">
+                            {" "}
+                            <div controlId="formReasonForTravel">
+                              <label>Reason for Travel</label>
+                              <input
+                                className="form-control form-control-sm"
+                                as="textarea"
+                                placeholder="Enter Reason for Travel"
+                                name="reason_for_travel"
+                                onChange={handleChange}
+                                value={formData?.reason_for_travel}
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-6">
+                            <div controlId="formReasonForTravel">
+                              <label>
+                                Est. Amount <small>(INR)</small>
+                              </label>
+                              <input
+                                className="form-control form-control-sm"
+                                type="number"
+                                placeholder="Enter Reason for Travel"
+                                name="estimated_amount"
+                                value={estimated_amount}
+                                onChange={handleChange}
+                                required
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-6">
+                            <label htmlFor="">Comments:</label>
+                            <input
+                              className="form-control form-control-sm"
+                              type="text"
+                              placeholder="Any Comments"
+                              name="comments"
+                              value={formData?.comments}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <button
+                          variant="primary"
+                          type="submit"
+                          className="btn btn-sm btn-gradient-success me-2"
                         >
-                          <option selected>Select</option>
-                          <option value="Flight">Flight</option>
-                          <option value="Hotel">Hotel</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                      <div controlId="formPhoneNumber">
-                        <label>Travelling From</label>
-                        <input
-                          className="form-control form-control-sm"
-                          type="tel"
-                          placeholder="Enter Phone Number"
-                          name="from_location"
-                          value={formData?.from_location}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-4">
-                      {" "}
-                      <div controlId="formTravelDestination">
-                        <label>Travel To</label>
-                        <input
-                          className="form-control form-control-sm"
-                          type="text"
-                          placeholder="Enter Travel Destination"
-                          name="destination"
-                          value={formData?.destination}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
+                          Submit
+                        </button>
+                      </form>
                     </div>
                   </div>
-
-                  <div className="row my-2">
-                    <div className="col-12 col-lg-6">
-                      {" "}
-                      <div controlId="formTravelStartDate">
-                        <label>Travel Start Date</label>
-                        <input
-                          className="form-control form-control-sm"
-                          type="date"
-                          name="start_date"
-                          value={start_date}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6">
-                      <div controlId="formTravelEndDate">
-                        <label>Travel End Date</label>
-                        <input
-                          className="form-control form-control-sm"
-                          type="date"
-                          name="end_date"
-                          value={end_date}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row my-2">
-                    <div className="col-12 col-lg-6">
-                      {" "}
-                      <div controlId="formReasonForTravel">
-                        <label>Reason for Travel</label>
-                        <input
-                          className="form-control form-control-sm"
-                          as="textarea"
-                          placeholder="Enter Reason for Travel"
-                          name="reason_for_travel"
-                          onChange={handleChange}
-                          value={formData?.reason_for_travel}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6">
-                      <div controlId="formReasonForTravel">
-                        <label>
-                          Est. Amount <small>(INR)</small>
-                        </label>
-                        <input
-                          className="form-control form-control-sm"
-                          type="number"
-                          placeholder="Enter Reason for Travel"
-                          name="estimated_amount"
-                          value={estimated_amount}
-                          onChange={handleChange}
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-6">
-                      <label htmlFor="">Comments:</label>
-                      <input
-                        className="form-control form-control-sm"
-                        type="text"
-                        placeholder="Any Comments"
-                        name="comments"
-                        value={formData?.comments}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    variant="primary"
-                    type="submit"
-                    className="btn btn-sm btn-gradient-success me-2"
-                  >
-                    Submit
-                  </button>
-                </form>
+                </div>
               </div>
             </div>
           </div>

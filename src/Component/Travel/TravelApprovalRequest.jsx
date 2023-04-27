@@ -23,7 +23,7 @@ const TravelApprovalRequest = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getData() {
-      setLoading(false);
+      setLoading(true);
       await axios
         .get(`all_travel_request`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
