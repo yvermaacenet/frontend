@@ -178,7 +178,7 @@ const User_List = () => {
                     <button
                       type="button"
                       className="btn btn-sm btn-inverse-info btn-fw ms-1"
-                      onClick={() => setStatus_code("all_users")}
+                      onClick={() => setStatus_code("active_users")}
                     >
                       All
                     </button>
@@ -264,7 +264,11 @@ const User_List = () => {
                                   New Joining
                                 </span>
                               </td>
-                              <td>{value["Acenet Role"]}</td>
+                              <td>
+                                {value["Acenet Role"] === ""
+                                  ? "Team member"
+                                  : value["Acenet Role"]}
+                              </td>
                               <td>
                                 {value["Personal Mobile Number"] === ""
                                   ? "NA"

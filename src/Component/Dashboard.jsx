@@ -65,205 +65,114 @@ const Dashboard = () => {
   }, []);
   console.log("roless?.Reporting_Manager", roless?.Reporting_Manager);
   const cardArray = [
-    {
-      card_background: "bg-gradient-success",
-      path: "/user_list/active_users",
-      card_title: "Users",
-      card_icon: "mdi-account-multiple-outline",
-      card_counter_data: counterList?.Active_Users,
-      card_allowed_access: ["Admin", "Hr", "Finance", "Management"],
-    },
-    {
-      card_background: "bg-gradient-primary",
-      path: "/user_list/pending_onboarding_users",
-      card_title: "Pending Onboarding",
-      card_icon: "mdi-view-dashboard",
-      card_counter_data: counterList?.Pending_Onboarding,
-      card_allowed_access: ["Admin", "Hr", "Finance", "Management"],
-    },
-    {
-      card_background: "bg-gradient-secondary",
-      path: "/user_list/pending_offboarding_users",
-      card_title: "Pending Offboarding",
-      card_icon: "mdi-view-dashboard",
-      card_counter_data: counterList?.Pending_Offboarding,
-      card_allowed_access: ["Admin", "Hr", "Finance", "Management"],
-    },
-    {
-      card_background: "bg-gradient-warning",
-      path: "/cabin_slot_booking",
-      card_title: "Cabin Booking",
-      card_icon: "mdi-home-modern",
-      card_counter_data: counterList?.Total_Cabin_Booking,
-      card_allowed_access: [
-        "Admin",
-        "Hr",
-        "Finance",
-        "Management",
-        "Team member",
-      ],
-    },
-    {
-      card_background: "bg-gradient-info",
-      path: "/form12bb",
-      card_title: "Form 12 BB",
-      card_icon: "mdi-book-plus",
-      card_allowed_access: [
-        "Admin",
-        "Hr",
-        "Finance",
-        "Management",
-        "Team member",
-      ],
-    },
-    {
-      card_background: "bg-gradient-dark",
-      path: "/get_form12bb_data",
-      card_title: "Download Form 12 BB Data",
-      card_icon: "mdi-book-plus",
-      card_allowed_access: ["Finance"],
-    },
-    {
-      card_background: "bg-gradient-danger",
-      path: "/flexible_benefit_plan",
-      card_title: "Form Flexible Benefit",
-      card_icon: "mdi-book-plus",
-      card_allowed_access: [
-        "Admin",
-        "Hr",
-        "Finance",
-        "Management",
-        "Team member",
-      ],
-    },
-    {
-      card_background: "bg-gradient-primary",
-      path: "/get_form_flexi_benefit_data",
-      card_title: "Download Form Flexible Benefit Data",
-      card_icon: "mdi-book-plus",
-      card_allowed_access: ["Finance"],
-    },
-    {
-      card_background: "bg-gradient-success",
-      path: "/alltravelrequest",
-      card_title: "Travel Request Form",
-      card_icon: "mdi-book-plus",
-      card_allowed_access: [
-        "Admin",
-        "Hr",
-        "Finance",
-        "Management",
-        "Team member",
-      ],
-    },
-    {
-      card_background: "bg-gradient-info",
-      path: "/travelrequestreceived",
-      card_title: "Travel Request Approvals",
-      card_icon: "mdi-book-plus",
-      display_none: roless?.Reporting_Manager.includes("60") ? "block" : "none",
-      card_allowed_access: [
-        "Admin",
-        "Hr",
-        "Finance",
-        "Management",
-        "Team member",
-      ],
-    },
+    // {
+    //   card_background: "bg-gradient-success",
+    //   path: "/user_list/active_users",
+    //   card_title: "Users",
+    //   card_icon: "mdi-account-multiple-outline",
+    //   card_counter_data: counterList?.Active_Users,
+    //   card_allowed_access: ["Admin", "Hr", "Finance", "Management"],
+    // },
+    // {
+    //   card_background: "bg-gradient-primary",
+    //   path: "/user_list/pending_onboarding_users",
+    //   card_title: "Pending Onboarding",
+    //   card_icon: "mdi-view-dashboard",
+    //   card_counter_data: counterList?.Pending_Onboarding,
+    //   card_allowed_access: ["Admin", "Hr", "Finance", "Management"],
+    // },
+    // {
+    //   card_background: "bg-gradient-secondary",
+    //   path: "/user_list/pending_offboarding_users",
+    //   card_title: "Pending Offboarding",
+    //   card_icon: "mdi-view-dashboard",
+    //   card_counter_data: counterList?.Pending_Offboarding,
+    //   card_allowed_access: ["Admin", "Hr", "Finance", "Management"],
+    // },
+    // {
+    //   card_background: "bg-gradient-warning",
+    //   path: "/cabin_slot_booking",
+    //   card_title: "Meeting Room Booking",
+    //   card_icon: "mdi-home-modern",
+    //   card_counter_data: counterList?.Total_Cabin_Booking,
+    //   card_allowed_access: [
+    //     "Admin",
+    //     "Hr",
+    //     "Finance",
+    //     "Management",
+    //     "Team member",
+    //   ],
+    // },
+    // {
+    //   card_background: "bg-gradient-info",
+    //   path: "/form12bb",
+    //   card_title: "Form 12 BB",
+    //   card_icon: "mdi-book-plus",
+    //   card_allowed_access: [
+    //     "Admin",
+    //     "Hr",
+    //     "Finance",
+    //     "Management",
+    //     "Team member",
+    //   ],
+    // },
+    // {
+    //   card_background: "bg-gradient-dark",
+    //   path: "/get_form12bb_data",
+    //   card_title: "Download Form 12 BB Data",
+    //   card_icon: "mdi-book-plus",
+    //   card_allowed_access: ["Finance"],
+    // },
+    // {
+    //   card_background: "bg-gradient-danger",
+    //   path: "/flexible_benefit_plan",
+    //   card_title: "Form Flexible Benefit",
+    //   card_icon: "mdi-book-plus",
+    //   card_allowed_access: [
+    //     "Admin",
+    //     "Hr",
+    //     "Finance",
+    //     "Management",
+    //     "Team member",
+    //   ],
+    // },
+    // {
+    //   card_background: "bg-gradient-primary",
+    //   path: "/get_form_flexi_benefit_data",
+    //   card_title: "Download Form Flexible Benefit Data",
+    //   card_icon: "mdi-book-plus",
+    //   card_allowed_access: ["Finance"],
+    // },
+    // {
+    //   card_background: "bg-gradient-success",
+    //   path: "/alltravelrequest",
+    //   card_title: "Travel Request Form",
+    //   card_icon: "mdi-book-plus",
+    //   card_allowed_access: [
+    //     "Admin",
+    //     "Hr",
+    //     "Finance",
+    //     "Management",
+    //     "Team member",
+    //   ],
+    // },
+    // {
+    //   card_background: "bg-gradient-info",
+    //   path: "/travelrequestreceived",
+    //   card_title: "Travel Request Approvals",
+    //   card_icon: "mdi-book-plus",
+    //   display_none: roless?.Reporting_Manager.includes("60") ? "block" : "none",
+    //   card_allowed_access: [
+    //     "Admin",
+    //     "Hr",
+    //     "Finance",
+    //     "Management",
+    //     "Team member",
+    //   ],
+    // },
   ];
-  const data01 = [
-    {
-      name: `Active User`,
-      value: counterList?.Active_Users,
-    },
-    {
-      name: `Deactive User`,
-      value: counterList?.Deactive_Users,
-    },
-  ];
-
-  const renderActiveShape = (props) => {
-    const RADIAN = Math.PI / 180;
-    const {
-      cx,
-      cy,
-      midAngle,
-      innerRadius,
-      outerRadius,
-      startAngle,
-      endAngle,
-      fill,
-      payload,
-      percent,
-      value,
-    } = props;
-    const sin = Math.sin(-RADIAN * midAngle);
-    const cos = Math.cos(-RADIAN * midAngle);
-    const sx = cx + (outerRadius + 10) * cos;
-    const sy = cy + (outerRadius + 10) * sin;
-    const mx = cx + (outerRadius + 30) * cos;
-    const my = cy + (outerRadius + 30) * sin;
-    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-    const ey = my;
-    const textAnchor = cos >= 0 ? "start" : "end";
-
-    return (
-      <g>
-        <text x={cx} y={cy} textAnchor="middle" fill={fill}>
-          {payload.name}
-        </text>
-        <text x={cx} y={cy} dy={25} textAnchor="middle" fill={fill}>
-          {payload.value}
-        </text>
-        <Sector
-          cx={cx}
-          cy={cy}
-          innerRadius={innerRadius}
-          outerRadius={outerRadius}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          fill={fill}
-        />
-        <Sector
-          cx={cx}
-          cy={cy}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          innerRadius={outerRadius + 6}
-          outerRadius={outerRadius + 10}
-          fill={fill}
-        />
-
-        {/* <path
-          d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
-          stroke={fill}
-          fill="none"
-        /> */}
-        {/* <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" /> */}
-        {/* <text
-          x={ex + (cos >= 0 ? 1 : -1) * 12}
-          y={ey}
-          textAnchor={textAnchor}
-          fill="#333"
-        >{` ${value}`}</text> */}
-        {/* <text
-          x={ex + (cos >= 0 ? 1 : -1) * 12}
-          y={ey}
-          dy={18}
-          textAnchor={textAnchor}
-          fill="#999"
-        >
-          {`(Rate ${(percent * 100).toFixed(2)}%)`}
-        </text> */}
-      </g>
-    );
-  };
-  const onPieEnter = (_, index) => {
-    setStates({
-      activeIndex: index,
-    });
-    setClr(index === 0 ? "#1bcfb4" : "#fe7c96");
-  };
+  const currentTime = new Date().toDateString();
+  console.log(currentTime);
   return (
     <>
       <div className="container-scroller">
@@ -272,6 +181,31 @@ const Dashboard = () => {
           <Sidebar />
           <div className="main-panel">
             <div className="content-wrapper">
+              <div
+                role="alert"
+                style={{
+                  color: "#6d4199",
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  border: "none",
+                  textAlign: "center !important",
+                }}
+              >
+                <div class="page-header" style={{ marginBottom: "1rem" }}>
+                  <div class="d-lg-flex w-100 justify-content-between align-items-center">
+                    <div class="d-lg-flex align-items-center">
+                      <h3 class="mb-0 font-weight-medium mr-3">
+                        Hi,Welcome {LocalStorageData?.name}!
+                      </h3>
+                    </div>
+                    <p class="mb-0 text-muted">
+                      <i className="mdi mdi-calendar-clock"></i>
+                      {currentTime}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               <Page_Header
                 page_title="Dashboard"
                 page_title_button="Overview"
@@ -299,7 +233,8 @@ const Dashboard = () => {
                     theme="light"
                   />
                 </div>
-                <div className="row">
+
+                {/* <div className="row">
                   {cardArray?.map(
                     (result) =>
                       result?.card_allowed_access.includes(
@@ -345,9 +280,9 @@ const Dashboard = () => {
                         </div>
                       )
                   )}
-                </div>
+                </div> */}
 
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-md-12">
                     <div className="template-demo mt-2">
                       <NavLink
@@ -362,7 +297,7 @@ const Dashboard = () => {
                           Form 12 BB
                         </span>
 
-                        {/*  */}
+                       
                       </NavLink>
                       <NavLink
                         to="/flexible_benefit_plan"
@@ -378,7 +313,7 @@ const Dashboard = () => {
                       </NavLink>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </>
             </div>
             <footer className="footer">

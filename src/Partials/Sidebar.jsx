@@ -77,7 +77,7 @@ const Sidebar = () => {
                 aria-expanded="false"
                 aria-controls="ui-basic"
               >
-                <span class="menu-title">Cabin</span>
+                <span class="menu-title">Meeting Room</span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-home-modern menu-icon"></i>
               </a>
@@ -87,14 +87,14 @@ const Sidebar = () => {
                     {state?.zoho_role === "Admin" && (
                       <li className="nav-item">
                         <NavLink className="nav-link" to="/cabin_list">
-                          Cabin List
+                          Meeting Room List
                         </NavLink>
                       </li>
                     )}
 
                     <li className="nav-item">
                       <NavLink className="nav-link" to="/cabin_slot_booking">
-                        Cabin Booking
+                        Meeting Room Booking
                       </NavLink>
                     </li>
                   </ul>
@@ -125,25 +125,25 @@ const Sidebar = () => {
                       Form Flexible Benefit
                     </NavLink>
                   </li>
-                  {LocalStorageData?.zoho_role === "Finance" && (
-                    <>
-                      <li className="nav-item">
-                        <NavLink className="nav-link" to="/get_form12bb_data">
-                          {/* Form Flexible Benefit */}
-                          Download Form 12 BB <br /> Data
-                        </NavLink>
-                      </li>
-                      <li className="nav-item">
-                        <NavLink
-                          className="nav-link"
-                          to="/get_form_flexi_benefit_data"
-                        >
-                          {/* Form 12 BB */}
-                          Download Form Flexible <br /> Benefit Data
-                        </NavLink>
-                      </li>
-                    </>
-                  )}
+                  {/* {LocalStorageData?.zoho_role === "Finance" && ( */}
+                  <>
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/get_form12bb_data">
+                        {/* Form Flexible Benefit */}
+                        Download Form 12 BB <br /> Data
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link"
+                        to="/get_form_flexi_benefit_data"
+                      >
+                        {/* Form 12 BB */}
+                        Download Form Flexible <br /> Benefit Data
+                      </NavLink>
+                    </li>
+                  </>
+                  {/* )} */}
                 </ul>
               </div>
             </li>

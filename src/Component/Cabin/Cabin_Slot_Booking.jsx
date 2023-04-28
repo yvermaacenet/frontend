@@ -399,7 +399,7 @@ const Cabin_Slot_Booking = () => {
         <div className="main-panel">
           <div className="content-wrapper">
             <Page_Header
-              page_title="Cabin"
+              page_title="Meeting Room"
               page_title_icon="mdi-home-modern"
               page_title_button="Back"
               page_title_button_link="/dashboard"
