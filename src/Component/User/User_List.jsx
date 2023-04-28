@@ -52,10 +52,10 @@ const User_List = () => {
               },
             })
             .then(async (result) => {
-              const resp = result.data;
+              const resp = result?.data;
               const tt = await result_user_list?.data.map((a) => ({
                 ...a,
-                ...resp.find((b) => b.user_id === a._id),
+                ...resp?.find((b) => b?.user_id === a?._id),
               }));
               return await axios
                 .get(`/off_boarding`, {
@@ -64,16 +64,16 @@ const User_List = () => {
                   },
                 })
                 .then(async (result) => {
-                  const resp = result.data;
-                  const pp = await tt.map((aa) => ({
+                  const resp = result?.data;
+                  const pp = await tt?.map((aa) => ({
                     ...aa,
-                    ...resp.find((bb) => bb.employee_id === aa._id),
+                    ...resp?.find((bb) => bb?.employee_id === aa?._id),
                   }));
                   console.log("resp", pp);
                   return setGetUserList(pp);
                 })
                 .catch((err) => {
-                  if (err.response.status === 500) {
+                  if (err?.response?.status === 500) {
                     navigate("/error_500");
                   } else {
                     navigate("/error_403");
@@ -81,7 +81,7 @@ const User_List = () => {
                 });
             })
             .catch((err) => {
-              if (err.response.status === 500) {
+              if (err?.response?.status === 500) {
                 navigate("/error_500");
               } else {
                 navigate("/error_403");
@@ -89,7 +89,7 @@ const User_List = () => {
             });
         })
         .catch((err) => {
-          if (err.response.status === 500) {
+          if (err?.response?.status === 500) {
             navigate("/error_500");
           } else {
             navigate("/error_403");
@@ -109,7 +109,7 @@ const User_List = () => {
           );
         })
         .catch((err) => {
-          if (err.response.status === 500) {
+          if (err?.response?.status === 500) {
             navigate("/error_500");
           } else {
             navigate("/error_403");
