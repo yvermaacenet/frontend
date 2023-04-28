@@ -125,25 +125,25 @@ const Sidebar = () => {
                       Form Flexible Benefit
                     </NavLink>
                   </li>
-                  {/* {LocalStorageData?.zoho_role === "Finance" && ( */}
-                  <>
-                    <li className="nav-item">
-                      <NavLink className="nav-link" to="/get_form12bb_data">
-                        {/* Form Flexible Benefit */}
-                        Download Form 12 BB <br /> Data
-                      </NavLink>
-                    </li>
-                    <li className="nav-item">
-                      <NavLink
-                        className="nav-link"
-                        to="/get_form_flexi_benefit_data"
-                      >
-                        {/* Form 12 BB */}
-                        Download Form Flexible <br /> Benefit Data
-                      </NavLink>
-                    </li>
-                  </>
-                  {/* )} */}
+                  {LocalStorageData?.zoho_role === "Finance" && (
+                    <>
+                      <li className="nav-item">
+                        <NavLink className="nav-link" to="/get_form12bb_data">
+                          {/* Form Flexible Benefit */}
+                          Download Form 12 BB <br /> Data
+                        </NavLink>
+                      </li>
+                      <li className="nav-item">
+                        <NavLink
+                          className="nav-link"
+                          to="/get_form_flexi_benefit_data"
+                        >
+                          {/* Form 12 BB */}
+                          Download Form Flexible <br /> Benefit Data
+                        </NavLink>
+                      </li>
+                    </>
+                  )}
                 </ul>
               </div>
             </li>
