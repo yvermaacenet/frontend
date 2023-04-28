@@ -220,7 +220,7 @@ const Dashboard = () => {
               <>
                 <div>
                   {/* Other dashboard content */}
-                  <ToastContainer
+                  {/* <ToastContainer
                     position="top-center"
                     autoClose={5000}
                     hideProgressBar={false}
@@ -231,7 +231,7 @@ const Dashboard = () => {
                     draggable
                     pauseOnHover
                     theme="light"
-                  />
+                  /> */}
                 </div>
 
                 {/* <div className="row">
