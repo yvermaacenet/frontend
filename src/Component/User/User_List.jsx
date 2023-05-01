@@ -226,7 +226,7 @@ const User_List = () => {
                         <thead>
                           <tr>
                             <th>#</th>
-                            <th>Employee ID</th>
+                            {/* <th>Employee ID</th> */}
                             <th>Name</th>
                             <th>Acenet Role</th>
                             <th>Phone</th>
@@ -239,10 +239,9 @@ const User_List = () => {
                             return (
                               <tr key={index}>
                                 <td className="py-1">
-                                  <img src={value?.Photo} alt="image" />{" "}
-                                  {index + 1}
+                                  <img src={value?.Photo} alt="image" />
                                 </td>
-                                <td className="py-1">{value["Employee ID"]}</td>
+                                {/* <td className="py-1">{value["Employee ID"]}</td> */}
                                 <td>
                                   {value["First Name"]} {value["Last Name"]}
                                   <span
