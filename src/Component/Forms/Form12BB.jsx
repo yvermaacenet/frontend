@@ -458,10 +458,10 @@ const Form12BB = () => {
                   <div class="loader"></div>
                 </div>
               )}
-              <div className="content-wrapper d-flex align-items-center auth">
-                <div className="row flex-grow">
-                  <div className="col-lg-12 mx-auto">
-                    <div className="auth-form-light text-left p-5">
+              <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
                       <form
                         className="forms-sample"
                         onSubmit={handleSubmit(onSaveButton)}

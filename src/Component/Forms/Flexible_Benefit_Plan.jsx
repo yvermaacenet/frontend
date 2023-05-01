@@ -235,36 +235,10 @@ const Flexible_Benefit_Plan = () => {
                   <div class="loader"></div>
                 </div>
               )}
-              <div className="content-wrapper d-flex align-items-center auth">
-                <div className="row flex-grow">
-                  <div className="col-lg-12 mx-auto">
-                    <div className="auth-form-light text-left p-5">
-                      {/* <h2 className="text-center">
-                      Declaration - Flexible Benefit Plan 
-                    </h2>
-
-                    <h6 className="font-weight-light text-center">
-                      (See rule 26C)
-                    </h6> */}
-                      {/* <div className="text-end mb-4">
-                  <button className="btn btn-success">
-                    <NavLink
-                      to="/get_flexi_form_data"
-                      className="text-light ms-2 text-decoration-none fw-lighter fs-6"
-                    >
-                      Download Flexi Form Data
-                    </NavLink>
-                  </button>
-                  <button className="btn btn-success ms-3">
-                    <NavLink
-                      to="/form12bb"
-                      className="text-light ms-2 text-decoration-none fw-lighter fs-6"
-                    >
-                      12BB Form
-                    </NavLink>
-                  </button>
-                </div> */}
-
+              <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
                       <form
                         className="forms-sample"
                         onSubmit={handleSubmit(handleSubmitButton)}

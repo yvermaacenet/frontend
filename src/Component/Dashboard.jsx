@@ -92,7 +92,7 @@ const Dashboard = () => {
     // {
     //   card_background: "bg-gradient-warning",
     //   path: "/cabin_slot_booking",
-    //   card_title: "Meeting Room Booking",
+    //   card_title: "Cabin Booking",
     //   card_icon: "mdi-home-modern",
     //   card_counter_data: counterList?.Total_Cabin_Booking,
     //   card_allowed_access: [
@@ -145,7 +145,7 @@ const Dashboard = () => {
     // },
     // {
     //   card_background: "bg-gradient-success",
-    //   path: "/alltravelrequest",
+    //   path: "/travelrequestform",
     //   card_title: "Travel Request Form",
     //   card_icon: "mdi-book-plus",
     //   card_allowed_access: [
@@ -218,9 +218,8 @@ const Dashboard = () => {
               )}
 
               <>
-                <div>
-                  {/* Other dashboard content */}
-                  <ToastContainer
+                {/* <div>
+                   <ToastContainer
                     position="top-center"
                     autoClose={5000}
                     hideProgressBar={false}
@@ -232,9 +231,9 @@ const Dashboard = () => {
                     pauseOnHover
                     theme="light"
                   />
-                </div>
+                </div> */}
 
-                {/* <div className="row">
+                <div className="row">
                   {cardArray?.map(
                     (result) =>
                       result?.card_allowed_access.includes(
@@ -280,7 +279,7 @@ const Dashboard = () => {
                         </div>
                       )
                   )}
-                </div> */}
+                </div>
 
                 {/* <div className="row">
                   <div className="col-md-12">

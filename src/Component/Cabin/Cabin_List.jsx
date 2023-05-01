@@ -71,7 +71,7 @@ const Cabin_List = () => {
           <div class="main-panel">
             <div class="content-wrapper">
               <Page_Header
-                page_title="Meeting Room"
+                page_title="Cabin"
                 page_title_icon="mdi-home-modern"
                 page_title_button="Add"
                 page_title_button_link="/cabin_add"
@@ -82,39 +82,40 @@ const Cabin_List = () => {
                 </div>
               )}
               <div class="row">
-                <div class="card">
-                  <div class="card-body">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Name</th>
-                          <th>Location</th>
-                          <th>Color code</th>
-                          <th>Status</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {getCabinList?.map((value, index) => {
-                          return (
-                            <tr key={index}>
-                              <td>{index + 1}</td>
-                              <td>{value?.name}</td>
-                              <td>{value?.location}</td>
-                              <td>
-                                <div
-                                  style={styles.swatch}
-                                  // onClick={handleClick}
-                                >
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Color code</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {getCabinList?.map((value, index) => {
+                            return (
+                              <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{value?.name}</td>
+                                <td>{value?.location}</td>
+                                <td>
                                   <div
-                                    style={{
-                                      ...styles.color,
-                                      background: `rgba(${value?.color_code?.r}, ${value?.color_code?.g}, ${value?.color_code?.b}, ${value?.color_code?.a})`,
-                                    }}
-                                  />
-                                </div>
-                                {/* {getChooseColor?.displayColorPicker ? (
+                                    style={styles.swatch}
+                                    // onClick={handleClick}
+                                  >
+                                    <div
+                                      style={{
+                                        ...styles.color,
+                                        background: `rgba(${value?.color_code?.r}, ${value?.color_code?.g}, ${value?.color_code?.b}, ${value?.color_code?.a})`,
+                                      }}
+                                    />
+                                  </div>
+                                  {/* {getChooseColor?.displayColorPicker ? (
                                   <div style={styles.popover}>
                                     <div
                                       style={styles.cover}
@@ -126,35 +127,36 @@ const Cabin_List = () => {
                                     />
                                   </div>
                                 ) : null} */}
-                              </td>
-                              <td>
-                                {value?.status ? (
-                                  <label class="badge badge-success">
-                                    Active
-                                  </label>
-                                ) : (
-                                  <label class="badge badge-danger">
-                                    Deactive
-                                  </label>
-                                )}
-                              </td>
+                                </td>
+                                <td>
+                                  {value?.status ? (
+                                    <label class="badge badge-success">
+                                      Active
+                                    </label>
+                                  ) : (
+                                    <label class="badge badge-danger">
+                                      Deactive
+                                    </label>
+                                  )}
+                                </td>
 
-                              <td>
-                                <NavLink to={`/cabin_update/${value?._id}`}>
-                                  <button
-                                    type="button"
-                                    class="btn btn-sm btn-inverse-dark btn-icon"
-                                    title="Edit"
-                                  >
-                                    <i class="mdi mdi-table-edit"></i>
-                                  </button>
-                                </NavLink>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                                <td>
+                                  <NavLink to={`/cabin_update/${value?._id}`}>
+                                    <button
+                                      type="button"
+                                      class="btn btn-sm btn-inverse-dark btn-icon"
+                                      title="Edit"
+                                    >
+                                      <i class="mdi mdi-table-edit"></i>
+                                    </button>
+                                  </NavLink>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

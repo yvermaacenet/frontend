@@ -156,7 +156,7 @@ const Cabin_Add = () => {
           <div className="main-panel">
             <div className="content-wrapper">
               <Page_Header
-                page_title="Meeting Room"
+                page_title="Cabin"
                 page_title_icon="mdi-home-modern"
                 page_title_button="Back"
                 page_title_button_link="/cabin_list"
@@ -167,145 +167,149 @@ const Cabin_Add = () => {
                 </div>
               )}
               <div className="row">
-                <div className="card">
-                  <div className="card-body">
-                    <form className="forms-sample">
-                      <div className="row">
-                        <div className="col-md-3">
-                          <div className="form-group">
-                            <label>Cabin Name </label>
-                            <input
-                              type="text"
-                              name="name"
-                              className="form-control form-control-sm"
-                              onChange={inputEvent}
-                              placeholder="Enter cabin name"
-                              value={inputData?.name}
-                            />
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div className="form-group">
-                            <div className="d-flex justify-content-between">
-                              <label>Location </label>
-                              <button
-                                className="btn btn-light btn-sm h-25"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setModal(true);
-                                }}
-                              >
-                                Add
-                              </button>
-                              <PureModal
-                                header="Add Location"
-                                // footer={
-                                //   <div>
-                                //     <form type="submit">
-                                //       <button className="btn btn-primary btn-sm">
-                                //         Create
-                                //       </button>
-                                //     </form>
-                                //   </div>
-                                // }
-                                isOpen={modal}
-                                closeButton="X"
-                                closeButtonPosition="bottom"
-                                onClose={() => {
-                                  setModal(false);
-                                  return true;
-                                }}
-                              >
-                                <div>
-                                  <form>
-                                    <input
-                                      className="form-control"
-                                      name="name"
-                                      onChange={handleLocationChangeEvent}
-                                      placeholder="Enter the Location name"
-                                    />
-                                    <button
-                                      type="submit"
-                                      onClick={add_location_submit}
-                                      className="btn btn-primary mt-2"
-                                    >
-                                      Create
-                                    </button>
-                                  </form>
-                                </div>
-                              </PureModal>
-                            </div>
-                            <select
-                              className="form-control h-100"
-                              name="location"
-                              value={locationList.name}
-                              onChange={handleLocationChangeEvent}
-                            >
-                              <option>Select Location</option>
-                              {location.map((item) => {
-                                return (
-                                  <option value={item.name}>{item.name}</option>
-                                );
-                              })}
-                            </select>
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div className="form-group row">
-                            <label> Pick cabin color </label>
-                            <div style={styles.swatch} onClick={handleClick}>
-                              <div
-                                style={{
-                                  ...styles.color,
-                                }}
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div className="card">
+                    <div className="card-body">
+                      <form className="forms-sample">
+                        <div className="row">
+                          <div className="col-md-3">
+                            <div className="form-group">
+                              <label>Cabin Name </label>
+                              <input
+                                type="text"
+                                name="name"
+                                className="form-control form-control-sm"
+                                onChange={inputEvent}
+                                placeholder="Enter cabin name"
+                                value={inputData?.name}
                               />
                             </div>
-                            {getChooseColor.displayColorPicker ? (
-                              <div style={styles.popover}>
+                          </div>
+                          <div className="col-md-3">
+                            <div className="form-group">
+                              <div className="d-flex justify-content-between">
+                                <label>Location </label>
+                                <button
+                                  className="btn btn-light btn-sm h-25"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setModal(true);
+                                  }}
+                                >
+                                  Add
+                                </button>
+                                <PureModal
+                                  header="Add Location"
+                                  // footer={
+                                  //   <div>
+                                  //     <form type="submit">
+                                  //       <button className="btn btn-primary btn-sm">
+                                  //         Create
+                                  //       </button>
+                                  //     </form>
+                                  //   </div>
+                                  // }
+                                  isOpen={modal}
+                                  closeButton="X"
+                                  closeButtonPosition="bottom"
+                                  onClose={() => {
+                                    setModal(false);
+                                    return true;
+                                  }}
+                                >
+                                  <div>
+                                    <form>
+                                      <input
+                                        className="form-control"
+                                        name="name"
+                                        onChange={handleLocationChangeEvent}
+                                        placeholder="Enter the Location name"
+                                      />
+                                      <button
+                                        type="submit"
+                                        onClick={add_location_submit}
+                                        className="btn btn-primary mt-2"
+                                      >
+                                        Create
+                                      </button>
+                                    </form>
+                                  </div>
+                                </PureModal>
+                              </div>
+                              <select
+                                className="form-control h-100"
+                                name="location"
+                                value={locationList.name}
+                                onChange={handleLocationChangeEvent}
+                              >
+                                <option>Select Location</option>
+                                {location.map((item) => {
+                                  return (
+                                    <option value={item.name}>
+                                      {item.name}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            </div>
+                          </div>
+                          <div className="col-md-3">
+                            <div className="form-group row">
+                              <label> Pick cabin color </label>
+                              <div style={styles.swatch} onClick={handleClick}>
                                 <div
-                                  style={styles.cover}
-                                  onClick={handleClose}
-                                />
-                                <SketchPicker
-                                  color={getChooseColor.color}
-                                  onChange={handleChange}
+                                  style={{
+                                    ...styles.color,
+                                  }}
                                 />
                               </div>
-                            ) : null}
+                              {getChooseColor.displayColorPicker ? (
+                                <div style={styles.popover}>
+                                  <div
+                                    style={styles.cover}
+                                    onClick={handleClose}
+                                  />
+                                  <SketchPicker
+                                    color={getChooseColor.color}
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              ) : null}
+                            </div>
+                          </div>
+                          <div className="col-md-3">
+                            <div className="form-group row">
+                              <label>Status </label>
+
+                              <label className="switch ms-4 mt-2">
+                                <input
+                                  type="checkbox"
+                                  name="status"
+                                  className="form-control form-control-sm"
+                                  onChange={() => {
+                                    return setInputData({
+                                      ...inputData,
+                                      status: !inputData?.status,
+                                    });
+                                    // onStatusChange(!checkedStatus)
+                                  }}
+                                  checked={inputData.status}
+                                />
+                                <span className="slider round"></span>
+                              </label>
+                            </div>
                           </div>
                         </div>
-                        <div className="col-md-3">
-                          <div className="form-group row">
-                            <label>Status </label>
 
-                            <label className="switch ms-4 mt-2">
-                              <input
-                                type="checkbox"
-                                name="status"
-                                className="form-control form-control-sm"
-                                onChange={() => {
-                                  return setInputData({
-                                    ...inputData,
-                                    status: !inputData?.status,
-                                  });
-                                  // onStatusChange(!checkedStatus)
-                                }}
-                                checked={inputData.status}
-                              />
-                              <span className="slider round"></span>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button
-                        type="submit"
-                        className="btn btn-sm btn-gradient-primary me-2"
-                        onClick={onCabinAddButton}
-                      >
-                        Submit
-                      </button>
-                    </form>
+                        <button
+                          type="submit"
+                          className="btn btn-sm btn-gradient-primary me-2"
+                          onClick={onCabinAddButton}
+                        >
+                          Submit
+                        </button>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -77,7 +77,7 @@ const Sidebar = () => {
                 aria-expanded="false"
                 aria-controls="ui-basic"
               >
-                <span class="menu-title">Meeting Room</span>
+                <span class="menu-title">Cabin</span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-home-modern menu-icon"></i>
               </a>
@@ -87,14 +87,14 @@ const Sidebar = () => {
                     {state?.zoho_role === "Admin" && (
                       <li className="nav-item">
                         <NavLink className="nav-link" to="/cabin_list">
-                          Meeting Room List
+                          Cabin List
                         </NavLink>
                       </li>
                     )}
 
                     <li className="nav-item">
                       <NavLink className="nav-link" to="/cabin_slot_booking">
-                        Meeting Room Booking
+                        Cabin Booking
                       </NavLink>
                     </li>
                   </ul>

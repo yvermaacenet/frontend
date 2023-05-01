@@ -208,7 +208,7 @@ const Get_Form12bb_Data = () => {
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <h4 class="card-title">Form 12BB Data</h4>
+                      {/* <h4 class="card-title">Form 12BB Data</h4> */}
                       {/* <p class="card-description">
                 Add class <code>.table</code>
               </p> */}

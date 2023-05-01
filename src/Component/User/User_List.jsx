@@ -173,179 +173,178 @@ const User_List = () => {
                 </div>
               )}
               <div className="row">
-                <div className="card">
-                  <div className="card-body">
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-inverse-info btn-fw ms-1"
-                      onClick={() => setStatus_code("active_users")}
-                    >
-                      All
-                    </button>
-                    {/* <button
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-inverse-info btn-fw ms-1"
+                    onClick={() => setStatus_code("active_users")}
+                  >
+                    All
+                  </button>
+                  {/* <button
                       type="button"
                       className="btn btn-sm btn-inverse-success btn-fw ms-1"
                       onClick={() => setStatus_code("active_users")}
                     >
                       Active
                     </button> */}
-                    {/* <button
+                  {/* <button
                       type="button"
                       className="btn btn-sm btn-inverse-danger btn-fw ms-1"
                       onClick={() => setStatus_code("deactive_users")}
                     >
                       Deactivated
                     </button> */}
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-inverse-primary btn-fw ms-1"
-                      onClick={() => setStatus_code("pending_onboarding_users")}
-                    >
-                      Pending Onboarding
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-inverse-dark btn-fw ms-1"
-                      onClick={() =>
-                        setStatus_code("pending_offboarding_users")
-                      }
-                    >
-                      Pending Offboarding
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-inverse-primary btn-fw ms-1"
+                    onClick={() => setStatus_code("pending_onboarding_users")}
+                  >
+                    Pending Onboarding
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-inverse-dark btn-fw ms-1"
+                    onClick={() => setStatus_code("pending_offboarding_users")}
+                  >
+                    Pending Offboarding
+                  </button>
                 </div>
               </div>
               <div className="row">
-                <div className="card">
-                  <div
-                    className="card-body"
-                    style={{
-                      maxWidth: "100%",
-                      overflow: "hidden",
-                      overflowX: "scroll",
-                    }}
-                  >
-                    <table className="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Employee ID</th>
-                          <th>Name</th>
-                          <th>Acenet Role</th>
-                          <th>Phone</th>
-                          <th>Email</th>
-                          <th>Onboarding/Offboarding </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {getUserList?.map((value, index) => {
-                          return (
-                            <tr key={index}>
-                              <td className="py-1">
-                                <img src={value?.Photo} alt="image" />{" "}
-                                {index + 1}
-                              </td>
-                              <td className="py-1">{value["Employee ID"]}</td>
-                              <td>
-                                {value["First Name"]} {value["Last Name"]}
-                                <span
-                                  className="badge badge-success"
-                                  style={{
-                                    borderRadius: "20px",
-                                    display:
-                                      compareDates(
-                                        value?.creation_date?.split("T")[0],
-                                        specificDate
-                                      ) === true
-                                        ? "inline-block"
-                                        : "none",
-                                  }}
-                                >
-                                  New Joining
-                                </span>
-                              </td>
-                              <td>
-                                {value["Acenet Role"] === ""
-                                  ? "Team member"
-                                  : value["Acenet Role"]}
-                              </td>
-                              <td>
-                                {value["Personal Mobile Number"] === ""
-                                  ? "NA"
-                                  : value["Personal Mobile Number"]}
-                              </td>
-                              <td> {value["Email address"]} </td>
-                              {/* <td>{value?.creation_date}</td> */}
-                              <td>
-                                {/* ================ On Boarding Button ============= */}
-                                {compareDates1(
-                                  value?.creation_date?.split("T")[0],
-                                  specificDate
-                                ) === true &&
-                                  (roless?.Admin?.includes(
-                                    LocalStorageData?.user_id
-                                  ) ||
-                                  roless?.Hr?.includes(
-                                    LocalStorageData?.user_id
-                                  ) ||
-                                  roless?.Finance?.includes(
-                                    LocalStorageData?.user_id
-                                  ) ||
-                                  roless?.Management?.includes(
-                                    LocalStorageData?.user_id
-                                  ) ? (
-                                    <button
-                                      type="button"
-                                      className={`btn btn-sm ${
-                                        value?.hr_on_boarding_status === true &&
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div className="card">
+                    <div
+                      className="card-body"
+                      style={{
+                        maxWidth: "100%",
+                        overflow: "hidden",
+                        overflowX: "scroll",
+                      }}
+                    >
+                      <table className="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Acenet Role</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Onboarding/Offboarding </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {getUserList?.map((value, index) => {
+                            return (
+                              <tr key={index}>
+                                <td className="py-1">
+                                  <img src={value?.Photo} alt="image" />{" "}
+                                  {index + 1}
+                                </td>
+                                <td className="py-1">{value["Employee ID"]}</td>
+                                <td>
+                                  {value["First Name"]} {value["Last Name"]}
+                                  <span
+                                    className="badge badge-success"
+                                    style={{
+                                      borderRadius: "20px",
+                                      display:
+                                        compareDates(
+                                          value?.creation_date?.split("T")[0],
+                                          specificDate
+                                        ) === true
+                                          ? "inline-block"
+                                          : "none",
+                                    }}
+                                  >
+                                    New Joining
+                                  </span>
+                                </td>
+                                <td>
+                                  {value["Acenet Role"] === ""
+                                    ? "Team member"
+                                    : value["Acenet Role"]}
+                                </td>
+                                <td>
+                                  {value["Personal Mobile Number"] === ""
+                                    ? "NA"
+                                    : value["Personal Mobile Number"]}
+                                </td>
+                                <td> {value["Email address"]} </td>
+                                {/* <td>{value?.creation_date}</td> */}
+                                <td>
+                                  {/* ================ On Boarding Button ============= */}
+                                  {compareDates1(
+                                    value?.creation_date?.split("T")[0],
+                                    specificDate
+                                  ) === true &&
+                                    (roless?.Admin?.includes(
+                                      LocalStorageData?.user_id
+                                    ) ||
+                                    roless?.Hr?.includes(
+                                      LocalStorageData?.user_id
+                                    ) ||
+                                    roless?.Finance?.includes(
+                                      LocalStorageData?.user_id
+                                    ) ||
+                                    roless?.Management?.includes(
+                                      LocalStorageData?.user_id
+                                    ) ? (
+                                      <button
+                                        type="button"
+                                        className={`btn btn-sm ${
+                                          value?.hr_on_boarding_status ===
+                                            true &&
+                                          value?.finance_on_boarding_status ===
+                                            true &&
+                                          value?.management_on_boarding_status ===
+                                            true
+                                            ? "btn-inverse-success"
+                                            : value?.initiate_on_boarding_status ===
+                                              true
+                                            ? "btn-inverse-danger"
+                                            : "btn-inverse-info"
+                                        } ms-2`}
+                                        title="Onboarding"
+                                        onClick={() => {
+                                          const confirmationButton =
+                                            window.confirm(
+                                              value?.hr_on_boarding_status ===
+                                                true &&
+                                                value?.finance_on_boarding_status ===
+                                                  true &&
+                                                value?.management_on_boarding_status ===
+                                                  true
+                                                ? "Do you really want to check onboarding?"
+                                                : "Do you really want to initiate onboarding?"
+                                            );
+                                          if (confirmationButton === true) {
+                                            navigate(
+                                              `/on_boarding/${value?._id}`
+                                            );
+                                          }
+                                        }}
+                                      >
+                                        {value?.hr_on_boarding_status ===
+                                          true &&
                                         value?.finance_on_boarding_status ===
                                           true &&
                                         value?.management_on_boarding_status ===
                                           true
-                                          ? "btn-inverse-success"
+                                          ? "Onboarding is completed"
                                           : value?.initiate_on_boarding_status ===
                                             true
-                                          ? "btn-inverse-danger"
-                                          : "btn-inverse-info"
-                                      } ms-2`}
-                                      title="Onboarding"
-                                      onClick={() => {
-                                        const confirmationButton =
-                                          window.confirm(
-                                            value?.hr_on_boarding_status ===
-                                              true &&
-                                              value?.finance_on_boarding_status ===
-                                                true &&
-                                              value?.management_on_boarding_status ===
-                                                true
-                                              ? "Do you really want to check onboarding?"
-                                              : "Do you really want to initiate onboarding?"
-                                          );
-                                        if (confirmationButton === true) {
-                                          navigate(
-                                            `/on_boarding/${value?._id}`
-                                          );
-                                        }
-                                      }}
-                                    >
-                                      {value?.hr_on_boarding_status === true &&
-                                      value?.finance_on_boarding_status ===
-                                        true &&
-                                      value?.management_on_boarding_status ===
-                                        true
-                                        ? "Onboarding is completed"
-                                        : value?.initiate_on_boarding_status ===
-                                          true
-                                        ? "Onboarding is pending"
-                                        : "Initiate Onboarding"}
-                                    </button>
-                                  ) : (
-                                    ""
-                                  ))}
+                                          ? "Onboarding is pending"
+                                          : "Initiate Onboarding"}
+                                      </button>
+                                    ) : (
+                                      ""
+                                    ))}
 
-                                {/* ================ Off Boarding Button ============= */}
+                                  {/* ================ Off Boarding Button ============= */}
 
-                                {/* {roless?.Admin?.includes(
+                                  {/* {roless?.Admin?.includes(
                                   LocalStorageData?.user_id
                                 ) ||
                                 roless?.Hr?.includes(
@@ -384,51 +383,55 @@ const User_List = () => {
                                   ""
                                 )} */}
 
-                                <button
-                                  type="button"
-                                  className={`btn btn-sm ${
-                                    value?.hr_off_boarding_status === true &&
+                                  <button
+                                    type="button"
+                                    className={`btn btn-sm ${
+                                      value?.hr_off_boarding_status === true &&
+                                      value?.finance_off_boarding_status ===
+                                        true &&
+                                      value?.management_off_boarding_status ===
+                                        true
+                                        ? "btn-inverse-success"
+                                        : value?.initiate_off_boarding_status ===
+                                          true
+                                        ? "btn-inverse-danger"
+                                        : "btn-inverse-info"
+                                    } ms-2`}
+                                    title="Offboarding"
+                                    onClick={() => {
+                                      const confirmationButton = window.confirm(
+                                        value?.hr_off_boarding_status ===
+                                          true &&
+                                          value?.finance_off_boarding_status ===
+                                            true &&
+                                          value?.management_off_boarding_status ===
+                                            true
+                                          ? "Do you really want to check resignation?"
+                                          : "Do you really want to initiate resignation?"
+                                      );
+                                      if (confirmationButton === true) {
+                                        navigate(`/off_boarding/${value?._id}`);
+                                      }
+                                    }}
+                                  >
+                                    {value?.hr_off_boarding_status === true &&
                                     value?.finance_off_boarding_status ===
                                       true &&
                                     value?.management_off_boarding_status ===
                                       true
-                                      ? "btn-inverse-success"
+                                      ? "Resignation is completed"
                                       : value?.initiate_off_boarding_status ===
                                         true
-                                      ? "btn-inverse-danger"
-                                      : "btn-inverse-info"
-                                  } ms-2`}
-                                  title="Offboarding"
-                                  onClick={() => {
-                                    const confirmationButton = window.confirm(
-                                      value?.hr_off_boarding_status === true &&
-                                        value?.finance_off_boarding_status ===
-                                          true &&
-                                        value?.management_off_boarding_status ===
-                                          true
-                                        ? "Do you really want to check resignation?"
-                                        : "Do you really want to initiate resignation?"
-                                    );
-                                    if (confirmationButton === true) {
-                                      navigate(`/off_boarding/${value?._id}`);
-                                    }
-                                  }}
-                                >
-                                  {value?.hr_off_boarding_status === true &&
-                                  value?.finance_off_boarding_status === true &&
-                                  value?.management_off_boarding_status === true
-                                    ? "Resignation is completed"
-                                    : value?.initiate_off_boarding_status ===
-                                      true
-                                    ? "Resignation is pending"
-                                    : "Initiate Resignation"}
-                                </button>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                                      ? "Resignation is pending"
+                                      : "Initiate Resignation"}
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>

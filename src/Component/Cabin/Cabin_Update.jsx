@@ -152,7 +152,7 @@ const Cabin_Update = () => {
           <div class="main-panel">
             <div class="content-wrapper">
               <Page_Header
-                page_title="Meeting Room"
+                page_title="Cabin"
                 page_title_icon="mdi-home-modern"
                 page_title_button="Back"
                 page_title_button_link="/cabin_list"
@@ -163,97 +163,101 @@ const Cabin_Update = () => {
                 </div>
               )}
               <div class="row">
-                <div class="card">
-                  <div class="card-body">
-                    <form class="forms-sample">
-                      <div className="row">
-                        <div className="col-md-3">
-                          <div class="form-group">
-                            <label>Location</label>
-                            <select
-                              className="form-control h-100"
-                              name="location"
-                              value={inputData.location}
-                              onChange={inputEvent}
-                              disabled
-                            >
-                              <option>Select Location</option>
-                              {location.map((item) => {
-                                return (
-                                  <option value={item.name}>{item.name}</option>
-                                );
-                              })}
-                            </select>
+                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="card">
+                    <div class="card-body">
+                      <form class="forms-sample">
+                        <div className="row">
+                          <div className="col-md-3">
+                            <div class="form-group">
+                              <label>Location</label>
+                              <select
+                                className="form-control h-100"
+                                name="location"
+                                value={inputData.location}
+                                onChange={inputEvent}
+                                disabled
+                              >
+                                <option>Select Location</option>
+                                {location.map((item) => {
+                                  return (
+                                    <option value={item.name}>
+                                      {item.name}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            </div>
                           </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div class="form-group">
-                            <label>Cabin Name </label>
-                            <input
-                              type="text"
-                              name="name"
-                              class="form-control form-control-sm"
-                              onChange={inputEvent}
-                              value={inputData?.name}
-                            />
-                          </div>
-                        </div>
-                        <div className="col-md-3">
-                          <div class="form-group row">
-                            <label> Pick cabin color </label>
-                            <div style={styles.swatch} onClick={handleClick}>
-                              <div
-                                style={{
-                                  ...styles.color,
-                                }}
+                          <div className="col-md-3">
+                            <div class="form-group">
+                              <label>Cabin Name </label>
+                              <input
+                                type="text"
+                                name="name"
+                                class="form-control form-control-sm"
+                                onChange={inputEvent}
+                                value={inputData?.name}
                               />
                             </div>
-                            {getChooseColor.displayColorPicker ? (
-                              <div style={styles.popover}>
+                          </div>
+                          <div className="col-md-3">
+                            <div class="form-group row">
+                              <label> Pick cabin color </label>
+                              <div style={styles.swatch} onClick={handleClick}>
                                 <div
-                                  style={styles.cover}
-                                  onClick={handleClose}
-                                />
-                                <SketchPicker
-                                  color={getChooseColor.color}
-                                  onChange={handleChange}
+                                  style={{
+                                    ...styles.color,
+                                  }}
                                 />
                               </div>
-                            ) : null}
+                              {getChooseColor.displayColorPicker ? (
+                                <div style={styles.popover}>
+                                  <div
+                                    style={styles.cover}
+                                    onClick={handleClose}
+                                  />
+                                  <SketchPicker
+                                    color={getChooseColor.color}
+                                    onChange={handleChange}
+                                  />
+                                </div>
+                              ) : null}
+                            </div>
+                          </div>
+                          <div className="col-md-3">
+                            <div class="form-group row">
+                              <label>Status </label>
+
+                              <label class="switch ms-4 mt-2">
+                                <input
+                                  type="checkbox"
+                                  name="status"
+                                  class="form-control form-control-sm"
+                                  onChange={() => {
+                                    return setInputData({
+                                      ...inputData,
+                                      status: !inputData?.status,
+                                    });
+                                    // onStatusChange(!checkedStatus)
+                                  }}
+                                  checked={inputData.status}
+                                />
+                                <span class="slider round"></span>
+                              </label>
+                            </div>
                           </div>
                         </div>
-                        <div className="col-md-3">
-                          <div class="form-group row">
-                            <label>Status </label>
 
-                            <label class="switch ms-4 mt-2">
-                              <input
-                                type="checkbox"
-                                name="status"
-                                class="form-control form-control-sm"
-                                onChange={() => {
-                                  return setInputData({
-                                    ...inputData,
-                                    status: !inputData?.status,
-                                  });
-                                  // onStatusChange(!checkedStatus)
-                                }}
-                                checked={inputData.status}
-                              />
-                              <span class="slider round"></span>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button
-                        type="submit"
-                        class="btn btn-sm btn-gradient-primary me-2"
-                        onClick={onCabinUpdateButton}
-                      >
-                        Submit
-                      </button>
-                    </form>
+                        <button
+                          type="submit"
+                          class="btn btn-sm btn-gradient-primary me-2"
+                          onClick={onCabinUpdateButton}
+                        >
+                          Submit
+                        </button>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
