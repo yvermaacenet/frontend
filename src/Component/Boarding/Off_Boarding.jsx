@@ -462,7 +462,7 @@ const Off_Boarding = () => {
                           Next
                         </button>
                       )}
-                      {/* hkfre */}
+                      {/* Yogendra */}
                     </div>
                     <form className="forms-sample">
                       <>
