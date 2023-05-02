@@ -567,8 +567,8 @@ const On_Boarding = () => {
                       )}
                     </div>
                     <div>
-                      <form class="forms-sample">
-                        <div style={{ maxWidth: "90%" }}>
+                      <form class="forms-sample" style={{display:"flex", justifyContent:"center"}}>
+                        <div style={{ width: "90%" }}>
                           <MultiStepForm activeStep={active}>
                             <Step label="First Day Formalities (HR)">
                               <>

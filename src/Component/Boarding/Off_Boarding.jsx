@@ -464,8 +464,8 @@ const Off_Boarding = () => {
                       )}
                       {/* Yogendra */}
                     </div>
-                    <form className="forms-sample">
-                      <>
+                    <form className="forms-sample" style={{display:"flex", justifyContent:"center"}}>
+                      <div style={{ width: "90%" }}>
                         <MultiStepForm activeStep={active}>
                           <Step label="Supervisor Clearance (HR)">
                             <>
@@ -1360,7 +1360,7 @@ const Off_Boarding = () => {
                         >
                           onUpdateNextButton2
                         </button> */}
-                      </>
+                      </div>
                     </form>
                   </div>
                 </div>
