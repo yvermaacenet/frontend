@@ -10,12 +10,12 @@ import PureModal from "react-pure-modal";
 import { useParams } from "react-router-dom";
 
 const User_List = () => {
-  const specificDate = "2023-04-20";
+  const specificDate = "2023-05-02";
   const navigate = useNavigate();
   const { status_code } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getUserList, setGetUserList] = useState([]);
-  const [roless, setRoless] = useState([]);
+  // const [roless, setRoless] = useState([]);
   const [uploadData, setUploadData] = useState([]);
   // const [offbordingdata, setOffBoardingData] = useState([]);
   const [show, setShow] = useState(false);
@@ -95,29 +95,27 @@ const User_List = () => {
             navigate("/error_403");
           }
         });
-    }
-    async function get_user_list_by_role_name() {
-      await axios
-        .get(`/get_user_list_by_role_name`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
-        .then((result) => {
-          return (
-            console.log(result.data),
-            setRoless(result.data),
-            get_user_list(result.data)
-          );
-        })
-        .catch((err) => {
-          if (err?.response?.status === 500) {
-            navigate("/error_500");
-          } else {
-            navigate("/error_403");
-          }
-        });
       setLoading(false);
     }
-    get_user_list_by_role_name();
+    // async function get_user_list_by_role_name() {
+    //   await axios
+    //     .get(`/get_user_list_by_role_name`, {
+    //       headers: { Access_Token: LocalStorageData?.generate_auth_token },
+    //     })
+    //     .then((result) => {
+    //       return console.log(result.data), setRoless(result.data);
+    //     })
+    //     .catch((err) => {
+    //       if (err?.response?.status === 500) {
+    //         navigate("/error_500");
+    //       } else {
+    //         navigate("/error_403");
+    //       }
+    //     });
+    //   setLoading(false);
+    // }
+    get_user_list();
+    // get_user_list_by_role_name();
   }, [getStatus_code]);
   const compareDates = (d1, d2) => {
     let date1 = new Date(d1);
@@ -278,18 +276,11 @@ const User_List = () => {
                                     value?.creation_date?.split("T")[0],
                                     specificDate
                                   ) === true &&
-                                    (roless?.Admin?.includes(
-                                      LocalStorageData?.user_id
-                                    ) ||
-                                    roless?.Hr?.includes(
-                                      LocalStorageData?.user_id
-                                    ) ||
-                                    roless?.Finance?.includes(
-                                      LocalStorageData?.user_id
-                                    ) ||
-                                    roless?.Management?.includes(
-                                      LocalStorageData?.user_id
-                                    ) ? (
+                                    (LocalStorageData?.zoho_role === "Admin" ||
+                                    LocalStorageData?.zoho_role ===
+                                      "Management" ||
+                                    LocalStorageData?.zoho_role === "Finance" ||
+                                    LocalStorageData?.zoho_role === "Hr" ? (
                                       <button
                                         type="button"
                                         className={`btn btn-sm ${

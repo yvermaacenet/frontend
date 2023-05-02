@@ -68,13 +68,12 @@ const On_Boarding = () => {
   const [active, setActive] = useState();
   // const [steperCounter, setSteperCounter] = useState(1);
   const [getUserDetailsById, setGetUserDetailsById] = useState({});
-  const [roless, setRoless] = useState([]);
+  // const [roless, setRoless] = useState([]);
   const [state, setState] = useState(false);
   const [updated_data, setUpdated_data] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const inputEvent = (e) => {
-    console.log("e", e);
     const { name, checked } = e.target;
     setInputData({ ...inputData, [name]: checked });
     setUpdated_data({ ...updated_data, [name]: checked });
@@ -89,32 +88,12 @@ const On_Boarding = () => {
         .then((result) => {
           const resp = result.data[0];
           return (
-            setInputData({ ...inputData, ...resp }), setRenderComponent(false)
-          );
-        })
-        .catch((err) => {
-          if (err.response.status === 500) {
-            navigate("/error_500");
-          } else {
-            navigate("/error_403");
-          }
-        });
-    }
-    get_on_boarding_list();
-    async function get_user_list_by_role_name() {
-      const result = await axios
-        .get(`/get_user_list_by_role_name`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
-        .then((resp) => {
-          return (
-            setRoless(resp.data),
+            setInputData({ ...inputData, ...resp }),
             setActive(
-              resp.data?.Hr?.includes(LocalStorageData?.user_id) === true ||
-                resp.data?.Admin?.includes(LocalStorageData?.user_id) === true
+              LocalStorageData?.zoho_role === "Hr" ||
+                LocalStorageData?.zoho_role === "Admin"
                 ? 1
-                : resp.data?.Finance?.includes(LocalStorageData?.user_id) ===
-                  true
+                : LocalStorageData?.zoho_role === "Finance"
                 ? 2
                 : 3
             ),
@@ -129,14 +108,35 @@ const On_Boarding = () => {
           }
         });
     }
-    get_user_list_by_role_name();
+    get_on_boarding_list();
+    // async function get_user_list_by_role_name() {
+    //   const result = await axios
+    //     .get(`/get_user_list_by_role_name`, {
+    //       headers: { Access_Token: LocalStorageData?.generate_auth_token },
+    //     })
+    //     .then((resp) => {
+    //       return (
+    //         setRoless(resp.data),
+
+    //       );
+    //     })
+    //     .catch((err) => {
+    //       if (err.response.status === 500) {
+    //         navigate("/error_500");
+    //       } else {
+    //         navigate("/error_403");
+    //       }
+    //     });
+    // }
+    // get_user_list_by_role_name();
     async function get_user_details_by_id() {
       await axios
         .get(`/get_user_details_By_Id/${_id}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
-          const resp_user_list_by_id = resp?.data[0];
+          const resp_user_list_by_id = resp?.data;
+
           return setGetUserDetailsById(resp_user_list_by_id);
         })
         .catch((err) => {
@@ -567,7 +567,7 @@ const On_Boarding = () => {
                       )}
                     </div>
                     <div>
-                      <form class="forms-sample">
+                      <form class="forms-sample d-flex justify-content-center">
                         <div style={{ maxWidth: "90%" }}>
                           <MultiStepForm activeStep={active}>
                             <Step label="First Day Formalities (HR)">
@@ -632,12 +632,10 @@ const On_Boarding = () => {
                                                 inputData?.wifi_passwords
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -664,12 +662,10 @@ const On_Boarding = () => {
                                                 inputData?.genrate_mail_id
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -696,12 +692,10 @@ const On_Boarding = () => {
                                                 inputData?.one_drive_access
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -728,12 +722,10 @@ const On_Boarding = () => {
                                                 inputData?.add_to_official_dls
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -758,12 +750,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.teams_access}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -788,12 +778,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.biometric}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -820,12 +808,10 @@ const On_Boarding = () => {
                                                 inputData?.induction_call
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -873,12 +859,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.acenet_laptop}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -903,12 +887,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.client_laptop}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -933,12 +915,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.notpad}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -963,12 +943,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.t_shirt}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -993,12 +971,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.welcome_kit}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1025,12 +1001,10 @@ const On_Boarding = () => {
                                                 inputData?.intro_slide_shared
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1058,12 +1032,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.aadhar_card}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1088,12 +1060,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.pan_card}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1118,12 +1088,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.passport}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1148,12 +1116,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.dl}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1178,12 +1144,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.ten_th}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1208,12 +1172,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.tweleve_th}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1238,12 +1200,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.graduation}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1270,12 +1230,10 @@ const On_Boarding = () => {
                                                 inputData?.post_graduation
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1306,12 +1264,10 @@ const On_Boarding = () => {
                                                 inputData?.experience_proof
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1338,12 +1294,10 @@ const On_Boarding = () => {
                                                 inputData?.passport_size_photo
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1370,12 +1324,10 @@ const On_Boarding = () => {
                                                 inputData?.signed_offer_latter
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1402,12 +1354,10 @@ const On_Boarding = () => {
                                                 inputData?.documents_verification
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1434,12 +1384,10 @@ const On_Boarding = () => {
                                                 inputData?.covid_certificate
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1468,12 +1416,10 @@ const On_Boarding = () => {
                                                 inputData?.employee_data_sheet_bank_details
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1500,12 +1446,10 @@ const On_Boarding = () => {
                                                 inputData?.other_official_documents
                                               }
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1530,12 +1474,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.pay_slips}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1565,12 +1507,10 @@ const On_Boarding = () => {
                                               // style={{ opacity: 0 }}
                                               checked={inputData?.forms_16}
                                               disabled={
-                                                roless?.Hr?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Hr" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1649,12 +1589,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1681,12 +1619,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1718,12 +1654,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1750,12 +1684,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1784,12 +1716,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1816,12 +1746,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1848,12 +1776,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1878,12 +1804,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1913,12 +1837,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1945,12 +1867,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -1977,12 +1897,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -2009,12 +1927,10 @@ const On_Boarding = () => {
                                               onChange={inputEvent}
                                               // style={{ opacity: 0 }}
                                               disabled={
-                                                roless?.Finance?.includes(
-                                                  LocalStorageData?.user_id
-                                                ) ||
-                                                roless?.Admin?.includes(
-                                                  LocalStorageData?.user_id
-                                                )
+                                                LocalStorageData?.zoho_role ===
+                                                  "Finance" ||
+                                                LocalStorageData?.zoho_role ===
+                                                  "Admin"
                                                   ? false
                                                   : true
                                               }
@@ -2098,12 +2014,10 @@ const On_Boarding = () => {
                                                 onChange={inputEvent}
                                                 // style={{ opacity: 0 }}
                                                 disabled={
-                                                  roless?.Management?.includes(
-                                                    LocalStorageData?.user_id
-                                                  ) ||
-                                                  roless?.Admin?.includes(
-                                                    LocalStorageData?.user_id
-                                                  )
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Management" ||
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Admin"
                                                     ? false
                                                     : true
                                                 }
@@ -2130,12 +2044,10 @@ const On_Boarding = () => {
                                                 onChange={inputEvent}
                                                 // style={{ opacity: 0 }}
                                                 disabled={
-                                                  roless?.Management?.includes(
-                                                    LocalStorageData?.user_id
-                                                  ) ||
-                                                  roless?.Admin?.includes(
-                                                    LocalStorageData?.user_id
-                                                  )
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Management" ||
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Admin"
                                                     ? false
                                                     : true
                                                 }
@@ -2162,12 +2074,10 @@ const On_Boarding = () => {
                                                 onChange={inputEvent}
                                                 // style={{ opacity: 0 }}
                                                 disabled={
-                                                  roless?.Management?.includes(
-                                                    LocalStorageData?.user_id
-                                                  ) ||
-                                                  roless?.Admin?.includes(
-                                                    LocalStorageData?.user_id
-                                                  )
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Management" ||
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Admin"
                                                     ? false
                                                     : true
                                                 }
@@ -2200,12 +2110,10 @@ const On_Boarding = () => {
                                                   inputData?.bgv_initiated
                                                 }
                                                 disabled={
-                                                  roless?.Management?.includes(
-                                                    LocalStorageData?.user_id
-                                                  ) ||
-                                                  roless?.Admin?.includes(
-                                                    LocalStorageData?.user_id
-                                                  )
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Management" ||
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Admin"
                                                     ? false
                                                     : true
                                                 }
@@ -2232,12 +2140,10 @@ const On_Boarding = () => {
                                                   inputData?.bgv_invoice_Paid
                                                 }
                                                 disabled={
-                                                  roless?.Management?.includes(
-                                                    LocalStorageData?.user_id
-                                                  ) ||
-                                                  roless?.Admin?.includes(
-                                                    LocalStorageData?.user_id
-                                                  )
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Management" ||
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Admin"
                                                     ? false
                                                     : true
                                                 }
@@ -2264,12 +2170,10 @@ const On_Boarding = () => {
                                                   inputData?.bgv_report_Received
                                                 }
                                                 disabled={
-                                                  roless?.Management?.includes(
-                                                    LocalStorageData?.user_id
-                                                  ) ||
-                                                  roless?.Admin?.includes(
-                                                    LocalStorageData?.user_id
-                                                  )
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Management" ||
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Admin"
                                                     ? false
                                                     : true
                                                 }
@@ -2296,12 +2200,10 @@ const On_Boarding = () => {
                                                   inputData?.update_linkedIn
                                                 }
                                                 disabled={
-                                                  roless?.Management?.includes(
-                                                    LocalStorageData?.user_id
-                                                  ) ||
-                                                  roless?.Admin?.includes(
-                                                    LocalStorageData?.user_id
-                                                  )
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Management" ||
+                                                  LocalStorageData?.zoho_role ===
+                                                    "Admin"
                                                     ? false
                                                     : true
                                                 }
@@ -2362,21 +2264,16 @@ const On_Boarding = () => {
                                 style={{
                                   float: "right",
                                   display:
-                                    roless?.Hr?.includes(
-                                      LocalStorageData?.user_id
-                                    ) && active === 1
+                                    LocalStorageData?.zoho_role === "Hr" &&
+                                    active === 1
                                       ? "block"
-                                      : roless?.Finance?.includes(
-                                          LocalStorageData?.user_id
-                                        ) && active === 2
+                                      : LocalStorageData?.zoho_role ===
+                                          "Finance" && active === 2
                                       ? "block"
-                                      : roless?.Management?.includes(
-                                          LocalStorageData?.user_id
-                                        ) && active === 3
+                                      : LocalStorageData?.zoho_role ===
+                                          "Management" && active === 3
                                       ? "block"
-                                      : roless?.Admin?.includes(
-                                          LocalStorageData?.user_id
-                                        )
+                                      : LocalStorageData?.zoho_role === "Admin"
                                       ? "block"
                                       : "none",
                                 }}
@@ -2391,21 +2288,16 @@ const On_Boarding = () => {
                               style={{
                                 float: "right",
                                 display:
-                                  roless?.Hr?.includes(
-                                    LocalStorageData?.user_id
-                                  ) && active === 1
+                                  LocalStorageData?.zoho_role === "Hr" &&
+                                  active === 1
                                     ? "block"
-                                    : roless?.Finance?.includes(
-                                        LocalStorageData?.user_id
-                                      ) && active === 2
+                                    : LocalStorageData?.zoho_role ===
+                                        "Finance" && active === 2
                                     ? "block"
-                                    : roless?.Management?.includes(
-                                        LocalStorageData?.user_id
-                                      ) && active === 3
+                                    : LocalStorageData?.zoho_role ===
+                                        "Management" && active === 3
                                     ? "block"
-                                    : roless?.Admin?.includes(
-                                        LocalStorageData?.user_id
-                                      )
+                                    : LocalStorageData?.zoho_role === "Admin"
                                     ? "block"
                                     : "none",
                               }}
