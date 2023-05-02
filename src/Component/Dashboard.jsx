@@ -180,37 +180,37 @@ const Dashboard = () => {
         <div className="container-fluid page-body-wrapper">
           <Sidebar />
           <div className="main-panel">
-            <div className="content-wrapper">
+            <div
+              className="content-wrapper"
+              style={{
+                display: "flex",
+                color: "#6d4199",
+                fontSize: "24px",
+                fontWeight: "600",
+                border: "none",
+                justifyContent: "center",
+                textAlign: "center !important",
+              }}
+            >
               <div
-                role="alert"
-                style={{
-                  color: "#6d4199",
-                  fontSize: "20px",
-                  fontWeight: "600",
-                  border: "none",
-                  textAlign: "center !important",
-                }}
+              // role="alert"
               >
                 <div class="page-header" style={{ marginBottom: "1rem" }}>
                   <div class="d-lg-flex w-100 justify-content-between align-items-center">
                     <div class="d-lg-flex align-items-center">
                       <h3 class="mb-0 font-weight-medium mr-3">
-                        Hi,Welcome {LocalStorageData?.name}!
+                        Hi, Welcome {LocalStorageData?.name}!
                       </h3>
                     </div>
-                    <p class="mb-0 text-muted">
-                      <i className="mdi mdi-calendar-clock"></i>
-                      {currentTime}
-                    </p>
                   </div>
                 </div>
               </div>
 
-              <Page_Header
+              {/* <Page_Header
                 page_title="Dashboard"
                 page_title_button="Overview"
                 page_title_icon="mdi-home"
-              />
+              /> */}
               {loading && (
                 <div className="loader-container">
                   <div className="loader"></div>
