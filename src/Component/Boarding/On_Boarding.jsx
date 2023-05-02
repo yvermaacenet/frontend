@@ -568,7 +568,7 @@ const On_Boarding = () => {
                     </div>
                     <div>
                       <form class="forms-sample">
-                        <>
+                        <div style={{ maxWidth: "90%" }}>
                           <MultiStepForm activeStep={active}>
                             <Step label="First Day Formalities (HR)">
                               <>
@@ -2435,7 +2435,7 @@ const On_Boarding = () => {
                             Submit3
                           </button>
                         )} */}
-                        </>
+                        </div>
                       </form>
                     </div>
                   </div>
