@@ -29,12 +29,12 @@ const Sidebar = () => {
               <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
             </NavLink>
           </li>
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <NavLink className="nav-link" to="/">
               <span className="menu-title">Dashboard</span>
               <i className="mdi mdi-home menu-icon"></i>
             </NavLink>
-          </li>
+          </li> */}
 
           <>
             {(state?.zoho_role === "Admin" ||
