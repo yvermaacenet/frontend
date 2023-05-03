@@ -194,7 +194,6 @@ const Flexible_Benefit_Plan = () => {
           : inputData?.books_and_periodicals_allowance,
     };
     async function postData() {
-      // setLoading(true);
       await axios
         .post(`form_flexi`, jsonDate, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -571,17 +570,10 @@ const Flexible_Benefit_Plan = () => {
 
                         {/* ===========================Submit================== */}
 
-                        {/* <button
-                            type="submit"
-                            className="btn btn-gradient-primary me-2"
-                          >
-                            Submit
-                          </button> */}
                         {!inputData?.status && (
                           <button
                             type="submit"
                             className="btn btn-sm btn-gradient-success me-2"
-                            // onClick={() => setbutton_id(2)}
                           >
                             Submit
                           </button>

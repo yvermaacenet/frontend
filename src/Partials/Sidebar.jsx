@@ -16,7 +16,6 @@ const Sidebar = () => {
               <div className="nav-profile-image">
                 <img src={LocalStorageData?.photo} alt="image" />
                 <span className="login-status online"></span>
-                {/* <!--change to offline or busy as needed--> */}
               </div>
               <div className="nav-profile-text d-flex flex-column">
                 <span className="font-weight-bold mb-2">
@@ -54,17 +53,15 @@ const Sidebar = () => {
                   <i class="mdi mdi-account-multiple-outline menu-icon"></i>
                 </a>
                 <div class="collapse" id="ui-basic">
-                  <ul class="nav flex-column sub-menu">
-                    <ul className="nav flex-column sub-menu">
-                      <li className="nav-item">
-                        <NavLink
-                          className="nav-link"
-                          to="/user_list/active_users"
-                        >
-                          Users List
-                        </NavLink>
-                      </li>
-                    </ul>
+                  <ul className="nav flex-column sub-menu">
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link"
+                        to="/user_list/active_users"
+                      >
+                        Users List
+                      </NavLink>
+                    </li>
                   </ul>
                 </div>
               </li>
@@ -83,21 +80,19 @@ const Sidebar = () => {
               </a>
               <div class="collapse" id="ui-cabin">
                 <ul class="nav flex-column sub-menu">
-                  <ul className="nav flex-column sub-menu">
-                    {state?.zoho_role === "Admin" && (
-                      <li className="nav-item">
-                        <NavLink className="nav-link" to="/cabin_list">
-                          Cabin List
-                        </NavLink>
-                      </li>
-                    )}
-
+                  {state?.zoho_role === "Admin" && (
                     <li className="nav-item">
-                      <NavLink className="nav-link" to="/cabin_slot_booking">
-                        Cabin Booking
+                      <NavLink className="nav-link" to="/cabin_list">
+                        Cabin List
                       </NavLink>
                     </li>
-                  </ul>
+                  )}
+
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/cabin_slot_booking">
+                      Cabin Booking
+                    </NavLink>
+                  </li>
                 </ul>
               </div>
             </li>
@@ -130,7 +125,6 @@ const Sidebar = () => {
                       <>
                         <li className="nav-item">
                           <NavLink className="nav-link" to="/get_form12bb_data">
-                            {/* Form Flexible Benefit */}
                             Download Form 12 BB <br /> Data
                           </NavLink>
                         </li>
@@ -139,7 +133,6 @@ const Sidebar = () => {
                             className="nav-link"
                             to="/get_form_flexi_benefit_data"
                           >
-                            {/* Form 12 BB */}
                             Download Form Flexible <br /> Benefit Data
                           </NavLink>
                         </li>

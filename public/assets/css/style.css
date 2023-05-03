@@ -17310,7 +17310,8 @@ code {
   background: #fff;
 }
 .card .card-body {
-  padding: 1rem 1rem;
+  padding: 2.5rem 2.5rem;
+  /* padding: 1rem 1rem; */
 }
 .card .card-body + .card-body {
   padding-top: 1rem;
@@ -19305,7 +19306,7 @@ dl li {
   background: #ffffff;
   font-family: "ubuntu-regular", sans-serif;
   padding: 0;
-  width: 260px;
+  width: 230px;
   z-index: 11;
   transition: width 0.25s ease, background 0.25s ease;
   -webkit-transition: width 0.25s ease, background 0.25s ease;
@@ -19351,7 +19352,7 @@ dl li {
   color: inherit;
 }
 .sidebar .nav .nav-item .nav-link i.menu-icon {
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1;
   margin-left: auto;
   color: #bba8bff5;
@@ -19429,7 +19430,7 @@ dl li {
   border-radius: 100%;
 }
 .sidebar .nav .nav-item.nav-profile .nav-link .nav-profile-text {
-  margin-left: 1rem;
+  margin-left: 0.25rem;
 }
 .rtl .sidebar .nav .nav-item.nav-profile .nav-link .nav-profile-text {
   margin-left: auto;

@@ -58,7 +58,6 @@ const Get_Form12bb_Data = () => {
           ["10", "Self Occupied or Rented", resp?.self_occupied_or_rented],
           ["11", "Rent Paid to the landlord", resp.rent_paid_to_the_landlord],
           ["12", "Name of the landlord", resp.name_of_the_landlord],
-          // "Address of the landlord", resp.address_of_the_landlord,
           [
             "13",
             "Address of the Rental Property",
@@ -144,10 +143,8 @@ const Get_Form12bb_Data = () => {
             ,
           ]);
         });
-        // console.log("ded2", ded2);
-        // console.log("rr", rr);
+
         const mergedData = ded.concat(rr);
-        // console.log("mergedData", mergedData);
         const worksheet = XLSX.utils.aoa_to_sheet(mergedData);
         worksheet["!cols"] = [
           { width: 5 },
@@ -155,8 +152,7 @@ const Get_Form12bb_Data = () => {
           { width: 25 },
           { width: 25 },
         ];
-        // worksheet["!merges"] = uuuu;
-        // const worksheet = XLSX.utils.json_to_sheet(mergedData);
+
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Users", {
           editable: true,
@@ -208,10 +204,6 @@ const Get_Form12bb_Data = () => {
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      {/* <h4 class="card-title">Form 12BB Data</h4> */}
-                      {/* <p class="card-description">
-                Add class <code>.table</code>
-              </p> */}
                       <table class="table">
                         <thead>
                           <tr>
@@ -238,9 +230,6 @@ const Get_Form12bb_Data = () => {
                                   >
                                     Download
                                   </button>
-                                  {/* <button type="button" onClick={() => downloadExcel()}>
-                            Download
-                          </button> */}
                                 </td>
                               </tr>
                             );
