@@ -48,7 +48,6 @@ const User_List = () => {
                     ...aa,
                     ...resp?.find((bb) => bb?.employee_id === aa?._id),
                   }));
-                  console.log("resp", pp);
                   return setGetUserList(pp);
                 })
                 .catch((err) => {
@@ -168,10 +167,11 @@ const User_List = () => {
                           <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Acenet Role</th>
+
                             <th>Phone</th>
                             <th>Email</th>
-                            <th>Onboarding/Offboarding </th>
+                            <th>Onboarding </th>
+                            <th>Offboarding</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -199,11 +199,7 @@ const User_List = () => {
                                     New Joining
                                   </span>
                                 </td>
-                                <td>
-                                  {value["Acenet Role"] === ""
-                                    ? "Team member"
-                                    : value["Acenet Role"]}
-                                </td>
+
                                 <td>
                                   {value["Personal Mobile Number"] === ""
                                     ? "NA"
@@ -262,16 +258,17 @@ const User_List = () => {
                                           true &&
                                         value?.management_on_boarding_status ===
                                           true
-                                          ? "Onboarding is completed"
+                                          ? "Completed"
                                           : value?.initiate_on_boarding_status ===
                                             true
-                                          ? "Onboarding is pending"
-                                          : "Initiate Onboarding"}
+                                          ? "Pending"
+                                          : "Initiate"}
                                       </button>
                                     ) : (
                                       ""
                                     ))}
-
+                                </td>
+                                <td>
                                   {/* ================ Off Boarding Button ============= */}
 
                                   <button
@@ -310,11 +307,11 @@ const User_List = () => {
                                       true &&
                                     value?.management_off_boarding_status ===
                                       true
-                                      ? "Resignation is completed"
+                                      ? "Completed"
                                       : value?.initiate_off_boarding_status ===
                                         true
-                                      ? "Resignation is pending"
-                                      : "Initiate Resignation"}
+                                      ? "Pending"
+                                      : "Initiate"}
                                   </button>
                                 </td>
                               </tr>

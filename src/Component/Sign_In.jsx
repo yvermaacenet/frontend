@@ -21,7 +21,6 @@ const Sign_In = () => {
         .catch((err) => {
           console.log(err);
         });
-      // setLoading(false);
     }
     postData();
   };
@@ -64,8 +63,6 @@ const Sign_In = () => {
     alignItems: "center",
     backgroundAttachment: "fixed",
     transition: "background-color 0.5s ease",
-
-    // Add any other styles you want to apply here
   };
   return (
     <>

@@ -185,7 +185,6 @@ const Form12BB = () => {
   }`;
   let year = date.getFullYear();
   let currentDate = `${year}-${month}-${day}`;
-  console.log("currentDate", currentDate);
   const {
     register,
     handleSubmit,
@@ -243,9 +242,7 @@ const Form12BB = () => {
     }
     getData();
   }, []);
-  // console.log("wd", getFormDataByID?.status === undefined ? "bb" : "aa");
-  // console.log("wdxxxx", getFormDataByID?.status);
-  // console.log("formState", watch(false));
+
   const [getSection, setGetSection] = useState();
   const [houseRentAllowance, sethouseRentAllowance] = useState(true);
   const [
@@ -277,8 +274,6 @@ const Form12BB = () => {
   }
 
   const onSaveButton = (e) => {
-    // e.preventDefault();
-
     const jsonDate = {
       ...inputData,
       financial_year: "2023-2024",
@@ -386,9 +381,7 @@ const Form12BB = () => {
           : inputData?.others,
     };
     async function postData() {
-      // setLoading(true);
       setLoading(true);
-      console.log("jsonDate", jsonDate);
       await axios
         .post(`form_12_bb`, jsonDate, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -438,7 +431,6 @@ const Form12BB = () => {
       day = ("0" + date.getDate()).slice(-2);
     return [date.getFullYear(), mnth, day].join("-");
   }
-  // console.log("asas", watch());
   return (
     <>
       <div className="container-scroller">
@@ -526,7 +518,6 @@ const Form12BB = () => {
                             onChange={inputEvent}
                             placeholder="Enter First address"
                             value={inputData?.address}
-                            // autoSave
                             disabled={inputData?.status && true}
                           />
                           <small className="invalid-feedback">
@@ -559,7 +550,6 @@ const Form12BB = () => {
                             value={
                               inputData?.permanent_account_number_of_the_employee
                             }
-                            // autoSave
                             disabled={inputData?.status && true}
                           />
                           <small className="invalid-feedback">
@@ -651,14 +641,6 @@ const Form12BB = () => {
                                     return sethouseRentAllowance(
                                       !houseRentAllowance
                                     );
-                                    // setInputData({
-                                    //   ...inputData,
-                                    //   rent_paid_to_the_landlord: "",
-                                    //   name_of_the_landlord: "",
-                                    //   address_of_the_rental_property: "",
-                                    //   permanent_account_number_of_the_landloard:
-                                    //     "",
-                                    // })
                                   }}
                                   checked={
                                     houseRentAllowance === false ? true : false
@@ -693,7 +675,6 @@ const Form12BB = () => {
                                 onChange={inputEvent}
                                 placeholder="Enter Amount(Rs.) Paid to the landlord"
                                 value={inputData?.rent_paid_to_the_landlord}
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -717,7 +698,6 @@ const Form12BB = () => {
                                 onChange={inputEvent}
                                 placeholder="Enter Name of the landlord"
                                 value={inputData?.name_of_the_landlord}
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -747,7 +727,6 @@ const Form12BB = () => {
                                 value={
                                   inputData?.address_of_the_rental_property
                                 }
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -780,7 +759,6 @@ const Form12BB = () => {
                                 value={
                                   inputData?.permanent_account_number_of_the_landloard
                                 }
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -931,7 +909,6 @@ const Form12BB = () => {
                                 value={
                                   inputData?.leave_travel_concessions_or_assistance_amount
                                 }
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -1082,7 +1059,6 @@ const Form12BB = () => {
                                 value={
                                   inputData?.interest_payable_paid_to_the_lender
                                 }
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -1109,7 +1085,6 @@ const Form12BB = () => {
                                 onChange={inputEvent}
                                 placeholder="Enter Name of the lender"
                                 value={inputData?.name_of_the_lender}
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -1133,7 +1108,6 @@ const Form12BB = () => {
                                 onChange={inputEvent}
                                 placeholder="Enter Address of the lender"
                                 value={inputData?.address_of_the_lender}
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -1166,7 +1140,6 @@ const Form12BB = () => {
                                 value={
                                   inputData?.permanent_account_number_of_the_lender
                                 }
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -1186,7 +1159,6 @@ const Form12BB = () => {
                                 onChange={inputEvent}
                                 placeholder="Enter Financial Institutions(if available) "
                                 value={inputData?.financial_institutions}
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                             </div>
@@ -1199,7 +1171,6 @@ const Form12BB = () => {
                                 onChange={inputEvent}
                                 placeholder="Enter Others"
                                 value={inputData?.others}
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                             </div>
@@ -1399,28 +1370,10 @@ const Form12BB = () => {
                                   Add
                                 </button>
                               </div>
-                              {/* <div className="col-md-1" style={{ marginTop: "20px" }}>
-                          {index !== 0 && (
-                            <button
-                              type="button"
-                              className="btn btn-inverse-danger btn-icon"
-                              onClick={() => removeInput(index)}
-                            >
-                              <i className="mdi mdi-delete-forever"></i>
-                            </button>
-                          )}
-                        </div> */}
                             </div>
                           </>
                         )}
 
-                        {/* <div className="d-flex flex-row align-items-center">
-                      <i
-                        className="mdi mdi-plus icon-md text-success"
-                        // onClick={addInput}
-                      ></i>
-                      <p className="mb-0 ms-1"> Add Row </p>
-                    </div> */}
                         <div className="d-flex flex-row align-items-center mt-3">
                           <i className="mdi mdi-hand-pointing-right icon-md text-secondary"></i>
                           <p className="mb-0 ms-1">Verification </p>
@@ -1453,7 +1406,6 @@ const Form12BB = () => {
                                   onChange={inputEvent}
                                   placeholder="Enter father_name"
                                   value={inputData?.father_name}
-                                  // autoSave
                                   disabled={inputData?.status && true}
                                 />
                               </>
@@ -1501,7 +1453,6 @@ const Form12BB = () => {
                                 onChange={inputEvent}
                                 placeholder="Enter Place"
                                 value={inputData?.place}
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
@@ -1528,7 +1479,6 @@ const Form12BB = () => {
                                 onChange={inputEvent}
                                 placeholder="Enter Designation"
                                 value={inputData?.designation}
-                                // autoSave
                                 disabled={inputData?.status && true}
                               />
                               <small className="invalid-feedback">
