@@ -6,8 +6,11 @@ import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import axios from "axios";
+import { useAlert } from "react-alert";
+
 const On_Boarding = () => {
   const navigate = useNavigate();
+  const alert = useAlert();
   const { _id } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [inputData, setInputData] = useState({
@@ -231,7 +234,7 @@ const On_Boarding = () => {
               }
             )
             .then((res) => {
-              return alert(res?.data.message);
+              return alert.show(res?.data.message);
             })
             .catch((err) => {
               if (err.response.status === 500) {
