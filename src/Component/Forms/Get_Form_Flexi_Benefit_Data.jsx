@@ -68,7 +68,6 @@ const Get_Form_Flexi_Benefit_Data = () => {
           bookType: "xlsx",
           type: "array",
         });
-        // console.log(excelBuffer);
         const downloadExcel = async () => {
           const blob = await new Blob([excelBuffer], {
             type: "application/octet-stream",
@@ -114,13 +113,11 @@ const Get_Form_Flexi_Benefit_Data = () => {
         const worksheet = XLSX.utils.aoa_to_sheet(ded);
         worksheet["!cols"] = [{ width: 15 }, { width: 15 }];
         const workbook = XLSX.utils.book_new();
-        // console.log("workbook", workbook);
         XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
         const excelBuffer = XLSX.write(workbook, {
           bookType: "xlsx",
           type: "array",
         });
-        // console.log(excelBuffer);
         const downloadExcel = async () => {
           const blob = await new Blob([excelBuffer], {
             type: "application/octet-stream",
@@ -162,8 +159,6 @@ const Get_Form_Flexi_Benefit_Data = () => {
               <div className="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    {/* <h4 class="card-title">Flexible Benefit Plan Form Data</h4> */}
-
                     <button
                       className="btn btn-outline-primary btn-sm"
                       type="button"
@@ -196,9 +191,6 @@ const Get_Form_Flexi_Benefit_Data = () => {
                                 >
                                   Download
                                 </button>
-                                {/* <button type="button" onClick={() => downloadExcel()}>
-                            Download
-                          </button> */}
                               </td>
                             </tr>
                           );

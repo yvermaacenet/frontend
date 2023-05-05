@@ -3,19 +3,15 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import Footer from "../Partials/Footer";
 import Navbar from "../Partials/Navbar";
-import Page_Header from "../Partials/Page_Header";
 import Sidebar from "../Partials/Sidebar";
-import { PieChart, Pie, Sector } from "recharts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Dashboard = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
-  const [state, setState] = useState(LocalStorageData);
-  const [clr, setClr] = useState("#1bcfb4");
   const [roless, setRoless] = useState();
-  const [counterList, setCounterList] = useState([]);
-  const [states, setStates] = useState({ activeIndex: 0 });
+  // const [counterList, setCounterList] = useState([]);
+  // const [states, setStates] = useState({ activeIndex: 0 });
   const [loading, setLoading] = useState(false);
   const toaster = () => {
     const messageDisplayed = localStorage.getItem("messageDisplayed");
@@ -26,44 +22,27 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    async function get_counterList() {
-      await axios
-        .get(`/documents_counter/${LocalStorageData?.user_id}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
-        .then((res) => {
-          return setCounterList(res?.data), setLoading(false);
-        })
-        .catch((err) => {
-          if (err.response.status === 500) {
-            navigate("/error_500");
-          } else {
-            navigate("/error_403");
-          }
-        });
-    }
-    async function get_user_list_by_role_name() {
-      const result = await axios
-        .get(`/get_user_list_by_role_name`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
-        .then((resp) => {
-          return setRoless(resp.data);
-        })
-        .catch((err) => {
-          if (err.response.status === 500) {
-            navigate("/error_500");
-          } else {
-            navigate("/error_403");
-          }
-        });
-    }
-    get_user_list_by_role_name();
+    // setLoading(true);
+    // async function get_counterList() {
+    //   await axios
+    //     .get(`/documents_counter/${LocalStorageData?.user_id}`, {
+    //       headers: { Access_Token: LocalStorageData?.generate_auth_token },
+    //     })
+    //     .then((res) => {
+    //       return setCounterList(res?.data), setLoading(false);
+    //     })
+    //     .catch((err) => {
+    //       if (err.response.status === 500) {
+    //         navigate("/error_500");
+    //       } else {
+    //         navigate("/error_403");
+    //       }
+    //     });
+    // }
+
     toaster();
-    get_counterList();
+    // get_counterList();
   }, []);
-  console.log("roless?.Reporting_Manager", roless?.Reporting_Manager);
   const cardArray = [
     // {
     //   card_background: "bg-gradient-success",
@@ -171,8 +150,7 @@ const Dashboard = () => {
     //   ],
     // },
   ];
-  const currentTime = new Date().toDateString();
-  console.log(currentTime);
+
   return (
     <>
       <div className="container-scroller">
@@ -266,7 +244,6 @@ const Dashboard = () => {
                                     </span>
                                     <i
                                       className={`mdi ${result?.card_icon} mdi-24px float-right`}
-                                      // style={{ float: "right" }}
                                     ></i>
                                   </h4>
                                   <h1 className="mb-4 text-center">

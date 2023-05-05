@@ -6,8 +6,11 @@ import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import axios from "axios";
+import { useAlert } from "react-alert";
+
 const On_Boarding = () => {
   const navigate = useNavigate();
+  const alert = useAlert();
   const { _id } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [inputData, setInputData] = useState({
@@ -66,15 +69,11 @@ const On_Boarding = () => {
   });
   const [renderComponent, setRenderComponent] = useState(false);
   const [active, setActive] = useState();
-  // const [steperCounter, setSteperCounter] = useState(1);
   const [getUserDetailsById, setGetUserDetailsById] = useState({});
-  const [roless, setRoless] = useState([]);
-  const [state, setState] = useState(false);
   const [updated_data, setUpdated_data] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const inputEvent = (e) => {
-    console.log("e", e);
     const { name, checked } = e.target;
     setInputData({ ...inputData, [name]: checked });
     setUpdated_data({ ...updated_data, [name]: checked });
@@ -90,32 +89,12 @@ const On_Boarding = () => {
         .then((result) => {
           const resp = result.data[0];
           return (
-            setInputData({ ...inputData, ...resp }), setRenderComponent(false)
-          );
-        })
-        .catch((err) => {
-          if (err.response.status === 500) {
-            navigate("/error_500");
-          } else {
-            navigate("/error_403");
-          }
-        });
-    }
-    get_on_boarding_list();
-    async function get_user_list_by_role_name() {
-      const result = await axios
-        .get(`/get_user_list_by_role_name`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
-        .then((resp) => {
-          return (
-            setRoless(resp.data),
+            setInputData({ ...inputData, ...resp }),
             setActive(
-              resp.data?.Hr?.includes(LocalStorageData?.user_id) === true ||
-                resp.data?.Admin?.includes(LocalStorageData?.user_id) === true
+              LocalStorageData?.zoho_role === "Hr" ||
+                LocalStorageData?.zoho_role === "Admin"
                 ? 1
-                : resp.data?.Finance?.includes(LocalStorageData?.user_id) ===
-                  true
+                : LocalStorageData?.zoho_role === "Finance"
                 ? 2
                 : 3
             ),
@@ -130,14 +109,16 @@ const On_Boarding = () => {
           }
         });
     }
-    get_user_list_by_role_name();
+    get_on_boarding_list();
+
     async function get_user_details_by_id() {
       await axios
         .get(`/get_user_details_By_Id/${_id}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
-          const resp_user_list_by_id = resp?.data[0];
+          const resp_user_list_by_id = resp?.data;
+
           return setGetUserDetailsById(resp_user_list_by_id);
         })
         .catch((err) => {
@@ -255,7 +236,7 @@ const On_Boarding = () => {
               }
             )
             .then((res) => {
-              return console.log(res?.data.message);
+              return alert.show(res?.data.message);
             })
             .catch((err) => {
               if (err.response.status === 500) {
@@ -355,7 +336,7 @@ const On_Boarding = () => {
       .then(async (res) => {
         if (res.data.message === "updated") {
           setActive(active + 1);
-
+          // setSteperCounter(steperCounter + 1);
           setRenderComponent(true);
           setUpdated_data([]);
           navigate("/user_list/active_users");
@@ -406,7 +387,6 @@ const On_Boarding = () => {
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    {/* <h4 class="card-title">Default form</h4> */}
                     <div className=" d-flex justify-content-between align-items-center">
                       <span class="card-description">On Boarding Process</span>
                       <div>
@@ -524,14 +504,24 @@ const On_Boarding = () => {
                         </tr>
                       </tbody>
                     </table>
-                    <div className="mt-4 mb-4">
-                      {/* <!==========  Previous Button ============> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    {/* <!==========  Previous Button ============> */}
 
                       <>
                         <button
                           class="btn btn-sm btn-gradient-primary"
                           onClick={(e) => {
-                            return e.preventDefault(), setActive(active - 1);
+                            return (
+                              e.preventDefault(), setActive(active - 1)
+                              // setSteperCounter(steperCounter - 1)
+                            );
                           }}
                           style={{
                             visibility: active !== 1 ? "visible" : "hidden",
@@ -554,42 +544,45 @@ const On_Boarding = () => {
                           Next
                         </button>
                       )}
-                    </div>
-                    <div>
-                      <form class="forms-sample">
-                        <div style={{ maxWidth: "90%" }}>
-                          <MultiStepForm activeStep={active}>
-                            <Step label="First Day Formalities (HR)">
-                              <>
-                                {inputData?.hr_on_boarding_status ? (
-                                  <div
-                                    class="alert alert-success alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-check-circle-outline me-1"></i>
-                                    This step has been completed.
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    class="alert alert-danger alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is pending !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                )}
+                    </>
+
+                    <div class="row">
+                      <div class="col-lg-12 grid-margin ">
+                        <div class="card">
+                          <div class="card-body">
+                            <form class="forms-sample">
+                              <MultiStepForm activeStep={active}>
+                                <Step label="First Day Formalities">
+                                  <>
+                                    {inputData?.hr_on_boarding_status ? (
+                                      <div
+                                        class="alert alert-success alert-dismissible fade show"
+                                        role="alert"
+                                      >
+                                        <i class="mdi mdi-check-circle-outline me-1"></i>
+                                        This step has been completed.
+                                        <button
+                                          type="button"
+                                          class="btn-close"
+                                          data-bs-dismiss="alert"
+                                          aria-label="Close"
+                                        ></button>
+                                      </div>
+                                    ) : (
+                                      <div
+                                        class="alert alert-danger alert-dismissible fade show"
+                                        role="alert"
+                                      >
+                                        <i class="mdi mdi-alert-octagon me-1"></i>
+                                        "This step is pending !!"
+                                        <button
+                                          type="button"
+                                          class="btn-close"
+                                          data-bs-dismiss="alert"
+                                          aria-label="Close"
+                                        ></button>
+                                      </div>
+                                    )}
 
                                 {/* <div className="row">
                                   <div class="card">
@@ -616,6 +609,7 @@ const On_Boarding = () => {
                                               name="wifi_passwords"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.wifi_passwords
                                               }
@@ -647,6 +641,7 @@ const On_Boarding = () => {
                                               name="genrate_mail_id"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.genrate_mail_id
                                               }
@@ -678,6 +673,7 @@ const On_Boarding = () => {
                                               name="one_drive_access"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.one_drive_access
                                               }
@@ -709,6 +705,7 @@ const On_Boarding = () => {
                                               name="add_to_official_dls"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.add_to_official_dls
                                               }
@@ -740,6 +737,7 @@ const On_Boarding = () => {
                                               name="teams_access"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.teams_access}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -769,6 +767,7 @@ const On_Boarding = () => {
                                               name="biometric"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.biometric}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -798,6 +797,7 @@ const On_Boarding = () => {
                                               name="induction_call"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.induction_call
                                               }
@@ -825,6 +825,7 @@ const On_Boarding = () => {
                                           <select
                                             name="induction_call_with"
                                             onChange={inputEvent}
+                                            // style={{ opacity: 0 }}
                                             value={
                                               inputData?.induction_call_with
                                             }
@@ -851,6 +852,7 @@ const On_Boarding = () => {
                                               name="acenet_laptop"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.acenet_laptop}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -880,6 +882,7 @@ const On_Boarding = () => {
                                               name="client_laptop"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.client_laptop}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -909,6 +912,7 @@ const On_Boarding = () => {
                                               name="notpad"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.notpad}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -938,6 +942,7 @@ const On_Boarding = () => {
                                               name="t_shirt"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.t_shirt}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -967,6 +972,7 @@ const On_Boarding = () => {
                                               name="welcome_kit"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.welcome_kit}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -996,6 +1002,7 @@ const On_Boarding = () => {
                                               name="intro_slide_shared"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.intro_slide_shared
                                               }
@@ -1030,6 +1037,7 @@ const On_Boarding = () => {
                                               name="aadhar_card"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.aadhar_card}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1059,6 +1067,7 @@ const On_Boarding = () => {
                                               name="pan_card"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.pan_card}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1088,6 +1097,7 @@ const On_Boarding = () => {
                                               name="passport"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.passport}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1117,6 +1127,7 @@ const On_Boarding = () => {
                                               name="dl"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.dl}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1146,6 +1157,7 @@ const On_Boarding = () => {
                                               name="ten_th"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.ten_th}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1175,6 +1187,7 @@ const On_Boarding = () => {
                                               name="tweleve_th"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.tweleve_th}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1204,6 +1217,7 @@ const On_Boarding = () => {
                                               name="graduation"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.graduation}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1233,6 +1247,7 @@ const On_Boarding = () => {
                                               name="post_graduation"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.post_graduation
                                               }
@@ -1268,6 +1283,7 @@ const On_Boarding = () => {
                                               name="experience_proof"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.experience_proof
                                               }
@@ -1299,6 +1315,7 @@ const On_Boarding = () => {
                                               name="passport_size_photo"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.passport_size_photo
                                               }
@@ -1330,6 +1347,7 @@ const On_Boarding = () => {
                                               name="signed_offer_latter"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.signed_offer_latter
                                               }
@@ -1361,6 +1379,7 @@ const On_Boarding = () => {
                                               name="documents_verification"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.documents_verification
                                               }
@@ -1392,6 +1411,7 @@ const On_Boarding = () => {
                                               name="covid_certificate"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.covid_certificate
                                               }
@@ -1425,6 +1445,7 @@ const On_Boarding = () => {
                                               name="employee_data_sheet_bank_details"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.employee_data_sheet_bank_details
                                               }
@@ -1456,6 +1477,7 @@ const On_Boarding = () => {
                                               name="other_official_documents"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.other_official_documents
                                               }
@@ -1487,6 +1509,7 @@ const On_Boarding = () => {
                                               name="pay_slips"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.pay_slips}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1521,6 +1544,7 @@ const On_Boarding = () => {
                                               name="forms_16"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               checked={inputData?.forms_16}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1605,6 +1629,7 @@ const On_Boarding = () => {
                                               name="pf_form_recieved"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1636,6 +1661,7 @@ const On_Boarding = () => {
                                               name="pf_submitted_to_ca_team"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1672,6 +1698,7 @@ const On_Boarding = () => {
                                               name="PF_number_shared_with_the_employee"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1703,6 +1730,7 @@ const On_Boarding = () => {
                                               name="gratuity_Form_Received"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1736,6 +1764,7 @@ const On_Boarding = () => {
                                               name="gratuity_Form_submitteed_to_CA_Team"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1767,6 +1796,7 @@ const On_Boarding = () => {
                                               name="ghi_documents_received"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1798,6 +1828,7 @@ const On_Boarding = () => {
                                               name="ghi_initiated"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1827,6 +1858,7 @@ const On_Boarding = () => {
                                               name="ghi_eCard_issued"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1861,6 +1893,7 @@ const On_Boarding = () => {
                                               name="hdfc_account_mapped"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1892,6 +1925,7 @@ const On_Boarding = () => {
                                               name="hdfc_account_initiated"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1923,6 +1957,7 @@ const On_Boarding = () => {
                                               name="hdfc_account_opened"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1954,6 +1989,7 @@ const On_Boarding = () => {
                                               name="hdfc_account_benefeciary_added"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
+                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1982,39 +2018,39 @@ const On_Boarding = () => {
                               </>
                             </Step>
 
-                            <Step label="ZOHO Account (Management)">
-                              <>
-                                <>
-                                  {inputData?.management_on_boarding_status ? (
-                                    <div
-                                      class="alert alert-success alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-check-circle-outline me-1"></i>
-                                      This step has been completed.
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  ) : (
-                                    <div
-                                      class="alert alert-danger alert-dismissible fade show"
-                                      role="alert"
-                                    >
-                                      <i class="mdi mdi-alert-octagon me-1"></i>
-                                      "This step is pending !!"
-                                      <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="alert"
-                                        aria-label="Close"
-                                      ></button>
-                                    </div>
-                                  )}
-                                </>
+                                <Step label="ZOHO Account">
+                                  <>
+                                    <>
+                                      {inputData?.management_on_boarding_status ? (
+                                        <div
+                                          class="alert alert-success alert-dismissible fade show"
+                                          role="alert"
+                                        >
+                                          <i class="mdi mdi-check-circle-outline me-1"></i>
+                                          This step has been completed.
+                                          <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                          ></button>
+                                        </div>
+                                      ) : (
+                                        <div
+                                          class="alert alert-danger alert-dismissible fade show"
+                                          role="alert"
+                                        >
+                                          <i class="mdi mdi-alert-octagon me-1"></i>
+                                          "This step is pending !!"
+                                          <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                          ></button>
+                                        </div>
+                                      )}
+                                    </>
 
                                 <>
                                   {/* <div className="row">
@@ -2042,6 +2078,7 @@ const On_Boarding = () => {
                                                 name="zoho_people_account_created"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
+                                                // style={{ opacity: 0 }}
                                                 disabled={
                                                   roless?.Management?.includes(
                                                     LocalStorageData?.user_id
@@ -2073,6 +2110,7 @@ const On_Boarding = () => {
                                                 name="zoho_people_account_activated"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
+                                                // style={{ opacity: 0 }}
                                                 disabled={
                                                   roless?.Management?.includes(
                                                     LocalStorageData?.user_id
@@ -2104,6 +2142,7 @@ const On_Boarding = () => {
                                                 name="zoho_payroll_integrated"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
+                                                // style={{ opacity: 0 }}
                                                 disabled={
                                                   roless?.Management?.includes(
                                                     LocalStorageData?.user_id
@@ -2138,6 +2177,7 @@ const On_Boarding = () => {
                                                 name="bgv_initiated"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
+                                                // style={{ opacity: 0 }}
                                                 checked={
                                                   inputData?.bgv_initiated
                                                 }
@@ -2169,6 +2209,7 @@ const On_Boarding = () => {
                                                 name="bgv_invoice_Paid"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
+                                                // style={{ opacity: 0 }}
                                                 checked={
                                                   inputData?.bgv_invoice_Paid
                                                 }
@@ -2200,6 +2241,7 @@ const On_Boarding = () => {
                                                 name="bgv_report_Received"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
+                                                // style={{ opacity: 0 }}
                                                 checked={
                                                   inputData?.bgv_report_Received
                                                 }
@@ -2231,6 +2273,7 @@ const On_Boarding = () => {
                                                 name="update_linkedIn"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
+                                                // style={{ opacity: 0 }}
                                                 checked={
                                                   inputData?.update_linkedIn
                                                 }
@@ -2269,6 +2312,7 @@ const On_Boarding = () => {
                                 onClick={(e) => {
                                   return (
                                     e.preventDefault(), setActive(active - 1)
+                                    // setSteperCounter(steperCounter - 1)
                                   );
                                 }}
                               >
@@ -2283,6 +2327,7 @@ const On_Boarding = () => {
                               onClick={(e) => {
                                 return (
                                   e.preventDefault(), setActive(active + 1)
+                                  // setSteperCounter(steperCounter + 1)
                                 );
                               }}
                               style={{ float: "right" }}

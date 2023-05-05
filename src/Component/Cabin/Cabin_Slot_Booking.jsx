@@ -206,7 +206,6 @@ const Cabin_Slot_Booking = () => {
           setAddEventModal(false),
           setAllDay(false),
           setRenderComponent(true)
-          // window.location.reload()
         );
       })
       .catch((err) => {
@@ -285,14 +284,11 @@ const Cabin_Slot_Booking = () => {
           (booking.end > start && booking.end <= end) ||
           (booking.start <= start && booking.end >= end)
       );
-      // console.log("start", event.start);
-      // console.log("end", event.end);
-      // console.log("event", event);
+
       if (selectCabin_id === "all") {
         alert?.show("Please select cabin");
       } else if (event.start === event.end) {
         alert?.show("Are you sure you want to delete this event?");
-        // onDeleteEvent(event);
       } else if (overlappingBooking && event._id !== overlappingBooking._id) {
         alert?.show("already booked");
       } else {
@@ -353,7 +349,6 @@ const Cabin_Slot_Booking = () => {
           const filtered = prev?.filter((ev) => ev?._id !== event?._id);
           const result2 = [...filtered, { ...existing, start, end, allDay }];
           const lastObject = result2[result2.length - 1];
-          // console.log(lastObject);
           setLoading(true);
           async function dragndrop() {
             await axios
@@ -389,7 +384,6 @@ const Cabin_Slot_Booking = () => {
     setFilteredCabinList(filteredCabinList);
     fetch_cabin_slot_booking_by_location(e.target.value);
   };
-  console.log("filteredCabinList", filteredCabinList);
 
   return (
     <div className="container-scroller">
@@ -423,11 +417,7 @@ const Cabin_Slot_Booking = () => {
                               className="form-control form-control-sm"
                               onChange={handleLocationChange}
                             >
-                              <option
-                                value="all_location"
-                                selected="selected"
-                                // disabled="disabled"
-                              >
+                              <option value="all_location" selected="selected">
                                 All Booking
                               </option>
                               {location?.map((item) => {
@@ -448,11 +438,7 @@ const Cabin_Slot_Booking = () => {
                                 setSelectCabin_id(e.target.value)
                               }
                             >
-                              <option
-                                value="all"
-                                selected="selected"
-                                // disabled="disabled"
-                              >
+                              <option value="all" selected="selected">
                                 All Booking
                               </option>
                               {filteredCabinList[0]?.map((val, index) => {
@@ -470,7 +456,6 @@ const Cabin_Slot_Booking = () => {
                       </div>
                     </form>
                     <DragAndDropCalendar
-                      // defaultDate={defaultDate}
                       events={getCabinSlotBookingList}
                       localizer={localizer}
                       onEventDrop={moveEvent}
@@ -479,10 +464,8 @@ const Cabin_Slot_Booking = () => {
                       selectable
                       onSelectSlot={handleSelect}
                       resourceIdAccessor="resourceId"
-                      // resources={resourceMap}
                       onSelectEvent={onSelectEvent}
                       resourceTitleAccessor="resourceTitle"
-                      // scrollToTime={scrollToTime}
                       startAccessor="start"
                       endAccessor="end"
                       defaultView={"week"}
@@ -496,7 +479,6 @@ const Cabin_Slot_Booking = () => {
                     <PureModal
                       header="Cabin Booking"
                       isOpen={addEventModal}
-                      // closeButtonPosition="bottom"
                       onClose={() => {
                         setAddEventModal(false);
                         setAllDay(false);
@@ -535,7 +517,6 @@ const Cabin_Slot_Booking = () => {
                                     type="date"
                                     className="form-control form-control-sm"
                                     placeholder="Username"
-                                    // onChange={inputEvent}
                                     value={inputData?.convertStartDate}
                                     disabled
                                   />
@@ -562,7 +543,6 @@ const Cabin_Slot_Booking = () => {
                                     type="date"
                                     className="form-control form-control-sm"
                                     placeholder="Username"
-                                    // onChange={inputEvent}
                                     value={inputData?.convertEndDate}
                                     disabled
                                   />
@@ -611,10 +591,8 @@ const Cabin_Slot_Booking = () => {
                     <PureModal
                       header="Cabin Booking"
                       isOpen={editEventModal}
-                      // closeButtonPosition="bottom"
                       onClose={() => {
                         setEditEventModal(false);
-                        // setAllDay(false);
                         return true;
                       }}
                       width={"40%"}

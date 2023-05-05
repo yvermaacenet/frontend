@@ -3,13 +3,17 @@ import Navbar from "../../Partials/Navbar";
 import Sidebar from "../../Partials/Sidebar";
 import Page_Header from "../../Partials/Page_Header";
 import { useAlert } from "react-alert";
-
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
+import countries from "i18n-iso-countries";
+
 const TravelRequestForm = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const alert = useAlert();
   let [loading, setLoading] = useState(false);
+  let [countryData, setCountryData] = useState([]);
+  let [countryName, setCountryName] = useState([]);
   const [employee, setEmployee] = useState({
     name: LocalStorageData?.name,
     email: LocalStorageData?.email,
@@ -20,6 +24,8 @@ const TravelRequestForm = () => {
     end_date: "",
     destination: "",
     purpose: "",
+    trip_type: "national",
+    from_country: "India",
   });
   const [flight, setFlight] = useState({
     type: false,
@@ -43,7 +49,27 @@ const TravelRequestForm = () => {
   const [other, setOther] = useState({
     type: false,
   });
-
+  useEffect(() => {
+    async function getCountry() {
+      await axios.get("airport").then((res) => {
+        const regionNamesInEnglish = new Intl.DisplayNames(["en"], {
+          type: "region",
+        });
+        return (
+          setCountryData(res.data),
+          res.data?.map((item) => {
+            return (
+              !countryName.includes(
+                regionNamesInEnglish.of(`${item.country_code}`)
+              ) &&
+              countryName.push(regionNamesInEnglish.of(`${item.country_code}`))
+            );
+          })
+        );
+      });
+    }
+    getCountry();
+  }, []);
   const handleSubmit = (event) => {
     event.preventDefault();
     // submit data to MongoDB
@@ -216,34 +242,32 @@ const TravelRequestForm = () => {
                           <div className="col-12 col-lg-6">
                             <div className="form-group">
                               <label>Reason for Travel</label>
-                              <textarea
-                                className="form-control "
-                                // value={travel.purpose}
-                                // onChange={(event) =>
-                                //   setTravel((prev) => ({
-                                //     ...prev,
-                                //     purpose: event.target.value,
-                                //   }))
-                                // }
-                              />
+                              <textarea className="form-control " />
                             </div>
                           </div>
-                          {/* <div className="col-12 col-lg-3">
-                          <div className="form-group">
-                            <label>
-                              Est. Amount <small>(INR)</small>
-                            </label>
-                            <input
-                              className="form-control form-control-sm"
-                              type="number"
-                              placeholder="Enter Reason for Travel"
-                              name="estimated_amount"
-                              value={estimated_amount}
-                              // onChange={handleChange}
-                              required
-                            />
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>Trip Type</label>
+                              <select
+                                className="form-control form-control-sm"
+                                name="trip_type"
+                                onChange={(e) => {
+                                  setTravel({
+                                    ...travel,
+                                    trip_type: e.target.value,
+                                  });
+                                }}
+                              >
+                                <option selected>Select</option>
+                                <option value="international">
+                                  International
+                                </option>
+                                <option value="national" selected>
+                                  National
+                                </option>
+                              </select>
+                            </div>
                           </div>
-                        </div> */}
                         </div>
 
                         <div className="form-group row">
@@ -329,23 +353,67 @@ const TravelRequestForm = () => {
                               <i className="mdi mdi-airplane icon-md text-secondary"></i>
                               <p className="mb-0 ms-1">Flight Informations</p>
                             </div>
+                            {travel?.trip_type === "international" && (
+                              <div className="col-12 col-lg-3">
+                                <div className="form-group">
+                                  <label>From(Country)</label>
+                                  <select
+                                    className="form-control form-control-sm"
+                                    value={travel?.from_country}
+                                  >
+                                    <option selected>Select</option>
+                                    {countryName
+                                      .sort()
+                                      ?.map((country, index) => {
+                                        return (
+                                          <option value={country} key={index}>
+                                            {country}
+                                          </option>
+                                        );
+                                      })}
+                                  </select>
+                                </div>
+                              </div>
+                            )}
 
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
-                                <label>From(City Name)</label>
-                                <input
-                                  className="form-control form-control-sm"
-                                  type="text"
-                                />
+                                <label>From(City)</label>
+                                <select className="form-control form-control-sm">
+                                  <option selected>Select</option>
+                                  {countryData.sort()?.map((country, index) => {
+                                    return (
+                                      <option
+                                        value={country?.city_name}
+                                        key={index}
+                                      >
+                                        {country?.city_name}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
                               </div>
                             </div>
+                            {travel?.trip_type === "international" && (
+                              <div className="col-12 col-lg-3">
+                                <div className="form-group">
+                                  <label>To(Country)</label>
+                                  <select className="form-control form-control-sm">
+                                    <option selected>Select</option>
+                                    <option value="AM">AM</option>
+                                    <option value="PM">PM</option>
+                                  </select>
+                                </div>
+                              </div>
+                            )}
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
-                                <label>To(City Name)</label>
-                                <input
-                                  className="form-control form-control-sm"
-                                  type="text"
-                                />
+                                <label>To(City)</label>
+                                <select className="form-control form-control-sm">
+                                  <option selected>Select</option>
+                                  <option value="AM">AM</option>
+                                  <option value="PM">PM</option>
+                                </select>
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
@@ -520,7 +588,6 @@ const TravelRequestForm = () => {
                                   <option value="rental_vehical">
                                     Rental Vehical(cab)
                                   </option>
-                                  <option value="others">Others</option>
                                 </select>
                               </div>
                             </div>

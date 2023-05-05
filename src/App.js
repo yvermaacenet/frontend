@@ -4,9 +4,7 @@ import { BrowserRouter as Router, Form, Route, Routes } from "react-router-dom";
 import Sign_In from "./Component/Sign_In";
 import Private_Routes from "./Utils/Private_Routes";
 import Routes_Array from "./Utils/Routes";
-import { useEffect } from "react";
 function App() {
-  useEffect(() => {}, []);
   return (
     <>
       <Router>

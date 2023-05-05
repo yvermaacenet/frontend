@@ -239,7 +239,6 @@ const Cabin_Update = () => {
                                       ...inputData,
                                       status: !inputData?.status,
                                     });
-                                    // onStatusChange(!checkedStatus)
                                   }}
                                   checked={inputData.status}
                                 />
