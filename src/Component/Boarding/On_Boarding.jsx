@@ -79,6 +79,7 @@ const On_Boarding = () => {
     setInputData({ ...inputData, [name]: checked });
     setUpdated_data({ ...updated_data, [name]: checked });
   };
+
   useEffect(() => {
     setLoading(true);
     async function get_on_boarding_list() {
@@ -231,7 +232,7 @@ const On_Boarding = () => {
       .then(async (res) => {
         if (res.data.message === "created") {
           setActive(active + 1);
-          // setSteperCounter(steperCounter + 1);
+
           setRenderComponent(true);
           navigate("/user_list/active_users");
 
@@ -239,7 +240,6 @@ const On_Boarding = () => {
             .put(
               `/user_update/${_id}`,
               {
-                // on_boarding_steper_counter: active,
                 initiate_on_boarding_status: true,
                 on_boarding_status:
                   inputData?.hr_on_boarding_status === true &&
@@ -355,7 +355,7 @@ const On_Boarding = () => {
       .then(async (res) => {
         if (res.data.message === "updated") {
           setActive(active + 1);
-          // setSteperCounter(steperCounter + 1);
+
           setRenderComponent(true);
           setUpdated_data([]);
           navigate("/user_list/active_users");
@@ -426,12 +426,7 @@ const On_Boarding = () => {
                           className="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
                           aria-labelledby="notificationDropdown"
                         >
-                          <h6
-                            className="mt-0 p-3"
-                            // style={{position:"sticky", top:"0", backgroundColor:"white", margin:"0"}}
-                          >
-                            History
-                          </h6>
+                          <h6 className="mt-0 p-3">History</h6>
 
                           {inputData?.updated_by?.map((item) => {
                             return (
@@ -536,10 +531,7 @@ const On_Boarding = () => {
                         <button
                           class="btn btn-sm btn-gradient-primary"
                           onClick={(e) => {
-                            return (
-                              e.preventDefault(), setActive(active - 1)
-                              // setSteperCounter(steperCounter - 1)
-                            );
+                            return e.preventDefault(), setActive(active - 1);
                           }}
                           style={{
                             visibility: active !== 1 ? "visible" : "hidden",
@@ -555,10 +547,7 @@ const On_Boarding = () => {
                         <button
                           class="btn btn-sm btn-gradient-primary"
                           onClick={(e) => {
-                            return (
-                              e.preventDefault(), setActive(active + 1)
-                              // setSteperCounter(steperCounter + 1)
-                            );
+                            return e.preventDefault(), setActive(active + 1);
                           }}
                           style={{ float: "right" }}
                         >
@@ -627,7 +616,6 @@ const On_Boarding = () => {
                                               name="wifi_passwords"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.wifi_passwords
                                               }
@@ -659,7 +647,6 @@ const On_Boarding = () => {
                                               name="genrate_mail_id"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.genrate_mail_id
                                               }
@@ -691,7 +678,6 @@ const On_Boarding = () => {
                                               name="one_drive_access"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.one_drive_access
                                               }
@@ -723,7 +709,6 @@ const On_Boarding = () => {
                                               name="add_to_official_dls"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.add_to_official_dls
                                               }
@@ -755,7 +740,6 @@ const On_Boarding = () => {
                                               name="teams_access"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.teams_access}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -785,7 +769,6 @@ const On_Boarding = () => {
                                               name="biometric"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.biometric}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -815,7 +798,6 @@ const On_Boarding = () => {
                                               name="induction_call"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.induction_call
                                               }
@@ -843,7 +825,6 @@ const On_Boarding = () => {
                                           <select
                                             name="induction_call_with"
                                             onChange={inputEvent}
-                                            // style={{ opacity: 0 }}
                                             value={
                                               inputData?.induction_call_with
                                             }
@@ -870,7 +851,6 @@ const On_Boarding = () => {
                                               name="acenet_laptop"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.acenet_laptop}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -900,7 +880,6 @@ const On_Boarding = () => {
                                               name="client_laptop"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.client_laptop}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -930,7 +909,6 @@ const On_Boarding = () => {
                                               name="notpad"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.notpad}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -960,7 +938,6 @@ const On_Boarding = () => {
                                               name="t_shirt"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.t_shirt}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -990,7 +967,6 @@ const On_Boarding = () => {
                                               name="welcome_kit"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.welcome_kit}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1020,7 +996,6 @@ const On_Boarding = () => {
                                               name="intro_slide_shared"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.intro_slide_shared
                                               }
@@ -1055,7 +1030,6 @@ const On_Boarding = () => {
                                               name="aadhar_card"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.aadhar_card}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1085,7 +1059,6 @@ const On_Boarding = () => {
                                               name="pan_card"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.pan_card}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1115,7 +1088,6 @@ const On_Boarding = () => {
                                               name="passport"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.passport}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1145,7 +1117,6 @@ const On_Boarding = () => {
                                               name="dl"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.dl}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1175,7 +1146,6 @@ const On_Boarding = () => {
                                               name="ten_th"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.ten_th}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1205,7 +1175,6 @@ const On_Boarding = () => {
                                               name="tweleve_th"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.tweleve_th}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1235,7 +1204,6 @@ const On_Boarding = () => {
                                               name="graduation"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.graduation}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1265,7 +1233,6 @@ const On_Boarding = () => {
                                               name="post_graduation"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.post_graduation
                                               }
@@ -1301,7 +1268,6 @@ const On_Boarding = () => {
                                               name="experience_proof"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.experience_proof
                                               }
@@ -1333,7 +1299,6 @@ const On_Boarding = () => {
                                               name="passport_size_photo"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.passport_size_photo
                                               }
@@ -1365,7 +1330,6 @@ const On_Boarding = () => {
                                               name="signed_offer_latter"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.signed_offer_latter
                                               }
@@ -1397,7 +1361,6 @@ const On_Boarding = () => {
                                               name="documents_verification"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.documents_verification
                                               }
@@ -1429,7 +1392,6 @@ const On_Boarding = () => {
                                               name="covid_certificate"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.covid_certificate
                                               }
@@ -1463,7 +1425,6 @@ const On_Boarding = () => {
                                               name="employee_data_sheet_bank_details"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.employee_data_sheet_bank_details
                                               }
@@ -1495,7 +1456,6 @@ const On_Boarding = () => {
                                               name="other_official_documents"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={
                                                 inputData?.other_official_documents
                                               }
@@ -1527,7 +1487,6 @@ const On_Boarding = () => {
                                               name="pay_slips"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.pay_slips}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1562,7 +1521,6 @@ const On_Boarding = () => {
                                               name="forms_16"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               checked={inputData?.forms_16}
                                               disabled={
                                                 roless?.Hr?.includes(
@@ -1647,7 +1605,6 @@ const On_Boarding = () => {
                                               name="pf_form_recieved"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1679,7 +1636,6 @@ const On_Boarding = () => {
                                               name="pf_submitted_to_ca_team"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1716,7 +1672,6 @@ const On_Boarding = () => {
                                               name="PF_number_shared_with_the_employee"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1748,7 +1703,6 @@ const On_Boarding = () => {
                                               name="gratuity_Form_Received"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1782,7 +1736,6 @@ const On_Boarding = () => {
                                               name="gratuity_Form_submitteed_to_CA_Team"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1814,7 +1767,6 @@ const On_Boarding = () => {
                                               name="ghi_documents_received"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1846,7 +1798,6 @@ const On_Boarding = () => {
                                               name="ghi_initiated"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1876,7 +1827,6 @@ const On_Boarding = () => {
                                               name="ghi_eCard_issued"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1911,7 +1861,6 @@ const On_Boarding = () => {
                                               name="hdfc_account_mapped"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1943,7 +1892,6 @@ const On_Boarding = () => {
                                               name="hdfc_account_initiated"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -1975,7 +1923,6 @@ const On_Boarding = () => {
                                               name="hdfc_account_opened"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -2007,7 +1954,6 @@ const On_Boarding = () => {
                                               name="hdfc_account_benefeciary_added"
                                               class="form-control form-control-sm"
                                               onChange={inputEvent}
-                                              // style={{ opacity: 0 }}
                                               disabled={
                                                 roless?.Finance?.includes(
                                                   LocalStorageData?.user_id
@@ -2096,7 +2042,6 @@ const On_Boarding = () => {
                                                 name="zoho_people_account_created"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
-                                                // style={{ opacity: 0 }}
                                                 disabled={
                                                   roless?.Management?.includes(
                                                     LocalStorageData?.user_id
@@ -2128,7 +2073,6 @@ const On_Boarding = () => {
                                                 name="zoho_people_account_activated"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
-                                                // style={{ opacity: 0 }}
                                                 disabled={
                                                   roless?.Management?.includes(
                                                     LocalStorageData?.user_id
@@ -2160,7 +2104,6 @@ const On_Boarding = () => {
                                                 name="zoho_payroll_integrated"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
-                                                // style={{ opacity: 0 }}
                                                 disabled={
                                                   roless?.Management?.includes(
                                                     LocalStorageData?.user_id
@@ -2195,7 +2138,6 @@ const On_Boarding = () => {
                                                 name="bgv_initiated"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
-                                                // style={{ opacity: 0 }}
                                                 checked={
                                                   inputData?.bgv_initiated
                                                 }
@@ -2227,7 +2169,6 @@ const On_Boarding = () => {
                                                 name="bgv_invoice_Paid"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
-                                                // style={{ opacity: 0 }}
                                                 checked={
                                                   inputData?.bgv_invoice_Paid
                                                 }
@@ -2259,7 +2200,6 @@ const On_Boarding = () => {
                                                 name="bgv_report_Received"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
-                                                // style={{ opacity: 0 }}
                                                 checked={
                                                   inputData?.bgv_report_Received
                                                 }
@@ -2291,7 +2231,6 @@ const On_Boarding = () => {
                                                 name="update_linkedIn"
                                                 class="form-control form-control-sm"
                                                 onChange={inputEvent}
-                                                // style={{ opacity: 0 }}
                                                 checked={
                                                   inputData?.update_linkedIn
                                                 }
@@ -2330,7 +2269,6 @@ const On_Boarding = () => {
                                 onClick={(e) => {
                                   return (
                                     e.preventDefault(), setActive(active - 1)
-                                    // setSteperCounter(steperCounter - 1)
                                   );
                                 }}
                               >
@@ -2345,7 +2283,6 @@ const On_Boarding = () => {
                               onClick={(e) => {
                                 return (
                                   e.preventDefault(), setActive(active + 1)
-                                  // setSteperCounter(steperCounter + 1)
                                 );
                               }}
                               style={{ float: "right" }}
