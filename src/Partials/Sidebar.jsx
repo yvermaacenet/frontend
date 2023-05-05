@@ -120,6 +120,12 @@ const Sidebar = () => {
                       Form Flexible Benefit
                     </NavLink>
                   </li>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/travelrequestform">
+                      Travel Request
+                    </NavLink>
+                  </li>
+
                   {LocalStorageData?.zoho_role === "Finance" ||
                     (LocalStorageData?.zoho_role === "Admin" && (
                       <>
