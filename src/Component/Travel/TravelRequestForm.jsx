@@ -7,6 +7,7 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import countries from "i18n-iso-countries";
+import Select from "react-select";
 
 const TravelRequestForm = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
@@ -80,6 +81,23 @@ const TravelRequestForm = () => {
       hotel,
     });
   };
+  const [options, setOptions] = useState([
+    {
+      value: "",
+      label: "",
+    },
+  ]);
+  const cities = countryData.map((item) => item.city_name);
+
+  const newOptions = cities.map((city, index) => {
+    const optionIndex = index % options.length;
+    return {
+      value: city,
+      label: city,
+    };
+  });
+
+  console.log(newOptions);
 
   return (
     <>
@@ -114,6 +132,7 @@ const TravelRequestForm = () => {
                   <div class="loader"></div>
                 </div>
               )}
+
               <div className="row">
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
@@ -212,6 +231,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                         </div>
+
                         <div className="row my-2">
                           <div className="col-12 col-lg-6">
                             <div className="form-group">
@@ -327,7 +347,7 @@ const TravelRequestForm = () => {
                               <i className="mdi mdi-airplane icon-md text-secondary"></i>
                               <p className="mb-0 ms-1">Flight Informations</p>
                             </div>
-                            {travel?.trip_type === "international" && (
+                            {/* {travel?.trip_type === "international" && (
                               <div className="col-12 col-lg-3">
                                 <div className="form-group">
                                   <label>From(Country)</label>
@@ -348,12 +368,14 @@ const TravelRequestForm = () => {
                                   </select>
                                 </div>
                               </div>
-                            )}
+                            )} */}
 
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>From(City)</label>
-                                <select className="form-control form-control-sm">
+                                <Select options={newOptions} />
+
+                                {/* <select className="form-control form-control-sm">
                                   <option selected>Select</option>
                                   {countryData.sort()?.map((country, index) => {
                                     return (
@@ -365,10 +387,10 @@ const TravelRequestForm = () => {
                                       </option>
                                     );
                                   })}
-                                </select>
+                                </select> */}
                               </div>
                             </div>
-                            {travel?.trip_type === "international" && (
+                            {/* {travel?.trip_type === "international" && (
                               <div className="col-12 col-lg-3">
                                 <div className="form-group">
                                   <label>To(Country)</label>
@@ -379,15 +401,17 @@ const TravelRequestForm = () => {
                                   </select>
                                 </div>
                               </div>
-                            )}
+                            )} */}
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City)</label>
-                                <select className="form-control form-control-sm">
+                                <Select options={newOptions} />
+
+                                {/* <select className="form-control form-control-sm">
                                   <option selected>Select</option>
                                   <option value="AM">AM</option>
                                   <option value="PM">PM</option>
-                                </select>
+                                </select> */}
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
@@ -422,6 +446,15 @@ const TravelRequestForm = () => {
                               <p className="mb-0 ms-1">Hotel Informations</p>
                             </div>
 
+                            <div className="col-12 col-lg-3">
+                              <div className="form-group">
+                                <label>City</label>
+                                <Select
+                                  className="from-control"
+                                  options={newOptions}
+                                />
+                              </div>
+                            </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>Check-in</label>
@@ -462,19 +495,13 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>From(City Name)</label>
-                                <input
-                                  className="form-control form-control-sm"
-                                  type="text"
-                                />
+                                <Select options={newOptions} />
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City Name)</label>
-                                <input
-                                  className="form-control form-control-sm"
-                                  type="text"
-                                />
+                                <Select options={newOptions} />
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
