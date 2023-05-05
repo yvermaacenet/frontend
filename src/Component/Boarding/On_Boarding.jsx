@@ -6,11 +6,8 @@ import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import axios from "axios";
-import { useAlert } from "react-alert";
-
 const On_Boarding = () => {
   const navigate = useNavigate();
-  const alert = useAlert();
   const { _id } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [inputData, setInputData] = useState({
@@ -69,16 +66,19 @@ const On_Boarding = () => {
   });
   const [renderComponent, setRenderComponent] = useState(false);
   const [active, setActive] = useState();
+  // const [steperCounter, setSteperCounter] = useState(1);
   const [getUserDetailsById, setGetUserDetailsById] = useState({});
+  const [roless, setRoless] = useState([]);
+  const [state, setState] = useState(false);
   const [updated_data, setUpdated_data] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const inputEvent = (e) => {
+    console.log("e", e);
     const { name, checked } = e.target;
     setInputData({ ...inputData, [name]: checked });
     setUpdated_data({ ...updated_data, [name]: checked });
   };
-
   useEffect(() => {
     setLoading(true);
     async function get_on_boarding_list() {
@@ -89,12 +89,32 @@ const On_Boarding = () => {
         .then((result) => {
           const resp = result.data[0];
           return (
-            setInputData({ ...inputData, ...resp }),
+            setInputData({ ...inputData, ...resp }), setRenderComponent(false)
+          );
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+    }
+    get_on_boarding_list();
+    async function get_user_list_by_role_name() {
+      const result = await axios
+        .get(`/get_user_list_by_role_name`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
+        .then((resp) => {
+          return (
+            setRoless(resp.data),
             setActive(
-              LocalStorageData?.zoho_role === "Hr" ||
-                LocalStorageData?.zoho_role === "Admin"
+              resp.data?.Hr?.includes(LocalStorageData?.user_id) === true ||
+                resp.data?.Admin?.includes(LocalStorageData?.user_id) === true
                 ? 1
-                : LocalStorageData?.zoho_role === "Finance"
+                : resp.data?.Finance?.includes(LocalStorageData?.user_id) ===
+                  true
                 ? 2
                 : 3
             ),
@@ -109,16 +129,14 @@ const On_Boarding = () => {
           }
         });
     }
-    get_on_boarding_list();
-
+    get_user_list_by_role_name();
     async function get_user_details_by_id() {
       await axios
         .get(`/get_user_details_By_Id/${_id}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
-          const resp_user_list_by_id = resp?.data;
-
+          const resp_user_list_by_id = resp?.data[0];
           return setGetUserDetailsById(resp_user_list_by_id);
         })
         .catch((err) => {
@@ -213,7 +231,7 @@ const On_Boarding = () => {
       .then(async (res) => {
         if (res.data.message === "created") {
           setActive(active + 1);
-
+          // setSteperCounter(steperCounter + 1);
           setRenderComponent(true);
           navigate("/user_list/active_users");
 
@@ -221,6 +239,7 @@ const On_Boarding = () => {
             .put(
               `/user_update/${_id}`,
               {
+                // on_boarding_steper_counter: active,
                 initiate_on_boarding_status: true,
                 on_boarding_status:
                   inputData?.hr_on_boarding_status === true &&
@@ -236,7 +255,7 @@ const On_Boarding = () => {
               }
             )
             .then((res) => {
-              return alert.show(res?.data.message);
+              return console.log(res?.data.message);
             })
             .catch((err) => {
               if (err.response.status === 500) {
@@ -387,6 +406,7 @@ const On_Boarding = () => {
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
+                    {/* <h4 class="card-title">Default form</h4> */}
                     <div className=" d-flex justify-content-between align-items-center">
                       <span class="card-description">On Boarding Process</span>
                       <div>
@@ -406,7 +426,12 @@ const On_Boarding = () => {
                           className="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
                           aria-labelledby="notificationDropdown"
                         >
-                          <h6 className="mt-0 p-3">History</h6>
+                          <h6
+                            className="mt-0 p-3"
+                            // style={{position:"sticky", top:"0", backgroundColor:"white", margin:"0"}}
+                          >
+                            History
+                          </h6>
 
                           {inputData?.updated_by?.map((item) => {
                             return (
@@ -504,15 +529,8 @@ const On_Boarding = () => {
                         </tr>
                       </tbody>
                     </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    {/* <!==========  Previous Button ============> */}
+                    <div className="mt-4 mb-4">
+                      {/* <!==========  Previous Button ============> */}
 
                       <>
                         <button
@@ -537,52 +555,52 @@ const On_Boarding = () => {
                         <button
                           class="btn btn-sm btn-gradient-primary"
                           onClick={(e) => {
-                            return e.preventDefault(), setActive(active + 1);
+                            return (
+                              e.preventDefault(), setActive(active + 1)
+                              // setSteperCounter(steperCounter + 1)
+                            );
                           }}
                           style={{ float: "right" }}
                         >
                           Next
                         </button>
                       )}
-                    </>
-
-                    <div class="row">
-                      <div class="col-lg-12 grid-margin ">
-                        <div class="card">
-                          <div class="card-body">
-                            <form class="forms-sample">
-                              <MultiStepForm activeStep={active}>
-                                <Step label="First Day Formalities">
-                                  <>
-                                    {inputData?.hr_on_boarding_status ? (
-                                      <div
-                                        class="alert alert-success alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-check-circle-outline me-1"></i>
-                                        This step has been completed.
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is pending !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    )}
+                    </div>
+                    <div>
+                      <form class="forms-sample">
+                        <div style={{ maxWidth: "90%" }}>
+                          <MultiStepForm activeStep={active}>
+                            <Step label="First Day Formalities (HR)">
+                              <>
+                                {inputData?.hr_on_boarding_status ? (
+                                  <div
+                                    class="alert alert-success alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-check-circle-outline me-1"></i>
+                                    This step has been completed.
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                ) : (
+                                  <div
+                                    class="alert alert-danger alert-dismissible fade show"
+                                    role="alert"
+                                  >
+                                    <i class="mdi mdi-alert-octagon me-1"></i>
+                                    "This step is pending !!"
+                                    <button
+                                      type="button"
+                                      class="btn-close"
+                                      data-bs-dismiss="alert"
+                                      aria-label="Close"
+                                    ></button>
+                                  </div>
+                                )}
 
                                 {/* <div className="row">
                                   <div class="card">
@@ -2018,39 +2036,39 @@ const On_Boarding = () => {
                               </>
                             </Step>
 
-                                <Step label="ZOHO Account">
-                                  <>
-                                    <>
-                                      {inputData?.management_on_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
-                                    </>
+                            <Step label="ZOHO Account (Management)">
+                              <>
+                                <>
+                                  {inputData?.management_on_boarding_status ? (
+                                    <div
+                                      class="alert alert-success alert-dismissible fade show"
+                                      role="alert"
+                                    >
+                                      <i class="mdi mdi-check-circle-outline me-1"></i>
+                                      This step has been completed.
+                                      <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                        aria-label="Close"
+                                      ></button>
+                                    </div>
+                                  ) : (
+                                    <div
+                                      class="alert alert-danger alert-dismissible fade show"
+                                      role="alert"
+                                    >
+                                      <i class="mdi mdi-alert-octagon me-1"></i>
+                                      "This step is pending !!"
+                                      <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                        aria-label="Close"
+                                      ></button>
+                                    </div>
+                                  )}
+                                </>
 
                                 <>
                                   {/* <div className="row">

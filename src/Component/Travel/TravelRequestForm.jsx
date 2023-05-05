@@ -120,7 +120,7 @@ const TravelRequestForm = () => {
                     <div class="card-body">
                       <form onSubmit={handleSubmit}>
                         <div className="row my-2">
-                          <div className="col-12 col-lg-3">
+                          <div className="col-12 col-lg-4">
                             <div className="form-group">
                               <label>Name</label>
                               <input
@@ -132,7 +132,7 @@ const TravelRequestForm = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-12 col-lg-3">
+                          <div className="col-12 col-lg-4">
                             <div className="form-group">
                               <label>Email address</label>
                               <input
@@ -144,7 +144,7 @@ const TravelRequestForm = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-12 col-lg-3">
+                          <div className="col-12 col-lg-4">
                             <div className="form-group">
                               <label>Phone No</label>
                               <input
@@ -156,46 +156,9 @@ const TravelRequestForm = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-12 col-lg-3">
-                            <div className="form-group">
-                              <label>Project Id</label>
-                              <input
-                                className="form-control form-control-sm"
-                                type="project_id"
-                                value={LocalStorageData?.project_id}
-                                name="project_id"
-                              />
-                            </div>
-                          </div>
                         </div>
 
                         <div className="row my-2">
-                          {/* <div className="col-12 col-lg-3">
-                          <div className="form-group">
-                            <label>Form</label>
-                            <input
-                              className="form-control form-control-sm"
-                              type="text"
-                              name="form"
-                              // value={form}
-                              // onChange={handleChange}
-                              required
-                            />
-                          </div>
-                        </div>
-                        <div className="col-12 col-lg-3">
-                          <div className="form-group">
-                            <label>To</label>
-                            <input
-                              className="form-control form-control-sm"
-                              type="text"
-                              name="to"
-                              // value={to}
-                              // onChange={handleChange}
-                              required
-                            />
-                          </div>
-                        </div> */}
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Travel Start Date</label>
@@ -219,6 +182,17 @@ const TravelRequestForm = () => {
                                 // value={end_date}
                                 // onChange={handleChange}
                                 required
+                              />
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>Project Id</label>
+                              <input
+                                className="form-control form-control-sm"
+                                type="project_id"
+                                value={LocalStorageData?.project_id}
+                                name="project_id"
                               />
                             </div>
                           </div>
