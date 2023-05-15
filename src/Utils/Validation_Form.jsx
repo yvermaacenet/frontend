@@ -467,3 +467,18 @@ export const form_flexible_validation = yup.object({
   //   .required("This field is required")
   //   .matches(/^\d*$/, "Employe id must be only numeric"),
 });
+
+export const travel_request_form_validation = yup.object({
+  start_date: yup.string().required("This field is required"),
+  end_date: yup.string().required("This field is required"),
+  project_id: yup.string().required("This field is required"),
+  billable: yup.string().required("This field is required"),
+  reason_for_travel: yup.string().required(),
+  travel_flight: yup.string().required(),
+  flight_from_city: yup.string().when("travel_flight", (val, schema) => {
+    // console.log("val", val, schema);
+    if (val[0] === "true") {
+      return yup.string().required("This field is required");
+    } else return yup.string().notRequired();
+  }),
+});
