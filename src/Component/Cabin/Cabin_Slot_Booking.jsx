@@ -210,7 +210,11 @@ const Cabin_Slot_Booking = () => {
 
   const [bookingEvent, setBookingEvent] = useState("");
   const onSelectEvent = (event) => {
-    setTimeValue({ manual_date: convertDateFormate(event?.start) });
+    setTimeValue({
+      manual_date: convertDateFormate(event?.start),
+      start_manual_time: convertTimeFormate(event?.start),
+      end_manual_time: convertTimeFormate(event?.end),
+    });
     setStartdate(event?.start);
     setEditEventModal(true);
     setBookingEvent(event);
