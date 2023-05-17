@@ -134,7 +134,7 @@ const Cabin_Slot_Booking = () => {
               start: new Date(val?.start),
               end: new Date(val?.end),
               title: `Title : ${val?.title} 
-               booked by  ${LocalStorageData?.name}`,
+               booked by  ${val?.owner}`,
             })
           );
           console.log("get", getAllEvents);
