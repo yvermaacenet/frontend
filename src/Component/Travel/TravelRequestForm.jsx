@@ -17,6 +17,9 @@ const TravelRequestForm = () => {
     name: LocalStorageData?.name,
     email: LocalStorageData?.email,
     employee_id: LocalStorageData?.emp_id,
+    billable: "",
+    project_id: "",
+    reason_for_travel: "",
   });
   const [travel, setTravel] = useState({
     start_date: "",
@@ -27,49 +30,52 @@ const TravelRequestForm = () => {
     from_country: "India",
   });
   const [flight, setFlight] = useState({
-    type: false,
+    travel_flight: false,
+    flight_from_city: "",
+    flight_to_city: "",
+    flight_preferred_time: "",
+    flight_class_preferred: "",
   });
   const [train, setTrain] = useState({
-    type: false,
-    train_name: "",
-    train_number: "",
-    departure_time: "",
-    arrival_time: "",
-    class: "",
+    travel_train: false,
+    train_from_city: "",
+    train_to_city: "",
+    train_preferred_time: "",
+    train_class_preferred: "",
   });
   const [hotel, setHotel] = useState({
-    type: false,
-    hotel_name: "",
-    check_in_date: "",
-    check_out_date: "",
-    room_type: "",
-    special_requirements: "",
+    travel_hotel: false,
+    hotel_city: "",
+    hotel_checkin: "",
+    hotel_checkout: "",
+    hotel_number_of_rooms: "",
   });
   const [other, setOther] = useState({
-    type: false,
+    travel_other: false,
+    name_of_travel: "",
+    from_location: "",
+    to_location: "",
+  });
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    mode: "onTouched",
+    resolver: yupResolver(travel_request_form_validation),
   });
   useEffect(() => {
     async function getCountry() {
       await axios.get("airport").then((res) => {
-        const regionNamesInEnglish = new Intl.DisplayNames(["en"], {
-          type: "region",
-        });
-        return (
-          setCountryData(res.data),
-          res.data?.map((item) => {
-            return (
-              !countryName.includes(
-                regionNamesInEnglish.of(`${item.country_code}`)
-              ) &&
-              countryName.push(regionNamesInEnglish.of(`${item.country_code}`))
-            );
-          })
-        );
+        return setCountryData(res.data);
       });
     }
     getCountry();
   }, []);
-  const handleSubmit = (event) => {
+
+  const onSubmitButton = (event) => {
     event.preventDefault();
     // submit data to MongoDB
     console.log({
@@ -79,7 +85,34 @@ const TravelRequestForm = () => {
       hotel,
     });
   };
+  const [options, setOptions] = useState([
+    {
+      value: "",
+      label: "",
+    },
+  ]);
+  const cities = countryData.map((item) => item.city_name);
 
+  const newOptions = cities.map((city, index) => {
+    const optionIndex = index % options.length;
+    return {
+      value: city,
+      label: city,
+    };
+  });
+
+  const inputEvent = (event) => {
+    const { name, value } = event.target;
+    setEmployee((preValue) => {
+      return {
+        ...preValue,
+        [name]: value,
+      };
+    });
+  };
+  const post_request = async () => {
+    const response = await axios.post("/raise_travel_request");
+  };
   return (
     <>
       <div className="container-scroller">
@@ -94,32 +127,20 @@ const TravelRequestForm = () => {
                 page_title_button="Back"
                 page_title_button_link="/alltravelrequest"
               />
-              {/* <div className="d-flex my-3 align-items-center justify-content-center justify-content-lg-end">
-                {/* <NavLink to="/alltravelrequest">
-                  <button className="btn btn-primary align-center">
-                    Your Travel Requests
-                  </button>
-                </NavLink> 
-
-                <NavLink to="/travelrequestreceived">
-                  <button className="btn btn-primary align-center">
-                    Received Requests for Approvals
-                  </button>
-                </NavLink>
-              </div> */}
 
               {loading && (
                 <div className="loader-container">
                   <div class="loader"></div>
                 </div>
               )}
+
               <div className="row">
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <form onSubmit={handleSubmit}>
+                      <form onSubmit={handleSubmit(onSubmitButton)}>
                         <div className="row my-2">
-                          <div className="col-12 col-lg-3">
+                          <div className="col-12 col-lg-4">
                             <div className="form-group">
                               <label>Name</label>
                               <input
@@ -131,7 +152,7 @@ const TravelRequestForm = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-12 col-lg-3">
+                          <div className="col-12 col-lg-4">
                             <div className="form-group">
                               <label>Email address</label>
                               <input
@@ -143,7 +164,7 @@ const TravelRequestForm = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-12 col-lg-3">
+                          <div className="col-12 col-lg-4">
                             <div className="form-group">
                               <label>Phone No</label>
                               <input
@@ -155,46 +176,9 @@ const TravelRequestForm = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-12 col-lg-3">
-                            <div className="form-group">
-                              <label>Project Id</label>
-                              <input
-                                className="form-control form-control-sm"
-                                type="project_id"
-                                value={LocalStorageData?.project_id}
-                                name="project_id"
-                              />
-                            </div>
-                          </div>
                         </div>
 
                         <div className="row my-2">
-                          {/* <div className="col-12 col-lg-3">
-                          <div className="form-group">
-                            <label>Form</label>
-                            <input
-                              className="form-control form-control-sm"
-                              type="text"
-                              name="form"
-                              // value={form}
-                              // onChange={handleChange}
-                              required
-                            />
-                          </div>
-                        </div>
-                        <div className="col-12 col-lg-3">
-                          <div className="form-group">
-                            <label>To</label>
-                            <input
-                              className="form-control form-control-sm"
-                              type="text"
-                              name="to"
-                              // value={to}
-                              // onChange={handleChange}
-                              required
-                            />
-                          </div>
-                        </div> */}
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Travel Start Date</label>
@@ -204,7 +188,7 @@ const TravelRequestForm = () => {
                                 name="start_date"
                                 // value={start_date}
                                 // onChange={handleChange}
-                                required
+                                // required
                               />
                             </div>
                           </div>
@@ -217,54 +201,69 @@ const TravelRequestForm = () => {
                                 name="end_date"
                                 // value={end_date}
                                 // onChange={handleChange}
-                                required
+                                // required
                               />
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>Project Id</label>
+                              <input
+                                type="text"
+                                name="project_id"
+                                className={classNames(
+                                  "form-control form-control-sm",
+                                  {
+                                    "is-invalid": errors?.project_id,
+                                  }
+                                )}
+                                {...register("project_id", {
+                                  value: employee?.project_id,
+                                })}
+                                value={employee?.project_id}
+                                onChange={inputEvent}
+                              />
+                              <small className="invalid-feedback">
+                                {errors.project_id?.message}
+                              </small>
                             </div>
                           </div>
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Billable</label>
                               <select
-                                className="form-control form-control-sm"
-                                // value={formData?.billable}
-                                // onChange={handleChange}
+                                className={classNames(
+                                  "form-control form-control-sm",
+                                  {
+                                    "is-invalid": errors?.billable,
+                                  }
+                                )}
+                                {...register("billable", {
+                                  value: employee?.billable,
+                                })}
+                                value={employee?.billable}
+                                onChange={inputEvent}
                                 name="billable"
                               >
-                                <option selected>Select</option>
+                                <option value="">Select</option>
                                 <option value="yes">YES</option>
                                 <option value="no">NO</option>
                               </select>
+                              <small className="invalid-feedbackfsfsfff">
+                                {errors?.billable?.message}
+                              </small>
                             </div>
                           </div>
                         </div>
+
                         <div className="row my-2">
                           <div className="col-12 col-lg-6">
                             <div className="form-group">
                               <label>Reason for Travel</label>
-                              <textarea className="form-control " />
-                            </div>
-                          </div>
-                          <div className="col-12 col-lg-3">
-                            <div className="form-group">
-                              <label>Trip Type</label>
-                              <select
-                                className="form-control form-control-sm"
-                                name="trip_type"
-                                onChange={(e) => {
-                                  setTravel({
-                                    ...travel,
-                                    trip_type: e.target.value,
-                                  });
-                                }}
-                              >
-                                <option selected>Select</option>
-                                <option value="international">
-                                  International
-                                </option>
-                                <option value="national" selected>
-                                  National
-                                </option>
-                              </select>
+                              <textarea
+                                name="reason_for_travel"
+                                className="form-control "
+                              />
                             </div>
                           </div>
                         </div>
@@ -277,15 +276,29 @@ const TravelRequestForm = () => {
                             <div className="form-check">
                               <label class="form-check-label">
                                 <input
+                                  name="travel_flight"
                                   type="checkbox"
-                                  class="form-check-input"
                                   onChange={(event) =>
                                     setFlight((prev) => ({
                                       ...prev,
-                                      type: event.target.checked,
+                                      travel_flight: event.target.checked,
+                                      flight_from_city: event.target.checked
+                                        ? "Delhi"
+                                        : "",
+                                      flight_to_city: event.target.checked
+                                        ? "Pune"
+                                        : "",
+                                      flight_preferred_time: event.target
+                                        .checked
+                                        ? "AM"
+                                        : "",
+                                      flight_class_preferred: event.target
+                                        .checked
+                                        ? "economy"
+                                        : "",
                                     }))
                                   }
-                                  checked={flight?.type}
+                                  checked={flight?.travel_flight}
                                 />
                                 Flight <i class="input-helper"></i>
                               </label>
@@ -300,10 +313,24 @@ const TravelRequestForm = () => {
                                   onChange={(event) =>
                                     setHotel((prev) => ({
                                       ...prev,
-                                      type: event.target.checked,
+                                      travel_hotel: event.target.checked,
+                                      hotel_city: event.target.checked
+                                        ? "Delhi"
+                                        : "",
+                                      hotel_checkin: event.target.checked
+                                        ? new Date().toLocaleDateString("en-CA")
+                                        : "",
+                                      hotel_checkout: event.target.checked
+                                        ? new Date().toLocaleDateString("en-CA")
+                                        : "",
+
+                                      hotel_number_of_rooms: event.target
+                                        .checked
+                                        ? "2"
+                                        : "",
                                     }))
                                   }
-                                  checked={hotel?.type}
+                                  checked={hotel?.travel_hotel}
                                 />
                                 Hotel <i class="input-helper"></i>
                               </label>
@@ -318,10 +345,23 @@ const TravelRequestForm = () => {
                                   onChange={(event) =>
                                     setTrain((prev) => ({
                                       ...prev,
-                                      type: event.target.checked,
+                                      travel_train: event.target.checked,
+                                      train_from_city: event.target.checked
+                                        ? "Delhi"
+                                        : "",
+                                      train_to_city: event.target.checked
+                                        ? "Pune"
+                                        : "",
+                                      train_preferred_time: event.target.checked
+                                        ? "AM"
+                                        : "",
+                                      train_class_preferred: event.target
+                                        .checked
+                                        ? "1A - 1st Class AC"
+                                        : "",
                                     }))
                                   }
-                                  checked={train?.type}
+                                  checked={train?.travel_train}
                                 />
                                 Train <i class="input-helper"></i>
                               </label>
@@ -336,89 +376,81 @@ const TravelRequestForm = () => {
                                   onChange={(event) =>
                                     setOther((prev) => ({
                                       ...prev,
-                                      type: event.target.checked,
+                                      travel_other: event.target.checked,
+                                      name_of_travel: event.target.checked
+                                        ? "Cab"
+                                        : "",
+                                      to_location: event.target.checked
+                                        ? "Delhi"
+                                        : "",
+                                      from_location: event.target.checked
+                                        ? "Pune"
+                                        : "",
                                     }))
                                   }
                                   checked={other?.type}
                                 />
-                                Other Transports <i class="input-helper"></i>
+                                Other <i class="input-helper"></i>
                               </label>
                             </div>
                           </div>
                         </div>
-                        {flight?.type && (
+                        {flight?.travel_flight && (
                           <div className="form-group row">
                             <div className="d-flex flex-row align-items-center mb-3">
                               <i className="mdi mdi-airplane icon-md text-secondary"></i>
                               <p className="mb-0 ms-1">Flight Informations</p>
                             </div>
-                            {travel?.trip_type === "international" && (
-                              <div className="col-12 col-lg-3">
-                                <div className="form-group">
-                                  <label>From(Country)</label>
-                                  <select
-                                    className="form-control form-control-sm"
-                                    value={travel?.from_country}
-                                  >
-                                    <option selected>Select</option>
-                                    {countryName
-                                      .sort()
-                                      ?.map((country, index) => {
-                                        return (
-                                          <option value={country} key={index}>
-                                            {country}
-                                          </option>
-                                        );
-                                      })}
-                                  </select>
-                                </div>
-                              </div>
-                            )}
 
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>From(City)</label>
-                                <select className="form-control form-control-sm">
-                                  <option selected>Select</option>
-                                  {countryData.sort()?.map((country, index) => {
-                                    return (
-                                      <option
-                                        value={country?.city_name}
-                                        key={index}
-                                      >
-                                        {country?.city_name}
-                                      </option>
-                                    );
-                                  })}
-                                </select>
+                                <Select
+                                  escapeClearsValue={true}
+                                  defaultInputValue={flight?.flight_from_city}
+                                  name="flight_from_city"
+                                  options={newOptions}
+                                  onChange={(e) => {
+                                    setFlight((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      flight_from_city: e.value, // Updating the value of 'b'
+                                    }));
+                                  }}
+                                />
                               </div>
                             </div>
-                            {travel?.trip_type === "international" && (
-                              <div className="col-12 col-lg-3">
-                                <div className="form-group">
-                                  <label>To(Country)</label>
-                                  <select className="form-control form-control-sm">
-                                    <option selected>Select</option>
-                                    <option value="AM">AM</option>
-                                    <option value="PM">PM</option>
-                                  </select>
-                                </div>
-                              </div>
-                            )}
+
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City)</label>
-                                <select className="form-control form-control-sm">
-                                  <option selected>Select</option>
-                                  <option value="AM">AM</option>
-                                  <option value="PM">PM</option>
-                                </select>
+                                <Select
+                                  escapeClearsValue={true}
+                                  defaultInputValue={flight?.flight_to_city}
+                                  name="flight_to_city"
+                                  options={newOptions}
+                                  onChange={(e) => {
+                                    setFlight((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      flight_to_city: e.value, // Updating the value of 'b'
+                                    }));
+                                  }}
+                                />
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>Preferred Time</label>
-                                <select className="form-control form-control-sm">
+                                <select
+                                  value={flight?.flight_preferred_time}
+                                  onChange={(e) => {
+                                    setFlight((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      flight_preferred_time: e.target.value, // Updating the value of 'b'
+                                    }));
+                                  }}
+                                  name="flight_preferred_time"
+                                  className="form-control form-control-sm"
+                                >
                                   <option selected>Select</option>
                                   <option value="AM">AM</option>
                                   <option value="PM">PM</option>
@@ -430,17 +462,27 @@ const TravelRequestForm = () => {
                                 <label htmlFor="arrival_time">
                                   Class of Travel
                                 </label>
-                                <select className="form-control form-control-sm">
+                                <select
+                                  name="flight_class_preferred"
+                                  className="form-control form-control-sm"
+                                  value={flight?.flight_class_preferred}
+                                  onChange={(e) => {
+                                    setFlight((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      flight_class_preferred: e.target.value, // Updating the value of 'b'
+                                    }));
+                                  }}
+                                >
                                   <option value="">Select Class</option>
                                   <option value="economy">Economy</option>
                                   <option value="business">Business</option>
-                                  <option value="first">First</option>
+                                  {/* <option value="first">First</option> */}
                                 </select>
                               </div>
                             </div>
                           </div>
                         )}
-                        {hotel?.type && (
+                        {hotel?.travel_hotel && (
                           <div className="form-group row">
                             <div className="d-flex flex-row align-items-center mb-3">
                               <i className="mdi mdi-hotel icon-md text-secondary"></i>
@@ -449,8 +491,33 @@ const TravelRequestForm = () => {
 
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
+                                <label>City</label>
+                                <Select
+                                  escapeClearsValue={true}
+                                  defaultInputValue={hotel?.hotel_city}
+                                  name="hote_city"
+                                  options={newOptions}
+                                  onChange={(e) => {
+                                    setFlight((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      hote_city: e.value, // Updating the value of 'b'
+                                    }));
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div className="col-12 col-lg-3">
+                              <div className="form-group">
                                 <label>Check-in</label>
                                 <input
+                                  name="hotel_checkin"
+                                  value={hotel?.hotel_checkin}
+                                  onChange={(e) => {
+                                    setHotel((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      hotel_checkin: e.target.value, // Updating the value of 'b'
+                                    }));
+                                  }}
                                   className="form-control form-control-sm"
                                   type="date"
                                 />
@@ -460,15 +527,33 @@ const TravelRequestForm = () => {
                               <div className="form-group">
                                 <label>Check-out</label>
                                 <input
+                                  name="hotel_checkout"
+                                  value={hotel?.hotel_checkout}
                                   className="form-control form-control-sm"
                                   type="date"
+                                  onChange={(e) => {
+                                    setHotel((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      hotel_checkout: e.target.value, // Updating the value of 'b'
+                                    }));
+                                  }}
                                 />
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label htmlFor="arrival_time">Rooms </label>
-                                <select className="form-control form-control-sm">
+                                <select
+                                  name="hotel_number_of_rooms"
+                                  value={hotel?.hotel_number_of_rooms}
+                                  className="form-control form-control-sm"
+                                  onChange={(e) => {
+                                    setHotel((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      hotel_number_of_rooms: e.target.value, // Updating the value of 'b'
+                                    }));
+                                  }}
+                                >
                                   <option selected>Select</option>
                                   <option value="1">1</option>
                                   <option value="2">2</option>
@@ -478,7 +563,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                         )}
-                        {train?.type && (
+                        {train?.travel_train && (
                           <div className="form-group row">
                             <div className="d-flex flex-row align-items-center mb-3">
                               <i className="mdi mdi-train icon-md text-secondary"></i>
@@ -487,25 +572,50 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>From(City Name)</label>
-                                <input
-                                  className="form-control form-control-sm"
-                                  type="text"
+                                <Select
+                                  options={newOptions}
+                                  name="train_from_city"
+                                  value={train?.train_from_city}
+                                  onChange={(e) => {
+                                    setTrain((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      train_from_city: e.value, // Updating the value of 'b'
+                                    }));
+                                  }}
                                 />
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City Name)</label>
-                                <input
-                                  className="form-control form-control-sm"
-                                  type="text"
+                                <Select
+                                  defaultInputValue={train?.train_to_city}
+                                  options={newOptions}
+                                  name="train_to_city"
+                                  value={train?.train_to_city}
+                                  onChange={(e) => {
+                                    setTrain((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      train_to_city: e.value, // Updating the value of 'b'
+                                    }));
+                                  }}
                                 />
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>Preferred Time</label>
-                                <select className="form-control form-control-sm">
+                                <select
+                                  name="train_preferred_time"
+                                  value={train?.train_preferred_time}
+                                  className="form-control form-control-sm"
+                                  onChange={(e) => {
+                                    setTrain((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      train_preferred_time: e.target.value, // Updating the value of 'b'
+                                    }));
+                                  }}
+                                >
                                   <option selected>Select</option>
                                   <option value="AM">AM</option>
                                   <option value="PM">PM</option>
@@ -518,83 +628,97 @@ const TravelRequestForm = () => {
                                 <label htmlFor="arrival_time">
                                   Class of Travel
                                 </label>
-                                <select className="form-control form-control-sm">
+                                <select
+                                  name="train_class_preferred"
+                                  onChange={(e) => {
+                                    setTrain((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      train_class_preferred: e.target.value, // Updating the value of 'b'
+                                    }));
+                                  }}
+                                  className="form-control form-control-sm"
+                                >
                                   <option value="">Select Class</option>
-                                  <option value="1">1A - 1st Class AC</option>
-                                  <option value="2">2A - 2 Tier AC</option>
-                                  <option value="3">3A - 3 Tier AC</option>
-                                  <option value="4">
-                                    3E - AC three tier(economy)
+                                  <option value="1A - 1st Class AC">
+                                    1A - 1st Class AC
                                   </option>
-                                  <option value="5">Executive Chair Car</option>
-                                  <option value="6">AC Chair Car</option>
-                                  <option value="7">SL - Sleeper</option>
-                                  <option value="8">2S - Second Sitting</option>
+                                  <option value="2A - 2 Tier AC">
+                                    2A - 2 Tier AC
+                                  </option>
+                                  <option value="3A - 3 Tier AC">
+                                    3A - 3 Tier AC
+                                  </option>
+                                  <option value="SL - Sleeper">
+                                    SL - Sleeper
+                                  </option>
                                 </select>
                               </div>
                             </div>
                           </div>
                         )}
-                        {other?.type && (
+                        {other?.travel_other && (
                           <div className="form-group row">
                             <div className="d-flex flex-row align-items-center mb-3">
                               <i className="mdi mdi-car icon-md text-secondary"></i>
-                              <p className="mb-0 ms-1">
-                                Other Transport Informations
-                              </p>
+                              <p className="mb-0 ms-1">Others</p>
                             </div>
 
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
-                                <label>From(City Name)</label>
+                                <label>Type</label>
                                 <input
+                                  name="name_of_travel"
+                                  value={other?.name_of_travel}
+                                  onChange={(e) => {
+                                    setOther((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      name_of_travel: e.target.value, // Updating the value of 'b'
+                                    }));
+                                  }}
                                   className="form-control form-control-sm"
                                   type="text"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-12 col-lg-3">
+                              <div className="form-group">
+                                <label>From(City Name)</label>
+                                <Select
+                                  escapeClearsValue={true}
+                                  defaultInputValue={other?.from_location}
+                                  name="from_location"
+                                  options={newOptions}
+                                  onChange={(e) => {
+                                    setOther((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      from_location: e.value, // Updating the value of 'b'
+                                    }));
+                                  }}
                                 />
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City Name)</label>
-                                <input
-                                  className="form-control form-control-sm"
-                                  type="text"
+                                <Select
+                                  escapeClearsValue={true}
+                                  defaultInputValue={other?.to_location}
+                                  name="to_location"
+                                  options={newOptions}
+                                  onChange={(e) => {
+                                    setOther((prevCountry) => ({
+                                      ...prevCountry, // Copying the previous state
+                                      to_location: e.value, // Updating the value of 'b'
+                                    }));
+                                  }}
                                 />
-                              </div>
-                            </div>
-                            <div className="col-12 col-lg-3">
-                              <div className="form-group">
-                                <label>Preferred Time</label>
-                                <select className="form-control form-control-sm">
-                                  <option selected>Select</option>
-                                  <option value="AM">AM</option>
-                                  <option value="PM">PM</option>
-                                </select>
-                              </div>
-                            </div>
-
-                            <div className="col-12 col-lg-3">
-                              <div className="form-group">
-                                <label htmlFor="arrival_time">
-                                  Class of Travel
-                                </label>
-                                <select className="form-control form-control-sm">
-                                  <option value="">Select Class</option>
-                                  <option value="bus">Bus(Volvo)</option>
-                                  <option value="personal_vehical">
-                                    Personal Vehical
-                                  </option>
-                                  <option value="rental_vehical">
-                                    Rental Vehical(cab)
-                                  </option>
-                                </select>
                               </div>
                             </div>
                           </div>
                         )}
                         <button
-                          variant="primary"
-                          type="submit"
+                          // variant="primary"
+                          // type="submit"
                           className="btn btn-sm btn-gradient-success me-2"
                         >
                           Submit
