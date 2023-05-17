@@ -10,12 +10,14 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import PureModal from "react-pure-modal";
 import "react-pure-modal/dist/react-pure-modal.min.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { format } from "date-fns"; // Import the format function from date-fns
 import "react-pure-modal/dist/react-pure-modal.min.css";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
 const DragAndDropCalendar = withDragAndDrop(Calendar);
+
 const localizer = momentLocalizer(moment);
 const Cabin_Slot_Booking = () => {
   const alert = useAlert();
@@ -33,6 +35,23 @@ const Cabin_Slot_Booking = () => {
   const [location, setLocation] = useState([]);
   const [locationValue, setLocationValue] = useState("all_location");
   const [filteredCabinList, setFilteredCabinList] = useState([]);
+  const [startDate, setStartdate] = useState("");
+  const [timeValue, setTimeValue] = useState({
+    manual_date: convertDateFormate(startDate),
+    start_manual_time: "",
+    end_manual_time: "",
+  });
+  const [endDate, setEndDate] = useState("");
+
+  const handleTimeChange = (event) => {
+    const { name, value } = event.target;
+    setTimeValue((preValue) => {
+      return {
+        ...preValue,
+        [name]: value,
+      };
+    });
+  };
   const inputEvent = (event) => {
     const { name, value } = event.target;
     setInputData((preValue) => {
@@ -42,7 +61,6 @@ const Cabin_Slot_Booking = () => {
       };
     });
   };
-
   const fetch_Location = async () => {
     const res = await axios
       .get("/get_location", {
@@ -117,6 +135,7 @@ const Cabin_Slot_Booking = () => {
               end: new Date(val?.end),
             })
           );
+          // console.log("get", getAllEvents);
           return getAllEvents;
         })
         .then((rr) => setGetCabinSlotBookingList(rr), setRenderComponent(false))
@@ -133,6 +152,7 @@ const Cabin_Slot_Booking = () => {
   }, [renderComponent === true, selectCabin_id]);
 
   function convertDateFormate(str) {
+    // console.log("sssstr", str);
     const date = new Date(str),
       mnth = ("0" + (date.getMonth() + 1)).slice(-2),
       day = ("0" + date.getDate()).slice(-2);
@@ -144,7 +164,14 @@ const Cabin_Slot_Booking = () => {
     const minutes = ("0" + date.getMinutes()).slice(-2);
     return [hours, minutes].join(":");
   }
+
   const handleSelect = async ({ start, end }) => {
+    // setStartdate(start);
+    // setTimeValue({
+    //   ...timeValue,
+    //   manual_date: convertDateFormate("Fri May 19 2023 11:15:00 GMT+0530"),
+    // });
+    setEndDate(end);
     const overlap = getCabinSlotBookingList.some((event) => {
       return (
         (start >= event.start && start < event.end) ||
@@ -152,7 +179,10 @@ const Cabin_Slot_Booking = () => {
         (start <= event.start && end >= event.end)
       );
     });
-    if (selectCabin_id === "all") {
+    const currentDate = new Date();
+    if (start < currentDate) {
+      alert?.show("please select a valid date");
+    } else if (selectCabin_id === "all") {
       alert?.show("Please select cabin");
     } else if (overlap) {
       alert?.show("This time slot is already booked!");
@@ -171,9 +201,19 @@ const Cabin_Slot_Booking = () => {
       setInputData(newEvent);
     }
   };
+  const convertDateTimeToDateObject = (date, time) => {
+    const [year, month, day] = date.split("-");
+    const [hours, minutes] = time.split(":");
+    const dateObject = new Date(year, month - 1, day, hours, minutes);
+    return dateObject.toString();
+  };
 
+  const [bookingEvent, setBookingEvent] = useState("");
   const onSelectEvent = (event) => {
+    setTimeValue({ manual_date: convertDateFormate(event?.start) });
+    setStartdate(event?.start);
     setEditEventModal(true);
+    setBookingEvent(event);
     setInputData({
       ...event,
       cabin_id: selectCabin_id,
@@ -193,6 +233,20 @@ const Cabin_Slot_Booking = () => {
         "cabin_slot_booking",
         {
           ...inputData,
+          start:
+            timeValue?.start_manual_time === ""
+              ? startDate
+              : convertDateTimeToDateObject(
+                  convertDateFormate(startDate),
+                  timeValue?.start_manual_time
+                ),
+          end:
+            timeValue?.start_manual_time === ""
+              ? endDate
+              : convertDateTimeToDateObject(
+                  convertDateFormate(endDate),
+                  timeValue?.end_manual_time
+                ),
           allDay,
           location: locationValue,
         },
@@ -205,6 +259,10 @@ const Cabin_Slot_Booking = () => {
           alert?.show(resp.data.message),
           setAddEventModal(false),
           setAllDay(false),
+          setTimeValue({
+            start_manual_time: "",
+            end_manual_time: "",
+          }),
           setRenderComponent(true)
         );
       })
@@ -271,6 +329,25 @@ const Cabin_Slot_Booking = () => {
     today.getDate(),
     19
   );
+
+  const manually_update_booking = async (e) => {
+    e.preventDefault();
+    const res = await axios.put(`/cabin_slot_booking/${bookingEvent?._id}`, {
+      start: convertDateTimeToDateObject(
+        timeValue?.manual_date,
+        timeValue?.start_manual_time
+      ),
+      end: convertDateTimeToDateObject(
+        timeValue?.manual_date,
+        timeValue?.end_manual_time
+      ),
+      // end: bookingEvent,
+    });
+    if (res.data.message === "updated") {
+      setEditEventModal(false);
+      setRenderComponent(true);
+    }
+  };
 
   const resizeEvent = useCallback(({ event, start, end }) => {
     setGetCabinSlotBookingList((prev) => {
@@ -385,6 +462,9 @@ const Cabin_Slot_Booking = () => {
     fetch_cabin_slot_booking_by_location(e.target.value);
   };
 
+  // ===========To enter time manually=========
+  // console.log("startdata", timeValue?.manual_date);
+
   return (
     <div className="container-scroller">
       <Navbar />
@@ -469,9 +549,11 @@ const Cabin_Slot_Booking = () => {
                       startAccessor="start"
                       endAccessor="end"
                       defaultView={"week"}
-                      min={minDate_time}
-                      max={maxDate_time}
-                      style={{ height: "100vh" }}
+                      // min={minDate_time}
+                      // max={maxDate_time}
+                      style={{
+                        height: "100vh",
+                      }}
                       showMultiDayTimes={true}
                       step={15}
                       eventPropGetter={eventStyleGetter}
@@ -497,6 +579,7 @@ const Cabin_Slot_Booking = () => {
                                 name="title"
                                 placeholder="Username"
                                 onChange={inputEvent}
+                                required
                               />
                             </div>
                             <div className="form-group">
@@ -527,10 +610,12 @@ const Cabin_Slot_Booking = () => {
                                     type="time"
                                     className="form-control form-control-sm"
                                     placeholder="Username"
-                                    onChange={inputEvent}
-                                    name="time"
-                                    value={inputData?.convertStartTime}
-                                    disabled
+                                    onChange={handleTimeChange}
+                                    // name="time"
+                                    name="start_manual_time"
+                                    value={timeValue?.start_manual_time}
+                                    // disabled
+                                    required
                                   />
                                 </div>
                               </div>
@@ -554,10 +639,11 @@ const Cabin_Slot_Booking = () => {
                                     type="time"
                                     className="form-control form-control-sm"
                                     placeholder="Username"
-                                    onChange={inputEvent}
-                                    name="time"
-                                    value={inputData?.convertEndTime}
-                                    disabled
+                                    onChange={handleTimeChange}
+                                    // name="time"
+                                    name="end_manual_time"
+                                    // value={inputData?.convertEndTime}
+                                    // disabled
                                   />
                                 </div>
                               </div>
@@ -622,7 +708,50 @@ const Cabin_Slot_Booking = () => {
                                 value={inputData?.description}
                               />
                             </div>
-                            <button
+                            <div className="row">
+                              <div className="col-md-4">
+                                <label>Date</label>
+                                <input
+                                  type="date"
+                                  className="form-control form-control-sm"
+                                  placeholder="Username"
+                                  onChange={handleTimeChange}
+                                  name="manual_date"
+                                  value={timeValue?.manual_date}
+                                  // disabled
+                                  // required
+                                />
+                              </div>
+                              <div className="col-md-4">
+                                <label>Start Time</label>
+                                <input
+                                  type="time"
+                                  className="form-control form-control-sm"
+                                  placeholder="Username"
+                                  onChange={handleTimeChange}
+                                  // name="time"
+                                  name="start_manual_time"
+                                  value={timeValue?.start_manual_time}
+                                  // disabled
+                                  required
+                                />
+                              </div>
+                              <div className="col-md-4">
+                                <label>End Time</label>
+                                <input
+                                  type="time"
+                                  className="form-control form-control-sm"
+                                  placeholder="Username"
+                                  onChange={handleTimeChange}
+                                  // name="time"
+                                  name="end_manual_time"
+                                  value={timeValue?.end_manual_time}
+                                  // disabled
+                                  required
+                                />
+                              </div>
+                            </div>
+                            {/* <button
                               type="submit"
                               className="btn btn-sm btn-gradient-primary me-2"
                               onClick={() => {
@@ -630,6 +759,13 @@ const Cabin_Slot_Booking = () => {
                               }}
                             >
                               close
+                            </button> */}
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-primary me-2"
+                              onClick={manually_update_booking}
+                            >
+                              Update
                             </button>
                             <button
                               type="submit"

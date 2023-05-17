@@ -25,6 +25,7 @@ const TravelRequestForm = () => {
     employee_id: LocalStorageData?.emp_id,
     billable: "",
     project_id: "",
+    reason_for_travel: "",
   });
   const [travel, setTravel] = useState({
     start_date: "",
@@ -115,7 +116,9 @@ const TravelRequestForm = () => {
       };
     });
   };
-  console.log("datess", new Date().toLocaleDateString("en-CA"));
+  const post_request = async () => {
+    const response = await axios.post("/raise_travel_request");
+  };
   return (
     <>
       <div className="container-scroller">
