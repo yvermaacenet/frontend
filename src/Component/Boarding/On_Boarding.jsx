@@ -215,34 +215,34 @@ const On_Boarding = () => {
           setRenderComponent(true);
           navigate("/user_list/active_users");
 
-          await axios
-            .put(
-              `/user_update/${_id}`,
-              {
-                initiate_on_boarding_status: true,
-                on_boarding_status:
-                  inputData?.hr_on_boarding_status === true &&
-                  inputData?.finance_on_boarding_status === true &&
-                  inputData?.management_on_boarding_status === true
-                    ? true
-                    : false,
-              },
-              {
-                headers: {
-                  Access_Token: LocalStorageData?.generate_auth_token,
-                },
-              }
-            )
-            .then((res) => {
-              return alert.show(res?.data.message);
-            })
-            .catch((err) => {
-              if (err.response.status === 500) {
-                navigate("/error_500");
-              } else {
-                navigate("/error_403");
-              }
-            });
+          // await axios
+          //   .put(
+          //     `/user_update/${_id}`,
+          //     {
+          //       initiate_on_boarding_status: true,
+          //       on_boarding_status:
+          //         inputData?.hr_on_boarding_status === true &&
+          //         inputData?.finance_on_boarding_status === true &&
+          //         inputData?.management_on_boarding_status === true
+          //           ? true
+          //           : false,
+          //     },
+          //     {
+          //       headers: {
+          //         Access_Token: LocalStorageData?.generate_auth_token,
+          //       },
+          //     }
+          //   )
+          //   .then((res) => {
+          //     return alert.show(res?.data.message);
+          //   })
+          //   .catch((err) => {
+          //     if (err.response.status === 500) {
+          //       navigate("/error_500");
+          //     } else {
+          //       navigate("/error_403");
+          //     }
+          //   });
         }
       })
       .catch((err) => {
@@ -544,7 +544,7 @@ const On_Boarding = () => {
                           <div class="card-body">
                             <form class="forms-sample">
                               <MultiStepForm activeStep={active}>
-                                <Step label="First Day Formalities">
+                                <Step label="HR">
                                   <>
                                     {inputData?.hr_on_boarding_status ? (
                                       <div
@@ -1517,7 +1517,7 @@ const On_Boarding = () => {
                                   </>
                                 </Step>
 
-                                <Step label="Compliance Documents">
+                                <Step label="Finance">
                                   <>
                                     <>
                                       {inputData?.finance_on_boarding_status ? (
@@ -1939,7 +1939,7 @@ const On_Boarding = () => {
                                   </>
                                 </Step>
 
-                                <Step label="ZOHO Account">
+                                <Step label="Management">
                                   <>
                                     <>
                                       {inputData?.management_on_boarding_status ? (
