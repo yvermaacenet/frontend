@@ -133,9 +133,11 @@ const Cabin_Slot_Booking = () => {
               ...val,
               start: new Date(val?.start),
               end: new Date(val?.end),
+              title: `Title : ${val?.title} 
+               booked by  ${LocalStorageData?.name}`,
             })
           );
-          // console.log("get", getAllEvents);
+          console.log("get", getAllEvents);
           return getAllEvents;
         })
         .then((rr) => setGetCabinSlotBookingList(rr), setRenderComponent(false))
@@ -166,7 +168,7 @@ const Cabin_Slot_Booking = () => {
   }
 
   const handleSelect = async ({ start, end }) => {
-    // setStartdate(start);
+    setStartdate(start);
     // setTimeValue({
     //   ...timeValue,
     //   manual_date: convertDateFormate("Fri May 19 2023 11:15:00 GMT+0530"),
@@ -253,6 +255,7 @@ const Cabin_Slot_Booking = () => {
                 ),
           allDay,
           location: locationValue,
+          owner: LocalStorageData?.name,
         },
         {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -309,13 +312,18 @@ const Cabin_Slot_Booking = () => {
     let backgroundColorCode = getCabinList?.filter(
       (val) => val._id === event.cabin_id
     );
+    console.log("sdf", event);
+    const dynamicValue = event?.owner; // Replace with the actual dynamic value you want to display
+
     const style = {
       backgroundColor: `rgba(${backgroundColorCode[0]?.color_code?.r},${backgroundColorCode[0]?.color_code?.g},${backgroundColorCode[0]?.color_code?.b},${backgroundColorCode[0]?.color_code?.a})`,
       borderRadius: "0px",
       opacity: 0.8,
       color: "white",
       border: "0px",
+      dynamicValue: dynamicValue,
     };
+
     return {
       style,
     };
