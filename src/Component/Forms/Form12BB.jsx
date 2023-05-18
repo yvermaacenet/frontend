@@ -185,21 +185,17 @@ const Form12BB = () => {
   }`;
   let year = date.getFullYear();
   let currentDate = `${year}-${month}-${day}`;
+  const [inputData, setInputData] = useState([]);
   const {
     register,
     handleSubmit,
-    clearErrors,
-    watch,
-    isValid,
+    setValue,
     formState: { errors },
   } = useForm({
-    mode: "onChange",
+    mode: "onChange",    
     resolver: yupResolver(form12bb_validation),
   });
-  const [inputData, setInputData] = useState({
-    address: "",
-    permanent_account_number_of_the_employee: "ATEPV5009R",
-  });
+
   useEffect(() => {
     async function getData() {
       setLoading(true);
@@ -207,11 +203,14 @@ const Form12BB = () => {
         .get(`get_form_12_bb_controller_by_id/${LocalStorageData?.user_id}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
-        .then((resp) => {
-          return (
-            clearErrors("inputData.address"),
-            setGetFormDataByID(resp?.data[0]),
+        .then(async(resp) => {
+         resp?.data?.map((val)=>{
+            let entries = Object.entries(val);
+          return entries.map((result)=>setValue(result[0], result[1]))})
+           return (
+              setGetFormDataByID(resp?.data[0]),
             setInputData(resp?.data[0]),
+
             setDeductions(
               resp?.data[0]?.deductions === undefined
                 ? []
@@ -276,26 +275,29 @@ const Form12BB = () => {
     );
     return capitalizedWords.join(" ");
   }
-
+  
   const onSaveButton = () => {
     const jsonDate = {
       ...inputData,
       financial_year: "2023-2024",
-      status: false,
       email: LocalStorageData?.email,
       emp_id: LocalStorageData?.emp_id,
       user_id: LocalStorageData?.user_id,
+      deductions:
+        deductions[0]?.section === undefined
+          ? []
+          : deductions,
     };
-    async function postData() {
-      setLoading(true);
+    async function putData() {
+      setLoading(true);      
       await axios
-        .put(`form_12_bb/${inputData?._id}`, jsonDate, {
+        .post(`form_12_bb/${inputData?._id}`, jsonDate, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
           return (
-            alert.success(resp.data.message),
-            // resp?.data?.message === "Form has been saved" && navigate("/"),
+            alert.success("Form has been saved"),
+            resp?.data?.message === "Form has been submitted successfully" && navigate("/"),
             setLoading(false)
           );
         })
@@ -307,9 +309,9 @@ const Form12BB = () => {
           }
         });
     }
-    postData();
+    putData();
   };
-  const onSubmitButton = (e) => {
+  const onSubmitButton = (e) => {  
     const jsonDate = {
       ...inputData,
       financial_year: "2023-2024",
@@ -324,24 +326,18 @@ const Form12BB = () => {
       name: LocalStorageData?.name,
       vpf_apply:
         inputData?.vpf_apply === undefined ? "No" : inputData?.vpf_apply,
-
+  
       availed_in_last_4_years:
         inputData?.availed_in_last_4_years === undefined ||
         !leavetravelconcessionsorassistance
           ? "No"
           : inputData?.availed_in_last_4_years,
-
+  
       deductions:
         deductions[0]?.section === undefined
-          ? [
-              {
-                section: "NA",
-                section_type: "NA",
-                section_amount: "NA",
-              },
-            ]
+          ? []
           : deductions,
-
+  
       rent_paid_to_the_landlord:
         inputData?.rent_paid_to_the_landlord === "" ||
         inputData?.rent_paid_to_the_landlord === undefined ||
@@ -371,13 +367,13 @@ const Form12BB = () => {
         inputData?.leave_travel_concessions_or_assistance_amount ===
           undefined ||
         !leavetravelconcessionsorassistance
-          ? "NA"
+          ? "0"
           : inputData?.leave_travel_concessions_or_assistance_amount,
       interest_payable_paid_to_the_lender:
         inputData?.interest_payable_paid_to_the_lender === "" ||
         inputData?.interest_payable_paid_to_the_lender === undefined ||
         !deductionofinterestonborrowing
-          ? "NA"
+          ? "0"
           : inputData?.interest_payable_paid_to_the_lender,
       name_of_the_lender:
         inputData?.name_of_the_lender === "" ||
@@ -419,13 +415,13 @@ const Form12BB = () => {
     async function postData() {
       setLoading(true);
       await axios
-        .post(`form_12_bb`, jsonDate, {
+        .post(`form_12_bb/${inputData?._id}`, jsonDate, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
           return (
-            alert.success(resp.data.message),
-            resp?.data?.message === "Form has been submitted" && navigate("/"),
+            alert.success("Form has been submitted"),
+            resp?.data?.message === "Form has been submitted successfully" && navigate("/"),
             setLoading(false)
           );
         })
@@ -467,12 +463,13 @@ const Form12BB = () => {
       day = ("0" + date.getDate()).slice(-2);
     return [date.getFullYear(), mnth, day].join("-");
   }
-  console.log(watch());
+  // console.log(watch());
 
-  console.log("isValid", isValid);
+  // console.log("isValid", isValid);
 
   console.log("errors", errors);
-
+  // const rr = watch();
+  // console.log("rr", rr);
   return (
     <>
       <div className="container-scroller">
@@ -500,6 +497,8 @@ const Form12BB = () => {
                         className="forms-sample"
                         onSubmit={handleSubmit(onSubmitButton)}
                       >
+                         
+
                         <div className="row">
                           <div className="col-md-4">
                             <div className="form-group">
@@ -559,7 +558,7 @@ const Form12BB = () => {
                             name="address"
                             onChange={inputEvent}
                             placeholder="Enter First address"
-                            value={inputData?.address}
+                            // value={inputData?.address}
                             disabled={inputData?.status && true}
                           />
                           <small className="invalid-feedback">
@@ -1573,11 +1572,13 @@ const Form12BB = () => {
                                 </button>
                               </>
                             )} */}
+                          
+                          
                           {!inputData?.status && (
                             <>
-                              <button
+                             <button
                                 type="button"
-                                className="btn btn-sm btn-gradient-success me-2"
+                                className="btn btn-sm btn-gradient-secondary me-2"
                                 onClick={onSaveButton}
                               >
                                 Save
@@ -1587,10 +1588,11 @@ const Form12BB = () => {
                                 className="btn btn-sm btn-gradient-success me-2"
                                 onClick={() => setbutton_id(2)}
                               >
-                                Submit
+                                Save & Submit
                               </button>
                             </>
                           )}
+                          
                         </div>
                       </form>
                     </div>
