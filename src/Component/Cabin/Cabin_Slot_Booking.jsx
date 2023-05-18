@@ -218,7 +218,11 @@ const Cabin_Slot_Booking = () => {
       end_manual_time: convertTimeFormate(event?.end),
     });
     setStartdate(event?.start);
-    setEditEventModal(true);
+    if (event?.user_id !== LocalStorageData?.user_id) {
+      alert?.show("you are not thr owener");
+    } else {
+      setEditEventModal(true);
+    }
     setBookingEvent(event);
     setInputData({
       ...event,
