@@ -62,6 +62,22 @@ const Sidebar = () => {
                         Users List
                       </NavLink>
                     </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link"
+                        to="/user_list/pending_onboarding_users"
+                      >
+                        Pending Onboarding
+                      </NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link"
+                        to="/user_list/pending_offboarding_users"
+                      >
+                        Pending Offboarding
+                      </NavLink>
+                    </li>
                   </ul>
                 </div>
               </li>
@@ -120,30 +136,31 @@ const Sidebar = () => {
                       Form Flexible Benefit
                     </NavLink>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <NavLink className="nav-link" to="/travelrequestform">
                       Travel Request
                     </NavLink>
-                  </li>
+                  </li> */}
 
-                  {LocalStorageData?.zoho_role === "Finance" ||
-                    (LocalStorageData?.zoho_role === "Admin" && (
-                      <>
-                        <li className="nav-item">
-                          <NavLink className="nav-link" to="/get_form12bb_data">
-                            Download Form 12 BB <br /> Data
-                          </NavLink>
-                        </li>
-                        <li className="nav-item">
-                          <NavLink
-                            className="nav-link"
-                            to="/get_form_flexi_benefit_data"
-                          >
-                            Download Form Flexible <br /> Benefit Data
-                          </NavLink>
-                        </li>
-                      </>
-                    ))}
+                  {(LocalStorageData?.zoho_role === "Finance" ||
+                    LocalStorageData?.zoho_role === "Admin") && (
+                    <>
+                      <li className="nav-item">
+                        <NavLink className="nav-link" to="/get_form12bb_data">
+                          Download Form <br />
+                          12 BB Data
+                        </NavLink>
+                      </li>
+                      <li className="nav-item">
+                        <NavLink
+                          className="nav-link"
+                          to="/get_form_flexi_benefit_data"
+                        >
+                          Download Form <br /> Flexible Benefit Data
+                        </NavLink>
+                      </li>
+                    </>
+                  )}
                 </ul>
               </div>
             </li>

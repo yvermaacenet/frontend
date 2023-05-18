@@ -10,7 +10,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import PureModal from "react-pure-modal";
 import "react-pure-modal/dist/react-pure-modal.min.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { format } from "date-fns"; // Import the format function from date-fns
+// import { format } from "date-fns"; // Import the format function from date-fns
 import "react-pure-modal/dist/react-pure-modal.min.css";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";

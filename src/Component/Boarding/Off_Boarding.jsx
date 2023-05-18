@@ -148,34 +148,34 @@ const Off_Boarding = () => {
           setActive(active + 1);
           setRenderComponent(true);
           navigate("/user_list/active_users");
-          await axios
-            .put(
-              `/user_update/${_id}`,
-              {
-                initiate_off_boarding_status: true,
-                off_boarding_status:
-                  inputData?.hr_off_boarding_status === true &&
-                  inputData?.finance_off_boarding_status === true &&
-                  inputData?.management_off_boarding_status === true
-                    ? true
-                    : false,
-              },
-              {
-                headers: {
-                  Access_Token: LocalStorageData?.generate_auth_token,
-                },
-              }
-            )
-            .then((res) => {
-              return alert.show(res?.data.message);
-            })
-            .catch((err) => {
-              if (err.response.status === 500) {
-                navigate("/error_500");
-              } else {
-                navigate("/error_403");
-              }
-            });
+          // await axios
+          //   .put(
+          //     `/user_update/${_id}`,
+          //     {
+          //       initiate_off_boarding_status: true,
+          //       off_boarding_status:
+          //         inputData?.hr_off_boarding_status === true &&
+          //         inputData?.finance_off_boarding_status === true &&
+          //         inputData?.management_off_boarding_status === true
+          //           ? true
+          //           : false,
+          //     },
+          //     {
+          //       headers: {
+          //         Access_Token: LocalStorageData?.generate_auth_token,
+          //       },
+          //     }
+          //   )
+          //   .then((res) => {
+          //     return alert.show(res?.data.message);
+          //   })
+          //   .catch((err) => {
+          //     if (err.response.status === 500) {
+          //       navigate("/error_500");
+          //     } else {
+          //       navigate("/error_403");
+          //     }
+          //   });
         }
       })
       .catch((err) => {
@@ -357,7 +357,7 @@ const Off_Boarding = () => {
                           <div class="card-body">
                             <form className="forms-sample">
                               <MultiStepForm activeStep={active}>
-                                <Step label="Supervisor Clearance">
+                                <Step label="HR">
                                   <>
                                     <>
                                       {inputData?.hr_off_boarding_status ? (
@@ -525,7 +525,7 @@ const Off_Boarding = () => {
                                     </table>
                                   </>
                                 </Step>
-                                <Step label="Admin Clearance">
+                                <Step label="Finance">
                                   <>
                                     <>
                                       {inputData?.finance_off_boarding_status ? (
@@ -809,7 +809,7 @@ const Off_Boarding = () => {
                                     </table>
                                   </>
                                 </Step>
-                                <Step label="Other Formalities">
+                                <Step label="Management">
                                   <>
                                     <>
                                       {inputData?.management_off_boarding_status ? (

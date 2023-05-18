@@ -188,15 +188,18 @@ const Form12BB = () => {
   const {
     register,
     handleSubmit,
+    clearErrors,
+    watch,
+    isValid,
     formState: { errors },
   } = useForm({
     mode: "onChange",
-    defaultValues: {
-      name: getFormDataByID?.status === undefined ? "" : " ",
-    },
     resolver: yupResolver(form12bb_validation),
   });
-  const [inputData, setInputData] = useState([]);
+  const [inputData, setInputData] = useState({
+    address: "",
+    permanent_account_number_of_the_employee: "ATEPV5009R",
+  });
   useEffect(() => {
     async function getData() {
       setLoading(true);
@@ -206,6 +209,7 @@ const Form12BB = () => {
         })
         .then((resp) => {
           return (
+            clearErrors("inputData.address"),
             setGetFormDataByID(resp?.data[0]),
             setInputData(resp?.data[0]),
             setDeductions(
@@ -273,7 +277,39 @@ const Form12BB = () => {
     return capitalizedWords.join(" ");
   }
 
-  const onSaveButton = (e) => {
+  const onSaveButton = () => {
+    const jsonDate = {
+      ...inputData,
+      financial_year: "2023-2024",
+      status: false,
+      email: LocalStorageData?.email,
+      emp_id: LocalStorageData?.emp_id,
+      user_id: LocalStorageData?.user_id,
+    };
+    async function postData() {
+      setLoading(true);
+      await axios
+        .put(`form_12_bb/${inputData?._id}`, jsonDate, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
+        .then((resp) => {
+          return (
+            alert.success(resp.data.message),
+            // resp?.data?.message === "Form has been saved" && navigate("/"),
+            setLoading(false)
+          );
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+    }
+    postData();
+  };
+  const onSubmitButton = (e) => {
     const jsonDate = {
       ...inputData,
       financial_year: "2023-2024",
@@ -431,6 +467,12 @@ const Form12BB = () => {
       day = ("0" + date.getDate()).slice(-2);
     return [date.getFullYear(), mnth, day].join("-");
   }
+  console.log(watch());
+
+  console.log("isValid", isValid);
+
+  console.log("errors", errors);
+
   return (
     <>
       <div className="container-scroller">
@@ -456,7 +498,7 @@ const Form12BB = () => {
                     <div class="card-body">
                       <form
                         className="forms-sample"
-                        onSubmit={handleSubmit(onSaveButton)}
+                        onSubmit={handleSubmit(onSubmitButton)}
                       >
                         <div className="row">
                           <div className="col-md-4">
@@ -1532,13 +1574,22 @@ const Form12BB = () => {
                               </>
                             )} */}
                           {!inputData?.status && (
-                            <button
-                              type="submit"
-                              className="btn btn-sm btn-gradient-success me-2"
-                              onClick={() => setbutton_id(2)}
-                            >
-                              Submit
-                            </button>
+                            <>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-gradient-success me-2"
+                                onClick={onSaveButton}
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="submit"
+                                className="btn btn-sm btn-gradient-success me-2"
+                                onClick={() => setbutton_id(2)}
+                              >
+                                Submit
+                              </button>
+                            </>
                           )}
                         </div>
                       </form>

@@ -1,26 +1,34 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../Partials/Footer";
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import { useParams } from "react-router-dom";
+import MaterialReactTable from "material-react-table";
+import { Box, Button } from "@mui/material";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { ExportToCsv } from "export-to-csv";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { IconButton, Tooltip } from "@mui/material";
+import { useAlert } from "react-alert";
 
 const User_List = () => {
-  const specificDate = "2023-05-02";
+  const alert = useAlert();
+  const specificDate = "2023-05-01";
   const navigate = useNavigate();
   const { status_code } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getUserList, setGetUserList] = useState([]);
-  const [getStatus_code, setStatus_code] = useState(status_code);
+  // const [getStatus_code, setStatus_code] = useState();
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
+    // setStatus_code(status_code);
     setLoading(true);
     async function get_user_list() {
       await axios
-        .get(`/user_list/${getStatus_code}`, {
+        .get(`/user_list/${status_code}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then(async (result_user_list) => {
@@ -76,7 +84,7 @@ const User_List = () => {
       setLoading(false);
     }
     get_user_list();
-  }, [getStatus_code]);
+  }, [status_code]);
   const compareDates = (d1, d2) => {
     let date1 = new Date(d1);
     let date2 = new Date(d2);
@@ -105,7 +113,191 @@ const User_List = () => {
       return true;
     }
   };
+  const columns = useMemo(
+    () => [
+      // {
+      //   accessorKey: "Employee ID", //access nested data with dot notation
+      //   header: "Employee Id",
+      // },
 
+      {
+        accessorFn: (row) => `${row["First Name"]} ${row["Last Name"]}`, //accessorFn used to join multiple data into a single cell
+        id: "name", //id is still required when using accessorFn instead of accessorKey
+        header: "Name",
+        size: 250,
+        Cell: ({ renderedCellValue, row }) => (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <img
+              alt="avatar"
+              height={30}
+              src={row.original.Photo}
+              loading="lazy"
+              style={{ borderRadius: "50%" }}
+            />
+
+            {/* using renderedCellValue instead of cell.getValue() preserves filter match highlighting */}
+            <span>{renderedCellValue}</span>
+            <span
+              className="badge badge-success"
+              style={{
+                borderRadius: "20px",
+                display:
+                  compareDates(
+                    row.original?.creation_date?.split("T")[0],
+                    specificDate
+                  ) === true
+                    ? "inline-block"
+                    : "none",
+              }}
+            >
+              New Joining
+            </span>
+          </Box>
+        ),
+      },
+      {
+        accessorKey: "Personal Mobile Number", //normal accessorKey
+        header: "Phone",
+      },
+      {
+        accessorKey: "Email address",
+        header: "Email",
+      },
+      {
+        // accessorKey: "Acenet Role",
+        accessorFn: (row) =>
+          `${row["Acenet Role"] === "" ? "Team member" : row["Acenet Role"]} `,
+        header: "Acenet Role",
+      },
+      {
+        id: "onboarding",
+        header: "Onboarding",
+        columnDefType: "display", //turns off data column features like sorting, filtering, etc.
+        enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
+        Cell: ({ row }) => {
+          return (
+            compareDates1(
+              row.original.creation_date?.split("T")[0],
+              specificDate
+            ) === true && (
+              <button
+                type="button"
+                className={`btn btn-sm ${
+                  row.original?.hr_on_boarding_status === true &&
+                  row.original?.finance_on_boarding_status === true &&
+                  row.original?.management_on_boarding_status === true
+                    ? "btn-inverse-success"
+                    : row.original?.initiate_on_boarding_status === true
+                    ? "btn-inverse-danger"
+                    : "btn-inverse-info"
+                } ms-2`}
+                title="Onboarding"
+                onClick={() => {
+                  const confirmationButton = window.confirm(
+                    row.original.hr_on_boarding_status === true &&
+                      row.original.finance_on_boarding_status === true &&
+                      row.original.management_on_boarding_status === true
+                      ? "Do you really want to check onboarding?"
+                      : "Do you really want to initiate onboarding?"
+                  );
+                  if (confirmationButton === true) {
+                    navigate(`/on_boarding/${row.original._id}`);
+                  }
+                }}
+              >
+                {row.original?.hr_on_boarding_status === true &&
+                row.original?.finance_on_boarding_status === true &&
+                row.original?.management_on_boarding_status === true
+                  ? "Completed"
+                  : row.original?.initiate_on_boarding_status === true
+                  ? "Pending"
+                  : "Initiate"}
+              </button>
+            )
+          );
+        },
+      },
+      {
+        id: "offboarding",
+        header: "Offboarding",
+        columnDefType: "display", //turns off data column features like sorting, filtering, etc.
+        enableColumnOrdering: true, //but you can turn back any of those features on if you want like this
+        Cell: ({ row }) => (
+          <button
+            // type="button"
+            className={`btn btn-sm ${
+              row.original?.hr_off_boarding_status === true &&
+              row.original?.finance_off_boarding_status === true &&
+              row.original?.management_off_boarding_status === true
+                ? "btn-inverse-success"
+                : row.original?.initiate_off_boarding_status === true
+                ? "btn-inverse-danger"
+                : "btn-inverse-info"
+            } ms-2`}
+            title="Offboarding"
+            onClick={() => {
+              const confirmationButton = window.confirm(
+                row.original.hr_off_boarding_status === true &&
+                  row.original.finance_off_boarding_status === true &&
+                  row.original.management_off_boarding_status === true
+                  ? "Do you really want to check resignation?"
+                  : "Do you really want to initiate resignation?"
+              );
+              if (confirmationButton === true) {
+                navigate(`/off_boarding/${row.original._id}`);
+              }
+            }}
+          >
+            {row.original?.hr_off_boarding_status === true &&
+            row.original?.finance_off_boarding_status === true &&
+            row.original?.management_off_boarding_status === true
+              ? "Completed"
+              : row.original?.initiate_off_boarding_status === true
+              ? "Pending"
+              : "Initiate"}
+          </button>
+        ),
+      },
+    ],
+    []
+  );
+  const csvOptions = {
+    fieldSeparator: ",",
+    quoteStrings: '"',
+    decimalSeparator: ".",
+    showLabels: true,
+    useBom: true,
+    useKeysAsHeaders: false,
+    headers: columns.map((c) => c.header),
+  };
+
+  const csvExporter = new ExportToCsv(csvOptions);
+  const handleExportRows = (rows) => {
+    csvExporter.generateCsv(rows.map((row) => row.original));
+  };
+
+  const handleExportData = () => {
+    csvExporter.generateCsv(getUserList);
+  };
+  const refreshData = () => {
+    setLoading(true);
+    async function loadZohoData() {
+      await axios
+        .post(`/compare_data_between_zoho_and_database`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
+        .then((result) => {
+          return setLoading(false), alert.success(result.data.message);
+        });
+    }
+    loadZohoData();
+  };
   return (
     <>
       <div className="container-scroller">
@@ -125,7 +317,7 @@ const User_List = () => {
                   <div className="loader"></div>
                 </div>
               )}
-              <div className="row">
+              {/* <div className="row">
                 <div class="col-lg-12 grid-margin stretch-card">
                   <button
                     type="button"
@@ -150,7 +342,7 @@ const User_List = () => {
                     Pending Offboarding
                   </button>
                 </div>
-              </div>
+              </div> */}
               <div className="row">
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div className="card">
@@ -162,6 +354,15 @@ const User_List = () => {
                         overflowX: "scroll",
                       }}
                     >
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span class="card-description">
+                          {status_code === "active_users"
+                            ? "Users List"
+                            : status_code === "pending_onboarding_users"
+                            ? "Pending Onboarding Users List"
+                            : "Pending Offboarding Users List"}
+                        </span>
+                      </div>
                       <table className="table table-striped">
                         <thead>
                           <tr>
@@ -207,7 +408,6 @@ const User_List = () => {
                                 </td>
                                 <td> {value["Email address"]} </td>
                                 <td>
-                                  {/* ================ On Boarding Button ============= */}
                                   {compareDates1(
                                     value?.creation_date?.split("T")[0],
                                     specificDate
@@ -269,8 +469,6 @@ const User_List = () => {
                                     ))}
                                 </td>
                                 <td>
-                                  {/* ================ Off Boarding Button ============= */}
-
                                   <button
                                     type="button"
                                     className={`btn btn-sm ${
@@ -319,6 +517,94 @@ const User_List = () => {
                           })}
                         </tbody>
                       </table>
+                      {/* <MaterialReactTable
+                        columns={columns}
+                        data={getUserList}
+                        enableRowSelection //showing checkbox
+                        positionToolbarAlertBanner="bottom"
+                        enableBottomToolbar={true}
+                        enableColumnResizing
+                        enableColumnVirtualization
+                        enableGlobalFilterModes
+                        enablePagination={true}
+                        enablePinning
+                        enableRowNumbers
+                        enableRowVirtualization
+ 
+                        renderTopToolbarCustomActions={({ table }) => (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              gap: "1rem",
+                              p: "0.5rem",
+                              flexWrap: "wrap",
+                            }}
+                          >
+                            <div className="row">
+                              <div class="col-lg-12 grid-margin stretch-card">
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-inverse-dark btn-fw ms-1"
+                                  onClick={handleExportData}
+                                >
+                                  Export All Data
+                                </button>
+                                 <button
+                                  type="button"
+                                  className="btn btn-sm btn-inverse-dark btn-fw ms-1"
+                                  disabled={
+                                    table.getPrePaginationRowModel().rows
+                                      .length === 0
+                                  }
+                                   onClick={() =>
+                                    handleExportRows(
+                                      table.getPrePaginationRowModel().rows
+                                    )
+                                  }
+                                 >
+                                  Export All Rows
+                                </button> 
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-inverse-dark btn-fw ms-1"
+                                  disabled={
+                                    table.getRowModel().rows.length === 0
+                                  }
+                                  //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+                                  onClick={() =>
+                                    handleExportRows(table.getRowModel().rows)
+                                  }
+                                >
+                                  Export Page Rows
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-inverse-dark btn-fw ms-1"
+                                  disabled={
+                                    !table.getIsSomeRowsSelected() &&
+                                    !table.getIsAllRowsSelected()
+                                  }
+                                  //only export selected rows
+                                  onClick={() =>
+                                    handleExportRows(
+                                      table.getSelectedRowModel().rows
+                                    )
+                                  }
+                                  startIcon={<FileDownloadIcon />}
+                                  variant="contained"
+                                >
+                                  Export Selected Rows
+                                </button>
+                                <Tooltip arrow title="Refresh Data">
+                                  <IconButton>
+                                    <RefreshIcon onClick={refreshData} />
+                                  </IconButton>
+                                </Tooltip>
+                              </div>
+                            </div>
+                          </Box>
+                        )}
+                      /> */}
                     </div>
                   </div>
                 </div>
