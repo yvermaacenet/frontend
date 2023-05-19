@@ -41,6 +41,7 @@ const Cabin_Slot_Booking = () => {
     manual_date: convertDateFormate(startDate),
     start_manual_time: "",
     end_manual_time: "",
+    title: "",
   });
   const [endDate, setEndDate] = useState("");
 
@@ -159,7 +160,7 @@ const Cabin_Slot_Booking = () => {
               ...val,
               start: new Date(val?.start),
               end: new Date(val?.end),
-              title: `Title : ${val?.title} 
+              title: `${val?.title} 
                booked by  ${val?.owner}`,
             })
           );
@@ -241,7 +242,11 @@ const Cabin_Slot_Booking = () => {
       manual_date: convertDateFormate(event?.start),
       start_manual_time: convertTimeFormate(event?.start),
       end_manual_time: convertTimeFormate(event?.end),
+      title: event?.title
+        .substring(0, event?.title.indexOf("booked by"))
+        .trim(),
     });
+
     setStartdate(event?.start);
     if (event?.user_id !== LocalStorageData?.user_id) {
       alert?.show("you are not the owner");
@@ -399,6 +404,8 @@ const Cabin_Slot_Booking = () => {
   const manually_update_booking = async (e) => {
     e.preventDefault();
     const res = await axios.put(`/cabin_slot_booking/${bookingEvent?._id}`, {
+      title: timeValue?.title,
+
       start: convertDateTimeToDateObject(
         timeValue?.manual_date,
         timeValue?.start_manual_time
@@ -485,6 +492,8 @@ const Cabin_Slot_Booking = () => {
           (booking.end > start && booking.end <= end) ||
           (booking.start <= start && booking.end >= end)
       );
+
+      console.log("resice", event?.title);
       if (event?.user_id !== LocalStorageData?.user_id) {
         alert?.show("you are not the owner");
       } else if (selectCabin_id === "all") {
@@ -502,7 +511,12 @@ const Cabin_Slot_Booking = () => {
             await axios
               .put(
                 `cabin_slot_booking/${event?._id}`,
-                { ...lastObject, title: "" },
+                {
+                  ...lastObject,
+                  title: event?.title
+                    .substring(0, event?.title.indexOf("booked by"))
+                    .trim(),
+                },
                 {
                   headers: {
                     Access_Token: LocalStorageData?.generate_auth_token,
@@ -775,21 +789,21 @@ const Cabin_Slot_Booking = () => {
                                 className="form-control form-control-sm"
                                 name="title"
                                 placeholder="Username"
-                                onChange={inputEvent}
-                                value={inputData?.title}
+                                onChange={handleTimeChange}
+                                value={timeValue?.title}
                               />
                             </div>
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <label>Description</label>
                               <input
                                 type="text"
                                 className="form-control form-control-sm"
                                 name="description"
                                 placeholder="Username"
-                                onChange={inputEvent}
+                                onChange={handleTimeChange}
                                 value={inputData?.description}
                               />
-                            </div>
+                            </div> */}
                             <div className="row">
                               <div className="col-md-4">
                                 <label>Date</label>
