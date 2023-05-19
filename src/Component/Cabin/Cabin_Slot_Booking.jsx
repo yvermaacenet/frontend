@@ -403,23 +403,35 @@ const Cabin_Slot_Booking = () => {
 
   const manually_update_booking = async (e) => {
     e.preventDefault();
-    const res = await axios.put(`/cabin_slot_booking/${bookingEvent?._id}`, {
-      title: timeValue?.title,
+    const timeCompare = compareTimes(
+      timeValue?.start_manual_time,
+      timeValue?.end_manual_time
+    );
+    console.log("timeCompare", timeCompare);
+    if (timeCompare === "no") {
+      setInvalidText("End time Should be greater than start time");
+    } else if (timeCompare === "equal") {
+      setInvalidText("Start time and End time can't be equal");
+    } else {
+      const res = await axios.put(`/cabin_slot_booking/${bookingEvent?._id}`, {
+        title: timeValue?.title,
 
-      start: convertDateTimeToDateObject(
-        timeValue?.manual_date,
-        timeValue?.start_manual_time
-      ),
-      end: convertDateTimeToDateObject(
-        timeValue?.manual_date,
-        timeValue?.end_manual_time
-      ),
+        start: convertDateTimeToDateObject(
+          timeValue?.manual_date,
+          timeValue?.start_manual_time
+        ),
+        end: convertDateTimeToDateObject(
+          timeValue?.manual_date,
+          timeValue?.end_manual_time
+        ),
 
-      // end: bookingEvent,
-    });
-    if (res.data.message === "updated") {
-      setEditEventModal(false);
-      setRenderComponent(true);
+        // end: bookingEvent,
+      });
+      if (res.data.message === "updated") {
+        setEditEventModal(false);
+        setInvalidText("");
+        setRenderComponent(true);
+      }
     }
   };
 
@@ -437,8 +449,7 @@ const Cabin_Slot_Booking = () => {
       );
       if (event?.user_id !== LocalStorageData?.user_id) {
         alert?.show("you are not the owner");
-      }
-      if (selectCabin_id === "all") {
+      } else if (selectCabin_id === "all") {
         alert?.show("Please select cabin");
       } else if (event.start === event.end) {
         alert?.show("Are you sure you want to delete this event?");
@@ -651,6 +662,7 @@ const Cabin_Slot_Booking = () => {
                       header="Cabin Booking"
                       isOpen={addEventModal}
                       onClose={() => {
+                        setInvalidText("");
                         setAddEventModal(false);
                         setAllDay(false);
                         return true;
@@ -659,7 +671,10 @@ const Cabin_Slot_Booking = () => {
                     >
                       <div className="card">
                         <div className="card-body">
-                          <form className="forms-sample">
+                          <form
+                            className="forms-sample"
+                            onSubmit={onAddCabinSlotBookingButton}
+                          >
                             <div className="form-group">
                               <label>Title</label>
                               <input
@@ -671,7 +686,7 @@ const Cabin_Slot_Booking = () => {
                                 required
                               />
                             </div>
-                            <div className="form-group">
+                            {/* <div className="form-group">
                               <label>Description</label>
                               <input
                                 type="text"
@@ -680,7 +695,7 @@ const Cabin_Slot_Booking = () => {
                                 placeholder="Username"
                                 onChange={inputEvent}
                               />
-                            </div>
+                            </div> */}
                             <div className="form-group">
                               <div className="row">
                                 <div className="col-md-6">
@@ -760,7 +775,7 @@ const Cabin_Slot_Booking = () => {
                             <button
                               type="submit"
                               className="btn btn-sm btn-gradient-primary me-2"
-                              onClick={onAddCabinSlotBookingButton}
+                              // onClick={onAddCabinSlotBookingButton}
                             >
                               Submit
                             </button>
@@ -774,6 +789,7 @@ const Cabin_Slot_Booking = () => {
                       header="Cabin Booking"
                       isOpen={editEventModal}
                       onClose={() => {
+                        setInvalidText("");
                         setEditEventModal(false);
                         return true;
                       }}
@@ -781,7 +797,10 @@ const Cabin_Slot_Booking = () => {
                     >
                       <div className="card">
                         <div className="card-body">
-                          <form className="forms-sample">
+                          <form
+                            className="forms-sample"
+                            onSubmit={manually_update_booking}
+                          >
                             <div className="form-group">
                               <label>Title</label>
                               <input
@@ -791,6 +810,7 @@ const Cabin_Slot_Booking = () => {
                                 placeholder="Username"
                                 onChange={handleTimeChange}
                                 value={timeValue?.title}
+                                required
                               />
                             </div>
                             {/* <div className="form-group">
@@ -804,8 +824,8 @@ const Cabin_Slot_Booking = () => {
                                 value={inputData?.description}
                               />
                             </div> */}
-                            <div className="row">
-                              <div className="col-md-4">
+                            <div className="row g-3">
+                              <div className="col-md-12">
                                 <label>Date</label>
                                 <input
                                   type="date"
@@ -818,7 +838,7 @@ const Cabin_Slot_Booking = () => {
                                   // required
                                 />
                               </div>
-                              <div className="col-md-4">
+                              <div className="col-md-6 col-12 ">
                                 <label>Start Time</label>
                                 <input
                                   type="time"
@@ -832,7 +852,7 @@ const Cabin_Slot_Booking = () => {
                                   required
                                 />
                               </div>
-                              <div className="col-md-4">
+                              <div className="col-md-6 col-12">
                                 <label>End Time</label>
                                 <input
                                   type="time"
@@ -845,6 +865,13 @@ const Cabin_Slot_Booking = () => {
                                   // disabled
                                   required
                                 />
+                                {invalidText ? (
+                                  <small className="text-danger">
+                                    {invalidText}
+                                  </small>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                             </div>
                             {/* <button
@@ -858,17 +885,17 @@ const Cabin_Slot_Booking = () => {
                             </button> */}
                             <button
                               type="submit"
-                              className="btn btn-sm btn-gradient-primary me-2"
-                              onClick={manually_update_booking}
+                              className=" mt-2 btn btn-sm btn-gradient-primary me-2"
+                              // onClick={manually_update_booking}
                             >
                               Update
                             </button>
                             <button
                               type="submit"
-                              className="btn btn-sm btn-gradient-danger me-2"
+                              className="mt-2 btn btn-sm btn-gradient-danger me-2"
                               onClick={onRemoveCabinSlotBookingButton}
                             >
-                              Remove
+                              Delete
                             </button>
                           </form>
                         </div>
