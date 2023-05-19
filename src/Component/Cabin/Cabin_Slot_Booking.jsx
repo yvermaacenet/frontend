@@ -36,6 +36,7 @@ const Cabin_Slot_Booking = () => {
   const [locationValue, setLocationValue] = useState("all_location");
   const [filteredCabinList, setFilteredCabinList] = useState([]);
   const [startDate, setStartdate] = useState("");
+  const [invalidText, setInvalidText] = useState("");
   const [timeValue, setTimeValue] = useState({
     manual_date: convertDateFormate(startDate),
     start_manual_time: "",
@@ -52,6 +53,30 @@ const Cabin_Slot_Booking = () => {
       };
     });
   };
+
+  const compareTime = (d1, d2) => {
+    let date1 = new Date(d1);
+    let date2 = new Date(d2);
+
+    if (date1.getTime() < date2.getTime()) {
+      return false;
+    } else if (date1.getTime() >= date2.getTime()) {
+      const s1 = new Date(date1.getTime() + 10 * 24 * 60 * 60 * 1000);
+      const s2 = new Date();
+
+      // Clear the time component of the current date
+      s2.setHours(0, 0, 0, 0);
+
+      if (s1.getTime() > s2.getTime()) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
   const inputEvent = (event) => {
     const { name, value } = event.target;
     setInputData((preValue) => {
@@ -120,6 +145,7 @@ const Cabin_Slot_Booking = () => {
     fetch_Location();
     get_cabin_list();
   }, []);
+
   useEffect(() => {
     async function get_cabin_slot_booking_list() {
       await axios
@@ -137,7 +163,6 @@ const Cabin_Slot_Booking = () => {
                booked by  ${val?.owner}`,
             })
           );
-          console.log("get", getAllEvents);
           return getAllEvents;
         })
         .then((rr) => setGetCabinSlotBookingList(rr), setRenderComponent(false))
@@ -169,10 +194,10 @@ const Cabin_Slot_Booking = () => {
 
   const handleSelect = async ({ start, end }) => {
     setStartdate(start);
-    // setTimeValue({
-    //   ...timeValue,
-    //   manual_date: convertDateFormate("Fri May 19 2023 11:15:00 GMT+0530"),
-    // });
+    setTimeValue({
+      start_manual_time: convertTimeFormate(start),
+      end_manual_time: convertTimeFormate(end),
+    });
     setEndDate(end);
     const overlap = getCabinSlotBookingList.some((event) => {
       return (
@@ -219,7 +244,7 @@ const Cabin_Slot_Booking = () => {
     });
     setStartdate(event?.start);
     if (event?.user_id !== LocalStorageData?.user_id) {
-      alert?.show("you are not thr owener");
+      alert?.show("you are not the owner");
     } else {
       setEditEventModal(true);
     }
@@ -235,56 +260,82 @@ const Cabin_Slot_Booking = () => {
     });
     setAllDay(event?.allDay);
   };
+  const compareTimes = (t1, t2) => {
+    const time1 = new Date(`2000-01-01T${t1}`);
+    const time2 = new Date(`2000-01-01T${t2}`);
+
+    if (time1.getTime() < time2.getTime()) {
+      return "yes";
+    } else if (time1.getTime() > time2.getTime()) {
+      return "no";
+    } else {
+      return "equal";
+    }
+  };
   const onAddCabinSlotBookingButton = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    await axios
-      .post(
-        "cabin_slot_booking",
-        {
-          ...inputData,
-          start:
-            timeValue?.start_manual_time === ""
-              ? startDate
-              : convertDateTimeToDateObject(
-                  convertDateFormate(startDate),
-                  timeValue?.start_manual_time
-                ),
-          end:
-            timeValue?.start_manual_time === ""
-              ? endDate
-              : convertDateTimeToDateObject(
-                  convertDateFormate(endDate),
-                  timeValue?.end_manual_time
-                ),
-          allDay,
-          location: locationValue,
-          owner: LocalStorageData?.name,
-        },
-        {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        }
-      )
-      .then((resp) => {
-        return (
-          alert?.show(resp.data.message),
-          setAddEventModal(false),
-          setAllDay(false),
-          setTimeValue({
-            start_manual_time: "",
-            end_manual_time: "",
-          }),
-          setRenderComponent(true)
-        );
-      })
-      .catch((err) => {
-        if (err.response.status === 500) {
-          navigate("/error_500");
-        } else {
-          navigate("/error_403");
-        }
-      });
-    setLoading(false);
+
+    const timeCompare = compareTimes(
+      timeValue?.start_manual_time,
+      timeValue?.end_manual_time
+    );
+    if (timeCompare === "no") {
+      console.log("end is smaller");
+      setInvalidText("End time Should be greater than start time");
+    } else if (timeCompare === "equal") {
+      console.log("bothequal");
+      setInvalidText("Start time and End time can't be equal");
+    } else {
+      setLoading(true);
+      await axios
+        .post(
+          "cabin_slot_booking",
+          {
+            ...inputData,
+            start:
+              timeValue?.start_manual_time === ""
+                ? startDate
+                : convertDateTimeToDateObject(
+                    convertDateFormate(startDate),
+                    timeValue?.start_manual_time
+                  ),
+            end:
+              timeValue?.start_manual_time === ""
+                ? endDate
+                : convertDateTimeToDateObject(
+                    convertDateFormate(endDate),
+                    timeValue?.end_manual_time
+                  ),
+            allDay,
+            location: locationValue,
+            owner: LocalStorageData?.name,
+          },
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
+        .then((resp) => {
+          return (
+            alert?.show(resp.data.message),
+            setAddEventModal(false),
+            setAllDay(false),
+            setTimeValue({
+              start_manual_time: "",
+              end_manual_time: "",
+            }),
+            setRenderComponent(true)
+          );
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+      setInvalidText("");
+      setLoading(false);
+    }
   };
 
   const onRemoveCabinSlotBookingButton = async (e) => {
@@ -316,7 +367,6 @@ const Cabin_Slot_Booking = () => {
     let backgroundColorCode = getCabinList?.filter(
       (val) => val._id === event.cabin_id
     );
-    console.log("sdf", event);
     const dynamicValue = event?.owner; // Replace with the actual dynamic value you want to display
 
     const style = {
@@ -357,6 +407,7 @@ const Cabin_Slot_Booking = () => {
         timeValue?.manual_date,
         timeValue?.end_manual_time
       ),
+
       // end: bookingEvent,
     });
     if (res.data.message === "updated") {
@@ -377,7 +428,9 @@ const Cabin_Slot_Booking = () => {
           (booking.end > start && booking.end <= end) ||
           (booking.start <= start && booking.end >= end)
       );
-
+      if (event?.user_id !== LocalStorageData?.user_id) {
+        alert?.show("you are not the owner");
+      }
       if (selectCabin_id === "all") {
         alert?.show("Please select cabin");
       } else if (event.start === event.end) {
@@ -432,7 +485,9 @@ const Cabin_Slot_Booking = () => {
           (booking.end > start && booking.end <= end) ||
           (booking.start <= start && booking.end >= end)
       );
-      if (selectCabin_id === "all") {
+      if (event?.user_id !== LocalStorageData?.user_id) {
+        alert?.show("you are not the owner");
+      } else if (selectCabin_id === "all") {
         alert?.show("Please select cabin");
       } else if (overlappingBooking && event._id !== overlappingBooking._id) {
         alert?.show("already booked");
@@ -445,11 +500,15 @@ const Cabin_Slot_Booking = () => {
           setLoading(true);
           async function dragndrop() {
             await axios
-              .put(`cabin_slot_booking/${event?._id}`, lastObject, {
-                headers: {
-                  Access_Token: LocalStorageData?.generate_auth_token,
-                },
-              })
+              .put(
+                `cabin_slot_booking/${event?._id}`,
+                { ...lastObject, title: "" },
+                {
+                  headers: {
+                    Access_Token: LocalStorageData?.generate_auth_token,
+                  },
+                }
+              )
               .then((res) => {
                 return alert?.show(res.data.message), setRenderComponent(true);
               })
@@ -658,9 +717,16 @@ const Cabin_Slot_Booking = () => {
                                     onChange={handleTimeChange}
                                     // name="time"
                                     name="end_manual_time"
-                                    // value={inputData?.convertEndTime}
+                                    value={timeValue?.end_manual_time}
                                     // disabled
                                   />
+                                  {invalidText ? (
+                                    <small className="text-danger">
+                                      {invalidText}
+                                    </small>
+                                  ) : (
+                                    ""
+                                  )}
                                 </div>
                               </div>
                             </div>
