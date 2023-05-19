@@ -529,7 +529,19 @@ const On_Boarding = () => {
                         </tr>
                       </tbody>
                     </table>
-                    <div className="mt-4 mb-4">
+                   
+                    <div>
+                     
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div class="col-lg-12 grid-margin stretch-card">
+                <div className="card">
+                  <div className="card-body">
+                  
                       {/* <!==========  Previous Button ============> */}
 
                       <>
@@ -565,15 +577,14 @@ const On_Boarding = () => {
                           Next
                         </button>
                       )}
-                    </div>
-                    <div>
-                      <div class="row">
+                     
+                  <div class="row">
                         <div class="col-lg-12 grid-margin ">
                           <div class="card">
                             <div class="card-body">
                               <form class="forms-sample">
                                 <MultiStepForm activeStep={active}>
-                                  <Step label="First Day Formalities">
+                                  <Step label="HR">
                                     <>
                                       {inputData?.hr_on_boarding_status ? (
                                         <div
@@ -1557,7 +1568,7 @@ const On_Boarding = () => {
                                     </>
                                   </Step>
 
-                                  <Step label="Compliance Documents">
+                                  <Step label="Finance">
                                     <>
                                       <>
                                         {inputData?.finance_on_boarding_status ? (
@@ -1982,7 +1993,7 @@ const On_Boarding = () => {
                                     </>
                                   </Step>
 
-                                  <Step label="ZOHO Account">
+                                  <Step label="Management">
                                     <>
                                       <>
                                         {inputData?.management_on_boarding_status ? (
@@ -2341,10 +2352,9 @@ const On_Boarding = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                    </div>
+                    </div>
+                    </div>
           </div>
           <footer class="footer">
             <Footer />
