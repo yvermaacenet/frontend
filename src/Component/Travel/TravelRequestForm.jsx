@@ -23,6 +23,8 @@ const TravelRequestForm = () => {
     name: LocalStorageData?.name,
     email: LocalStorageData?.email,
     employee_id: LocalStorageData?.emp_id,
+    phone: LocalStorageData?.phone,
+    reporting_manager: LocalStorageData?.reporting_manager,
     billable: "",
     project_id: "",
     reason_for_travel: "",
@@ -30,10 +32,10 @@ const TravelRequestForm = () => {
   const [travel, setTravel] = useState({
     start_date: "",
     end_date: "",
-    destination: "",
-    purpose: "",
-    trip_type: "national",
-    from_country: "India",
+    // destination: "",
+    reason_for_travel: "",
+    // trip_type: "national",
+    // from_country: "India",
   });
   const [flight, setFlight] = useState({
     travel_flight: false,
@@ -81,15 +83,23 @@ const TravelRequestForm = () => {
     getCountry();
   }, []);
 
-  const onSubmitButton = (event) => {
+  const onSubmitButton = async (event) => {
     event.preventDefault();
     // submit data to MongoDB
-    console.log({
-      employee,
-      travel,
-      train,
-      hotel,
+
+    const res = await axios.post("/raise_travel_request", {
+      employee: employee,
+      travel: travel,
+      flight: flight,
+      train: train,
+      hotel: hotel,
+      other: other,
     });
+    if (res.data === "updated") {
+      alert?.show("Request Raised Successfully");
+    } else {
+      alert?.show("Something went wrong");
+    }
   };
   const [options, setOptions] = useState([
     {
@@ -144,7 +154,7 @@ const TravelRequestForm = () => {
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <form onSubmit={handleSubmit(onSubmitButton)}>
+                      <form onSubmit={onSubmitButton}>
                         <div className="row my-2">
                           <div className="col-12 col-lg-4">
                             <div className="form-group">
