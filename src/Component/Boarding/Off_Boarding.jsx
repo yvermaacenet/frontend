@@ -42,10 +42,13 @@ const Off_Boarding = () => {
   const [active, setActive] = useState();
   const [getUserDetailsById, setGetUserDetailsById] = useState({});
   const [loading, setLoading] = useState(false);
+  const [updated_data, setUpdated_data] = useState([]);
 
   const inputEvent = (e) => {
     const { name, checked } = e.target;
     setInputData({ ...inputData, [name]: checked });
+    setUpdated_data({ ...updated_data, [name]: checked });
+
   };
   useEffect(() => {
     setLoading(true);
@@ -138,6 +141,13 @@ const Off_Boarding = () => {
             inputData?.ghi_e_card_issued === true
               ? true
               : false,
+              updated_by: [
+                {
+                  user_id: LocalStorageData?.user_id,
+                  user_name: LocalStorageData?.name,
+                  updated_data,
+                },
+              ],
         },
         {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -148,34 +158,34 @@ const Off_Boarding = () => {
           setActive(active + 1);
           setRenderComponent(true);
           navigate("/user_list/active_users");
-          await axios
-            .put(
-              `/user_update/${_id}`,
-              {
-                initiate_off_boarding_status: true,
-                off_boarding_status:
-                  inputData?.hr_off_boarding_status === true &&
-                  inputData?.finance_off_boarding_status === true &&
-                  inputData?.management_off_boarding_status === true
-                    ? true
-                    : false,
-              },
-              {
-                headers: {
-                  Access_Token: LocalStorageData?.generate_auth_token,
-                },
-              }
-            )
-            .then((res) => {
-              return alert.show(res?.data.message);
-            })
-            .catch((err) => {
-              if (err.response.status === 500) {
-                navigate("/error_500");
-              } else {
-                navigate("/error_403");
-              }
-            });
+          // await axios
+          //   .put(
+          //     `/user_update/${_id}`,
+          //     {
+          //       initiate_off_boarding_status: true,
+          //       off_boarding_status:
+          //         inputData?.hr_off_boarding_status === true &&
+          //         inputData?.finance_off_boarding_status === true &&
+          //         inputData?.management_off_boarding_status === true
+          //           ? true
+          //           : false,
+          //     },
+          //     {
+          //       headers: {
+          //         Access_Token: LocalStorageData?.generate_auth_token,
+          //       },
+          //     }
+          //   )
+          //   .then((res) => {
+          //     return alert.show(res?.data.message);
+          //   })
+          //   .catch((err) => {
+          //     if (err.response.status === 500) {
+          //       navigate("/error_500");
+          //     } else {
+          //       navigate("/error_403");
+          //     }
+          //   });
         }
       })
       .catch((err) => {
@@ -224,6 +234,14 @@ const Off_Boarding = () => {
             inputData?.ghi_e_card_issued === true
               ? true
               : false,
+              updated_by: [
+                ...inputData?.updated_by,
+                {
+                  user_id: LocalStorageData?.user_id,
+                  user_name: LocalStorageData?.name,
+                  updated_data,
+                },
+              ],
         },
 
         {
@@ -234,6 +252,7 @@ const Off_Boarding = () => {
         if (res.data.message === "updated") {
           setActive(active + 1);
           setRenderComponent(true);
+          setUpdated_data([]);
           navigate("/user_list/active_users");
         }
       })
@@ -246,6 +265,20 @@ const Off_Boarding = () => {
       });
     setLoading(false);
   };
+  function convertDateFormate(str) {
+    const date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [day, mnth, date.getFullYear()].join("-");
+  }
+  function capitalize(ss) {
+    const newData = ss.split("_").join(" ");
+    const words = newData.split(" ");
+    const capitalizedWords = words.map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    });
+    return capitalizedWords.join(" ");
+  }
 
   return (
     <div className="container-scroller">
@@ -269,7 +302,82 @@ const Off_Boarding = () => {
               <div class="col-lg-12 grid-margin stretch-card">
                 <div className="card">
                   <div className="card-body">
-                    <p className="card-description"> Off Boarding Process </p>
+                  <div className=" d-flex justify-content-between align-items-center">
+                    <span className="card-description"> Off Boarding Process </span>
+                    <div>
+                        <a
+                          style={{ float: "right" }}
+                          className=" nav-link count-indicator dropdown-toggle mb-4"
+                          id="notificationDropdown"
+                          href="#"
+                          data-bs-toggle="dropdown"
+                          title="updation history"
+                        >
+                          <i className="mdi mdi-bell-outline"></i>
+                          <span className="count-symbol bg-danger"></span>
+                        </a>
+                        <div
+                          style={{ height: "50vh", overflowY: "scroll" }}
+                          className="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                          aria-labelledby="notificationDropdown"
+                        >
+                          <h6
+                            className="mt-0 p-3"
+                            // style={{position:"sticky", top:"0", backgroundColor:"white", margin:"0"}}
+                          >
+                            History
+                          </h6>
+
+                          {inputData?.updated_by?.map((item) => {
+                            return (
+                              <>
+                                <div className="dropdown-divider"></div>
+                                <a className="dropdown-item preview-item">
+                                  <div className="preview-thumbnail">
+                                    <div
+                                      className="preview-icon  "
+                                      style={{
+                                        background: `#${Math.random()
+                                          .toString(16)
+                                          .slice(2, 8)
+                                          .padEnd(6, 0)}`,
+                                        color: "#f8f8f8",
+                                      }}
+                                    >
+                                      <i className="mdi mdi-calendar"></i>
+                                    </div>
+                                  </div>
+                                  <div className="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                                    <span className="preview-subject fw-bold mb-1">
+                                      {`Updated by : ${item?.user_name}`}
+                                    </span>
+                                    <span className="preview-subject fw-bold mb-1">
+                                      {`Updated At : ${convertDateFormate(
+                                        item?.updated_date
+                                      )}`}
+                                    </span>
+
+                                    {Object.entries(item?.updated_data).map(
+                                      ([key, val]) => {
+                                        return val ? (
+                                          <span className="text-success ">
+                                            {capitalize(key)}
+                                          </span>
+                                        ) : (
+                                          <span className="text-danger ">
+                                            {capitalize(key)}
+                                          </span>
+                                        );
+                                      }
+                                    )}
+                                  </div>
+                                </a>
+                              </>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
                     <table className="table table-bordered">
                       <thead>
                         <tr>
@@ -357,7 +465,7 @@ const Off_Boarding = () => {
                           <div class="card-body">
                             <form className="forms-sample">
                               <MultiStepForm activeStep={active}>
-                                <Step label="Supervisor Clearance">
+                                <Step label="HR">
                                   <>
                                     <>
                                       {inputData?.hr_off_boarding_status ? (
@@ -525,7 +633,7 @@ const Off_Boarding = () => {
                                     </table>
                                   </>
                                 </Step>
-                                <Step label="Admin Clearance">
+                                <Step label="Finance">
                                   <>
                                     <>
                                       {inputData?.finance_off_boarding_status ? (
@@ -809,7 +917,7 @@ const Off_Boarding = () => {
                                     </table>
                                   </>
                                 </Step>
-                                <Step label="Other Formalities">
+                                <Step label="Management">
                                   <>
                                     <>
                                       {inputData?.management_off_boarding_status ? (
