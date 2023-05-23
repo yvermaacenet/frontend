@@ -141,11 +141,11 @@ const Sidebar = () => {
                       Travel Request
                     </NavLink>
                   </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <NavLink className="nav-link" to="/alltravelrequest">
                       All Travel Requests
                     </NavLink>
-                  </li>
+                  </li> */}
 
                   {(LocalStorageData?.zoho_role === "Finance" ||
                     LocalStorageData?.zoho_role === "Admin") && (

@@ -160,6 +160,11 @@ const TravelRequestForm = () => {
                 page_title_button="Back"
                 page_title_button_link="/alltravelrequest"
               />
+              <div className="text-end m-2">
+                <NavLink to="/alltravelrequest">
+                  <button className="btn btn-primary">All Requests</button>
+                </NavLink>
+              </div>
 
               {loading && (
                 <div className="loader-container">

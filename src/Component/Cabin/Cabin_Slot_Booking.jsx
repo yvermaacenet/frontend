@@ -504,8 +504,10 @@ const Cabin_Slot_Booking = () => {
           (booking.start <= start && booking.end >= end)
       );
 
-      console.log("resice", event?.title);
-      if (event?.user_id !== LocalStorageData?.user_id) {
+      const currentDate = new Date();
+      if (start < currentDate) {
+        alert?.show("please select a valid date");
+      } else if (event?.user_id !== LocalStorageData?.user_id) {
         alert?.show("you are not the owner");
       } else if (selectCabin_id === "all") {
         alert?.show("Please select cabin");

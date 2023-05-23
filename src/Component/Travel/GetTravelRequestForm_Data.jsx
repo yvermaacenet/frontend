@@ -51,7 +51,7 @@ const GetTravelRequestForm_Data = () => {
               page_title="Travel Request Updates"
               page_title_icon="mdi-home-modern"
               page_title_button="Back"
-              page_title_button_link="/dashboard"
+              page_title_button_link="/travelrequestform"
             />
             <div className="d-flex justify-content-end mb-3">
               <NavLink to="/travelrequestform">
@@ -132,34 +132,38 @@ const GetTravelRequestForm_Data = () => {
               // setAllDay(false);
               return true;
             }}
-            width={"80%"}
+            width={"90%"}
           >
             <div className="card">
               <div className="card-body">
                 <div className="row">
-                  <h5 className="fs-4 fw-bold"> Travel Info</h5>
-                  <div className="col-lg-6">
+                  <h5 className="fs-4 fw-bold" style={{ color: "#b66dff" }}>
+                    {" "}
+                    Travel Info
+                  </h5>
+                  <div className="col-lg-4 col-12">
                     <div className="row text-center text-lg-start">
-                      <div className="col-lg-6 col-12 ">Start Data:</div>
+                      <div className="col-lg-6 col-12 fw-bold">Start Data:</div>
                       <div className="col-lg-6 col-12 ">
                         {viewRequestData?.travel?.start_date?.split("T")[0]}
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-6 col-12 ">
+                  <div className="col-lg-4 col-12 ">
                     <div className="row text-center text-lg-start">
-                      <div className="col-lg-6 col-12 ">End Data:</div>
+                      <div className="col-lg-6 col-12 fw-bold">End Data:</div>
                       <div className="col-lg-6 col-12 ">
                         {" "}
                         {viewRequestData?.travel?.end_date?.split("T")[0]}
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="row">
-                  <div className="col-12 col-lg-6">
-                    <div className="row">
-                      <div className="col-12 col-lg-6"> Reason For Travel</div>
+                  <div className="col-12 col-lg-4">
+                    <div className="row text-center text-lg-start">
+                      <div className="col-12 col-lg- fw-bold">
+                        {" "}
+                        Reason For Travel:
+                      </div>
                       <div className="col-12 col-lg-6">
                         {" "}
                         {viewRequestData?.travel?.reason_for_travel}
@@ -167,6 +171,208 @@ const GetTravelRequestForm_Data = () => {
                     </div>
                   </div>
                 </div>
+                <div className="row">
+                  <div className="col-12 col-lg-4">
+                    <div className="row mt-4 text-center text-lg-start">
+                      <div className="col-12 col-lg-6 fw-bold">
+                        {" "}
+                        Project ID:
+                      </div>
+                      <div className="col-12 col-lg-4">
+                        {" "}
+                        {viewRequestData?.employee?.project_id}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-4">
+                    <div className="row mt-4 text-center text-lg-start">
+                      <div className="col-12 col-lg-6 fw-bold"> Billable:</div>
+                      <div className="col-12 col-lg-4">
+                        {" "}
+                        {viewRequestData?.employee?.billable}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-4">
+                    <div className="row mt-4 text-center text-lg-start">
+                      <div className="col-12 col-lg-6 fw-bold">
+                        {" "}
+                        Request Status:
+                      </div>
+                      <div className="col-12 col-lg-4">
+                        {" "}
+                        {viewRequestData?.managers_approval}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {viewRequestData?.flight?.flight_from_city ? (
+                  <div className="row mt-4 text-center text-lg-start">
+                    <p className="fs-4 fw-bold " style={{ color: "#b66dff" }}>
+                      Flight Info
+                    </p>
+                    <div className="col-12 col-lg-4">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          From Location:
+                        </div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {viewRequestData?.flight?.flight_from_city}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-4">
+                      <div className="row ">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          To Location::
+                        </div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {viewRequestData?.flight?.flight_to_city}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-4 ">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          Preferred Time:
+                        </div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {viewRequestData?.flight?.flight_preferred_time}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-4 mt-lg-4 mt-0">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          Request Status:
+                        </div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {viewRequestData?.managers_approval}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {/* Hotel Request */}
+                {viewRequestData?.hotel?.hotel_city ? (
+                  <div className="row mt-4 text-center text-lg-start">
+                    <p className="fs-4 fw-bold " style={{ color: "#b66dff" }}>
+                      Hotel Info
+                    </p>
+                    <div className="col-12 col-lg-4">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          City Name:
+                        </div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {viewRequestData?.hotel?.hotel_city}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-4">
+                      <div className="row ">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          Checkin Date:
+                        </div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {
+                            (viewRequestData?.hotel?.hotel_checkin).split(
+                              "T"
+                            )[0]
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-4 ">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          Checkout Date:
+                        </div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {
+                            (viewRequestData?.hotel?.hotel_checkout).split(
+                              "T"
+                            )[0]
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-4 mt-lg-4 mt-0">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          No. of rooms requested:
+                        </div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {viewRequestData?.hotel?.hotel_number_of_rooms}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {/* Other Request */}
+                {viewRequestData?.train?.train_from_city ? (
+                  <div className="row mt-4 text-center text-lg-start">
+                    <p className="fs-4 fw-bold " style={{ color: "#b66dff" }}>
+                      Other Request Info
+                    </p>
+                    <div className="col-12 col-lg-4">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          travel Name:
+                        </div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {viewRequestData?.other?.name_of_travel}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-4">
+                      <div className="row ">
+                        <div className="col-12 col-lg-6 fw-bold"> From:</div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {
+                            (viewRequestData?.other?.from_location).split(
+                              "T"
+                            )[0]
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-4 ">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold"> To:</div>
+                        <div className="col-12 col-lg-4">
+                          {" "}
+                          {(viewRequestData?.other?.to_location).split("T")[0]}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </PureModal>
