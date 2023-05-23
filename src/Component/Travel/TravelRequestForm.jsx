@@ -94,6 +94,7 @@ const TravelRequestForm = () => {
       train: train,
       hotel: hotel,
       other: other,
+      managers_approval: "Pending",
     });
     if (res.data === "updated") {
       alert?.show("Request Raised Successfully");
@@ -117,6 +118,24 @@ const TravelRequestForm = () => {
     };
   });
 
+  const handleTravelChange = (event) => {
+    const { name, value } = event.target;
+    setTravel((preValue) => {
+      return {
+        ...preValue,
+        [name]: value,
+      };
+    });
+  };
+  const handleFlightChange = (event) => {
+    const { name, value } = event.target;
+    setFlight((preValue) => {
+      return {
+        ...preValue,
+        [name]: value,
+      };
+    });
+  };
   const inputEvent = (event) => {
     const { name, value } = event.target;
     setEmployee((preValue) => {
@@ -203,7 +222,7 @@ const TravelRequestForm = () => {
                                 type="date"
                                 name="start_date"
                                 // value={start_date}
-                                // onChange={handleChange}
+                                onChange={handleTravelChange}
                                 // required
                               />
                             </div>
@@ -216,7 +235,7 @@ const TravelRequestForm = () => {
                                 type="date"
                                 name="end_date"
                                 // value={end_date}
-                                // onChange={handleChange}
+                                onChange={handleTravelChange}
                                 // required
                               />
                             </div>
@@ -279,6 +298,7 @@ const TravelRequestForm = () => {
                               <textarea
                                 name="reason_for_travel"
                                 className="form-control "
+                                onChange={handleTravelChange}
                               />
                             </div>
                           </div>

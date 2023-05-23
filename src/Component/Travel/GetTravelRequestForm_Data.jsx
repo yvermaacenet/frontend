@@ -3,6 +3,8 @@ import axios from "axios";
 import { saveAs } from "file-saver";
 import * as XLSX from "xlsx";
 import Footer from "../../Partials/Footer";
+import PureModal from "react-pure-modal";
+
 import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
@@ -12,6 +14,8 @@ const GetTravelRequestForm_Data = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [getleaverequestdata, setGetleaverequestdata] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [viewRequestModal, setViewRequestModal] = useState(false);
+  const [viewRequestData, setViewRequestData] = useState([]);
   useEffect(() => {
     async function getData() {
       setLoading(true);
@@ -35,6 +39,7 @@ const GetTravelRequestForm_Data = () => {
     getData();
   }, []);
 
+  console.log("data", viewRequestData);
   return (
     <div className="container-scroller">
       <Navbar />
@@ -76,13 +81,9 @@ const GetTravelRequestForm_Data = () => {
                       <thead>
                         <tr>
                           <th>Id</th>
-                          <th>From</th>
-                          <th>To</th>
-                          <th>amount</th>
-                          <th>Type</th>
+                          <th>Requested On</th>
                           <th>Manager Approval</th>
-                          <th>Management Approval</th>
-                          {/* <th>Remarks</th> */}
+                          <th>View Request</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -90,29 +91,28 @@ const GetTravelRequestForm_Data = () => {
                           return (
                             <tr>
                               <td>{index + 1}</td>
-                              <td>{val?.from_location}</td>
-                              <td>{val?.destination}</td>
-                              <td>{val.estimated_amount}</td>
-                              <td>{val.type_of_request}</td>
+                              <td>{(val?.createdAt).split("T")[0]}</td>
                               <td>
+                                <td className="" type="button" disabled>
+                                  {val?.managers_approval}
+                                </td>
+                              </td>
+
+                              <td>
+                                {" "}
                                 <td
                                   className="btn btn-outline-primary btn-sm"
                                   type="button"
+                                  onClick={() => {
+                                    return (
+                                      setViewRequestModal(true),
+                                      setViewRequestData(val)
+                                    );
+                                  }}
                                 >
-                                  {val?.manager_status}
-                                  {/* {val?.status ? "Approved" : "Pending"} */}
+                                  View Request
                                 </td>
                               </td>
-                              <td>
-                                <td
-                                  className="btn btn-outline-primary btn-sm"
-                                  type="button"
-                                >
-                                  {val?.management_status}
-                                  {/* {val?.status ? "Approved" : "Pending"} */}
-                                </td>
-                              </td>
-                              {/* <td>{val.remarks}</td> */}
                             </tr>
                           );
                         })}
@@ -123,6 +123,54 @@ const GetTravelRequestForm_Data = () => {
               </div>
             </div>
           </div>
+          {/* ========View Request Modal=========== */}
+          <PureModal
+            header="Travel Request"
+            isOpen={viewRequestModal}
+            onClose={() => {
+              setViewRequestModal(false);
+              // setAllDay(false);
+              return true;
+            }}
+            width={"80%"}
+          >
+            <div className="card">
+              <div className="card-body">
+                <div className="row">
+                  <h5 className="fs-4 fw-bold"> Travel Info</h5>
+                  <div className="col-lg-6">
+                    <div className="row text-center text-lg-start">
+                      <div className="col-lg-6 col-12 ">Start Data:</div>
+                      <div className="col-lg-6 col-12 ">
+                        {viewRequestData?.travel?.start_date?.split("T")[0]}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-6 col-12 ">
+                    <div className="row text-center text-lg-start">
+                      <div className="col-lg-6 col-12 ">End Data:</div>
+                      <div className="col-lg-6 col-12 ">
+                        {" "}
+                        {viewRequestData?.travel?.end_date?.split("T")[0]}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-12 col-lg-6">
+                    <div className="row">
+                      <div className="col-12 col-lg-6"> Reason For Travel</div>
+                      <div className="col-12 col-lg-6">
+                        {" "}
+                        {viewRequestData?.travel?.reason_for_travel}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </PureModal>
+
           <footer className="footer">
             <Footer />
           </footer>
