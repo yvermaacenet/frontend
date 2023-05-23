@@ -136,11 +136,16 @@ const Sidebar = () => {
                       Form Flexible Benefit
                     </NavLink>
                   </li>
-                  {/* <li className="nav-item">
+                  <li className="nav-item">
                     <NavLink className="nav-link" to="/travelrequestform">
                       Travel Request
                     </NavLink>
-                  </li> */}
+                  </li>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/alltravelrequest">
+                      All Travel Requests
+                    </NavLink>
+                  </li>
 
                   {(LocalStorageData?.zoho_role === "Finance" ||
                     LocalStorageData?.zoho_role === "Admin") && (
