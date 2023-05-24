@@ -137,7 +137,7 @@ const Sidebar = () => {
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <NavLink className="nav-link" to="/travelrequestform">
+                    <NavLink className="nav-link" to="/alltravelrequest">
                       Travel Request
                     </NavLink>
                   </li>

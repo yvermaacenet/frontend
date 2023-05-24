@@ -132,7 +132,7 @@ const GetTravelRequestForm_Data = () => {
               // setAllDay(false);
               return true;
             }}
-            width={"90%"}
+            width={"100%"}
           >
             <div className="card">
               <div className="card-body">
