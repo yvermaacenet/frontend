@@ -23,18 +23,21 @@ const TravelApprovalRequest = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     async function getData() {
-      setLoading(true);
+      // setLoading(true);
       await axios
         .get(`all_travel_request`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
           const resp = result.data;
+
+          console.log("resp", resp);
           const filtered = resp.filter(
             (x) => x?.reporting_manager.slice(-2) === LocalStorageData?.emp_id
           );
           console.log("fill", filtered);
-          return setGettravelrequestdata(filtered), setLoading(false);
+          return setGettravelrequestdata(filtered);
+          // , setLoading(false);
         })
         .catch((err) => {
           if (err.response.status === 500) {
@@ -44,9 +47,9 @@ const TravelApprovalRequest = () => {
           }
         });
     }
-    getData("asd", gettravelrequestdata);
+    getData();
   }, []);
-  console.log();
+  console.log("request", gettravelrequestdata);
   //   //   ====Handle Remarks
 
   //   const handleRemarksChange = (e) => {
@@ -106,11 +109,12 @@ const TravelApprovalRequest = () => {
                         <tr>
                           <th>Id</th>
                           <th>Name</th>
+                          <th>Requested on</th>
                           {/* <th>destination</th> */}
                           {/* <th>amount</th> */}
-                          <th>Type</th>
                           <th>Status</th>
-                          <th>Requested on</th>
+                          <th>Remarks</th>
+                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -118,12 +122,13 @@ const TravelApprovalRequest = () => {
                           return (
                             <tr>
                               <td>{index + 1}</td>
-                              <td>{val?.name}</td>
+                              <td>{val?.employee?.name}</td>
+                              <td>{val?.createdAt?.split("T")[0]}</td>
                               {/* <td>{val?.destination}</td> */}
                               {/* <td>{val.estimated_amount}</td> */}
-                              <td>{val.type_of_request}</td>
-                              <td>{val?.manager_status}</td>
-                              <td>{(val?.creation_date).split("T")[0]}</td>
+                              {/* <td>{val.type_of_request}</td> */}
+                              <td>{val?.managers_approval}</td>
+                              <td>{val?.remarks}</td>
 
                               <td>
                                 <td
@@ -138,7 +143,7 @@ const TravelApprovalRequest = () => {
                                     );
                                   }}
                                 >
-                                  Take Action
+                                  View
                                 </td>
                               </td>
                             </tr>

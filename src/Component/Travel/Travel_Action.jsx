@@ -28,7 +28,7 @@ const Travel_Action = (props) => {
     get_travel_request_by_id();
   }, []);
   //   ====Handle Remarks
-  console.log("status", getData[0]?.management_status);
+  // console.log("status", getData[0]?.management_status);
 
   const handleRemarksChange = (e) => {
     e.preventDefault();
@@ -40,12 +40,12 @@ const Travel_Action = (props) => {
     e.preventDefault();
     if (
       LocalStorageData?.zoho_role === "Management" &&
-      getData[0].manager_status === "Pending"
+      getData[0].managers_approval === "Pending"
     ) {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         ...remarks,
-        manager_status: "Approved",
-        management_status: "Approved",
+        managers_approval: "Approved",
+        // management_status: "Approved",
       });
       if (res.data === "Updated Sucessfully") {
         alert.show("Approved Successfully");
@@ -54,7 +54,7 @@ const Travel_Action = (props) => {
     } else if (LocalStorageData?.zoho_role === "Management") {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         ...remarks,
-        management_status: "Approved",
+        // management_status: "Approved",
       });
       if (res.data === "Updated Sucessfully") {
         alert.show("Approved Successfully");
@@ -63,7 +63,7 @@ const Travel_Action = (props) => {
     } else {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         ...remarks,
-        manager_status: "Approved",
+        managers_approval: "Approved",
       });
       if (res.data === "Updated Sucessfully") {
         alert.show("Approved Successfully");
@@ -77,8 +77,8 @@ const Travel_Action = (props) => {
     if (LocalStorageData?.zoho_role === "Management") {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         ...remarks,
-        manager_status: "Declined",
-        management_status: "Declined",
+        managers_approval: "Declined",
+        // management_status: "Declined",
       });
       if (res.data === "Updated Sucessfully") {
         alert.show("Declined Successfully");
@@ -87,7 +87,7 @@ const Travel_Action = (props) => {
     } else {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         ...remarks,
-        manager_status: "Declined",
+        managers_approval: "Declined",
       });
       if (res.data === "Updated Sucessfully") {
         alert.show("Declined Successfully");
@@ -125,7 +125,7 @@ const Travel_Action = (props) => {
                               <p className="fw-bold"> Owner: </p>
                             </div>
                             <div className="col-6">
-                              <p> {modalData?.name}</p>
+                              <p> {modalData?.employee?.name}</p>
                             </div>
                           </div>
                           <div className="row">
@@ -133,23 +133,23 @@ const Travel_Action = (props) => {
                               <p className="fw-bold"> Requested on:</p>
                             </div>
                             <div className="col-6">
-                              <p> {modalData?.creation_date?.split("T")[0]}</p>
+                              <p> {modalData?.createdAt?.split("T")[0]}</p>
                             </div>
                           </div>
                           <div className="row">
                             <div className="col-6">
-                              <p className="fw-bold"> Request Type: </p>
+                              <p className="fw-bold"> Email: </p>
                             </div>
                             <div className="col-6">
-                              <p> {modalData?.type_of_request}</p>
+                              <p> {modalData?.employee?.email}</p>
                             </div>
                           </div>
                           <div className="row">
                             <div className="col-6">
-                              <p className="fw-bold"> Reason: </p>
+                              <p className="fw-bold"> Phone: </p>
                             </div>
                             <div className="col-6">
-                              <p> {modalData?.reason_for_travel}</p>
+                              <p> {modalData?.employee?.phone}</p>
                             </div>
                           </div>
                           <div className="row">
@@ -174,8 +174,8 @@ const Travel_Action = (props) => {
                             </div>
                             <div className="col-6">
                               <p>
-                                {(modalData?.start_date).split("T")[0]}
-                                {" to "} {modalData?.end_date.split("T")[0]}
+                                {/* {(modalData?.start_date).split("T")[0]} */}
+                                {/* {" to "} {modalData?.end_date.split("T")[0]} */}
                               </p>
                             </div>
                           </div>

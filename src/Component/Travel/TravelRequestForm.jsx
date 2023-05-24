@@ -28,8 +28,9 @@ const TravelRequestForm = () => {
     reason_for_travel: "",
   });
   const [travel, setTravel] = useState({
-    start_date: "",
-    end_date: "",
+    start_date: new Date().toISOString().split("T")[0],
+
+    end_date: new Date().toISOString().split("T")[0],
     // destination: "",
     reason_for_travel: "",
     // trip_type: "national",
@@ -81,6 +82,8 @@ const TravelRequestForm = () => {
     getCountry();
   }, []);
 
+  // Fetch all the reporting manager's ID
+
   const onSubmitButton = async (event) => {
     event.preventDefault();
     // submit data to MongoDB
@@ -93,6 +96,7 @@ const TravelRequestForm = () => {
       hotel: hotel,
       other: other,
       managers_approval: "Pending",
+      reporting_manager: LocalStorageData?.reporting_manager,
     });
     if (res.data === "updated") {
       alert?.show("Request Raised Successfully");
@@ -224,7 +228,8 @@ const TravelRequestForm = () => {
                                 className="form-control form-control-sm"
                                 type="date"
                                 name="start_date"
-                                // value={start_date}
+                                value={travel?.start_date}
+                                min={travel?.start_date}
                                 onChange={handleTravelChange}
                                 // required
                               />
@@ -237,7 +242,8 @@ const TravelRequestForm = () => {
                                 className="form-control form-control-sm"
                                 type="date"
                                 name="end_date"
-                                // value={end_date}
+                                value={travel?.end_date}
+                                min={travel?.end_date}
                                 onChange={handleTravelChange}
                                 // required
                               />

@@ -16,6 +16,8 @@ const GetTravelRequestForm_Data = () => {
   const [loading, setLoading] = useState(false);
   const [viewRequestModal, setViewRequestModal] = useState(false);
   const [viewRequestData, setViewRequestData] = useState([]);
+  const [gettravelrequestdata, setGettravelrequestdata] = useState([]);
+
   useEffect(() => {
     async function getData() {
       setLoading(true);
@@ -36,10 +38,14 @@ const GetTravelRequestForm_Data = () => {
           }
         });
     }
+
     getData();
   }, []);
 
-  console.log("data", viewRequestData);
+  // =========getreporting managers=========
+
+  console.log("dadaad", gettravelrequestdata);
+
   return (
     <div className="container-scroller">
       <Navbar />
@@ -56,6 +62,9 @@ const GetTravelRequestForm_Data = () => {
             <div className="d-flex justify-content-end mb-3">
               <NavLink to="/travelrequestform">
                 <button className="btn btn-primary">Raise Request</button>
+              </NavLink>
+              <NavLink to="/travelrequestreceived">
+                <button className="btn btn-primary">Take Action</button>
               </NavLink>
             </div>
             {loading && (

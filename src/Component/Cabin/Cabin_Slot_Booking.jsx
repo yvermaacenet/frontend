@@ -683,7 +683,7 @@ const Cabin_Slot_Booking = () => {
                                 type="text"
                                 className="form-control form-control-sm"
                                 name="title"
-                                placeholder="Username"
+                                placeholder="Enter Title"
                                 onChange={inputEvent}
                                 required
                               />
