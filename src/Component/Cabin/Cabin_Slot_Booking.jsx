@@ -815,17 +815,7 @@ const Cabin_Slot_Booking = () => {
                                 required
                               />
                             </div>
-                            {/* <div className="form-group">
-                              <label>Description</label>
-                              <input
-                                type="text"
-                                className="form-control form-control-sm"
-                                name="description"
-                                placeholder="Username"
-                                onChange={handleTimeChange}
-                                value={inputData?.description}
-                              />
-                            </div> */}
+
                             <div className="row g-3">
                               <div className="col-md-12">
                                 <label>Date</label>

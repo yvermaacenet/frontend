@@ -99,7 +99,7 @@ const TravelRequestForm = () => {
       reporting_manager: LocalStorageData?.reporting_manager,
     });
     if (res.data === "updated") {
-      alert?.show("Request Raised Successfully");
+      alert?.success("Request Raised Successfully");
     } else {
       alert?.show("Something went wrong");
     }

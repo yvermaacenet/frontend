@@ -22,7 +22,9 @@ const Travel_Action = (props) => {
 
   useEffect(() => {
     const get_travel_request_by_id = async () => {
-      const res = await axios.get(`/get_travel_request_by_id/${_id}`);
+      const res = await axios.get(`/get_travel_request_by_id/${_id}`, {
+        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+      });
       setGetData([res.data]);
     };
     get_travel_request_by_id();
@@ -34,7 +36,6 @@ const Travel_Action = (props) => {
     e.preventDefault();
     setRemarks({ ...remarks, [e.target.name]: e.target.value });
   };
-  console.log(LocalStorageData?.zoho_role);
   //   ====handle Approve
   const handleApprove = async (e) => {
     e.preventDefault();
@@ -113,132 +114,276 @@ const Travel_Action = (props) => {
                 <div class="loader"></div>
               </div>
             )}
-            <div className="row">
-              <div className="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body ">
-                    {getData?.map((modalData) => {
-                      return (
-                        <div>
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-bold"> Owner: </p>
-                            </div>
-                            <div className="col-6">
-                              <p> {modalData?.employee?.name}</p>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-bold"> Requested on:</p>
-                            </div>
-                            <div className="col-6">
-                              <p> {modalData?.createdAt?.split("T")[0]}</p>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-bold"> Email: </p>
-                            </div>
-                            <div className="col-6">
-                              <p> {modalData?.employee?.email}</p>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-bold"> Phone: </p>
-                            </div>
-                            <div className="col-6">
-                              <p> {modalData?.employee?.phone}</p>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-bold"> From:</p>
-                            </div>
-                            <div className="col-6">
-                              <p> {modalData?.from_location}</p>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-bold"> To:</p>
-                            </div>
-                            <div className="col-6">
-                              <p> {modalData?.destination}</p>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-bold"> Travelling Dates:</p>
-                            </div>
-                            <div className="col-6">
-                              <p>
-                                {/* {(modalData?.start_date).split("T")[0]} */}
-                                {/* {" to "} {modalData?.end_date.split("T")[0]} */}
-                              </p>
-                            </div>
-                          </div>
-
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-bold"> Est. Amount(INR):</p>
-                            </div>
-                            <div className="col-6">
-                              <p> {modalData?.estimated_amount}</p>
-                            </div>
-                          </div>
-                          <div className="row">
-                            <div className="col-6">
-                              <p className="fw-bold"> Status:</p>
-                            </div>
-                            <div className="col-6">
-                              <p> {modalData?.status}</p>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                    <div className="row my-4">
-                      <form typeof="submit">
-                        <div className="row">
-                          <div className="col-12">
-                            <label htmlFor="">Remarks</label>
-                            <input
-                              className="form-control"
-                              type="text"
-                              required
-                              name="remarks"
-                              onChange={handleRemarksChange}
-                              value={remarks?.remarks}
-                            />
-                          </div>
-                        </div>
-                        <div className="row my-2">
-                          <div className="col-6">
-                            <button
-                              onClick={handleApprove}
-                              className="btn btn-primary"
-                            >
-                              {" "}
-                              Approve
-                            </button>
-                          </div>
-                          <div className="col-6">
-                            {" "}
-                            <button
-                              onClick={handleDecline}
-                              className="btn btn-primary"
-                            >
-                              {" "}
-                              Decline
-                            </button>
-                          </div>
-                        </div>
-                      </form>
+            <div className="card small">
+              <div className="card-body">
+                <div className="row">
+                  <h5 className=" fw-bold" style={{ color: "#b66dff" }}>
+                    {" "}
+                    Travel Info
+                  </h5>
+                  <div className="col-lg-6 col-12 mt-lg-4 ">
+                    <div className="row text-center text-lg-start">
+                      <div className="col-lg-6 col-12 fw-bold">
+                        <small> Start Date:</small>
+                      </div>
+                      <div className="col-lg-6 col-12 ">
+                        <small>
+                          {" "}
+                          {getData[0]?.travel?.start_date?.split("T")[0]}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-6 col-12 mt-lg-4 mt-2">
+                    <div className="row text-center text-lg-start">
+                      <div className="col-lg-6 col-12 fw-bold">
+                        {" "}
+                        <small> End Date:</small>
+                      </div>
+                      <div className="col-lg-6 col-12">
+                        {" "}
+                        {getData[0]?.travel?.end_date?.split("T")[0]}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-6 mt-lg-4 mt-2">
+                    <div className="row text-center text-lg-start">
+                      <div className="col-12 col-lg-6 fw-bold"> Reason:</div>
+                      <div className="col-12 col-lg-6">
+                        {" "}
+                        {getData[0]?.travel?.reason_for_travel}
+                      </div>
                     </div>
                   </div>
                 </div>
+                <div className="row">
+                  <div className="col-12 col-lg-6">
+                    <div className="row mt-4 text-center text-lg-start">
+                      <div className="col-12 col-lg-6 fw-bold">
+                        {" "}
+                        Project ID:
+                      </div>
+                      <div className="col-12 col-lg-6">
+                        {" "}
+                        {getData[0]?.employee?.project_id}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-6">
+                    <div className="row mt-4 text-center text-lg-start">
+                      <div className="col-12 col-lg-6 fw-bold"> Billable:</div>
+                      <div className="col-12 col-lg-6">
+                        {" "}
+                        {getData[0]?.employee?.billable}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-lg-6">
+                    <div className="row mt-4 text-center text-lg-start">
+                      <div className="col-12 col-lg-6 fw-bold">
+                        {" "}
+                        Request Status:
+                      </div>
+                      <div className="col-12 col-lg-6">
+                        {" "}
+                        {getData[0]?.managers_approval}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {getData[0]?.flight?.flight_from_city ? (
+                  <div className="row mt-4 text-center text-lg-start">
+                    <p className="fw-bold " style={{ color: "#b66dff" }}>
+                      <hr className="m-4" />
+                      Flight Info
+                    </p>
+                    <div className="col-12 col-lg-6">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold mt-lg-4 mt-0">
+                          {" "}
+                          From Location:
+                        </div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {getData[0]?.flight?.flight_from_city}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-6">
+                      <div className="row ">
+                        <div className="col-12 col-lg-6 fw-bold mt-lg-4 mt-2">
+                          {" "}
+                          To Location::
+                        </div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {getData[0]?.flight?.flight_to_city}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          Preferred Time:
+                        </div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {getData[0]?.flight?.flight_preferred_time}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          Request Status:
+                        </div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {getData[0]?.managers_approval}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {/* Hotel Request */}
+                {getData[0]?.hotel?.hotel_city ? (
+                  <div className="row mt-4 text-center text-lg-start">
+                    <p className="fw-bold " style={{ color: "#b66dff" }}>
+                      <hr className="m-4" />
+                      Hotel Info
+                    </p>
+                    <div className="col-12 col-lg-6">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold mt-lg-4 mt-2">
+                          {" "}
+                          City Name:
+                        </div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {getData[0]?.hotel?.hotel_city}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-6">
+                      <div className="row ">
+                        <div className="col-12 col-lg-6 fw-bold mt-lg-4 mt-2">
+                          {" "}
+                          Checkin Date:
+                        </div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {(getData[0]?.hotel?.hotel_checkin).split("T")[0]}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold">
+                          {" "}
+                          Checkout Date:
+                        </div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {(getData[0]?.hotel?.hotel_checkout).split("T")[0]}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold"> Rooms:</div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {getData[0]?.hotel?.hotel_number_of_rooms}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+                {/* Other Request */}
+                {getData[0]?.train?.train_from_city ? (
+                  <div className="row mt-4 text-center text-lg-start">
+                    <p className="fw-bold " style={{ color: "#b66dff" }}>
+                      <hr className="m-4" />
+                      Other Request Info
+                    </p>
+                    <div className="col-12 col-lg-6">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold mt-lg-4 mt-2">
+                          {" "}
+                          Travel Name:
+                        </div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {getData[0]?.other?.name_of_travel}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
+                      <div className="row ">
+                        <div className="col-12 col-lg-6 fw-bold"> From:</div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {(getData[0]?.other?.from_location).split("T")[0]}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
+                      <div className="row">
+                        <div className="col-12 col-lg-6 fw-bold"> To:</div>
+                        <div className="col-12 col-lg-6">
+                          {" "}
+                          {(getData[0]?.other?.to_location).split("T")[0]}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="row m-lg-3 m-2 ">
+                <form typeof="submit">
+                  <div className="row">
+                    <div className="col-12">
+                      <label htmlFor="">Remarks</label>
+                      <input
+                        className="form-control "
+                        type="text"
+                        required
+                        name="remarks"
+                        onChange={handleRemarksChange}
+                        value={remarks?.remarks}
+                      />
+                    </div>
+                  </div>
+                  <div className="row my-2 text-center text-lg-start g-2">
+                    <div className="col-12 col-lg-4">
+                      <button
+                        onClick={handleApprove}
+                        className="btn btn-primary"
+                      >
+                        {" "}
+                        Approve
+                      </button>
+                    </div>
+                    <div className="col-12 col-lg-4">
+                      {" "}
+                      <button
+                        onClick={handleDecline}
+                        className="btn btn-primary"
+                      >
+                        {" "}
+                        Decline
+                      </button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
