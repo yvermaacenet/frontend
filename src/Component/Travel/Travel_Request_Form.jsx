@@ -96,11 +96,10 @@ const TravelRequestForm = () => {
       hotel: hotel,
       other: other,
       managers_approval: "Pending",
-      management_approval: "Pending",
       reporting_manager: LocalStorageData?.reporting_manager,
     });
     if (res.data === "updated") {
-      alert?.success("Request Raised Successfully");
+      alert?.show("Request Raised Successfully");
     } else {
       alert?.show("Something went wrong");
     }
