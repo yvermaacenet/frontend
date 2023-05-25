@@ -147,7 +147,6 @@ const GetTravelRequestForm_Data = () => {
               <div className="card-body">
                 <div className="row">
                   <h5 className="fs-4 fw-bold" style={{ color: "#b66dff" }}>
-                    {" "}
                     Travel Info
                   </h5>
                   <div className="col-lg-4 col-12">
