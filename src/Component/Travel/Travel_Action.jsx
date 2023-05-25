@@ -18,8 +18,15 @@ const Travel_Action = (props) => {
   const [loading, setLoading] = useState(false);
   const [getData, setGetData] = useState([]);
   const [remarks, setRemarks] = useState([]);
+  const [isManager, setIsManager] = useState("");
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
 
+  const getAllManagersList = async () => {
+    const resp = await axios.get("/get_user_list_By_Role_Name");
+    const allManagersId = resp.data.Reporting_Manager;
+    const filtered = allManagersId.includes(LocalStorageData?.emp_id);
+    setIsManager(filtered);
+  };
   useEffect(() => {
     const get_travel_request_by_id = async () => {
       const res = await axios.get(`/get_travel_request_by_id/${_id}`, {
@@ -28,10 +35,11 @@ const Travel_Action = (props) => {
       setGetData([res.data]);
     };
     get_travel_request_by_id();
+    getAllManagersList();
   }, []);
   //   ====Handle Remarks
   // console.log("status", getData[0]?.management_status);
-
+  console.log("isManager", isManager);
   const handleRemarksChange = (e) => {
     e.preventDefault();
     setRemarks({ ...remarks, [e.target.name]: e.target.value });
@@ -39,14 +47,11 @@ const Travel_Action = (props) => {
   //   ====handle Approve
   const handleApprove = async (e) => {
     e.preventDefault();
-    if (
-      LocalStorageData?.zoho_role === "Management" &&
-      getData[0].managers_approval === "Pending"
-    ) {
+    if (LocalStorageData?.zoho_role === "Management" && isManager === true) {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         ...remarks,
         managers_approval: "Approved",
-        // management_status: "Approved",
+        management_approval: "Approved",
       });
       if (res.data === "Updated Sucessfully") {
         alert.show("Approved Successfully");
@@ -55,7 +60,7 @@ const Travel_Action = (props) => {
     } else if (LocalStorageData?.zoho_role === "Management") {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         ...remarks,
-        // management_status: "Approved",
+        management_approval: "Approved",
       });
       if (res.data === "Updated Sucessfully") {
         alert.show("Approved Successfully");
@@ -75,11 +80,20 @@ const Travel_Action = (props) => {
   // =====handle Decline
   const handleDecline = async (e) => {
     e.preventDefault();
-    if (LocalStorageData?.zoho_role === "Management") {
+    if (LocalStorageData?.zoho_role === "Management" && isManager === true) {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         ...remarks,
         managers_approval: "Declined",
-        // management_status: "Declined",
+        management_approval: "Declined",
+      });
+      if (res.data === "Updated Sucessfully") {
+        alert.show("Declined Successfully");
+        navigate("/travelrequestreceived");
+      }
+    } else if (LocalStorageData?.zoho_role === "Management") {
+      const res = await axios.put(`/update_travel_request/${_id}`, {
+        ...remarks,
+        management_approval: "Declined",
       });
       if (res.data === "Updated Sucessfully") {
         alert.show("Declined Successfully");
