@@ -72,14 +72,14 @@ const GetTravelRequestForm_Data = () => {
             </div>
             {loading && (
               <div className="loader-container">
-                <div class="loader"></div>
+                <div className="loader"></div>
               </div>
             )}
-            <div class="row">
-              <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <table class="table table-striped">
+            <div className="row">
+              <div className="col-lg-12 grid-margin stretch-card">
+                <div className="card">
+                  <div className="card-body">
+                    <table className="table table-striped">
                       <thead>
                         <tr>
                           <th>Id</th>
@@ -169,221 +169,264 @@ const GetTravelRequestForm_Data = () => {
               // setAllDay(false);
               return true;
             }}
-            width={"50%"}
+            width={"80%"}
           >
-            <div className="p-0 m-0 small">
-              <div className="p-0 m-0">
-                <div className="row">
-                  <h5 className=" fw-bold" style={{ color: "#b66dff" }}>
-                    Travel Info
-                  </h5>
-                  <div className="col-lg-6 col-12 mt-lg-4 ">
-                    <div className="row text-center text-lg-start">
-                      <div className="col-lg-6 col-12 fw-bold">
-                        <small> Start Date:</small>
-                      </div>
-                      <div className="col-lg-6 col-12 ">
-                        <small>
-                          {viewRequestData?.travel?.start_date?.split("T")[0]}
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-lg-6 col-12 mt-lg-4 mt-2">
-                    <div className="row text-center text-lg-start">
-                      <div className="col-lg-6 col-12 fw-bold">
-                        <small> End Date:</small>
-                      </div>
-                      <div className="col-lg-6 col-12">
-                        {viewRequestData?.travel?.end_date?.split("T")[0]}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-lg-6 mt-lg-4 mt-2">
-                    <div className="row text-center text-lg-start">
-                      <div className="col-12 col-lg-6 fw-bold"> Reason:</div>
-                      <div className="col-12 col-lg-6">
-                        {viewRequestData?.travel?.reason_for_travel}
-                      </div>
-                    </div>
+            <div className="row">
+              <div className="col-lg-12 grid-margin stretch-card">
+                <div className="card">
+                  <div className="card-body">
+                    <h6
+                      className="card-title text-primary mt-2"
+                      style={{ fontSize: "14px" }}
+                    >
+                      Information
+                    </h6>
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Phone</th>
+                          <th>Travel Start Date</th>
+                          <th>Travel End Date</th>
+                          <th>Project Id</th>
+                          <th>Billable</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{LocalStorageData?.name}</td>
+                          <td>{LocalStorageData?.email}</td>
+                          <td>{LocalStorageData?.phone}</td>
+                          <td>
+                            {viewRequestData?.travel?.start_date?.split("T")[0]}
+                          </td>
+                          <td>
+                            {viewRequestData?.travel?.end_date?.split("T")[0]}
+                          </td>
+                          <td>{viewRequestData?.employee?.project_id}</td>
+                          <td>{viewRequestData?.employee?.billable}</td>
+                        </tr>
+                        <tr>
+                          <th>Reason for Travel</th>
+                          <td colSpan={6}>
+                            {viewRequestData?.travel?.reason_for_travel}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <>
+                      <h6
+                        className="card-title text-primary mt-2"
+                        style={{ fontSize: "14px" }}
+                      >
+                        Travel Type
+                      </h6>
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th className="w-25">Flight</th>
+                            <th className="w-25">Hotel</th>
+                            <th className="w-25">Train</th>
+                            <th className="w-25">Other</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <label className="form-check-label">
+                                <input
+                                  name="other_travel"
+                                  type="checkbox"
+                                  checked={
+                                    viewRequestData?.flight?.flight_travel
+                                  }
+                                  disabled
+                                />
+                                <i className="input-helper"></i>
+                              </label>
+                            </td>
+                            <td>
+                              <label className="form-check-label">
+                                <input
+                                  name="other_travel"
+                                  type="checkbox"
+                                  checked={viewRequestData?.hotel?.hotel_travel}
+                                  disabled
+                                />
+                                <i className="input-helper"></i>
+                              </label>
+                            </td>
+                            <td>
+                              <label className="form-check-label">
+                                <input
+                                  name="other_travel"
+                                  type="checkbox"
+                                  checked={viewRequestData?.train?.train_travel}
+                                  disabled
+                                />
+                                <i className="input-helper"></i>
+                              </label>
+                            </td>
+                            <td>
+                              <label className="form-check-label">
+                                <input
+                                  name="other_travel"
+                                  type="checkbox"
+                                  checked={viewRequestData?.other?.other_travel}
+                                  disabled
+                                />
+                                <i className="input-helper"></i>
+                              </label>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </>
+                    {viewRequestData?.flight?.flight_travel && (
+                      <>
+                        <h6
+                          className="card-title text-primary mt-2"
+                          style={{ fontSize: "14px" }}
+                        >
+                          Flight Info
+                        </h6>
+                        <table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th className="w-25">Form City</th>
+                              <th className="w-25">To City</th>
+                              <th className="w-25">Preferred Time</th>
+                              <th className="w-25">Class of Travel</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                {viewRequestData?.flight?.flight_from_city}
+                              </td>
+                              <td>{viewRequestData?.flight?.flight_to_city}</td>
+                              <td>
+                                {viewRequestData?.flight?.flight_preferred_time}
+                              </td>
+                              <td>
+                                {
+                                  viewRequestData?.flight
+                                    ?.flight_class_preferred
+                                }
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </>
+                    )}
+                    {viewRequestData?.hotel?.hotel_travel && (
+                      <>
+                        <h6
+                          className="card-title text-primary mt-2"
+                          style={{ fontSize: "14px" }}
+                        >
+                          Hotel Info
+                        </h6>
+                        <table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th className="w-25">City</th>
+                              <th className="w-25">Check-in</th>
+                              <th className="w-25">Check-out</th>
+                              <th className="w-25">No. of Rooms</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{viewRequestData?.hotel?.hotel_city}</td>
+                              <td>
+                                {
+                                  viewRequestData?.hotel?.hotel_checkin?.split(
+                                    "T"
+                                  )[0]
+                                }
+                              </td>
+                              <td>
+                                {
+                                  viewRequestData?.hotel?.hotel_checkout?.split(
+                                    "T"
+                                  )[0]
+                                }
+                              </td>
+                              <td>
+                                {viewRequestData?.hotel?.hotel_number_of_rooms}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </>
+                    )}
+
+                    {viewRequestData?.train?.train_travel && (
+                      <>
+                        <h6
+                          className="card-title text-primary mt-2"
+                          style={{ fontSize: "14px" }}
+                        >
+                          Train Info
+                        </h6>
+                        <table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th className="w-25">Form City</th>
+                              <th className="w-25">To City</th>
+                              <th className="w-25">Preferred Time</th>
+                              <th className="w-25">Class of Travel</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>{viewRequestData?.train?.train_from_city}</td>
+                              <td>{viewRequestData?.train?.train_to_city}</td>
+                              <td>
+                                {viewRequestData?.train?.train_preferred_time}
+                              </td>
+                              <td>
+                                {viewRequestData?.train?.train_class_preferred}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </>
+                    )}
+
+                    {viewRequestData?.other?.other_travel && (
+                      <>
+                        <h6
+                          className="card-title text-primary mt-2"
+                          style={{ fontSize: "14px" }}
+                        >
+                          Other Info
+                        </h6>
+                        <table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th className="w-25">Type</th>
+                              <th className="w-25">Form City</th>
+                              <th>To City</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                {viewRequestData?.other?.other_travel_type}
+                              </td>
+                              <td>{viewRequestData?.other?.other_from_city}</td>
+                              <td>{viewRequestData?.other?.other_to_city}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </>
+                    )}
                   </div>
                 </div>
-                <div className="row">
-                  <div className="col-12 col-lg-6">
-                    <div className="row mt-4 text-center text-lg-start">
-                      <div className="col-12 col-lg-6 fw-bold">Project ID:</div>
-                      <div className="col-12 col-lg-6">
-                        {viewRequestData?.employee?.project_id}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-lg-6">
-                    <div className="row mt-4 text-center text-lg-start">
-                      <div className="col-12 col-lg-6 fw-bold"> Billable:</div>
-                      <div className="col-12 col-lg-6">
-                        {viewRequestData?.employee?.billable}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-12 col-lg-6">
-                    <div className="row mt-4 text-center text-lg-start">
-                      <div className="col-12 col-lg-6 fw-bold">
-                        Request Status:
-                      </div>
-                      <div className="col-12 col-lg-6">
-                        {viewRequestData?.managers_approval}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {viewRequestData?.flight?.flight_from_city ? (
-                  <div className="row mt-4 text-center text-lg-start">
-                    <p className="fw-bold " style={{ color: "#b66dff" }}>
-                      <hr className="m-4" />
-                      Flight Info
-                    </p>
-                    <div className="col-12 col-lg-6">
-                      <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold ">
-                          From Location:
-                        </div>
-                        <div className="col-12 col-lg-6">
-                          {viewRequestData?.flight?.flight_from_city}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6">
-                      <div className="row ">
-                        <div className="col-12 col-lg-6 fw-bold ">
-                          To Location::
-                        </div>
-                        <div className="col-12 col-lg-6">
-                          {viewRequestData?.flight?.flight_to_city}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
-                      <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold">
-                          Preferred Time:
-                        </div>
-                        <div className="col-12 col-lg-6">
-                          {viewRequestData?.flight?.flight_preferred_time}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
-                      <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold">
-                          Request Status:
-                        </div>
-                        <div className="col-12 col-lg-6">
-                          {viewRequestData?.managers_approval}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
-                {/* Hotel Request */}
-                {viewRequestData?.hotel?.hotel_city ? (
-                  <div className="row mt-4 text-center text-lg-start">
-                    <p className="fw-bold " style={{ color: "#b66dff" }}>
-                      <hr className="m-4" />
-                      Hotel Info
-                    </p>
-                    <div className="col-12 col-lg-6">
-                      <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold ">
-                          City Name:
-                        </div>
-                        <div className="col-12 col-lg-6">
-                          {viewRequestData?.hotel?.hotel_city}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6">
-                      <div className="row ">
-                        <div className="col-12 col-lg-6 fw-bold ">
-                          Checkin Date:
-                        </div>
-                        <div className="col-12 col-lg-6">
-                          {
-                            (viewRequestData?.hotel?.hotel_checkin).split(
-                              "T"
-                            )[0]
-                          }
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
-                      <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold">
-                          Checkout Date:
-                        </div>
-                        <div className="col-12 col-lg-6">
-                          {
-                            (viewRequestData?.hotel?.hotel_checkout).split(
-                              "T"
-                            )[0]
-                          }
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
-                      <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold"> Rooms:</div>
-                        <div className="col-12 col-lg-6">
-                          {viewRequestData?.hotel?.hotel_number_of_rooms}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
-                {/* Other Request */}
-                {viewRequestData?.train?.train_from_city ? (
-                  <div className="row mt-4 text-center text-lg-start">
-                    <p className="fw-bold " style={{ color: "#b66dff" }}>
-                      <hr className="m-4" />
-                      Other Request Info
-                    </p>
-                    <div className="col-12 col-lg-6">
-                      <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold">
-                          Travel Name:
-                        </div>
-                        <div className="col-12 col-lg-6">
-                          {viewRequestData?.other?.name_of_travel}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6 ">
-                      <div className="row ">
-                        <div className="col-12 col-lg-6 fw-bold"> From:</div>
-                        <div className="col-12 col-lg-6">
-                          {
-                            (viewRequestData?.other?.from_location).split(
-                              "T"
-                            )[0]
-                          }
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
-                      <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold"> To:</div>
-                        <div className="col-12 col-lg-6">
-                          {(viewRequestData?.other?.to_location).split("T")[0]}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
               </div>
             </div>
           </PureModal>

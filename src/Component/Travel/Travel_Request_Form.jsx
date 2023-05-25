@@ -596,12 +596,6 @@ const TravelRequestForm = () => {
                                 <input
                                   name="hotel_checkin"
                                   value={hotel?.hotel_checkin}
-                                  onChange={(e) => {
-                                    setHotel((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      hotel_checkin: e.target.value, // Updating the value of 'b'
-                                    }));
-                                  }}
                                   className={classNames(
                                     "form-control form-control-sm",
                                     {
@@ -609,9 +603,15 @@ const TravelRequestForm = () => {
                                     }
                                   )}
                                   {...register("hotel_checkin", {
-                                    value: travel?.hotel_checkin,
+                                    value: hotel?.hotel_checkin,
                                   })}
                                   type="date"
+                                  onChange={(e) => {
+                                    setHotel({
+                                      ...hotel,
+                                      hotel_checkin: e.target.value,
+                                    });
+                                  }}
                                   min={new Date()?.toISOString()?.split("T")[0]}
                                 />
                                 <small className="invalid-feedback">
@@ -632,14 +632,14 @@ const TravelRequestForm = () => {
                                     }
                                   )}
                                   {...register("hotel_checkout", {
-                                    value: travel?.hotel_checkout,
+                                    value: hotel?.hotel_checkout,
                                   })}
                                   type="date"
                                   onChange={(e) => {
-                                    setHotel((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      hotel_checkout: e.target.value, // Updating the value of 'b'
-                                    }));
+                                    setHotel({
+                                      ...hotel,
+                                      hotel_checkout: e.target.value,
+                                    });
                                   }}
                                   min={new Date()?.toISOString()?.split("T")[0]}
                                 />
@@ -801,14 +801,8 @@ const TravelRequestForm = () => {
                               <div className="form-group">
                                 <label>Type</label>
                                 <input
+                                  type="text"
                                   name="other_travel_type"
-                                  value={other?.other_travel_type}
-                                  onChange={(e) => {
-                                    setOther({
-                                      ...other,
-                                      other_travel_type: e.target.value,
-                                    });
-                                  }}
                                   className={classNames(
                                     "form-control form-control-sm",
                                     {
@@ -816,10 +810,16 @@ const TravelRequestForm = () => {
                                     }
                                   )}
                                   {...register("other_travel_type", {
-                                    value: travel?.other_travel_type,
+                                    value: other?.other_travel_type,
                                   })}
-                                  type="text"
-                                  placeholder="Enter travel type"
+                                  placeholder="Enter Travel type"
+                                  value={other?.other_travel_type}
+                                  onChange={(e) => {
+                                    setOther({
+                                      ...other,
+                                      other_travel_type: e.target.value,
+                                    });
+                                  }}
                                 />
                                 <small className="invalid-feedback">
                                   {errors.other_travel_type?.message}
