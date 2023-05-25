@@ -97,6 +97,7 @@ const TravelRequestForm = () => {
         other,
         managers_approval: "Pending",
         reporting_manager: LocalStorageData?.reporting_manager,
+        management_approval: "Pending",
       })
       .then(async (res) => {
         if (res.data.message === "Request Raised Successfully") {
@@ -150,11 +151,6 @@ const TravelRequestForm = () => {
                 page_title_button="Back"
                 page_title_button_link="/alltravelrequest"
               />
-              <div className="text-end m-2">
-                <NavLink to="/alltravelrequest">
-                  <button className="btn btn-primary">All Requests</button>
-                </NavLink>
-              </div>
 
               {loading && (
                 <div className="loader-container">

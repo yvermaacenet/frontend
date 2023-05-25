@@ -93,18 +93,18 @@ const TravelApprovalRequest = () => {
               page_title="Requests Received for Approvals"
               page_title_icon="mdi-home-modern"
               page_title_button="Back"
-              page_title_button_link="/dashbaord"
+              page_title_button_link="/alltravelrequest"
             />
             {loading && (
               <div className="loader-container">
                 <div class="loader"></div>
               </div>
             )}
-            <div className="row card" style={{ overflow: "auto" }}>
-              <div className="col-lg-12 grid-margin stretch-card">
+            <div class="row">
+              <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <table class="table">
+                    <table class="table table-striped">
                       <thead>
                         <tr>
                           <th>Id</th>

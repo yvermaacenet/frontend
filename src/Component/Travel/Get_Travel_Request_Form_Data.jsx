@@ -55,17 +55,19 @@ const GetTravelRequestForm_Data = () => {
         <div className="main-panel">
           <div className="content-wrapper">
             <Page_Header
-              page_title="Travel Request Updates"
+              page_title="Travel Requests"
               page_title_icon="mdi-home-modern"
               page_title_button="Back"
               page_title_button_link="/travelrequestform"
             />
             <div className="d-flex justify-content-end mb-3">
               <NavLink to="/travelrequestform">
-                <button className="btn btn-primary mx-3">Raise Request</button>
+                <button className="btn btn-sm btn-success mx-3">
+                  Raise Request
+                </button>
               </NavLink>
               <NavLink to="/travelrequestreceived">
-                <button className="btn btn-primary">Take Action</button>
+                <button className="btn btn-sm btn-dark">Take Action</button>
               </NavLink>
             </div>
             {loading && (
@@ -73,25 +75,16 @@ const GetTravelRequestForm_Data = () => {
                 <div class="loader"></div>
               </div>
             )}
-            <div className="row card p-4" style={{ overflow: "auto" }}>
-              <div className="col-lg-12 grid-margin stretch-card">
+            <div class="row">
+              <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
-                  <div class="">
-                    {/* <h4 class="card-title">Flexible Benefit Plan Form Data</h4> */}
-
-                    {/* <button
-                      className="btn btn-outline-primary btn-sm"
-                      type="button"
-                      //   onClick={() => clickbuttonalldata()}
-                      style={{ float: "right" }}
-                    >
-                      Download All Data
-                    </button> */}
-                    <table class="table">
+                  <div class="card-body">
+                    <table class="table table-striped">
                       <thead>
-                        <tr className="text-center">
+                        <tr>
                           <th>Id</th>
                           <th>Requested On</th>
+                          {/* <th>Reason for travel</th> */}
                           <th>Manager Approval</th>
                           <th>Actions</th>
                         </tr>
@@ -99,9 +92,10 @@ const GetTravelRequestForm_Data = () => {
                       <tbody>
                         {getleaverequestdata?.map((val, index) => {
                           return (
-                            <tr className="text-center">
+                            <tr>
                               <td>{index + 1}</td>
                               <td>{(val?.createdAt).split("T")[0]}</td>
+                              {/* <td>{val?.travel?.reason_for_travel}</td> */}
                               <td>
                                 <td className="" type="button" disabled>
                                   {val?.managers_approval}
@@ -109,7 +103,6 @@ const GetTravelRequestForm_Data = () => {
                               </td>
 
                               <td>
-                                {" "}
                                 <td
                                   className="btn btn-outline-primary btn-sm"
                                   type="button"
@@ -123,7 +116,7 @@ const GetTravelRequestForm_Data = () => {
                                   View
                                 </td>
                                 <td
-                                  className="btn btn-danger bg-danger text-white btn-sm mx-2"
+                                  className="btn btn-sm btn-outline-danger mx-2"
                                   style={{
                                     visibility:
                                       val?.managers_approval === "Pending"
@@ -191,7 +184,6 @@ const GetTravelRequestForm_Data = () => {
                       </div>
                       <div className="col-lg-6 col-12 ">
                         <small>
-                          {" "}
                           {viewRequestData?.travel?.start_date?.split("T")[0]}
                         </small>
                       </div>
@@ -200,11 +192,9 @@ const GetTravelRequestForm_Data = () => {
                   <div className="col-lg-6 col-12 mt-lg-4 mt-2">
                     <div className="row text-center text-lg-start">
                       <div className="col-lg-6 col-12 fw-bold">
-                        {" "}
                         <small> End Date:</small>
                       </div>
                       <div className="col-lg-6 col-12">
-                        {" "}
                         {viewRequestData?.travel?.end_date?.split("T")[0]}
                       </div>
                     </div>
@@ -213,7 +203,6 @@ const GetTravelRequestForm_Data = () => {
                     <div className="row text-center text-lg-start">
                       <div className="col-12 col-lg-6 fw-bold"> Reason:</div>
                       <div className="col-12 col-lg-6">
-                        {" "}
                         {viewRequestData?.travel?.reason_for_travel}
                       </div>
                     </div>
@@ -222,12 +211,8 @@ const GetTravelRequestForm_Data = () => {
                 <div className="row">
                   <div className="col-12 col-lg-6">
                     <div className="row mt-4 text-center text-lg-start">
-                      <div className="col-12 col-lg-6 fw-bold">
-                        {" "}
-                        Project ID:
-                      </div>
+                      <div className="col-12 col-lg-6 fw-bold">Project ID:</div>
                       <div className="col-12 col-lg-6">
-                        {" "}
                         {viewRequestData?.employee?.project_id}
                       </div>
                     </div>
@@ -236,7 +221,6 @@ const GetTravelRequestForm_Data = () => {
                     <div className="row mt-4 text-center text-lg-start">
                       <div className="col-12 col-lg-6 fw-bold"> Billable:</div>
                       <div className="col-12 col-lg-6">
-                        {" "}
                         {viewRequestData?.employee?.billable}
                       </div>
                     </div>
@@ -244,11 +228,9 @@ const GetTravelRequestForm_Data = () => {
                   <div className="col-12 col-lg-6">
                     <div className="row mt-4 text-center text-lg-start">
                       <div className="col-12 col-lg-6 fw-bold">
-                        {" "}
                         Request Status:
                       </div>
                       <div className="col-12 col-lg-6">
-                        {" "}
                         {viewRequestData?.managers_approval}
                       </div>
                     </div>
@@ -263,11 +245,9 @@ const GetTravelRequestForm_Data = () => {
                     <div className="col-12 col-lg-6">
                       <div className="row">
                         <div className="col-12 col-lg-6 fw-bold ">
-                          {" "}
                           From Location:
                         </div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {viewRequestData?.flight?.flight_from_city}
                         </div>
                       </div>
@@ -275,11 +255,9 @@ const GetTravelRequestForm_Data = () => {
                     <div className="col-12 col-lg-6">
                       <div className="row ">
                         <div className="col-12 col-lg-6 fw-bold ">
-                          {" "}
                           To Location::
                         </div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {viewRequestData?.flight?.flight_to_city}
                         </div>
                       </div>
@@ -287,11 +265,9 @@ const GetTravelRequestForm_Data = () => {
                     <div className="col-12 col-lg-6 mt-lg-4 mt-2">
                       <div className="row">
                         <div className="col-12 col-lg-6 fw-bold">
-                          {" "}
                           Preferred Time:
                         </div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {viewRequestData?.flight?.flight_preferred_time}
                         </div>
                       </div>
@@ -299,11 +275,9 @@ const GetTravelRequestForm_Data = () => {
                     <div className="col-12 col-lg-6 mt-lg-4 mt-2">
                       <div className="row">
                         <div className="col-12 col-lg-6 fw-bold">
-                          {" "}
                           Request Status:
                         </div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {viewRequestData?.managers_approval}
                         </div>
                       </div>
@@ -322,11 +296,9 @@ const GetTravelRequestForm_Data = () => {
                     <div className="col-12 col-lg-6">
                       <div className="row">
                         <div className="col-12 col-lg-6 fw-bold ">
-                          {" "}
                           City Name:
                         </div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {viewRequestData?.hotel?.hotel_city}
                         </div>
                       </div>
@@ -334,11 +306,9 @@ const GetTravelRequestForm_Data = () => {
                     <div className="col-12 col-lg-6">
                       <div className="row ">
                         <div className="col-12 col-lg-6 fw-bold ">
-                          {" "}
                           Checkin Date:
                         </div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {
                             (viewRequestData?.hotel?.hotel_checkin).split(
                               "T"
@@ -350,11 +320,9 @@ const GetTravelRequestForm_Data = () => {
                     <div className="col-12 col-lg-6 mt-lg-4 mt-2">
                       <div className="row">
                         <div className="col-12 col-lg-6 fw-bold">
-                          {" "}
                           Checkout Date:
                         </div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {
                             (viewRequestData?.hotel?.hotel_checkout).split(
                               "T"
@@ -367,7 +335,6 @@ const GetTravelRequestForm_Data = () => {
                       <div className="row">
                         <div className="col-12 col-lg-6 fw-bold"> Rooms:</div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {viewRequestData?.hotel?.hotel_number_of_rooms}
                         </div>
                       </div>
@@ -386,11 +353,9 @@ const GetTravelRequestForm_Data = () => {
                     <div className="col-12 col-lg-6">
                       <div className="row">
                         <div className="col-12 col-lg-6 fw-bold">
-                          {" "}
                           Travel Name:
                         </div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {viewRequestData?.other?.name_of_travel}
                         </div>
                       </div>
@@ -399,7 +364,6 @@ const GetTravelRequestForm_Data = () => {
                       <div className="row ">
                         <div className="col-12 col-lg-6 fw-bold"> From:</div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {
                             (viewRequestData?.other?.from_location).split(
                               "T"
@@ -412,7 +376,6 @@ const GetTravelRequestForm_Data = () => {
                       <div className="row">
                         <div className="col-12 col-lg-6 fw-bold"> To:</div>
                         <div className="col-12 col-lg-6">
-                          {" "}
                           {(viewRequestData?.other?.to_location).split("T")[0]}
                         </div>
                       </div>

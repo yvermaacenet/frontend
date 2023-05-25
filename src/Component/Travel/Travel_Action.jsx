@@ -128,6 +128,7 @@ const Travel_Action = (props) => {
                 <div class="loader"></div>
               </div>
             )}
+
             <div className="card small">
               <div className="card-body">
                 <div className="row">
