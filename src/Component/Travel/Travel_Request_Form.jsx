@@ -5,18 +5,21 @@ import Page_Header from "../../Partials/Page_Header";
 import { useAlert } from "react-alert";
 import axios from "axios";
 import Select from "react-select";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import { useEffect } from "react";
 import classNames from "classnames";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { travel_request_form_validation } from "../../Utils/Validation_Form";
+
+// testing
 const TravelRequestForm = () => {
+  const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const alert = useAlert();
   let [loading, setLoading] = useState(false);
-  let [countryData, setCountryData] = useState([]);
-  let [countryName, setCountryName] = useState([]);
+  let [cityData, setCityData] = useState([]);
+  const [error, setError] = useState(false);
   const [employee, setEmployee] = useState({
     name: LocalStorageData?.name,
     email: LocalStorageData?.email,
@@ -27,99 +30,91 @@ const TravelRequestForm = () => {
     project_id: "",
     reason_for_travel: "",
   });
-  const [travel, setTravel] = useState({
-    start_date: new Date().toISOString().split("T")[0],
-
-    end_date: new Date().toISOString().split("T")[0],
-    // destination: "",
-    reason_for_travel: "",
-    // trip_type: "national",
-    // from_country: "India",
-  });
+  const [travel, setTravel] = useState([]);
   const [flight, setFlight] = useState({
-    travel_flight: false,
-    flight_from_city: "",
-    flight_to_city: "",
-    flight_preferred_time: "",
-    flight_class_preferred: "",
+    flight_travel: false,
   });
   const [train, setTrain] = useState({
-    travel_train: false,
-    train_from_city: "",
-    train_to_city: "",
-    train_preferred_time: "",
-    train_class_preferred: "",
+    train_travel: false,
   });
   const [hotel, setHotel] = useState({
-    travel_hotel: false,
-    hotel_city: "",
-    hotel_checkin: "",
-    hotel_checkout: "",
-    hotel_number_of_rooms: "",
+    hotel_travel: false,
   });
   const [other, setOther] = useState({
-    travel_other: false,
-    name_of_travel: "",
-    from_location: "",
-    to_location: "",
+    other_travel: false,
+    other_travel_type: "",
   });
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     mode: "onTouched",
     resolver: yupResolver(travel_request_form_validation),
   });
+  const CustomStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      border: "0",
+    }),
+  };
   useEffect(() => {
     async function getCountry() {
-      await axios.get("airport").then((res) => {
-        return setCountryData(res.data);
-      });
+      setLoading(true);
+      await axios
+        .get("airport")
+        .then((res) => {
+          const citys = res.data.map((val) => ({
+            value: val.city_name,
+            label: val.city_name,
+          }));
+          return setCityData(citys);
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+      setLoading(false);
     }
     getCountry();
   }, []);
 
-  // Fetch all the reporting manager's ID
-
   const onSubmitButton = async (event) => {
-    event.preventDefault();
-    // submit data to MongoDB
-
-    const res = await axios.post("/raise_travel_request", {
-      employee: employee,
-      travel: travel,
-      flight: flight,
-      train: train,
-      hotel: hotel,
-      other: other,
-      managers_approval: "Pending",
-      management_approval: "Pending",
-      reporting_manager: LocalStorageData?.reporting_manager,
-    });
-    if (res.data === "updated") {
-      alert?.success("Request Raised Successfully");
-    } else {
-      alert?.show("Something went wrong");
-    }
+    setLoading(true);
+    const res = await axios
+      .post("/raise_travel_request", {
+        employee,
+        travel,
+        flight,
+        train,
+        hotel,
+        other,
+        managers_approval: "Pending",
+        reporting_manager: LocalStorageData?.reporting_manager,
+      })
+      .then(async (res) => {
+        if (res.data.message === "Request Raised Successfully") {
+          alert.success(res.data.message);
+          setLoading(false);
+          navigate("/alltravelrequest");
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 500) {
+          setLoading(false);
+          navigate("/error_500");
+        } else {
+          setLoading(false);
+          navigate("/error_403");
+        }
+      });
   };
-  const [options, setOptions] = useState([
-    {
-      value: "",
-      label: "",
-    },
-  ]);
-  const cities = countryData.map((item) => item.city_name);
-
-  const newOptions = cities.map((city, index) => {
-    const optionIndex = index % options.length;
-    return {
-      value: city,
-      label: city,
-    };
-  });
 
   const handleTravelChange = (event) => {
     const { name, value } = event.target;
@@ -130,15 +125,7 @@ const TravelRequestForm = () => {
       };
     });
   };
-  const handleFlightChange = (event) => {
-    const { name, value } = event.target;
-    setFlight((preValue) => {
-      return {
-        ...preValue,
-        [name]: value,
-      };
-    });
-  };
+
   const inputEvent = (event) => {
     const { name, value } = event.target;
     setEmployee((preValue) => {
@@ -148,9 +135,7 @@ const TravelRequestForm = () => {
       };
     });
   };
-  const post_request = async () => {
-    const response = await axios.post("/raise_travel_request");
-  };
+  console.log(watch());
   return (
     <>
       <div className="container-scroller">
@@ -181,7 +166,7 @@ const TravelRequestForm = () => {
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <form onSubmit={onSubmitButton}>
+                      <form onSubmit={handleSubmit(onSubmitButton)}>
                         <div className="row my-2">
                           <div className="col-12 col-lg-4">
                             <div className="form-group">
@@ -226,28 +211,48 @@ const TravelRequestForm = () => {
                             <div className="form-group">
                               <label>Travel Start Date</label>
                               <input
-                                className="form-control form-control-sm"
+                                className={classNames(
+                                  "form-control form-control-sm",
+                                  {
+                                    "is-invalid": errors?.start_date,
+                                  }
+                                )}
+                                {...register("start_date", {
+                                  value: travel?.start_date,
+                                })}
                                 type="date"
                                 name="start_date"
                                 value={travel?.start_date}
-                                min={travel?.start_date}
+                                min={new Date()?.toISOString()?.split("T")[0]}
                                 onChange={handleTravelChange}
-                                // required
                               />
+                              <small className="invalid-feedback">
+                                {errors.start_date?.message}
+                              </small>
                             </div>
                           </div>
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Travel End Date</label>
                               <input
-                                className="form-control form-control-sm"
+                                className={classNames(
+                                  "form-control form-control-sm",
+                                  {
+                                    "is-invalid": errors?.end_date,
+                                  }
+                                )}
+                                {...register("end_date", {
+                                  value: travel?.end_date,
+                                })}
                                 type="date"
                                 name="end_date"
                                 value={travel?.end_date}
-                                min={travel?.end_date}
+                                min={new Date()?.toISOString()?.split("T")[0]}
                                 onChange={handleTravelChange}
-                                // required
                               />
+                              <small className="invalid-feedback">
+                                {errors.end_date?.message}
+                              </small>
                             </div>
                           </div>
                           <div className="col-12 col-lg-3">
@@ -265,6 +270,7 @@ const TravelRequestForm = () => {
                                 {...register("project_id", {
                                   value: employee?.project_id,
                                 })}
+                                placeholder="Enter Project Id"
                                 value={employee?.project_id}
                                 onChange={inputEvent}
                               />
@@ -278,7 +284,7 @@ const TravelRequestForm = () => {
                               <label>Billable</label>
                               <select
                                 className={classNames(
-                                  "form-control form-control-sm",
+                                  "form-select form-control-sm",
                                   {
                                     "is-invalid": errors?.billable,
                                   }
@@ -290,12 +296,12 @@ const TravelRequestForm = () => {
                                 onChange={inputEvent}
                                 name="billable"
                               >
-                                <option value="">Select</option>
-                                <option value="yes">YES</option>
-                                <option value="no">NO</option>
+                                <option value="">Select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
                               </select>
-                              <small className="invalid-feedbackfsfsfff">
-                                {errors?.billable?.message}
+                              <small className="invalid-feedback">
+                                {errors.billable?.message}
                               </small>
                             </div>
                           </div>
@@ -307,9 +313,21 @@ const TravelRequestForm = () => {
                               <label>Reason for Travel</label>
                               <textarea
                                 name="reason_for_travel"
-                                className="form-control "
+                                className={classNames(
+                                  "form-control form-control-sm",
+                                  {
+                                    "is-invalid": errors?.reason_for_travel,
+                                  }
+                                )}
+                                {...register("reason_for_travel", {
+                                  value: travel?.reason_for_travel,
+                                })}
                                 onChange={handleTravelChange}
+                                placeholder="Enter Reason for Travel"
                               />
+                              <small className="invalid-feedback">
+                                {errors.reason_for_travel?.message}
+                              </small>
                             </div>
                           </div>
                         </div>
@@ -318,33 +336,29 @@ const TravelRequestForm = () => {
                           <label className="col-sm-2 col-form-label">
                             Travel Type
                           </label>
+
                           <div className="col-sm-2">
                             <div className="form-check">
                               <label class="form-check-label">
                                 <input
-                                  name="travel_flight"
+                                  name="flight_travel"
                                   type="checkbox"
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors?.flight_travel,
+                                    }
+                                  )}
+                                  {...register("flight_travel", {
+                                    value: flight?.flight_travel,
+                                  })}
                                   onChange={(event) =>
-                                    setFlight((prev) => ({
-                                      ...prev,
-                                      travel_flight: event.target.checked,
-                                      flight_from_city: event.target.checked
-                                        ? "Delhi"
-                                        : "",
-                                      flight_to_city: event.target.checked
-                                        ? "Pune"
-                                        : "",
-                                      flight_preferred_time: event.target
-                                        .checked
-                                        ? "AM"
-                                        : "",
-                                      flight_class_preferred: event.target
-                                        .checked
-                                        ? "economy"
-                                        : "",
-                                    }))
+                                    setFlight({
+                                      ...flight,
+                                      flight_travel: event.target.checked,
+                                    })
                                   }
-                                  checked={flight?.travel_flight}
+                                  checked={flight?.flight_travel}
                                 />
                                 Flight <i class="input-helper"></i>
                               </label>
@@ -354,29 +368,25 @@ const TravelRequestForm = () => {
                             <div className="form-check">
                               <label class="form-check-label">
                                 <input
+                                  name="hotel_travel"
                                   type="checkbox"
                                   class="form-check-input"
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors?.hotel_travel,
+                                    }
+                                  )}
+                                  {...register("hotel_travel", {
+                                    value: hotel?.hotel_travel,
+                                  })}
                                   onChange={(event) =>
-                                    setHotel((prev) => ({
-                                      ...prev,
-                                      travel_hotel: event.target.checked,
-                                      hotel_city: event.target.checked
-                                        ? "Delhi"
-                                        : "",
-                                      hotel_checkin: event.target.checked
-                                        ? new Date().toLocaleDateString("en-CA")
-                                        : "",
-                                      hotel_checkout: event.target.checked
-                                        ? new Date().toLocaleDateString("en-CA")
-                                        : "",
-
-                                      hotel_number_of_rooms: event.target
-                                        .checked
-                                        ? "2"
-                                        : "",
-                                    }))
+                                    setHotel({
+                                      ...hotel,
+                                      hotel_travel: event.target.checked,
+                                    })
                                   }
-                                  checked={hotel?.travel_hotel}
+                                  checked={hotel?.hotel_travel}
                                 />
                                 Hotel <i class="input-helper"></i>
                               </label>
@@ -386,28 +396,25 @@ const TravelRequestForm = () => {
                             <div className="form-check">
                               <label class="form-check-label">
                                 <input
+                                  name="train_travel"
                                   type="checkbox"
                                   class="form-check-input"
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors?.train_travel,
+                                    }
+                                  )}
+                                  {...register("train_travel", {
+                                    value: train?.train_travel,
+                                  })}
                                   onChange={(event) =>
-                                    setTrain((prev) => ({
-                                      ...prev,
-                                      travel_train: event.target.checked,
-                                      train_from_city: event.target.checked
-                                        ? "Delhi"
-                                        : "",
-                                      train_to_city: event.target.checked
-                                        ? "Pune"
-                                        : "",
-                                      train_preferred_time: event.target.checked
-                                        ? "AM"
-                                        : "",
-                                      train_class_preferred: event.target
-                                        .checked
-                                        ? "1A - 1st Class AC"
-                                        : "",
-                                    }))
+                                    setTrain({
+                                      ...train,
+                                      train_travel: event.target.checked,
+                                    })
                                   }
-                                  checked={train?.travel_train}
+                                  checked={train?.train_travel}
                                 />
                                 Train <i class="input-helper"></i>
                               </label>
@@ -417,22 +424,23 @@ const TravelRequestForm = () => {
                             <div className="form-check">
                               <label class="form-check-label">
                                 <input
+                                  name="other_travel"
                                   type="checkbox"
                                   class="form-check-input"
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors?.other_travel,
+                                    }
+                                  )}
+                                  {...register("other_travel", {
+                                    value: other?.other_travel,
+                                  })}
                                   onChange={(event) =>
-                                    setOther((prev) => ({
-                                      ...prev,
-                                      travel_other: event.target.checked,
-                                      name_of_travel: event.target.checked
-                                        ? "Cab"
-                                        : "",
-                                      to_location: event.target.checked
-                                        ? "Delhi"
-                                        : "",
-                                      from_location: event.target.checked
-                                        ? "Pune"
-                                        : "",
-                                    }))
+                                    setOther({
+                                      ...other,
+                                      other_travel: event.target.checked,
+                                    })
                                   }
                                   checked={other?.type}
                                 />
@@ -441,7 +449,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                         </div>
-                        {flight?.travel_flight && (
+                        {flight?.flight_travel && (
                           <div className="form-group row">
                             <div className="d-flex flex-row align-items-center mb-3">
                               <i className="mdi mdi-airplane icon-md text-secondary"></i>
@@ -449,20 +457,33 @@ const TravelRequestForm = () => {
                             </div>
 
                             <div className="col-12 col-lg-3">
-                              <div className="form-group">
+                              <div className="">
                                 <label>From(City)</label>
+
                                 <Select
-                                  escapeClearsValue={true}
-                                  defaultInputValue={flight?.flight_from_city}
+                                  className={classNames("form-select-select", {
+                                    "is-invalid": errors?.flight_from_city,
+                                  })}
+                                  styles={CustomStyles}
+                                  isClearable={true}
                                   name="flight_from_city"
-                                  options={newOptions}
+                                  options={cityData}
                                   onChange={(e) => {
-                                    setFlight((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      flight_from_city: e.value, // Updating the value of 'b'
-                                    }));
+                                    return (
+                                      setFlight({
+                                        ...flight,
+                                        flight_from_city: e ? e.value : "",
+                                      }),
+                                      setValue(
+                                        "flight_from_city",
+                                        e ? e.value : ""
+                                      )
+                                    );
                                   }}
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.flight_from_city?.message}
+                                </small>
                               </div>
                             </div>
 
@@ -470,34 +491,46 @@ const TravelRequestForm = () => {
                               <div className="form-group">
                                 <label>To(City)</label>
                                 <Select
-                                  escapeClearsValue={true}
-                                  defaultInputValue={flight?.flight_to_city}
+                                  className={classNames("form-select-select", {
+                                    "is-invalid": errors?.flight_to_city,
+                                  })}
+                                  styles={CustomStyles}
+                                  isClearable={true}
                                   name="flight_to_city"
-                                  options={newOptions}
+                                  options={cityData}
                                   onChange={(e) => {
-                                    setFlight((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      flight_to_city: e.value, // Updating the value of 'b'
-                                    }));
+                                    return (
+                                      setFlight({
+                                        ...flight,
+                                        flight_to_city: e ? e.value : "",
+                                      }),
+                                      setValue(
+                                        "flight_to_city",
+                                        e ? e.value : ""
+                                      )
+                                    );
                                   }}
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.flight_to_city?.message}
+                                </small>
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>Preferred Time</label>
                                 <select
-                                  value={flight?.flight_preferred_time}
-                                  onChange={(e) => {
-                                    setFlight((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      flight_preferred_time: e.target.value, // Updating the value of 'b'
-                                    }));
-                                  }}
                                   name="flight_preferred_time"
-                                  className="form-control form-control-sm"
+                                  className="form-select form-control-sm"
+                                  onChange={(e) => {
+                                    setFlight({
+                                      ...flight,
+                                      flight_preferred_time: e.target.value,
+                                    });
+                                  }}
+                                  value={flight?.flight_preferred_time}
                                 >
-                                  <option selected>Select</option>
+                                  <option value="">Select...</option>
                                   <option value="AM">AM</option>
                                   <option value="PM">PM</option>
                                 </select>
@@ -510,16 +543,16 @@ const TravelRequestForm = () => {
                                 </label>
                                 <select
                                   name="flight_class_preferred"
-                                  className="form-control form-control-sm"
-                                  value={flight?.flight_class_preferred}
+                                  className="form-select form-control-sm"
                                   onChange={(e) => {
-                                    setFlight((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      flight_class_preferred: e.target.value, // Updating the value of 'b'
-                                    }));
+                                    setFlight({
+                                      ...flight,
+                                      flight_class_preferred: e.target.value,
+                                    });
                                   }}
+                                  value={flight?.flight_class_preferred}
                                 >
-                                  <option value="">Select Class</option>
+                                  <option value="">Select...</option>
                                   <option value="economy">Economy</option>
                                   <option value="business">Business</option>
                                   {/* <option value="first">First</option> */}
@@ -528,7 +561,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                         )}
-                        {hotel?.travel_hotel && (
+                        {hotel?.hotel_travel && (
                           <div className="form-group row">
                             <div className="d-flex flex-row align-items-center mb-3">
                               <i className="mdi mdi-hotel icon-md text-secondary"></i>
@@ -539,17 +572,26 @@ const TravelRequestForm = () => {
                               <div className="form-group">
                                 <label>City</label>
                                 <Select
-                                  escapeClearsValue={true}
-                                  defaultInputValue={hotel?.hotel_city}
-                                  name="hote_city"
-                                  options={newOptions}
+                                  className={classNames("form-select-select", {
+                                    "is-invalid": errors?.hotel_city,
+                                  })}
+                                  styles={CustomStyles}
+                                  isClearable={true}
+                                  name="hotel_city"
+                                  options={cityData}
                                   onChange={(e) => {
-                                    setFlight((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      hote_city: e.value, // Updating the value of 'b'
-                                    }));
+                                    return (
+                                      setHotel({
+                                        ...hotel,
+                                        hotel_city: e ? e.value : "",
+                                      }),
+                                      setValue("hotel_city", e ? e.value : "")
+                                    );
                                   }}
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.hotel_city?.message}
+                                </small>
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
@@ -564,9 +606,21 @@ const TravelRequestForm = () => {
                                       hotel_checkin: e.target.value, // Updating the value of 'b'
                                     }));
                                   }}
-                                  className="form-control form-control-sm"
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors?.hotel_checkin,
+                                    }
+                                  )}
+                                  {...register("hotel_checkin", {
+                                    value: travel?.hotel_checkin,
+                                  })}
                                   type="date"
+                                  min={new Date()?.toISOString()?.split("T")[0]}
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.hotel_checkin?.message}
+                                </small>
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
@@ -575,7 +629,15 @@ const TravelRequestForm = () => {
                                 <input
                                   name="hotel_checkout"
                                   value={hotel?.hotel_checkout}
-                                  className="form-control form-control-sm"
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors?.hotel_checkout,
+                                    }
+                                  )}
+                                  {...register("hotel_checkout", {
+                                    value: travel?.hotel_checkout,
+                                  })}
                                   type="date"
                                   onChange={(e) => {
                                     setHotel((prevCountry) => ({
@@ -583,7 +645,11 @@ const TravelRequestForm = () => {
                                       hotel_checkout: e.target.value, // Updating the value of 'b'
                                     }));
                                   }}
+                                  min={new Date()?.toISOString()?.split("T")[0]}
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.hotel_checkout?.message}
+                                </small>
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
@@ -592,7 +658,7 @@ const TravelRequestForm = () => {
                                 <select
                                   name="hotel_number_of_rooms"
                                   value={hotel?.hotel_number_of_rooms}
-                                  className="form-control form-control-sm"
+                                  className="form-select form-control-sm"
                                   onChange={(e) => {
                                     setHotel((prevCountry) => ({
                                       ...prevCountry, // Copying the previous state
@@ -600,7 +666,7 @@ const TravelRequestForm = () => {
                                     }));
                                   }}
                                 >
-                                  <option selected>Select</option>
+                                  <option value="">Select</option>
                                   <option value="1">1</option>
                                   <option value="2">2</option>
                                   <option value="3">3</option>
@@ -609,7 +675,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                         )}
-                        {train?.travel_train && (
+                        {train?.train_travel && (
                           <div className="form-group row">
                             <div className="d-flex flex-row align-items-center mb-3">
                               <i className="mdi mdi-train icon-md text-secondary"></i>
@@ -618,34 +684,60 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>From(City Name)</label>
+
                                 <Select
-                                  options={newOptions}
+                                  className={classNames("form-select-select", {
+                                    "is-invalid": errors?.train_from_city,
+                                  })}
+                                  styles={CustomStyles}
+                                  isClearable={true}
                                   name="train_from_city"
-                                  value={train?.train_from_city}
+                                  options={cityData}
                                   onChange={(e) => {
-                                    setTrain((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      train_from_city: e.value, // Updating the value of 'b'
-                                    }));
+                                    return (
+                                      setTrain({
+                                        ...train,
+                                        train_from_city: e ? e.value : "",
+                                      }),
+                                      setValue(
+                                        "train_from_city",
+                                        e ? e.value : ""
+                                      )
+                                    );
                                   }}
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.train_from_city?.message}
+                                </small>
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City Name)</label>
                                 <Select
-                                  defaultInputValue={train?.train_to_city}
-                                  options={newOptions}
+                                  className={classNames("form-select-select", {
+                                    "is-invalid": errors?.train_to_city,
+                                  })}
+                                  styles={CustomStyles}
+                                  isClearable={true}
                                   name="train_to_city"
-                                  value={train?.train_to_city}
+                                  options={cityData}
                                   onChange={(e) => {
-                                    setTrain((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      train_to_city: e.value, // Updating the value of 'b'
-                                    }));
+                                    return (
+                                      setTrain({
+                                        ...train,
+                                        train_to_city: e ? e.value : "",
+                                      }),
+                                      setValue(
+                                        "train_to_city",
+                                        e ? e.value : ""
+                                      )
+                                    );
                                   }}
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.train_to_city?.message}
+                                </small>
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
@@ -654,7 +746,7 @@ const TravelRequestForm = () => {
                                 <select
                                   name="train_preferred_time"
                                   value={train?.train_preferred_time}
-                                  className="form-control form-control-sm"
+                                  className="form-select form-control-sm"
                                   onChange={(e) => {
                                     setTrain((prevCountry) => ({
                                       ...prevCountry, // Copying the previous state
@@ -662,7 +754,7 @@ const TravelRequestForm = () => {
                                     }));
                                   }}
                                 >
-                                  <option selected>Select</option>
+                                  <option value="">Select...</option>
                                   <option value="AM">AM</option>
                                   <option value="PM">PM</option>
                                 </select>
@@ -682,9 +774,9 @@ const TravelRequestForm = () => {
                                       train_class_preferred: e.target.value, // Updating the value of 'b'
                                     }));
                                   }}
-                                  className="form-control form-control-sm"
+                                  className="form-select form-control-sm"
                                 >
-                                  <option value="">Select Class</option>
+                                  <option value="">Select...</option>
                                   <option value="1A - 1st Class AC">
                                     1A - 1st Class AC
                                   </option>
@@ -702,7 +794,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                         )}
-                        {other?.travel_other && (
+                        {other?.other_travel && (
                           <div className="form-group row">
                             <div className="d-flex flex-row align-items-center mb-3">
                               <i className="mdi mdi-car icon-md text-secondary"></i>
@@ -713,58 +805,94 @@ const TravelRequestForm = () => {
                               <div className="form-group">
                                 <label>Type</label>
                                 <input
-                                  name="name_of_travel"
-                                  value={other?.name_of_travel}
+                                  name="other_travel_type"
+                                  value={other?.other_travel_type}
                                   onChange={(e) => {
-                                    setOther((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      name_of_travel: e.target.value, // Updating the value of 'b'
-                                    }));
+                                    setOther({
+                                      ...other,
+                                      other_travel_type: e.target.value,
+                                    });
                                   }}
-                                  className="form-control form-control-sm"
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors?.other_travel_type,
+                                    }
+                                  )}
+                                  {...register("other_travel_type", {
+                                    value: travel?.other_travel_type,
+                                  })}
                                   type="text"
+                                  placeholder="Enter travel type"
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.other_travel_type?.message}
+                                </small>
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>From(City Name)</label>
+
                                 <Select
-                                  escapeClearsValue={true}
-                                  defaultInputValue={other?.from_location}
-                                  name="from_location"
-                                  options={newOptions}
+                                  className={classNames("form-select-select", {
+                                    "is-invalid": errors?.other_from_city,
+                                  })}
+                                  styles={CustomStyles}
+                                  isClearable={true}
+                                  name="other_from_city"
+                                  options={cityData}
                                   onChange={(e) => {
-                                    setOther((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      from_location: e.value, // Updating the value of 'b'
-                                    }));
+                                    return (
+                                      setOther({
+                                        ...other,
+                                        other_from_city: e ? e.value : "",
+                                      }),
+                                      setValue(
+                                        "other_from_city",
+                                        e ? e.value : ""
+                                      )
+                                    );
                                   }}
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.other_from_city?.message}
+                                </small>
                               </div>
                             </div>
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City Name)</label>
                                 <Select
-                                  escapeClearsValue={true}
-                                  defaultInputValue={other?.to_location}
-                                  name="to_location"
-                                  options={newOptions}
+                                  className={classNames("form-select-select", {
+                                    "is-invalid": errors?.other_to_city,
+                                  })}
+                                  styles={CustomStyles}
+                                  isClearable={true}
+                                  name="other_to_city"
+                                  options={cityData}
                                   onChange={(e) => {
-                                    setOther((prevCountry) => ({
-                                      ...prevCountry, // Copying the previous state
-                                      to_location: e.value, // Updating the value of 'b'
-                                    }));
+                                    return (
+                                      setOther({
+                                        ...other,
+                                        other_to_city: e ? e.value : "",
+                                      }),
+                                      setValue(
+                                        "other_to_city",
+                                        e ? e.value : ""
+                                      )
+                                    );
                                   }}
                                 />
+                                <small className="invalid-feedback">
+                                  {errors.other_to_city?.message}
+                                </small>
                               </div>
                             </div>
                           </div>
                         )}
                         <button
-                          // variant="primary"
-                          // type="submit"
+                          type="submit"
                           className="btn btn-sm btn-gradient-success me-2"
                         >
                           Submit
