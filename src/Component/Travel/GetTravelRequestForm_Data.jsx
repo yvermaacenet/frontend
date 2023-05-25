@@ -73,7 +73,7 @@ const GetTravelRequestForm_Data = () => {
                 <div class="loader"></div>
               </div>
             )}
-            <div className="row card" style={{ overflow: "auto" }}>
+            <div className="row card p-4" style={{ overflow: "auto" }}>
               <div className="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="">
