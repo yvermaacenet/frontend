@@ -100,7 +100,7 @@ const TravelApprovalRequest = () => {
                 <div class="loader"></div>
               </div>
             )}
-            <div className="row">
+            <div className="row card" style={{ overflow: "auto" }}>
               <div className="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">

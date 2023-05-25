@@ -73,10 +73,10 @@ const GetTravelRequestForm_Data = () => {
                 <div class="loader"></div>
               </div>
             )}
-            <div className="row">
+            <div className="row card" style={{ overflow: "auto" }}>
               <div className="col-lg-12 grid-margin stretch-card">
                 <div class="card">
-                  <div class="card-body">
+                  <div class="">
                     {/* <h4 class="card-title">Flexible Benefit Plan Form Data</h4> */}
 
                     {/* <button
@@ -122,40 +122,40 @@ const GetTravelRequestForm_Data = () => {
                                 >
                                   View
                                 </td>
-                                {val?.managers_approval === "Pending" && (
-                                  <td
-                                    className="btn btn-danger bg-danger text-white btn-sm mx-2"
-                                    type="button"
-                                    onClick={async () => {
-                                      let res = window.confirm(
-                                        "Do You Want To Revoke This Request"
-                                      );
-                                      if (res === true) {
-                                        const res2 = await axios.delete(
-                                          `/revoke_travel_request/${val?._id}`,
-                                          {
-                                            headers: {
-                                              Access_Token:
-                                                LocalStorageData?.generate_auth_token,
-                                            },
-                                          }
-                                        );
-                                        if (
-                                          res2.data === "Deleted Sucessfully"
-                                        ) {
-                                          setRenderComponent(!renderComponent);
-                                          alert2.success(
-                                            "Deleted Successfully"
-                                          );
-                                        } else {
-                                          alert2.error("something went wrong");
+                                <td
+                                  className="btn btn-danger bg-danger text-white btn-sm mx-2"
+                                  style={{
+                                    visibility:
+                                      val?.managers_approval === "Pending"
+                                        ? ""
+                                        : "hidden",
+                                  }}
+                                  type="button"
+                                  onClick={async () => {
+                                    let res = window.confirm(
+                                      "Do You Want To Revoke This Request"
+                                    );
+                                    if (res === true) {
+                                      const res2 = await axios.delete(
+                                        `/revoke_travel_request/${val?._id}`,
+                                        {
+                                          headers: {
+                                            Access_Token:
+                                              LocalStorageData?.generate_auth_token,
+                                          },
                                         }
+                                      );
+                                      if (res2.data === "Deleted Sucessfully") {
+                                        setRenderComponent(!renderComponent);
+                                        alert2.success("Deleted Successfully");
+                                      } else {
+                                        alert2.error("something went wrong");
                                       }
-                                    }}
-                                  >
-                                    Revoke
-                                  </td>
-                                )}
+                                    }
+                                  }}
+                                >
+                                  Revoke
+                                </td>
                               </td>
                             </tr>
                           );
@@ -182,7 +182,6 @@ const GetTravelRequestForm_Data = () => {
               <div className="p-0 m-0">
                 <div className="row">
                   <h5 className=" fw-bold" style={{ color: "#b66dff" }}>
-                    {" "}
                     Travel Info
                   </h5>
                   <div className="col-lg-6 col-12 mt-lg-4 ">
@@ -258,6 +257,7 @@ const GetTravelRequestForm_Data = () => {
                 {viewRequestData?.flight?.flight_from_city ? (
                   <div className="row mt-4 text-center text-lg-start">
                     <p className="fw-bold " style={{ color: "#b66dff" }}>
+                      <hr className="m-4" />
                       Flight Info
                     </p>
                     <div className="col-12 col-lg-6">
@@ -272,7 +272,7 @@ const GetTravelRequestForm_Data = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
+                    <div className="col-12 col-lg-6">
                       <div className="row ">
                         <div className="col-12 col-lg-6 fw-bold ">
                           {" "}
@@ -316,11 +316,12 @@ const GetTravelRequestForm_Data = () => {
                 {viewRequestData?.hotel?.hotel_city ? (
                   <div className="row mt-4 text-center text-lg-start">
                     <p className="fw-bold " style={{ color: "#b66dff" }}>
+                      <hr className="m-4" />
                       Hotel Info
                     </p>
                     <div className="col-12 col-lg-6">
                       <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold mt-lg-4 mt-2">
+                        <div className="col-12 col-lg-6 fw-bold ">
                           {" "}
                           City Name:
                         </div>
@@ -332,7 +333,7 @@ const GetTravelRequestForm_Data = () => {
                     </div>
                     <div className="col-12 col-lg-6">
                       <div className="row ">
-                        <div className="col-12 col-lg-6 fw-bold mt-lg-4 mt-2">
+                        <div className="col-12 col-lg-6 fw-bold ">
                           {" "}
                           Checkin Date:
                         </div>
@@ -379,11 +380,12 @@ const GetTravelRequestForm_Data = () => {
                 {viewRequestData?.train?.train_from_city ? (
                   <div className="row mt-4 text-center text-lg-start">
                     <p className="fw-bold " style={{ color: "#b66dff" }}>
+                      <hr className="m-4" />
                       Other Request Info
                     </p>
                     <div className="col-12 col-lg-6">
                       <div className="row">
-                        <div className="col-12 col-lg-6 fw-bold mt-lg-4 mt-2">
+                        <div className="col-12 col-lg-6 fw-bold">
                           {" "}
                           Travel Name:
                         </div>
@@ -393,7 +395,7 @@ const GetTravelRequestForm_Data = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-12 col-lg-6 mt-lg-4 mt-2">
+                    <div className="col-12 col-lg-6 ">
                       <div className="row ">
                         <div className="col-12 col-lg-6 fw-bold"> From:</div>
                         <div className="col-12 col-lg-6">
