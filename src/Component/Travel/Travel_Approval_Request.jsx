@@ -21,6 +21,11 @@ const TravelApprovalRequest = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [gettravelrequestdata, setGettravelrequestdata] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState([]);
+  const [history, setHistory] = useState([false]);
+  const [originalData, setOriginalData] = useState([]);
+
+  // const [historyStatus, setHistoryStatus] = useState(false);
   useEffect(() => {
     async function getData() {
       // setLoading(true);
@@ -31,11 +36,13 @@ const TravelApprovalRequest = () => {
         .then((result) => {
           const resp = result.data;
 
-          console.log("resp", resp);
+          // setManagementView(resp);
           const filtered = resp.filter(
             (x) => x?.reporting_manager.slice(-2) === LocalStorageData?.emp_id
           );
           console.log("fill", filtered);
+          setOriginalData(filtered);
+
           return setGettravelrequestdata(filtered);
           // , setLoading(false);
         })
@@ -49,39 +56,37 @@ const TravelApprovalRequest = () => {
     }
     getData();
   }, []);
-  console.log("request", gettravelrequestdata);
-  //   //   ====Handle Remarks
 
-  //   const handleRemarksChange = (e) => {
-  //     e.preventDefault();
-  //     setRemarks({ ...remarks, [e.target.name]: e.target.value });
-  //   };
-  //   //   ====handle Approve
-  //   const handleApprove = async (e) => {
-  //     e.preventDefault();
-  //     console.log(e);
-  //     const res = await axios.put(`/update_travel_request/${id}`, {
-  //       ...remarks,
-  //       status: "Approved",
-  //     });
-  //     if (res.data === "Updated Sucessfully") {
-  //       alert.show("Approved Successfully");
-  //       setModal(false);
-  //     }
-  //   };
-  //   // =====handle Decline
-  //   const handleDecline = async (e) => {
-  //     e.preventDefault();
-  //     console.log(e);
-  //     const res = await axios.put(`/update_travel_request/${id}`, {
-  //       ...remarks,
-  //       status: "Declined",
-  //     });
-  //     if (res.data === "Updated Sucessfully") {
-  //       alert.show("Declined Successfully");
-  //       setModal(false);
-  //     }
-  //   };
+  const handleActiveClick = (e) => {
+    e.preventDefault();
+    const filteredRequest = originalData.filter(
+      (x) => x.managers_approval === "Pending"
+    );
+    setGettravelrequestdata(filteredRequest);
+  };
+  const handleHistoryClick = (e) => {
+    e.preventDefault();
+    const filteredRequest = originalData.filter(
+      (x) =>
+        x.managers_approval === "Approved" || x.managers_approval === "Declined"
+    );
+    console.log("hi:", filteredRequest);
+    setGettravelrequestdata(filteredRequest);
+  };
+  const handleAllClick = (e) => {
+    e.preventDefault();
+
+    setGettravelrequestdata(originalData);
+  };
+  // ==========Show only data to management that is approved by Managers============
+  // if (LocalStorageData?.zoho_role === "Management") {
+  //   const filteredDataForManagement = resp.filter(
+  //     (x) => x.managers_approval === "Approved"
+  //   );
+
+  //   setGettravelrequestdata(filteredDataForManagement);
+  // }
+
   return (
     <div className="container-scroller">
       <Navbar />
@@ -100,7 +105,24 @@ const TravelApprovalRequest = () => {
                 <div class="loader"></div>
               </div>
             )}
-            <div class="row">
+            <div className="d-flex justify-content-lg-end my-2 justify-content-center ">
+              <button className="btn btn-info" onClick={handleAllClick}>
+                {" "}
+                All
+              </button>
+              <button
+                className="btn btn-danger mx-2 "
+                onClick={handleActiveClick}
+              >
+                {" "}
+                Active
+              </button>
+              <button className="btn btn-success" onClick={handleHistoryClick}>
+                {" "}
+                History
+              </button>
+            </div>
+            <div class="row card" style={{ overflow: "auto" }}>
               <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
@@ -118,6 +140,7 @@ const TravelApprovalRequest = () => {
                         </tr>
                       </thead>
                       <tbody>
+                        {/* =====All Request====== */}
                         {gettravelrequestdata?.map((val, index) => {
                           return (
                             <tr>
@@ -149,6 +172,8 @@ const TravelApprovalRequest = () => {
                             </tr>
                           );
                         })}
+
+                        {/* =======Pending Request===== */}
                       </tbody>
                     </table>
                   </div>
@@ -157,108 +182,6 @@ const TravelApprovalRequest = () => {
             </div>
           </div>
 
-          {/* <PureModal
-            header="Travel Request"
-            footer={
-              <form typeof="submit">
-                <div className="row">
-                  <div className="col-12">
-                    <label htmlFor="">Remarks</label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      required
-                      name="remarks"
-                      onChange={handleRemarksChange}
-                      value={remarks?.remarks}
-                    />
-                  </div>
-                </div>
-                <div className="row my-2">
-                  <div className="col-6">
-                    <button onClick={handleApprove} className="btn btn-primary">
-                      {" "}
-                      Approve
-                    </button>
-                  </div>
-                  <div className="col-6">
-                    {" "}
-                    <button onClick={handleDecline} className="btn btn-primary">
-                      {" "}
-                      Decline
-                    </button>
-                  </div>
-                </div>
-              </form>
-            }
-            isOpen={modal}
-            closeButton="x"
-            width="50%"
-            closeButtonPosition="bottom"
-            onClose={() => {
-              setModal(false);
-              return true;
-            }}
-          >
-            <div className="fw-bold">
-              <div className="row">
-                <div className="col-6">
-                  <p> Owner: </p>
-                </div>
-                <div className="col-6">
-                  <p> {modalData?.name}</p>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-6">
-                  <p> Request Type: </p>
-                </div>
-                <div className="col-6">
-                  <p> {modalData?.type_of_request}</p>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-6">
-                  <p> Reason: </p>
-                </div>
-                <div className="col-6">
-                  <p> {modalData?.reason_for_travel}</p>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-6">
-                  <p> From:</p>
-                </div>
-                <div className="col-6">
-                  <p> {modalData?.from_location}</p>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-6">
-                  <p> To:</p>
-                </div>
-                <div className="col-6">
-                  <p> {modalData?.destination}</p>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-6">
-                  <p> Requested on:</p>
-                </div>
-                <div className="col-6">
-                  <p> {modalData?.creation_date?.split("T")[0]}</p>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-6">
-                  <p> Est. Amount:</p>
-                </div>
-                <div className="col-6">
-                  <p> {modalData?.estimated_amount}</p>
-                </div>
-              </div>
-            </div>
-          </PureModal> */}
           <footer className="footer">
             <Footer />
           </footer>
