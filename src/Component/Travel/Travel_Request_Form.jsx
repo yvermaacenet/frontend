@@ -304,7 +304,7 @@ const TravelRequestForm = () => {
                         </div>
 
                         <div className="row my-2">
-                          <div className="col-12 col-lg-6">
+                          <div className="col-12">
                             <div className="form-group">
                               <label>Reason for Travel</label>
                               <textarea
@@ -320,6 +320,7 @@ const TravelRequestForm = () => {
                                 })}
                                 onChange={handleTravelChange}
                                 placeholder="Enter Reason for Travel"
+                                rows={4}
                               />
                               <small className="invalid-feedback">
                                 {errors.reason_for_travel?.message}

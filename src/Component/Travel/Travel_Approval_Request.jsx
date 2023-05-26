@@ -137,7 +137,6 @@ const TravelApprovalRequest = () => {
                                   onClick={() => {
                                     return (
                                       setModalData(val),
-                                      console.log(val),
                                       setId(val._id),
                                       navigate(`/travelactionpage/${val._id}`)
                                     );

@@ -192,7 +192,7 @@ const Form12BB = () => {
     setValue,
     formState: { errors },
   } = useForm({
-    mode: "onChange",    
+    mode: "onChange",
     resolver: yupResolver(form12bb_validation),
   });
 
@@ -203,14 +203,14 @@ const Form12BB = () => {
         .get(`get_form_12_bb_controller_by_id/${LocalStorageData?.user_id}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
-        .then(async(resp) => {
-         resp?.data?.map((val)=>{
+        .then(async (resp) => {
+          resp?.data?.map((val) => {
             let entries = Object.entries(val);
-          return entries.map((result)=>setValue(result[0], result[1]))})
-           return (
-              setGetFormDataByID(resp?.data[0]),
+            return entries.map((result) => setValue(result[0], result[1]));
+          });
+          return (
+            setGetFormDataByID(resp?.data[0]),
             setInputData(resp?.data[0]),
-
             setDeductions(
               resp?.data[0]?.deductions === undefined
                 ? []
@@ -275,7 +275,7 @@ const Form12BB = () => {
     );
     return capitalizedWords.join(" ");
   }
-  
+
   const onSaveButton = () => {
     const jsonDate = {
       ...inputData,
@@ -283,13 +283,10 @@ const Form12BB = () => {
       email: LocalStorageData?.email,
       emp_id: LocalStorageData?.emp_id,
       user_id: LocalStorageData?.user_id,
-      deductions:
-        deductions[0]?.section === undefined
-          ? []
-          : deductions,
+      deductions: deductions[0]?.section === undefined ? [] : deductions,
     };
     async function putData() {
-      setLoading(true);      
+      setLoading(true);
       await axios
         .post(`form_12_bb/${inputData?._id}`, jsonDate, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -297,7 +294,8 @@ const Form12BB = () => {
         .then((resp) => {
           return (
             alert.success("Form has been saved"),
-            resp?.data?.message === "Form has been submitted successfully" && navigate("/"),
+            resp?.data?.message === "Form has been submitted successfully" &&
+              navigate("/"),
             setLoading(false)
           );
         })
@@ -311,7 +309,7 @@ const Form12BB = () => {
     }
     putData();
   };
-  const onSubmitButton = (e) => {  
+  const onSubmitButton = (e) => {
     const jsonDate = {
       ...inputData,
       financial_year: "2023-2024",
@@ -326,18 +324,15 @@ const Form12BB = () => {
       name: LocalStorageData?.name,
       vpf_apply:
         inputData?.vpf_apply === undefined ? "No" : inputData?.vpf_apply,
-  
+
       availed_in_last_4_years:
         inputData?.availed_in_last_4_years === undefined ||
         !leavetravelconcessionsorassistance
           ? "No"
           : inputData?.availed_in_last_4_years,
-  
-      deductions:
-        deductions[0]?.section === undefined
-          ? []
-          : deductions,
-  
+
+      deductions: deductions[0]?.section === undefined ? [] : deductions,
+
       rent_paid_to_the_landlord:
         inputData?.rent_paid_to_the_landlord === "" ||
         inputData?.rent_paid_to_the_landlord === undefined ||
@@ -421,7 +416,8 @@ const Form12BB = () => {
         .then((resp) => {
           return (
             alert.success("Form has been submitted"),
-            resp?.data?.message === "Form has been submitted successfully" && navigate("/"),
+            resp?.data?.message === "Form has been submitted successfully" &&
+              navigate("/"),
             setLoading(false)
           );
         })
@@ -479,7 +475,7 @@ const Form12BB = () => {
           <div className="main-panel">
             <div className="content-wrapper">
               <Page_Header
-                page_title="Form 12 BB (See rule 26C)"
+                page_heading="Form 12 BB (See rule 26C)"
                 page_title_icon="mdi-book-plus"
                 page_title_button="Back"
                 page_title_button_link="/dashboard"
@@ -497,8 +493,6 @@ const Form12BB = () => {
                         className="forms-sample"
                         onSubmit={handleSubmit(onSubmitButton)}
                       >
-                         
-
                         <div className="row">
                           <div className="col-md-4">
                             <div className="form-group">
@@ -1572,11 +1566,10 @@ const Form12BB = () => {
                                 </button>
                               </>
                             )} */}
-                          
-                          
+
                           {!inputData?.status && (
                             <>
-                             <button
+                              <button
                                 type="button"
                                 className="btn btn-sm btn-gradient-secondary me-2"
                                 onClick={onSaveButton}
@@ -1592,7 +1585,6 @@ const Form12BB = () => {
                               </button>
                             </>
                           )}
-                          
                         </div>
                       </form>
                     </div>
