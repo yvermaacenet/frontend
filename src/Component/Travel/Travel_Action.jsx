@@ -199,11 +199,11 @@ const Travel_Action = (props) => {
                           <th>Name</th>
                           <th>Email</th>
                           <th>Phone</th>
-                          <th>Travel Start Date</th>
-                          <th>Travel End Date</th>
+                          <th>Start Date</th>
+                          <th>End Date</th>
                           <th>Project Id</th>
                           <th>Billable</th>
-                          {isManager && <th>Request Status </th>}
+                          {isManager && <th>Status</th>}
                         </tr>
                       </thead>
                       <tbody>

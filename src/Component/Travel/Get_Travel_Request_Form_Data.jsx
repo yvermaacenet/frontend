@@ -74,7 +74,7 @@ const GetTravelRequestForm_Data = () => {
         <div className="main-panel">
           <div className="content-wrapper">
             <Page_Header
-              page_heading="Travel Requests"
+              page_heading="Travel Requests List"
               page_title="Create new request"
               page_title_icon="mdi-home-modern"
               page_title_button="Add"
