@@ -174,7 +174,10 @@ const Travel_Action = (props) => {
               page_title_icon="mdi-home-modern"
               page_title_button="Back"
               page_title_button_link={`${
-                isManager ? "/travelrequestreceived" : "/alltravelrequest"
+                isManager &&
+                getData?.employee?.email !== LocalStorageData?.email
+                  ? "/travelrequestreceived"
+                  : "/alltravelrequest"
               }`}
             />
             {loading && (
@@ -421,56 +424,57 @@ const Travel_Action = (props) => {
                         </table>
                       </>
                     )}
-                    {isManager && (
-                      <form
-                        className="forms-sample"
-                        onSubmit={handleSubmit(onSubmitButton)}
-                      >
-                        <div class="col-12 mt-2">
-                          <div class="form-group">
-                            <label>Remarks</label>
-                            <textarea
-                              name="remarks"
-                              className={classNames(
-                                "form-control form-control-sm font-bold",
-                                {
-                                  "is-invalid": errors.remarks,
+                    {isManager &&
+                      getData?.employee?.email !== LocalStorageData?.email && (
+                        <form
+                          className="forms-sample"
+                          onSubmit={handleSubmit(onSubmitButton)}
+                        >
+                          <div class="col-12 mt-2">
+                            <div class="form-group">
+                              <label>Remarks</label>
+                              <textarea
+                                name="remarks"
+                                className={classNames(
+                                  "form-control form-control-sm font-bold",
+                                  {
+                                    "is-invalid": errors.remarks,
+                                  }
+                                )}
+                                {...register("remarks", {
+                                  value: getData?.remarks,
+                                })}
+                                onChange={(e) =>
+                                  setGetData({
+                                    ...getData,
+                                    remarks: e.target.value,
+                                  })
                                 }
-                              )}
-                              {...register("remarks", {
-                                value: getData?.remarks,
-                              })}
-                              onChange={(e) =>
-                                setGetData({
-                                  ...getData,
-                                  remarks: e.target.value,
-                                })
-                              }
-                              value={getData?.remarks}
-                              placeholder="Enter Remarks"
-                              rows={4}
-                            ></textarea>
+                                value={getData?.remarks}
+                                placeholder="Enter Remarks"
+                                rows={4}
+                              ></textarea>
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="text-center">
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-gradient-success me-2"
-                            onClick={() => setHandleButtonType(true)}
-                          >
-                            Approve
-                          </button>
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-gradient-danger me-2"
-                            onClick={() => setHandleButtonType(false)}
-                          >
-                            Decline
-                          </button>
-                        </div>
-                      </form>
-                    )}
+                          <div className="text-center">
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-success me-2"
+                              onClick={() => setHandleButtonType(true)}
+                            >
+                              Approve
+                            </button>
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-danger me-2"
+                              onClick={() => setHandleButtonType(false)}
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        </form>
+                      )}
                   </div>
                 </div>
               </div>
