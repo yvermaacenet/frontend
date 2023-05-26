@@ -119,9 +119,17 @@ const GetTravelRequestForm_Data = () => {
                               <td>{val?.createdAt?.split("T")[0]}</td>
                               {/* <td>{val?.travel?.reason_for_travel}</td> */}
                               <td>
-                                <td className="" type="button" disabled>
+                                <label
+                                  class={`${
+                                    val?.managers_approval === "Approved"
+                                      ? "badge badge-success"
+                                      : val?.managers_approval === "Declined"
+                                      ? "badge badge-danger"
+                                      : "badge badge-warning"
+                                  }`}
+                                >
                                   {val?.managers_approval}
-                                </td>
+                                </label>
                               </td>
 
                               <td>
