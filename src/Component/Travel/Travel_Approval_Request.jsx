@@ -21,20 +21,23 @@ const TravelApprovalRequest = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [gettravelrequestdata, setGettravelrequestdata] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [active, setActive] = useState([]);
+  const [allData, setAllData] = useState([]);
   const [history, setHistory] = useState([false]);
   const [originalData, setOriginalData] = useState([]);
 
   // const [historyStatus, setHistoryStatus] = useState(false);
   useEffect(() => {
     async function getData() {
-      // setLoading(true);
+      setLoading(true);
       await axios
         .get(`all_travel_request`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
           const resp = result.data;
+          setAllData(resp);
+          console.log("cwe", resp);
+
           const filtered = resp.filter(
             (x) => x?.reporting_manager.slice(-2) === LocalStorageData?.emp_id
           );
@@ -42,8 +45,14 @@ const TravelApprovalRequest = () => {
           const filteredRequest = filtered.filter(
             (x) => x.managers_approval === "Pending"
           );
-          return setGettravelrequestdata(filteredRequest);
-          // , setLoading(false);
+          return (
+            setGettravelrequestdata(
+              LocalStorageData?.zoho_role === "Management"
+                ? resp.filter((x) => x.management_approval === "Pending")
+                : filteredRequest
+            ),
+            setLoading(false)
+          );
         })
         .catch((err) => {
           if (err.response.status === 500) {
@@ -61,7 +70,11 @@ const TravelApprovalRequest = () => {
     const filteredRequest = originalData.filter(
       (x) => x.managers_approval === "Pending"
     );
-    setGettravelrequestdata(filteredRequest);
+    setGettravelrequestdata(
+      LocalStorageData?.zoho_role === "Management"
+        ? allData.filter((x) => x.management_approval === "Pending")
+        : filteredRequest
+    );
   };
   const handleHistoryClick = (e) => {
     e.preventDefault();
@@ -69,13 +82,21 @@ const TravelApprovalRequest = () => {
       (x) =>
         x.managers_approval === "Approved" || x.managers_approval === "Declined"
     );
-    setGettravelrequestdata(filteredRequest);
+    setGettravelrequestdata(
+      LocalStorageData?.zoho_role === "Management"
+        ? allData.filter(
+            (x) =>
+              x.management_approval === "Approved" ||
+              x.management_approval === "Declined"
+          )
+        : filteredRequest
+    );
   };
-  const handleAllClick = (e) => {
-    e.preventDefault();
+  // const handleAllClick = (e) => {
+  //   e.preventDefault();
 
-    setGettravelrequestdata(originalData);
-  };
+  //   setGettravelrequestdata(originalData);
+  // };
   // ==========Show only data to management that is approved by Managers============
   // if (LocalStorageData?.zoho_role === "Management") {
   //   const filteredDataForManagement = resp.filter(
@@ -104,9 +125,9 @@ const TravelApprovalRequest = () => {
               </div>
             )}
             <div className="d-flex justify-content-lg-end my-2 justify-content-center ">
-              <button className="btn btn-sm btn-info" onClick={handleAllClick}>
+              {/* <button className="btn btn-sm btn-info" onClick={handleAllClick}>
                 All
-              </button>
+              </button> */}
               <button
                 className="btn btn-sm btn-warning mx-2 "
                 onClick={handleActiveClick}
@@ -132,7 +153,8 @@ const TravelApprovalRequest = () => {
                           <th>Requested on</th>
                           {/* <th>destination</th> */}
                           {/* <th>amount</th> */}
-                          <th>Status</th>
+                          <th>Action from Manager</th>
+                          <th>Action from Management</th>
                           <th>Remarks</th>
                           <th>Actions</th>
                         </tr>
@@ -159,6 +181,19 @@ const TravelApprovalRequest = () => {
                                   }`}
                                 >
                                   {val?.managers_approval}
+                                </label>
+                              </td>
+                              <td>
+                                <label
+                                  class={`${
+                                    val?.management_approval === "Approved"
+                                      ? "badge badge-success"
+                                      : val?.management_approval === "Declined"
+                                      ? "badge badge-danger"
+                                      : "badge badge-warning"
+                                  }`}
+                                >
+                                  {val?.management_approval}
                                 </label>
                               </td>
                               <td>{val?.remarks}</td>

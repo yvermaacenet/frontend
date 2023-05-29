@@ -307,7 +307,7 @@ const User_List = () => {
           <div className="main-panel">
             <div className="content-wrapper">
               <Page_Header
-                page_heading="User"
+                page_heading="User List"
                 // page_title="User"
                 page_title_icon="mdi-account-multiple-outline"
                 page_title_button="Back"
@@ -424,8 +424,6 @@ const User_List = () => {
                                           value?.hr_on_boarding_status ===
                                             true &&
                                           value?.finance_on_boarding_status ===
-                                            true &&
-                                          value?.management_on_boarding_status ===
                                             true
                                             ? "btn-inverse-success"
                                             : value?.initiate_on_boarding_status ===
@@ -440,8 +438,6 @@ const User_List = () => {
                                               value?.hr_on_boarding_status ===
                                                 true &&
                                                 value?.finance_on_boarding_status ===
-                                                  true &&
-                                                value?.management_on_boarding_status ===
                                                   true
                                                 ? "Do you really want to check onboarding?"
                                                 : "Do you really want to initiate onboarding?"
@@ -456,8 +452,6 @@ const User_List = () => {
                                         {value?.hr_on_boarding_status ===
                                           true &&
                                         value?.finance_on_boarding_status ===
-                                          true &&
-                                        value?.management_on_boarding_status ===
                                           true
                                           ? "Completed"
                                           : value?.initiate_on_boarding_status ===

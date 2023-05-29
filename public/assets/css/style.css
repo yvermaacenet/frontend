@@ -18777,6 +18777,7 @@ dl li {
   position: absolute;
   font-size: 0.9rem;
   margin-top: 0;
+  margin-right: -4rem;
   padding: 0;
 }
 .rtl
@@ -19944,6 +19945,6 @@ input:checked + .slider:before {
   color: #fff;
   text-decoration: none;
 }
-.small{
-  font-size:0.875em
+.small {
+  font-size: 0.875em;
 }
