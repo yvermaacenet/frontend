@@ -84,7 +84,7 @@ const Flexible_Benefit_Plan = () => {
         })
         .then((resp) => {
           return (
-            console.log("aas",resp.data),
+            console.log("aas", resp.data),
             setInputData({
               ...resp.data[0],
               children_allowance:
@@ -163,8 +163,8 @@ const Flexible_Benefit_Plan = () => {
       salary_band: selectedBand,
       stream: selectedStream,
       position: selectedPosition,
-      children_allowance:inputData?.children_allowance * 100
-          };
+      children_allowance: inputData?.children_allowance * 100,
+    };
     async function postData() {
       setLoading(true);
       await axios
@@ -174,9 +174,9 @@ const Flexible_Benefit_Plan = () => {
         .then((resp) => {
           return (
             alert.success("Form has been saved"),
-            resp?.data?.message === "Form has been submitted successfully" && navigate("/"),
+            resp?.data?.message === "Form has been submitted successfully" &&
+              navigate("/"),
             setLoading(false)
-
           );
         })
         .catch((err) => err.response.status === 403 && navigate("/"));
@@ -235,9 +235,9 @@ const Flexible_Benefit_Plan = () => {
         .then((resp) => {
           return (
             alert.success("Form has been submitted"),
-            resp?.data?.message === "Form has been submitted successfully" && navigate("/"),
+            resp?.data?.message === "Form has been submitted successfully" &&
+              navigate("/"),
             setLoading(false)
-
           );
         })
         .catch((err) => err.response.status === 403 && navigate("/"));
@@ -259,7 +259,7 @@ const Flexible_Benefit_Plan = () => {
           <div class="main-panel">
             <div class="content-wrapper">
               <Page_Header
-                page_title="Declaration - Flexible Benefit Plan (See rule 26C)"
+                page_heading="Declaration - Flexible Benefit Plan (See rule 26C)"
                 page_title_button="Back"
                 page_title_button_link="/dashboard"
                 page_title_icon="mdi-book-plus"
@@ -319,82 +319,84 @@ const Flexible_Benefit_Plan = () => {
                         </div>
                         <div className="row">
                           <div className="col-md-4">
-                          <div className="form-group">
-                          <label >
-                            Select your salary band
-                          </label>
+                            <div className="form-group">
+                              <label>Select your salary band</label>
 
-                          <select
-                            className="form-control form-control-sm"
-                            onChange={handleBandChange}
-                            name="salary_band"
-                            disabled={inputData?.status && true}
-                            value={inputData?.salary_band}
-                          >
-                            <option value="Band 1">less than 10 Lakhs</option>
-                            <option value="Band 2"> 10 lakhs - 15 Lakhs</option>
-                            <option value="Band 3"> 15 Lakhs - 20 Lakhs</option>
-                            <option value="Band 4"> Above 20 Lakhs</option>
-                          </select>
-                        </div>
+                              <select
+                                className="form-control form-control-sm"
+                                onChange={handleBandChange}
+                                name="salary_band"
+                                disabled={inputData?.status && true}
+                                value={inputData?.salary_band}
+                              >
+                                <option value="Band 1">
+                                  less than 10 Lakhs
+                                </option>
+                                <option value="Band 2">
+                                  {" "}
+                                  10 lakhs - 15 Lakhs
+                                </option>
+                                <option value="Band 3">
+                                  {" "}
+                                  15 Lakhs - 20 Lakhs
+                                </option>
+                                <option value="Band 4"> Above 20 Lakhs</option>
+                              </select>
+                            </div>
                           </div>
                           <div className="col-md-4">
-                          <div className="form-group">
-                          <label >
-                            Select your stream:
-                          </label>
+                            <div className="form-group">
+                              <label>Select your stream:</label>
 
-                          <select
-                            className="form-control form-control-sm"
-                            id="stream"
-                            value={selectedStream}
-                            onChange={handleStreamChange}
-                            name="stream"
-                            disabled={inputData?.status && true}
-                          >
-                            <option value="HR">HR</option>
-                            <option value="Business Consulting">
-                              Business Consulting
-                            </option>
-                            <option value="Technology Consulting">
-                              Technology Consulting
-                            </option>
-                            <option value="Management">Management</option>
-                          </select>
-                        </div>
+                              <select
+                                className="form-control form-control-sm"
+                                id="stream"
+                                value={selectedStream}
+                                onChange={handleStreamChange}
+                                name="stream"
+                                disabled={inputData?.status && true}
+                              >
+                                <option value="HR">HR</option>
+                                <option value="Business Consulting">
+                                  Business Consulting
+                                </option>
+                                <option value="Technology Consulting">
+                                  Technology Consulting
+                                </option>
+                                <option value="Management">Management</option>
+                              </select>
+                            </div>
                           </div>
                           <div className="col-md-4">
-                          <div className="form-group">
-                          <label >
-                            Select your Position:
-                          </label>
+                            <div className="form-group">
+                              <label>Select your Position:</label>
 
-                          <select
-                            name="position"
-                            className="form-control form-control-sm"
-                            value={selectedPosition}
-                            onChange={handlePositionChange}
-                            disabled={inputData?.status && true}
-                          >
-                            <option value="">Select a position</option>
-                            {positions[selectedStream].map((position) => (
-                              <option key={position} value={position}>
-                                {position}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                              <select
+                                name="position"
+                                className="form-control form-control-sm"
+                                value={selectedPosition}
+                                onChange={handlePositionChange}
+                                disabled={inputData?.status && true}
+                              >
+                                <option value="">Select a position</option>
+                                {positions[selectedStream].map((position) => (
+                                  <option key={position} value={position}>
+                                    {position}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
                           </div>
                         </div>
                         {selectedBand !== "Band 1" && (
                           <>
-                        <div className="row">
-                          <div className="col-md-4">
-                          <div className="form-group">
-                          <label >
-                          Children allowance <span>(Max. 2)</span>
-                          </label>
-                          <select
+                            <div className="row">
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label>
+                                    Children allowance <span>(Max. 2)</span>
+                                  </label>
+                                  <select
                                     className="form-control form-control-sm"
                                     name="children_allowance"
                                     onChange={handleInput}
@@ -405,32 +407,35 @@ const Flexible_Benefit_Plan = () => {
                                     <option value={1}>1</option>
                                     <option value={2}>2</option>
                                   </select>
-                                  <div style={{fontSize:"12px"}}>
-                                  <span className="text-danger mt-2" >
-                                  * Total Allowance:
-                                </span>                                 
-                                  <span className="ms-1 me-1 fw-bold" >
-                                    {inputData?.children_allowance === undefined
-                                      ? 0 * 100
-                                      : inputData?.children_allowance * 100}
-                                  </span>
-                                  Per Month
+                                  <div style={{ fontSize: "12px" }}>
+                                    <span className="text-danger mt-2">
+                                      * Total Allowance:
+                                    </span>
+                                    <span className="ms-1 me-1 fw-bold">
+                                      {inputData?.children_allowance ===
+                                      undefined
+                                        ? 0 * 100
+                                        : inputData?.children_allowance * 100}
+                                    </span>
+                                    Per Month
+                                  </div>
                                 </div>
-                          </div>
-                          </div>
-                          <div className="col-md-4">
-                          <div className="form-group">                               
-                                  <label >Telephone Allowance <span className="text-danger mt-2">
-                                  {selectedBand === "Band 2"
-                                    ? "(Max 2000) "
-                                    : selectedBand === "Band 3"
-                                    ? "(Max 3000) "
-                                    : selectedBand === "Band 4"
-                                    ? "(Max 5000) "
-                                    : ""}
-                                </span>
-                                </label>
-                                <input
+                              </div>
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label>
+                                    Telephone Allowance{" "}
+                                    <span className="text-danger mt-2">
+                                      {selectedBand === "Band 2"
+                                        ? "(Max 2000) "
+                                        : selectedBand === "Band 3"
+                                        ? "(Max 3000) "
+                                        : selectedBand === "Band 4"
+                                        ? "(Max 5000) "
+                                        : ""}
+                                    </span>
+                                  </label>
+                                  <input
                                     onChange={handleInput}
                                     name="telephone_allowance"
                                     type="number"
@@ -450,24 +455,23 @@ const Flexible_Benefit_Plan = () => {
                                     disabled={inputData?.status && true}
                                     required
                                   />
-                                   </div>
-                                
-                               
-                          </div>
-                          <div className="col-md-4">
-                          <div className="form-group">
-                             
-                                  <label >Fuel <span className="col-4 text-danger mt-2">
-                                  {selectedBand === "Band 2"
-                                    ? "(Max 3000) "
-                                    : selectedBand === "Band 3"
-                                    ? "(Max 5000) "
-                                    : selectedBand === "Band 4"
-                                    ? "(Max 10000) "
-                                    : ""}
-                                </span></label>
-                                
-                                
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label>
+                                    Fuel{" "}
+                                    <span className="col-4 text-danger mt-2">
+                                      {selectedBand === "Band 2"
+                                        ? "(Max 3000) "
+                                        : selectedBand === "Band 3"
+                                        ? "(Max 5000) "
+                                        : selectedBand === "Band 4"
+                                        ? "(Max 10000) "
+                                        : ""}
+                                    </span>
+                                  </label>
+
                                   <input
                                     onChange={handleInput}
                                     name="fuel_allowance"
@@ -487,26 +491,26 @@ const Flexible_Benefit_Plan = () => {
                                     disabled={inputData?.status && true}
                                     required
                                   />
-                               
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="row">
-                          
-                          <div className="col-md-4">
-                          <div className="form-group">
-                                    <label >Meals Allowance <span className="col-4 text-danger mt-2">
-                                  {selectedBand === "Band 2"
-                                    ? "(Max 2000) "
-                                    : selectedBand === "Band 3"
-                                    ? "(Max 3000) "
-                                    : selectedBand === "Band 4"
-                                    ? "(Max 5000) "
-                                    : ""}
-                                </span></label>
-                                 
+                            <div className="row">
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label>
+                                    Meals Allowance{" "}
+                                    <span className="col-4 text-danger mt-2">
+                                      {selectedBand === "Band 2"
+                                        ? "(Max 2000) "
+                                        : selectedBand === "Band 3"
+                                        ? "(Max 3000) "
+                                        : selectedBand === "Band 4"
+                                        ? "(Max 5000) "
+                                        : ""}
+                                    </span>
+                                  </label>
 
-                                   <input
+                                  <input
                                     onChange={handleInput}
                                     name="meals_allowance"
                                     className="form-control form-control-sm"
@@ -525,30 +529,30 @@ const Flexible_Benefit_Plan = () => {
                                     disabled={inputData?.status && true}
                                     required
                                   />
-                                 
-                             </div>
-                          </div>
-                          <div className="col-md-4">
-                          <div className="form-group">
-                                    <label >
-                                    Books and Periodicals <span className=" text-danger mt-2">
-                                  {selectedBand === "Band 2"
-                                    ? "(Max 1500)"
-                                    : selectedBand === "Band 3"
-                                    ? "(Max 2000) "
-                                    : selectedBand === "Band 4"
-                                    ? "(Max 2500)"
-                                    : ""}
-                                </span>
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label>
+                                    Books and Periodicals{" "}
+                                    <span className=" text-danger mt-2">
+                                      {selectedBand === "Band 2"
+                                        ? "(Max 1500)"
+                                        : selectedBand === "Band 3"
+                                        ? "(Max 2000) "
+                                        : selectedBand === "Band 4"
+                                        ? "(Max 2500)"
+                                        : ""}
+                                    </span>
                                   </label>
- 
-                                   <input
+
+                                  <input
                                     onChange={handleInput}
                                     name="books_and_periodicals_allowance"
                                     className="form-control form-control-sm"
                                     type="number"
                                     value={
-                                        inputData?.books_and_periodicals_allowance 
+                                      inputData?.books_and_periodicals_allowance
                                     }
                                     min="1"
                                     max={
@@ -563,19 +567,20 @@ const Flexible_Benefit_Plan = () => {
                                     disabled={inputData?.status && true}
                                     required
                                   />
-                                  
-                                 
-                            </div>
-                          </div>
-                          <div className="col-md-4">
-                          {selectedBand === "Band 4" &&
-                              <div className="form-group">
-                                 
-                                    <label >Driver <span className="col-4 text-danger mt-2">
-                                    {selectedBand === "Band 4"
-                                      ? "(Max 8000)"
-                                      : ""}
-                                  </span></label>  <input
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                {selectedBand === "Band 4" && (
+                                  <div className="form-group">
+                                    <label>
+                                      Driver{" "}
+                                      <span className="col-4 text-danger mt-2">
+                                        {selectedBand === "Band 4"
+                                          ? "(Max 8000)"
+                                          : ""}
+                                      </span>
+                                    </label>{" "}
+                                    <input
                                       type="number"
                                       name="driver_allowance"
                                       onChange={handleInput}
@@ -586,39 +591,32 @@ const Flexible_Benefit_Plan = () => {
                                       disabled={inputData?.status && true}
                                       required
                                     />
-                                   
-                                  
                                   </div>
-                                 
-}
-                          </div>
-                        </div>
-                        </>
+                                )}
+                              </div>
+                            </div>
+                          </>
                         )}
-                       
-                       
-
-                         
 
                         {/* ===========================Submit================== */}
                         <div className="text-center">
-                        {!inputData?.status && (
-                          <>
-                           <button
-                           type="button"
-                           className="btn btn-sm btn-gradient-secondary me-2"
-                           onClick={onSaveButton}
-                         >
-                           Save
-                         </button>
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-gradient-success me-2"
-                          >
-                            Save & Submit
-                          </button>
-                          </>
-                        )}
+                          {!inputData?.status && (
+                            <>
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-gradient-secondary me-2"
+                                onClick={onSaveButton}
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="submit"
+                                className="btn btn-sm btn-gradient-success me-2"
+                              >
+                                Save & Submit
+                              </button>
+                            </>
+                          )}
                         </div>
                       </form>
                     </div>

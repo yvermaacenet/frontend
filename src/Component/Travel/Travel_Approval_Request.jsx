@@ -35,15 +35,14 @@ const TravelApprovalRequest = () => {
         })
         .then((result) => {
           const resp = result.data;
-
-          // setManagementView(resp);
           const filtered = resp.filter(
             (x) => x?.reporting_manager.slice(-2) === LocalStorageData?.emp_id
           );
-          console.log("fill", filtered);
           setOriginalData(filtered);
-
-          return setGettravelrequestdata(filtered);
+          const filteredRequest = filtered.filter(
+            (x) => x.managers_approval === "Pending"
+          );
+          return setGettravelrequestdata(filteredRequest);
           // , setLoading(false);
         })
         .catch((err) => {
@@ -70,7 +69,6 @@ const TravelApprovalRequest = () => {
       (x) =>
         x.managers_approval === "Approved" || x.managers_approval === "Declined"
     );
-    console.log("hi:", filteredRequest);
     setGettravelrequestdata(filteredRequest);
   };
   const handleAllClick = (e) => {
@@ -95,7 +93,7 @@ const TravelApprovalRequest = () => {
         <div className="main-panel">
           <div className="content-wrapper">
             <Page_Header
-              page_title="Requests Received for Approvals"
+              page_heading="Travel Requests list for Approvals"
               page_title_icon="mdi-home-modern"
               page_title_button="Back"
               page_title_button_link="/alltravelrequest"
@@ -106,19 +104,19 @@ const TravelApprovalRequest = () => {
               </div>
             )}
             <div className="d-flex justify-content-lg-end my-2 justify-content-center ">
-              <button className="btn btn-info" onClick={handleAllClick}>
-                {" "}
+              <button className="btn btn-sm btn-info" onClick={handleAllClick}>
                 All
               </button>
               <button
-                className="btn btn-danger mx-2 "
+                className="btn btn-sm btn-warning mx-2 "
                 onClick={handleActiveClick}
               >
-                {" "}
-                Active
+                Pending
               </button>
-              <button className="btn btn-success" onClick={handleHistoryClick}>
-                {" "}
+              <button
+                className="btn btn-sm btn-success"
+                onClick={handleHistoryClick}
+              >
                 History
               </button>
             </div>
@@ -150,7 +148,19 @@ const TravelApprovalRequest = () => {
                               {/* <td>{val?.destination}</td> */}
                               {/* <td>{val.estimated_amount}</td> */}
                               {/* <td>{val.type_of_request}</td> */}
-                              <td>{val?.managers_approval}</td>
+                              <td>
+                                <label
+                                  class={`${
+                                    val?.managers_approval === "Approved"
+                                      ? "badge badge-success"
+                                      : val?.managers_approval === "Declined"
+                                      ? "badge badge-danger"
+                                      : "badge badge-warning"
+                                  }`}
+                                >
+                                  {val?.managers_approval}
+                                </label>
+                              </td>
                               <td>{val?.remarks}</td>
 
                               <td>
@@ -160,7 +170,6 @@ const TravelApprovalRequest = () => {
                                   onClick={() => {
                                     return (
                                       setModalData(val),
-                                      console.log(val),
                                       setId(val._id),
                                       navigate(`/travelactionpage/${val._id}`)
                                     );

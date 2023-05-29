@@ -19,6 +19,8 @@ const GetTravelRequestForm_Data = () => {
   const [viewRequestData, setViewRequestData] = useState([]);
   const [gettravelrequestdata, setGettravelrequestdata] = useState([]);
   const [renderComponent, setRenderComponent] = useState(false);
+  const [id, setId] = useState("");
+  const [isManager, setIsManager] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -40,8 +42,25 @@ const GetTravelRequestForm_Data = () => {
           }
         });
     }
-
     getData();
+    async function getAllManagersList() {
+      const resp = await axios
+        .get("/get_user_list_By_Role_Name")
+        .then((result) => {
+          const resp = result.data.Reporting_Manager;
+          const filtered = resp?.includes(LocalStorageData?.emp_id);
+          return setIsManager(filtered);
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+    }
+
+    getAllManagersList();
   }, [renderComponent]);
 
   // =========Revoke RRequest=========
@@ -55,20 +74,23 @@ const GetTravelRequestForm_Data = () => {
         <div className="main-panel">
           <div className="content-wrapper">
             <Page_Header
-              page_title="Travel Requests"
+              page_heading="Travel Requests List"
+              page_title="Create new request"
               page_title_icon="mdi-home-modern"
-              page_title_button="Back"
+              page_title_button="Add"
               page_title_button_link="/travelrequestform"
             />
             <div className="d-flex justify-content-end mb-3">
-              <NavLink to="/travelrequestform">
+              {/* <NavLink to="/travelrequestform">
                 <button className="btn btn-sm btn-success mx-3">
                   Raise Request
                 </button>
-              </NavLink>
-              <NavLink to="/travelrequestreceived">
-                <button className="btn btn-sm btn-dark">Take Action</button>
-              </NavLink>
+              </NavLink> */}
+              {isManager && (
+                <NavLink to="/travelrequestreceived">
+                  <button className="btn btn-sm btn-dark">Take Action</button>
+                </NavLink>
+              )}
             </div>
             {loading && (
               <div className="loader-container">
@@ -82,7 +104,7 @@ const GetTravelRequestForm_Data = () => {
                     <table className="table table-striped">
                       <thead>
                         <tr>
-                          <th>Id</th>
+                          <th>Sr.no</th>
                           <th>Requested On</th>
                           {/* <th>Reason for travel</th> */}
                           <th>Manager Approval</th>
@@ -94,22 +116,37 @@ const GetTravelRequestForm_Data = () => {
                           return (
                             <tr>
                               <td>{index + 1}</td>
-                              <td>{(val?.createdAt).split("T")[0]}</td>
+                              <td>{val?.createdAt?.split("T")[0]}</td>
                               {/* <td>{val?.travel?.reason_for_travel}</td> */}
                               <td>
-                                <td className="" type="button" disabled>
+                                <label
+                                  class={`${
+                                    val?.managers_approval === "Approved"
+                                      ? "badge badge-success"
+                                      : val?.managers_approval === "Declined"
+                                      ? "badge badge-danger"
+                                      : "badge badge-warning"
+                                  }`}
+                                >
                                   {val?.managers_approval}
-                                </td>
+                                </label>
                               </td>
 
                               <td>
                                 <td
                                   className="btn btn-outline-primary btn-sm"
                                   type="button"
+                                  // onClick={() => {
+                                  //   return (
+                                  //     setViewRequestModal(true),
+                                  //     setViewRequestData(val)
+                                  //   );
+                                  // }}
                                   onClick={() => {
                                     return (
-                                      setViewRequestModal(true),
-                                      setViewRequestData(val)
+                                      // setModalData(val),
+                                      setId(val._id),
+                                      navigate(`/travelactionpage/${val._id}`)
                                     );
                                   }}
                                 >
@@ -169,7 +206,7 @@ const GetTravelRequestForm_Data = () => {
               // setAllDay(false);
               return true;
             }}
-            width={"80%"}
+            width={"70%"}
           >
             <div className="row">
               <div className="col-lg-12 grid-margin stretch-card">

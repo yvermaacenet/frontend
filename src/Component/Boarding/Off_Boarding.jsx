@@ -48,7 +48,6 @@ const Off_Boarding = () => {
     const { name, checked } = e.target;
     setInputData({ ...inputData, [name]: checked });
     setUpdated_data({ ...updated_data, [name]: checked });
-
   };
   useEffect(() => {
     setLoading(true);
@@ -141,13 +140,13 @@ const Off_Boarding = () => {
             inputData?.ghi_e_card_issued === true
               ? true
               : false,
-              updated_by: [
-                {
-                  user_id: LocalStorageData?.user_id,
-                  user_name: LocalStorageData?.name,
-                  updated_data,
-                },
-              ],
+          updated_by: [
+            {
+              user_id: LocalStorageData?.user_id,
+              user_name: LocalStorageData?.name,
+              updated_data,
+            },
+          ],
         },
         {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
@@ -234,14 +233,14 @@ const Off_Boarding = () => {
             inputData?.ghi_e_card_issued === true
               ? true
               : false,
-              updated_by: [
-                ...inputData?.updated_by,
-                {
-                  user_id: LocalStorageData?.user_id,
-                  user_name: LocalStorageData?.name,
-                  updated_data,
-                },
-              ],
+          updated_by: [
+            ...inputData?.updated_by,
+            {
+              user_id: LocalStorageData?.user_id,
+              user_name: LocalStorageData?.name,
+              updated_data,
+            },
+          ],
         },
 
         {
@@ -288,7 +287,7 @@ const Off_Boarding = () => {
         <div className="main-panel">
           <div className="content-wrapper">
             <Page_Header
-              page_title="Boarding"
+              page_heading="Boarding"
               page_title_icon="mdi-view-dashboard"
               page_title_button="Back"
               page_title_button_link="/user_list/active_users"
@@ -302,9 +301,12 @@ const Off_Boarding = () => {
               <div class="col-lg-12 grid-margin stretch-card">
                 <div className="card">
                   <div className="card-body">
-                  <div className=" d-flex justify-content-between align-items-center">
-                    <span className="card-description"> Off Boarding Process </span>
-                    <div>
+                    <div className=" d-flex justify-content-between align-items-center">
+                      <span className="card-description">
+                        {" "}
+                        Off Boarding Process{" "}
+                      </span>
+                      <div>
                         <a
                           style={{ float: "right" }}
                           className=" nav-link count-indicator dropdown-toggle mb-4"

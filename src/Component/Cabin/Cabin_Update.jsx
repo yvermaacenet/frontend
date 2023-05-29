@@ -152,6 +152,7 @@ const Cabin_Update = () => {
           <div class="main-panel">
             <div class="content-wrapper">
               <Page_Header
+                page_heading="Edit Cabin"
                 page_title="Cabin"
                 page_title_icon="mdi-home-modern"
                 page_title_button="Back"
@@ -172,7 +173,7 @@ const Cabin_Update = () => {
                             <div class="form-group">
                               <label>Location</label>
                               <select
-                                className="form-control h-100"
+                                className="form-control form-control-sm"
                                 name="location"
                                 value={inputData.location}
                                 onChange={inputEvent}

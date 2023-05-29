@@ -307,7 +307,8 @@ const User_List = () => {
           <div className="main-panel">
             <div className="content-wrapper">
               <Page_Header
-                page_title="User"
+                page_heading="User"
+                // page_title="User"
                 page_title_icon="mdi-account-multiple-outline"
                 page_title_button="Back"
                 page_title_button_link="/dashboard"

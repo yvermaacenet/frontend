@@ -565,3 +565,6 @@ export const travel_request_form_validation = yup.object({
     } else return yup.string().notRequired();
   }),
 });
+export const form_travel_request_action_validation = yup.object({
+  remarks: yup.string().required("This field is required"),
+});

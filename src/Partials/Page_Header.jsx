@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const Page_Header = ({
+  page_heading,
   page_title,
   page_title_icon,
   page_title_button,
@@ -14,7 +15,7 @@ const Page_Header = ({
           <span className="page-title-icon bg-gradient-primary text-white me-2">
             <i class={`mdi ${page_title_icon}`}></i>
           </span>
-          {page_title}
+          {page_heading}
         </h3>
         {page_title_button === "Overview" ? (
           <nav aria-label="breadcrumb">
@@ -29,7 +30,7 @@ const Page_Header = ({
           <h3 className="page-title">
             <NavLink to={page_title_button_link}>
               <span className="page-title-icon bg-gradient-primary text-white me-2">
-                <i class={`mdi mdi-plus`}></i>
+                <i class={`mdi mdi-plus`} title={page_title}></i>
               </span>
             </NavLink>
           </h3>
@@ -37,7 +38,10 @@ const Page_Header = ({
           <h3 className="page-title">
             <NavLink to={page_title_button_link}>
               <span className="page-title-icon bg-gradient-primary text-white me-2">
-                <i class={`mdi mdi-keyboard-backspace`}></i>
+                <i
+                  class={`mdi mdi-keyboard-backspace`}
+                  title="Back to page"
+                ></i>
               </span>
             </NavLink>
           </h3>

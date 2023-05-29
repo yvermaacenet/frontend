@@ -71,7 +71,8 @@ const Cabin_List = () => {
           <div class="main-panel">
             <div class="content-wrapper">
               <Page_Header
-                page_title="Cabin"
+                page_heading="Cabin List"
+                page_title="Add Cabin"
                 page_title_icon="mdi-home-modern"
                 page_title_button="Add"
                 page_title_button_link="/cabin_add"
