@@ -39,8 +39,10 @@ const TravelApprovalRequest = () => {
             (x) => x?.reporting_manager.slice(-2) === LocalStorageData?.emp_id
           );
           setOriginalData(filtered);
-
-          return setGettravelrequestdata(filtered);
+          const filteredRequest = filtered.filter(
+            (x) => x.managers_approval === "Pending"
+          );
+          return setGettravelrequestdata(filteredRequest);
           // , setLoading(false);
         })
         .catch((err) => {
