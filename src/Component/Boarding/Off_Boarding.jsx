@@ -34,6 +34,7 @@ const Off_Boarding = () => {
     employee_datasheet_updated: false,
     ghi_deletion: false,
     employee_folder_moved_to_past_employee_folder: false,
+    ghi_opt_out: false,
     ghi_initiated: false,
     ghi_e_card_issued: false,
     handover_complete: false,
@@ -115,6 +116,12 @@ const Off_Boarding = () => {
         `/off_boarding/${_id}`,
         {
           ...inputData,
+          ghi_initiated: inputData?.ghi_opt_out
+            ? inputData?.ghi_initiated
+            : false,
+          ghi_e_card_issued: inputData?.ghi_opt_out
+            ? inputData?.ghi_e_card_issued
+            : false,
           hr_off_boarding_status:
             inputData?.acceptance_of_resignation_and_last_date_communication_to_employee ===
               true && inputData?.appraisals_for_reportees === true
@@ -127,7 +134,7 @@ const Off_Boarding = () => {
             inputData?.official_document_handover === true &&
             inputData?.acenet_laptop === true &&
             inputData?.id_card === true &&
-            inputData?.data_card_hotspot === true &&
+            // inputData?.data_card_hotspot === true &&
             inputData?.client_asset === true &&
             inputData?.biometric_disabled === true &&
             inputData?.office_365_account_deletion === true &&
@@ -139,8 +146,10 @@ const Off_Boarding = () => {
             inputData?.employee_datasheet_updated === true &&
             inputData?.ghi_deletion === true &&
             inputData?.employee_folder_moved_to_past_employee_folder === true &&
-            inputData?.ghi_initiated === true &&
-            inputData?.ghi_e_card_issued === true
+            inputData?.ghi_initiated ===
+              (inputData?.ghi_opt_out ? true : false) &&
+            inputData?.ghi_e_card_issued ===
+              (inputData?.ghi_opt_out ? true : false)
               ? true
               : false,
           management_off_boarding_status:
@@ -184,6 +193,12 @@ const Off_Boarding = () => {
         `/off_boarding/${inputData?._id}`,
         {
           ...inputData,
+          ghi_initiated: inputData?.ghi_opt_out
+            ? inputData?.ghi_initiated
+            : false,
+          ghi_e_card_issued: inputData?.ghi_opt_out
+            ? inputData?.ghi_e_card_issued
+            : false,
           hr_off_boarding_status:
             inputData?.acceptance_of_resignation_and_last_date_communication_to_employee ===
               true && inputData?.appraisals_for_reportees === true
@@ -196,7 +211,7 @@ const Off_Boarding = () => {
             inputData?.official_document_handover === true &&
             inputData?.acenet_laptop === true &&
             inputData?.id_card === true &&
-            inputData?.data_card_hotspot === true &&
+            // inputData?.data_card_hotspot === true &&
             inputData?.client_asset === true &&
             inputData?.biometric_disabled === true &&
             inputData?.office_365_account_deletion === true &&
@@ -208,8 +223,10 @@ const Off_Boarding = () => {
             inputData?.employee_datasheet_updated === true &&
             inputData?.ghi_deletion === true &&
             inputData?.employee_folder_moved_to_past_employee_folder === true &&
-            inputData?.ghi_initiated === true &&
-            inputData?.ghi_e_card_issued === true
+            inputData?.ghi_initiated ===
+              (inputData?.ghi_opt_out ? true : false) &&
+            inputData?.ghi_e_card_issued ===
+              (inputData?.ghi_opt_out ? true : false)
               ? true
               : false,
           management_off_boarding_status:
@@ -780,7 +797,7 @@ const Off_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                        <tr>
+                                        {/* <tr>
                                           <td> Data card/hotspot </td>
                                           <td>
                                             <div className="board">
@@ -809,7 +826,7 @@ const Off_Boarding = () => {
                                               <span>Yes</span>
                                             </div>
                                           </td>
-                                        </tr>
+                                        </tr> */}
                                         <tr>
                                           <td> Client Asset </td>
                                           <td>
@@ -1144,18 +1161,18 @@ const Off_Boarding = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <td>GHI Initiated</td>
+                                          <td>GHI Opt out</td>
                                           <td>
                                             <div className="board">
                                               <span>No</span>
                                               <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
-                                                  name="ghi_initiated"
+                                                  name="ghi_opt_out"
                                                   className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   checked={
-                                                    inputData?.ghi_initiated
+                                                    inputData?.ghi_opt_out
                                                   }
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
@@ -1173,36 +1190,70 @@ const Off_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                        <tr>
-                                          <td>GHI E-Card issued</td>
-                                          <td>
-                                            <div className="board">
-                                              <span>No</span>
-                                              <label className="switch ms-1 me-1 mt-1 ">
-                                                <input
-                                                  type="checkbox"
-                                                  name="ghi_e_card_issued"
-                                                  className="form-control form-control-sm"
-                                                  onChange={inputEvent}
-                                                  checked={
-                                                    inputData?.ghi_e_card_issued
-                                                  }
-                                                  disabled={
-                                                    LocalStorageData?.zoho_role ===
-                                                      "Finance" ||
-                                                    LocalStorageData?.zoho_role ===
-                                                      "Admin"
-                                                      ? false
-                                                      : true
-                                                  }
-                                                  style={{ opacity: "0" }}
-                                                />
-                                                <span className="slider round"></span>
-                                              </label>
-                                              <span>Yes</span>
-                                            </div>
-                                          </td>
-                                        </tr>
+                                        {inputData?.ghi_opt_out && (
+                                          <>
+                                            <tr>
+                                              <td>GHI Initiated</td>
+                                              <td>
+                                                <div className="board">
+                                                  <span>No</span>
+                                                  <label className="switch ms-1 me-1 mt-1 ">
+                                                    <input
+                                                      type="checkbox"
+                                                      name="ghi_initiated"
+                                                      className="form-control form-control-sm"
+                                                      onChange={inputEvent}
+                                                      checked={
+                                                        inputData?.ghi_initiated
+                                                      }
+                                                      disabled={
+                                                        LocalStorageData?.zoho_role ===
+                                                          "Finance" ||
+                                                        LocalStorageData?.zoho_role ===
+                                                          "Admin"
+                                                          ? false
+                                                          : true
+                                                      }
+                                                      style={{ opacity: "0" }}
+                                                    />
+                                                    <span className="slider round"></span>
+                                                  </label>
+                                                  <span>Yes</span>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td>GHI E-Card issued</td>
+                                              <td>
+                                                <div className="board">
+                                                  <span>No</span>
+                                                  <label className="switch ms-1 me-1 mt-1 ">
+                                                    <input
+                                                      type="checkbox"
+                                                      name="ghi_e_card_issued"
+                                                      className="form-control form-control-sm"
+                                                      onChange={inputEvent}
+                                                      checked={
+                                                        inputData?.ghi_e_card_issued
+                                                      }
+                                                      disabled={
+                                                        LocalStorageData?.zoho_role ===
+                                                          "Finance" ||
+                                                        LocalStorageData?.zoho_role ===
+                                                          "Admin"
+                                                          ? false
+                                                          : true
+                                                      }
+                                                      style={{ opacity: "0" }}
+                                                    />
+                                                    <span className="slider round"></span>
+                                                  </label>
+                                                  <span>Yes</span>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          </>
+                                        )}
                                       </tbody>
                                     </table>
                                   </>

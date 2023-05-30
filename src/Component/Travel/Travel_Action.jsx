@@ -174,7 +174,6 @@ const Travel_Action = (props) => {
       }
     }
   };
-  console.log("ressdsdp", isManagememnt);
 
   return (
     <div className="container-scroller">
@@ -438,57 +437,57 @@ const Travel_Action = (props) => {
                         </table>
                       </>
                     )}
-                    {/* {isManager &&
-                      getData?.employee?.email !== LocalStorageData?.email && ( */}
-                    <form
-                      className="forms-sample"
-                      onSubmit={handleSubmit(onSubmitButton)}
-                    >
-                      <div class="col-12 mt-2">
-                        <div class="form-group">
-                          <label>Remarks</label>
-                          <textarea
-                            name="remarks"
-                            className={classNames(
-                              "form-control form-control-sm font-bold",
-                              {
-                                "is-invalid": errors.remarks,
-                              }
-                            )}
-                            {...register("remarks", {
-                              value: getData?.remarks,
-                            })}
-                            onChange={(e) =>
-                              setGetData({
-                                ...getData,
-                                remarks: e.target.value,
-                              })
-                            }
-                            value={getData?.remarks}
-                            placeholder="Enter Remarks"
-                            rows={4}
-                          ></textarea>
-                        </div>
-                      </div>
+                    {isManager &&
+                      getData?.employee?.email !== LocalStorageData?.email && (
+                        <form
+                          className="forms-sample"
+                          onSubmit={handleSubmit(onSubmitButton)}
+                        >
+                          <div class="col-12 mt-2">
+                            <div class="form-group">
+                              <label>Remarks</label>
+                              <textarea
+                                name="remarks"
+                                className={classNames(
+                                  "form-control form-control-sm font-bold",
+                                  {
+                                    "is-invalid": errors.remarks,
+                                  }
+                                )}
+                                {...register("remarks", {
+                                  value: getData?.remarks,
+                                })}
+                                onChange={(e) =>
+                                  setGetData({
+                                    ...getData,
+                                    remarks: e.target.value,
+                                  })
+                                }
+                                value={getData?.remarks}
+                                placeholder="Enter Remarks"
+                                rows={4}
+                              ></textarea>
+                            </div>
+                          </div>
 
-                      <div className="text-center">
-                        <button
-                          type="submit"
-                          className="btn btn-sm btn-gradient-success me-2"
-                          onClick={() => setHandleButtonType(true)}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          type="submit"
-                          className="btn btn-sm btn-gradient-danger me-2"
-                          onClick={() => setHandleButtonType(false)}
-                        >
-                          Decline
-                        </button>
-                      </div>
-                    </form>
-                    {/* )} */}
+                          <div className="text-center">
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-success me-2"
+                              onClick={() => setHandleButtonType(true)}
+                            >
+                              Approve
+                            </button>
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-danger me-2"
+                              onClick={() => setHandleButtonType(false)}
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        </form>
+                      )}
                   </div>
                 </div>
               </div>

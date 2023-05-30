@@ -17,7 +17,7 @@ const On_Boarding = () => {
     introduction_meeting_with_line_manager_respective_senior_manager: false,
     handover_to_project_complete: false,
     introduction_call_with_ceo: false,
-    wifi_passwords: false,
+    // wifi_passwords: false,
     genrate_mail_id: false,
     one_drive_access: false,
     teams_access: false,
@@ -25,10 +25,10 @@ const On_Boarding = () => {
     biometric: false,
     acenet_laptop: false,
     client_laptop: false,
-    notpad: false,
+    // notpad: false,
     t_shirt: false,
     welcome_kit: false,
-    intro_slide_shared: false,
+    // intro_slide_shared: false,
     aadhar_card: false,
     pan_card: false,
     passport: false,
@@ -55,8 +55,8 @@ const On_Boarding = () => {
     ghi_initiated: false,
     ghi_eCard_issued: false,
     zoho_people_account_created: false,
-    zoho_people_account_activated: false,
-    zoho_payroll_integrated: false,
+    // zoho_people_account_activated: false,
+    // zoho_payroll_integrated: false,
     bgv_initiated: false,
     bgv_invoice_Paid: false,
     bgv_report_Received: false,
@@ -166,19 +166,19 @@ const On_Boarding = () => {
               ? true
               : false,
           finance_on_boarding_status:
-            inputData?.wifi_passwords === true &&
+            // inputData?.wifi_passwords === true &&
             inputData?.genrate_mail_id === true &&
             inputData?.one_drive_access === true &&
             inputData?.teams_access === true &&
             inputData?.add_to_official_dls === true &&
-            inputData?.biometric === true &&
+            // inputData?.biometric === true &&
             inputData?.introduction_call_with_ceo === true &&
             inputData?.acenet_laptop === true &&
-            inputData?.client_laptop === true &&
-            inputData?.notpad === true &&
+            // inputData?.client_laptop === true &&
+            // inputData?.notpad === true &&
             inputData?.t_shirt === true &&
             inputData?.welcome_kit === true &&
-            inputData?.intro_slide_shared === true &&
+            // inputData?.intro_slide_shared === true &&
             inputData?.aadhar_card === true &&
             inputData?.pan_card === true &&
             inputData?.passport === true &&
@@ -205,8 +205,8 @@ const On_Boarding = () => {
             inputData?.ghi_initiated === true &&
             inputData?.ghi_eCard_issued === true &&
             inputData?.zoho_people_account_created === true &&
-            inputData?.zoho_people_account_activated === true &&
-            inputData?.zoho_payroll_integrated === true &&
+            // inputData?.zoho_people_account_activated === true &&
+            // inputData?.zoho_payroll_integrated === true &&
             inputData?.bgv_initiated === true &&
             inputData?.bgv_invoice_Paid === true &&
             inputData?.bgv_report_Received === true &&
@@ -260,19 +260,19 @@ const On_Boarding = () => {
               ? true
               : false,
           finance_on_boarding_status:
-            inputData?.wifi_passwords === true &&
+            // inputData?.wifi_passwords === true &&
             inputData?.genrate_mail_id === true &&
             inputData?.one_drive_access === true &&
             inputData?.teams_access === true &&
             inputData?.add_to_official_dls === true &&
-            inputData?.biometric === true &&
+            // inputData?.biometric === true &&
             inputData?.introduction_call_with_ceo === true &&
             inputData?.acenet_laptop === true &&
-            inputData?.client_laptop === true &&
-            inputData?.notpad === true &&
+            // inputData?.client_laptop === true &&
+            // inputData?.notpad === true &&
             inputData?.t_shirt === true &&
             inputData?.welcome_kit === true &&
-            inputData?.intro_slide_shared === true &&
+            // inputData?.intro_slide_shared === true &&
             inputData?.aadhar_card === true &&
             inputData?.pan_card === true &&
             inputData?.passport === true &&
@@ -299,8 +299,8 @@ const On_Boarding = () => {
             inputData?.ghi_initiated === true &&
             inputData?.ghi_eCard_issued === true &&
             inputData?.zoho_people_account_created === true &&
-            inputData?.zoho_people_account_activated === true &&
-            inputData?.zoho_payroll_integrated === true &&
+            // inputData?.zoho_people_account_activated === true &&
+            // inputData?.zoho_payroll_integrated === true &&
             inputData?.bgv_initiated === true &&
             inputData?.bgv_invoice_Paid === true &&
             inputData?.bgv_report_Received === true &&
@@ -829,7 +829,7 @@ const On_Boarding = () => {
                                         <p class="card-description mt-2 mb-0 text-center">
                                           First Day Formalities
                                         </p>
-                                        <tr>
+                                        {/* <tr>
                                           <td> Wifi Passwords </td>
                                           <td>
                                             <div className="board">
@@ -858,7 +858,7 @@ const On_Boarding = () => {
                                               <span>Yes</span>
                                             </div>
                                           </td>
-                                        </tr>
+                                        </tr> */}
                                         <tr>
                                           <td> Generate Mail Id </td>
                                           <td>
@@ -1067,7 +1067,7 @@ const On_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                        <tr>
+                                        {/* <tr>
                                           <td> Notepad </td>
                                           <td>
                                             <div className="board">
@@ -1094,7 +1094,7 @@ const On_Boarding = () => {
                                               <span>Yes</span>
                                             </div>
                                           </td>
-                                        </tr>
+                                        </tr> */}
                                         <tr>
                                           <td> T-Shirt</td>
                                           <td>
@@ -1153,7 +1153,7 @@ const On_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                        <tr>
+                                        {/* <tr>
                                           <td> Intro Slide Shared</td>
                                           <td>
                                             <div className="board">
@@ -1182,7 +1182,7 @@ const On_Boarding = () => {
                                               <span>Yes</span>
                                             </div>
                                           </td>
-                                        </tr>
+                                        </tr> */}
                                         <p class="card-description mt-2 mb-0 text-center">
                                           Documents
                                         </p>
@@ -1982,7 +1982,7 @@ const On_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                        <tr>
+                                        {/* <tr>
                                           <td>Zoho People Account Activated</td>
                                           <td>
                                             <div className="board">
@@ -2011,8 +2011,8 @@ const On_Boarding = () => {
                                               <span>Yes</span>
                                             </div>
                                           </td>
-                                        </tr>
-                                        <tr>
+                                        </tr> */}
+                                        {/* <tr>
                                           <td>Zoho Payroll Integrated</td>
                                           <td>
                                             <div className="board">
@@ -2041,7 +2041,7 @@ const On_Boarding = () => {
                                               <span>Yes</span>
                                             </div>
                                           </td>
-                                        </tr>
+                                        </tr> */}
                                         <p class="card-description mt-2 mb-0 text-center">
                                           Other Formalities
                                         </p>
