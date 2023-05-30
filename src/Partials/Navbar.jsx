@@ -13,7 +13,6 @@ const Navbar = () => {
   useEffect(() => {
     const getAllManagersList = async () => {
       const resp = await axios.get("/get_user_list_By_Role_Name");
-      console.log("resp", resp);
       const allManagersId = resp.data.Reporting_Manager;
       const filtered = allManagersId.includes(LocalStorageData?.emp_id);
       setIsManager(filtered);

@@ -113,7 +113,8 @@ const On_Boarding = () => {
                 ? 1
                 : 2
             ),
-            setRenderComponent(false)
+            setRenderComponent(false),
+            setLoading(false)
           );
         })
         .catch((err) => {
@@ -142,7 +143,6 @@ const On_Boarding = () => {
             navigate("/error_403");
           }
         });
-      setLoading(false);
     }
     get_user_details_by_id();
   }, [renderComponent === true]);
