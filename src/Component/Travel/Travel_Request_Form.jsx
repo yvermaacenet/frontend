@@ -27,6 +27,7 @@ const TravelRequestForm = () => {
     employee_id: LocalStorageData?.emp_id,
     phone: LocalStorageData?.phone,
     reporting_manager: LocalStorageData?.reporting_manager,
+    reporting_manager_emp_id: LocalStorageData?.reporting_manager.slice(-2),
     billable: "",
     project_id: "",
     reason_for_travel: "",

@@ -118,7 +118,7 @@ const GetTravelRequestForm_Data = () => {
                             <tr>
                               <td>{index + 1}</td>
                               <td>{val?.createdAt?.split("T")[0]}</td>
-                              <td>{val?.reporting_manager}</td>
+                              <td>{val?.employee?.reporting_manager}</td>
                               <td>
                                 <label
                                   class={`${

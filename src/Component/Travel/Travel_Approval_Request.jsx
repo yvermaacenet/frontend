@@ -34,24 +34,20 @@ const TravelApprovalRequest = () => {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
-          const resp = result.data;
+          const resp = result?.data;
           setAllData(resp);
-          console.log("cwe", resp);
 
-          const filtered = resp.filter(
-            (x) => x?.reporting_manager.slice(-2) === LocalStorageData?.emp_id
+          const filtered = resp?.filter(
+            (x) => x?.reporting_manager?.slice(-2) === LocalStorageData?.emp_id
           );
           setOriginalData(filtered);
-          const filteredRequest = filtered.filter(
+          const filteredRequest = filtered?.filter(
             (x) => x.managers_approval === "Pending"
           );
-          return (
-            setGettravelrequestdata(
-              LocalStorageData?.zoho_role === "Management"
-                ? resp.filter((x) => x.management_approval === "Pending")
-                : filteredRequest
-            ),
-            setLoading(false)
+          return setGettravelrequestdata(
+            LocalStorageData?.zoho_role === "Management"
+              ? resp.filter((x) => x.management_approval === "Pending")
+              : filteredRequest
           );
         })
         .catch((err) => {
@@ -61,6 +57,7 @@ const TravelApprovalRequest = () => {
             navigate("/error_403");
           }
         });
+      setLoading(false);
     }
     getData();
   }, []);
@@ -172,7 +169,7 @@ const TravelApprovalRequest = () => {
                               {/* <td>{val?.destination}</td> */}
                               {/* <td>{val.estimated_amount}</td> */}
                               {/* <td>{val.type_of_request}</td> */}
-                              <td>{val?.reporting_manager}</td>
+                              <td>{val?.employee?.reporting_manager}</td>
 
                               <td>
                                 <label
