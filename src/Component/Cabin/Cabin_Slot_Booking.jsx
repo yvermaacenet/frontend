@@ -37,6 +37,7 @@ const Cabin_Slot_Booking = () => {
   const [filteredCabinList, setFilteredCabinList] = useState([]);
   const [startDate, setStartdate] = useState("");
   const [invalidText, setInvalidText] = useState("");
+  // to add the start and end time manaually
   const [timeValue, setTimeValue] = useState({
     manual_date: convertDateFormate(startDate),
     start_manual_time: "",
@@ -54,7 +55,7 @@ const Cabin_Slot_Booking = () => {
       };
     });
   };
-
+  // to compare the start and the end time so that end time should not be less than the start time
   const compareTime = (d1, d2) => {
     let date1 = new Date(d1);
     let date2 = new Date(d2);
@@ -87,6 +88,7 @@ const Cabin_Slot_Booking = () => {
       };
     });
   };
+  //to get all the location ( gurgram, Pune)
   const fetch_Location = async () => {
     const res = await axios
       .get("/get_location", {
@@ -101,6 +103,9 @@ const Cabin_Slot_Booking = () => {
         }
       });
   };
+
+  //to get the bookings via cabin
+
   const fetch_cabin_slot_booking_by_location = async (loc) => {
     const res = await axios
       .get(`/cabin_slot_booking_by_location/${loc}`, {
@@ -556,7 +561,7 @@ const Cabin_Slot_Booking = () => {
 
   const handleLocationChange = (e) => {
     setLocationValue(e.target.value);
-    setSelectCabin_id("all");
+    // setSelectCabin_id("all");
     let filteredCabinList = [];
     let filtered = getCabinList?.filter((x) => x.location === e.target.value);
     filteredCabinList.push(filtered);

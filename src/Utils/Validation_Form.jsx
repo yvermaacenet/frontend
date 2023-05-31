@@ -568,3 +568,7 @@ export const travel_request_form_validation = yup.object({
 export const form_travel_request_action_validation = yup.object({
   remarks: yup.string().required("This field is required"),
 });
+export const form_onborading_validation = yup.object({
+  induction_call_with: yup.string().notRequired(),
+  // induction_call_with: yup.string().required("This field is required"),
+});

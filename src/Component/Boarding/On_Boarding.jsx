@@ -10,6 +10,7 @@ const On_Boarding = () => {
   const navigate = useNavigate();
   const { _id } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
+  const [inductionCallWith, setInductionCallWith] = useState("Sunil");
   const [inputData, setInputData] = useState({
     wifi_passwords: false,
     genrate_mail_id: false,
@@ -18,6 +19,7 @@ const On_Boarding = () => {
     add_to_official_dls: false,
     biometric: false,
     induction_call: false,
+    // induction_call_with: inductionCallWith,
     acenet_laptop: false,
     client_laptop: false,
     notpad: false,
@@ -74,11 +76,16 @@ const On_Boarding = () => {
   const [loading, setLoading] = useState(false);
 
   const inputEvent = (e) => {
-    console.log("e", e);
     const { name, checked } = e.target;
     setInputData({ ...inputData, [name]: checked });
     setUpdated_data({ ...updated_data, [name]: checked });
   };
+  const handleInductionCallWith = (e) => {
+    if (inputData?.induction_call === true) {
+      setInductionCallWith(e.target.value);
+    }
+  };
+  console.log(inductionCallWith);
   useEffect(() => {
     setLoading(true);
     async function get_on_boarding_list() {
@@ -88,6 +95,12 @@ const On_Boarding = () => {
         })
         .then((result) => {
           const resp = result.data[0];
+          console.log("ressss", resp);
+          if (resp === undefined) {
+            setInductionCallWith("Sunil");
+          } else {
+            setInductionCallWith(resp?.induction_call_with);
+          }
           return (
             setInputData({ ...inputData, ...resp }), setRenderComponent(false)
           );
@@ -159,6 +172,8 @@ const On_Boarding = () => {
         `/on_boarding/${_id}`,
         {
           ...inputData,
+          induction_call_with:
+            inputData?.induction_call === true ? inductionCallWith : "",
           hr_on_boarding_status:
             inputData?.wifi_passwords === true &&
             inputData?.genrate_mail_id === true &&
@@ -281,6 +296,9 @@ const On_Boarding = () => {
         `/on_boarding/${inputData?._id}`,
         {
           ...inputData,
+          induction_call_with:
+            inputData?.induction_call === true ? inductionCallWith : "",
+
           hr_on_boarding_status:
             inputData?.wifi_passwords === true &&
             inputData?.genrate_mail_id === true &&
@@ -838,14 +856,13 @@ const On_Boarding = () => {
                                             <td>
                                               <select
                                                 name="induction_call_with"
-                                                onChange={inputEvent}
-                                                value={
-                                                  inputData?.induction_call_with
+                                                onChange={
+                                                  handleInductionCallWith
                                                 }
+                                                value={inductionCallWith}
                                                 className="form-control mt-2 "
                                                 type="text"
                                               >
-                                                <option>Please Select</option>
                                                 <option value="sunil">
                                                   Sunil
                                                 </option>
