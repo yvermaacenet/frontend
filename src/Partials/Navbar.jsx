@@ -38,7 +38,6 @@ const Navbar = () => {
     };
     get_notifications_counter();
   }, []);
-  // console.log(getData);
   return (
     <>
       <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -201,7 +200,9 @@ const Navbar = () => {
                 <h6 className="p-3 mb-0 text-center">4 new messages</h6>
               </div>
             </li> */}
-            {isManager && (
+            {(isManager ||
+              LocalStorageData?.zoho_role === "Management" ||
+              LocalStorageData?.zoho_role === "Admin") && (
               <li className="nav-item dropdown">
                 <a
                   className="nav-link count-indicator dropdown-toggle"

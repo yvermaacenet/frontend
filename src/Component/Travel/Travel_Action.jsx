@@ -217,8 +217,8 @@ const Travel_Action = (props) => {
                           <th>Phone</th>
                           <th>Start Date</th>
                           <th>End Date</th>
-                          <th>Project Id</th>
                           <th>Billable</th>
+                          <th>Project Id</th>
                           {isManager && <th>Status</th>}
                         </tr>
                       </thead>
@@ -229,8 +229,12 @@ const Travel_Action = (props) => {
                           <td>{LocalStorageData?.phone}</td>
                           <td>{getData?.travel?.start_date?.split("T")[0]}</td>
                           <td>{getData?.travel?.end_date?.split("T")[0]}</td>
-                          <td>{getData?.employee?.project_id}</td>
                           <td>{getData?.employee?.billable}</td>
+                          <td>
+                            {getData?.employee?.project_id === ""
+                              ? "N/A"
+                              : getData?.employee?.project_id}
+                          </td>
                           {isManager && (
                             <td>
                               <label

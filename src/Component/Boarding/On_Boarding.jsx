@@ -111,7 +111,10 @@ const On_Boarding = () => {
               resp.data?.Hr?.includes(LocalStorageData?.user_id) === true ||
                 resp.data?.Admin?.includes(LocalStorageData?.user_id) === true
                 ? 1
-                : 2
+                : resp.data?.Finance?.includes(LocalStorageData?.user_id) ===
+                  true
+                ? 2
+                : 1
             ),
             setRenderComponent(false),
             setLoading(false)
@@ -460,7 +463,6 @@ const On_Boarding = () => {
                           <th> Designation </th>
                           <th> Joining Date </th>
                           <th> Department </th>
-                          <th> Designation </th>
                           <th> Status </th>
                         </tr>
                       </thead>
@@ -479,7 +481,6 @@ const On_Boarding = () => {
                           <td>{getUserDetailsById["Date of Joining"]}</td>
 
                           <td>{getUserDetailsById["Department"]}</td>
-                          <td>{getUserDetailsById["Designation"]}</td>
                           <td>
                             {inputData?.hr_on_boarding_status === true &&
                             inputData?.finance_on_boarding_status === true ? (
@@ -507,23 +508,22 @@ const On_Boarding = () => {
                   <div className="card-body">
                     {/* <!==========  Previous Button ============> */}
 
-                    <>
-                      <button
-                        class="btn btn-sm btn-gradient-primary"
-                        onClick={(e) => {
-                          return (
-                            e.preventDefault(), setActive(active - 1)
-                            // setSteperCounter(steperCounter - 1)
-                          );
-                        }}
-                        style={{
-                          visibility: active !== 1 ? "visible" : "hidden",
-                        }}
-                        disabled={active !== 1 ? false : true}
-                      >
-                        Previous
-                      </button>
-                    </>
+                    <button
+                      class="btn btn-sm btn-gradient-primary me-4"
+                      onClick={(e) => {
+                        return (
+                          e.preventDefault(), setActive(active - 1)
+                          // setSteperCounter(steperCounter - 1)
+                        );
+                      }}
+                      style={{
+                        visibility: active !== 1 ? "visible" : "hidden",
+                        marginleft: "-48px",
+                      }}
+                      disabled={active !== 1 ? false : true}
+                    >
+                      Previous
+                    </button>
 
                     {/* <!==========  Next Button ============> */}
                     {active !== 2 && (
@@ -535,7 +535,7 @@ const On_Boarding = () => {
                             // setSteperCounter(steperCounter + 1)
                           );
                         }}
-                        style={{ float: "right" }}
+                        style={{ float: "right", marginRight: "48px" }}
                       >
                         Next
                       </button>
@@ -546,38 +546,42 @@ const On_Boarding = () => {
                         <div class="card">
                           <div class="card-body">
                             <form class="forms-sample">
-                              <MultiStepForm activeStep={active}>
+                              <MultiStepForm
+                                activeStep={active}
+                                accentColor="#07cdae"
+                              >
                                 <Step label="HR">
                                   <>
-                                    {inputData?.hr_on_boarding_status ? (
-                                      <div
-                                        class="alert alert-success alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-check-circle-outline me-1"></i>
-                                        This step has been completed.
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is pending !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    )}
+                                    {getUserDetailsById?.initiate_on_boarding_status &&
+                                      (inputData?.hr_on_boarding_status ? (
+                                        <div
+                                          class="alert alert-success alert-dismissible fade show"
+                                          role="alert"
+                                        >
+                                          <i class="mdi mdi-check-circle-outline me-1"></i>
+                                          This step has been completed.
+                                          <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                          ></button>
+                                        </div>
+                                      ) : (
+                                        <div
+                                          class="alert alert-danger alert-dismissible fade show"
+                                          role="alert"
+                                        >
+                                          <i class="mdi mdi-alert-octagon me-1"></i>
+                                          "This step is pending !!"
+                                          <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                          ></button>
+                                        </div>
+                                      ))}
 
                                     <table class="table table-hover">
                                       <thead>
@@ -787,35 +791,36 @@ const On_Boarding = () => {
                                 <Step label="Finance">
                                   <>
                                     <>
-                                      {inputData?.finance_on_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
+                                      {getUserDetailsById?.initiate_on_boarding_status &&
+                                        (inputData?.finance_on_boarding_status ? (
+                                          <div
+                                            class="alert alert-success alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-check-circle-outline me-1"></i>
+                                            This step has been completed.
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            class="alert alert-danger alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-alert-octagon me-1"></i>
+                                            "This step is pending !!"
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ))}
                                     </>
 
                                     <table class="table table-hover">

@@ -39,10 +39,11 @@ const Dashboard = () => {
     //       }
     //     });
     // }
-
-    toaster();
+    // toaster();
     // get_counterList();
   }, []);
+  toaster();
+
   const cardArray = [
     // {
     //   card_background: "bg-gradient-success",

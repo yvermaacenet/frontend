@@ -141,10 +141,10 @@ const TravelApprovalRequest = () => {
                 History
               </button>
             </div>
-            <div class="row card" style={{ overflow: "auto" }}>
-              <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
+            <div className="row">
+              <div className="col-lg-12 grid-margin stretch-card">
+                <div className="card">
+                  <div className="card-body">
                     <table class="table table-striped">
                       <thead>
                         <tr>
@@ -153,6 +153,8 @@ const TravelApprovalRequest = () => {
                           <th>Requested on</th>
                           {/* <th>destination</th> */}
                           {/* <th>amount</th> */}
+
+                          <th>Manager Name</th>
                           <th>Action from Manager</th>
                           <th>Action from Management</th>
                           <th>Remarks</th>
@@ -170,6 +172,8 @@ const TravelApprovalRequest = () => {
                               {/* <td>{val?.destination}</td> */}
                               {/* <td>{val.estimated_amount}</td> */}
                               {/* <td>{val.type_of_request}</td> */}
+                              <td>{val?.reporting_manager}</td>
+
                               <td>
                                 <label
                                   class={`${

@@ -387,7 +387,6 @@ const Off_Boarding = () => {
                           <th> Designation </th>
                           <th> Joining Date </th>
                           <th> Department </th>
-                          <th> Designation </th>
                           <th> Status </th>
                         </tr>
                       </thead>
@@ -406,7 +405,6 @@ const Off_Boarding = () => {
                           <td>{getUserDetailsById["Date of Joining"]}</td>
 
                           <td>{getUserDetailsById["Department"]}</td>
-                          <td>{getUserDetailsById["Designation"]}</td>
                           <td>
                             {inputData?.hr_off_boarding_status === true &&
                             inputData?.finance_off_boarding_status === true &&
@@ -441,10 +439,11 @@ const Off_Boarding = () => {
                         }}
                         style={{
                           visibility: active !== 1 ? "visible" : "hidden",
+                          marginLeft: "40px",
                         }}
                         disabled={active !== 1 ? false : true}
                       >
-                        Previous
+                        Previoussss
                       </button>
 
                       {/* <!==========  Next Button ============> */}
@@ -454,7 +453,7 @@ const Off_Boarding = () => {
                           onClick={(e) => {
                             return e.preventDefault(), setActive(active + 1);
                           }}
-                          style={{ float: "right" }}
+                          style={{ float: "right", marginRight: "48px" }}
                         >
                           Next
                         </button>
@@ -465,39 +464,43 @@ const Off_Boarding = () => {
                         <div class="card">
                           <div class="card-body">
                             <form className="forms-sample">
-                              <MultiStepForm activeStep={active}>
+                              <MultiStepForm
+                                activeStep={active}
+                                accentColor="#07cdae"
+                              >
                                 <Step label="HR">
                                   <>
                                     <>
-                                      {inputData?.hr_off_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
+                                      {getUserDetailsById?.initiate_off_boarding_status &&
+                                        (inputData?.hr_off_boarding_status ? (
+                                          <div
+                                            class="alert alert-success alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-check-circle-outline me-1"></i>
+                                            This step has been completed.
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            class="alert alert-danger alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-alert-octagon me-1"></i>
+                                            "This step is pending !!"
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ))}
                                     </>
 
                                     <table className="table table-hover">
@@ -578,35 +581,36 @@ const Off_Boarding = () => {
                                 <Step label="Finance">
                                   <>
                                     <>
-                                      {inputData?.finance_off_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
+                                      {getUserDetailsById?.initiate_off_boarding_status &&
+                                        (inputData?.finance_off_boarding_status ? (
+                                          <div
+                                            class="alert alert-success alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-check-circle-outline me-1"></i>
+                                            This step has been completed.
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            class="alert alert-danger alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-alert-octagon me-1"></i>
+                                            "This step is pending !!"
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ))}
                                     </>
 
                                     <table className="table table-hover">
@@ -1261,35 +1265,36 @@ const Off_Boarding = () => {
                                 <Step label="Management">
                                   <>
                                     <>
-                                      {inputData?.management_off_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
+                                      {getUserDetailsById?.initiate_off_boarding_status &&
+                                        (inputData?.management_off_boarding_status ? (
+                                          <div
+                                            class="alert alert-success alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-check-circle-outline me-1"></i>
+                                            This step has been completed.
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            class="alert alert-danger alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-alert-octagon me-1"></i>
+                                            "This step is pending !!"
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ))}
                                     </>
 
                                     <table className="table table-hover">
