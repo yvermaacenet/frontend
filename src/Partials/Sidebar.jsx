@@ -23,7 +23,7 @@ const Sidebar = () => {
     async function get_counterList() {
       await axios
         .get(
-          `/documents_counter/${LocalStorageData?.user_id}/${LocalStorageData?.reporting_manager}/${LocalStorageData?.zoho_role}`,
+          `/documents_counter/${LocalStorageData?.user_id}/${LocalStorageData?.emp_id}/${LocalStorageData?.zoho_role}`,
           {
             headers: { Access_Token: LocalStorageData?.generate_auth_token },
           }
