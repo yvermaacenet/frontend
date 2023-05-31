@@ -14,6 +14,8 @@ const Off_Boarding = () => {
   const { _id } = useParams();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [inputData, setInputData] = useState({
+    acceptance_of_resignation_and_last_date_communication_to_employee: false,
+    appraisals_for_reportees: false,
     informed_client_on_exit: false,
     project_official_duties_handover: false,
     important_mails_transferred: false,
@@ -32,8 +34,11 @@ const Off_Boarding = () => {
     employee_datasheet_updated: false,
     ghi_deletion: false,
     employee_folder_moved_to_past_employee_folder: false,
+    ghi_opt_out: false,
     ghi_initiated: false,
     ghi_e_card_issued: false,
+    handover_complete: false,
+    eligible_for_rehire: false,
     hr_off_boarding_status: false,
     finance_off_boarding_status: false,
     management_off_boarding_status: false,
@@ -111,33 +116,45 @@ const Off_Boarding = () => {
         `/off_boarding/${_id}`,
         {
           ...inputData,
+          ghi_initiated: inputData?.ghi_opt_out
+            ? inputData?.ghi_initiated
+            : false,
+          ghi_e_card_issued: inputData?.ghi_opt_out
+            ? inputData?.ghi_e_card_issued
+            : false,
           hr_off_boarding_status:
-            inputData?.informed_client_on_exit === true &&
-            inputData?.project_official_duties_handover === true &&
-            inputData?.important_mails_transferred === true &&
-            inputData?.official_document_handover === true
+            inputData?.acceptance_of_resignation_and_last_date_communication_to_employee ===
+              true && inputData?.appraisals_for_reportees === true
               ? true
               : false,
           finance_off_boarding_status:
+            inputData?.informed_client_on_exit === true &&
+            inputData?.project_official_duties_handover === true &&
+            inputData?.important_mails_transferred === true &&
+            inputData?.official_document_handover === true &&
             inputData?.acenet_laptop === true &&
             inputData?.id_card === true &&
-            inputData?.data_card_hotspot === true &&
+            // inputData?.data_card_hotspot === true &&
             inputData?.client_asset === true &&
             inputData?.biometric_disabled === true &&
             inputData?.office_365_account_deletion === true &&
             inputData?.email_forwarded === true &&
-            inputData?.zoho_account_deleted === true
-              ? true
-              : false,
-          management_off_boarding_status:
+            inputData?.zoho_account_deleted === true &&
             inputData?.relieving_letter_shared === true &&
             inputData?.fnf_statement_shared === true &&
             inputData?.fnf_cleared === true &&
             inputData?.employee_datasheet_updated === true &&
             inputData?.ghi_deletion === true &&
             inputData?.employee_folder_moved_to_past_employee_folder === true &&
-            inputData?.ghi_initiated === true &&
-            inputData?.ghi_e_card_issued === true
+            inputData?.ghi_initiated ===
+              (inputData?.ghi_opt_out ? true : false) &&
+            inputData?.ghi_e_card_issued ===
+              (inputData?.ghi_opt_out ? true : false)
+              ? true
+              : false,
+          management_off_boarding_status:
+            inputData?.handover_complete === true &&
+            inputData?.eligible_for_rehire === true
               ? true
               : false,
           updated_by: [
@@ -157,34 +174,6 @@ const Off_Boarding = () => {
           setActive(active + 1);
           setRenderComponent(true);
           navigate("/user_list/active_users");
-          // await axios
-          //   .put(
-          //     `/user_update/${_id}`,
-          //     {
-          //       initiate_off_boarding_status: true,
-          //       off_boarding_status:
-          //         inputData?.hr_off_boarding_status === true &&
-          //         inputData?.finance_off_boarding_status === true &&
-          //         inputData?.management_off_boarding_status === true
-          //           ? true
-          //           : false,
-          //     },
-          //     {
-          //       headers: {
-          //         Access_Token: LocalStorageData?.generate_auth_token,
-          //       },
-          //     }
-          //   )
-          //   .then((res) => {
-          //     return alert.show(res?.data.message);
-          //   })
-          //   .catch((err) => {
-          //     if (err.response.status === 500) {
-          //       navigate("/error_500");
-          //     } else {
-          //       navigate("/error_403");
-          //     }
-          //   });
         }
       })
       .catch((err) => {
@@ -204,37 +193,48 @@ const Off_Boarding = () => {
         `/off_boarding/${inputData?._id}`,
         {
           ...inputData,
+          ghi_initiated: inputData?.ghi_opt_out
+            ? inputData?.ghi_initiated
+            : false,
+          ghi_e_card_issued: inputData?.ghi_opt_out
+            ? inputData?.ghi_e_card_issued
+            : false,
           hr_off_boarding_status:
-            inputData?.informed_client_on_exit === true &&
-            inputData?.project_official_duties_handover === true &&
-            inputData?.important_mails_transferred === true &&
-            inputData?.official_document_handover === true
+            inputData?.acceptance_of_resignation_and_last_date_communication_to_employee ===
+              true && inputData?.appraisals_for_reportees === true
               ? true
               : false,
           finance_off_boarding_status:
+            inputData?.informed_client_on_exit === true &&
+            inputData?.project_official_duties_handover === true &&
+            inputData?.important_mails_transferred === true &&
+            inputData?.official_document_handover === true &&
             inputData?.acenet_laptop === true &&
             inputData?.id_card === true &&
-            inputData?.data_card_hotspot === true &&
+            // inputData?.data_card_hotspot === true &&
             inputData?.client_asset === true &&
             inputData?.biometric_disabled === true &&
             inputData?.office_365_account_deletion === true &&
             inputData?.email_forwarded === true &&
-            inputData?.zoho_account_deleted === true
-              ? true
-              : false,
-          management_off_boarding_status:
+            inputData?.zoho_account_deleted === true &&
             inputData?.relieving_letter_shared === true &&
             inputData?.fnf_statement_shared === true &&
             inputData?.fnf_cleared === true &&
             inputData?.employee_datasheet_updated === true &&
             inputData?.ghi_deletion === true &&
             inputData?.employee_folder_moved_to_past_employee_folder === true &&
-            inputData?.ghi_initiated === true &&
-            inputData?.ghi_e_card_issued === true
+            inputData?.ghi_initiated ===
+              (inputData?.ghi_opt_out ? true : false) &&
+            inputData?.ghi_e_card_issued ===
+              (inputData?.ghi_opt_out ? true : false)
+              ? true
+              : false,
+          management_off_boarding_status:
+            inputData?.handover_complete === true &&
+            inputData?.eligible_for_rehire === true
               ? true
               : false,
           updated_by: [
-            ...inputData?.updated_by,
             {
               user_id: LocalStorageData?.user_id,
               user_name: LocalStorageData?.name,
@@ -242,7 +242,6 @@ const Off_Boarding = () => {
             },
           ],
         },
-
         {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         }
@@ -388,7 +387,6 @@ const Off_Boarding = () => {
                           <th> Designation </th>
                           <th> Joining Date </th>
                           <th> Department </th>
-                          <th> Designation </th>
                           <th> Status </th>
                         </tr>
                       </thead>
@@ -407,7 +405,6 @@ const Off_Boarding = () => {
                           <td>{getUserDetailsById["Date of Joining"]}</td>
 
                           <td>{getUserDetailsById["Department"]}</td>
-                          <td>{getUserDetailsById["Designation"]}</td>
                           <td>
                             {inputData?.hr_off_boarding_status === true &&
                             inputData?.finance_off_boarding_status === true &&
@@ -442,10 +439,11 @@ const Off_Boarding = () => {
                         }}
                         style={{
                           visibility: active !== 1 ? "visible" : "hidden",
+                          marginLeft: "40px",
                         }}
                         disabled={active !== 1 ? false : true}
                       >
-                        Previous
+                        Previoussss
                       </button>
 
                       {/* <!==========  Next Button ============> */}
@@ -455,7 +453,7 @@ const Off_Boarding = () => {
                           onClick={(e) => {
                             return e.preventDefault(), setActive(active + 1);
                           }}
-                          style={{ float: "right" }}
+                          style={{ float: "right", marginRight: "48px" }}
                         >
                           Next
                         </button>
@@ -466,39 +464,153 @@ const Off_Boarding = () => {
                         <div class="card">
                           <div class="card-body">
                             <form className="forms-sample">
-                              <MultiStepForm activeStep={active}>
+                              <MultiStepForm
+                                activeStep={active}
+                                accentColor="#07cdae"
+                              >
                                 <Step label="HR">
                                   <>
                                     <>
-                                      {inputData?.hr_off_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
+                                      {getUserDetailsById?.initiate_off_boarding_status &&
+                                        (inputData?.hr_off_boarding_status ? (
+                                          <div
+                                            class="alert alert-success alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-check-circle-outline me-1"></i>
+                                            This step has been completed.
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            class="alert alert-danger alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-alert-octagon me-1"></i>
+                                            "This step is pending !!"
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ))}
+                                    </>
+
+                                    <table className="table table-hover">
+                                      <thead>
+                                        <tr>
+                                          <th> Field Name </th>
+                                          <th> Action </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr>
+                                          <td>
+                                            Acceptance of Resignation and Last
+                                            Date communication to employee
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label className="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="acceptance_of_resignation_and_last_date_communication_to_employee"
+                                                  className="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Hr" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                  style={{ opacity: "0" }}
+                                                  checked={
+                                                    inputData?.acceptance_of_resignation_and_last_date_communication_to_employee
+                                                  }
+                                                />
+                                                <span className="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>Appraisals for reportees</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label className="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="appraisals_for_reportees"
+                                                  className="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Hr" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                  style={{ opacity: "0" }}
+                                                  checked={
+                                                    inputData?.appraisals_for_reportees
+                                                  }
+                                                />
+                                                <span className="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </>
+                                </Step>
+                                <Step label="Finance">
+                                  <>
+                                    <>
+                                      {getUserDetailsById?.initiate_off_boarding_status &&
+                                        (inputData?.finance_off_boarding_status ? (
+                                          <div
+                                            class="alert alert-success alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-check-circle-outline me-1"></i>
+                                            This step has been completed.
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            class="alert alert-danger alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-alert-octagon me-1"></i>
+                                            "This step is pending !!"
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ))}
                                     </>
 
                                     <table className="table table-hover">
@@ -522,7 +634,7 @@ const Off_Boarding = () => {
                                                   onChange={inputEvent}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -554,7 +666,7 @@ const Off_Boarding = () => {
                                                   onChange={inputEvent}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -584,7 +696,7 @@ const Off_Boarding = () => {
                                                   onChange={inputEvent}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -614,7 +726,7 @@ const Off_Boarding = () => {
                                                   onChange={inputEvent}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -631,52 +743,6 @@ const Off_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                      </tbody>
-                                    </table>
-                                  </>
-                                </Step>
-                                <Step label="Finance">
-                                  <>
-                                    <>
-                                      {inputData?.finance_off_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
-                                    </>
-
-                                    <table className="table table-hover">
-                                      <thead>
-                                        <tr>
-                                          <th> Field Name </th>
-                                          <th> Action </th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
                                         <tr>
                                           <td>Acenet - Laptop</td>
                                           <td>
@@ -735,7 +801,7 @@ const Off_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                        <tr>
+                                        {/* <tr>
                                           <td> Data card/hotspot </td>
                                           <td>
                                             <div className="board">
@@ -764,7 +830,7 @@ const Off_Boarding = () => {
                                               <span>Yes</span>
                                             </div>
                                           </td>
-                                        </tr>
+                                        </tr> */}
                                         <tr>
                                           <td> Client Asset </td>
                                           <td>
@@ -915,52 +981,6 @@ const Off_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                      </tbody>
-                                    </table>
-                                  </>
-                                </Step>
-                                <Step label="Management">
-                                  <>
-                                    <>
-                                      {inputData?.management_off_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
-                                    </>
-
-                                    <table className="table table-hover">
-                                      <thead>
-                                        <tr>
-                                          <th> Field Name </th>
-                                          <th> Action </th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
                                         <tr>
                                           <td> Relieving Letter shared</td>
                                           <td>
@@ -974,7 +994,7 @@ const Off_Boarding = () => {
                                                   onChange={inputEvent}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Management" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1004,7 +1024,7 @@ const Off_Boarding = () => {
                                                   onChange={inputEvent}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Management" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1034,7 +1054,7 @@ const Off_Boarding = () => {
                                                   onChange={inputEvent}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Management" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1064,7 +1084,7 @@ const Off_Boarding = () => {
                                                   onChange={inputEvent}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Management" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1094,7 +1114,7 @@ const Off_Boarding = () => {
                                                   onChange={inputEvent}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Management" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1130,7 +1150,7 @@ const Off_Boarding = () => {
                                                   }
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Management" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1145,18 +1165,159 @@ const Off_Boarding = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <td>GHI Initiated</td>
+                                          <td>GHI Opt out</td>
                                           <td>
                                             <div className="board">
                                               <span>No</span>
                                               <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
-                                                  name="ghi_initiated"
+                                                  name="ghi_opt_out"
                                                   className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   checked={
-                                                    inputData?.ghi_initiated
+                                                    inputData?.ghi_opt_out
+                                                  }
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Finance" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                  style={{ opacity: "0" }}
+                                                />
+                                                <span className="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        {inputData?.ghi_opt_out && (
+                                          <>
+                                            <tr>
+                                              <td>GHI Initiated</td>
+                                              <td>
+                                                <div className="board">
+                                                  <span>No</span>
+                                                  <label className="switch ms-1 me-1 mt-1 ">
+                                                    <input
+                                                      type="checkbox"
+                                                      name="ghi_initiated"
+                                                      className="form-control form-control-sm"
+                                                      onChange={inputEvent}
+                                                      checked={
+                                                        inputData?.ghi_initiated
+                                                      }
+                                                      disabled={
+                                                        LocalStorageData?.zoho_role ===
+                                                          "Finance" ||
+                                                        LocalStorageData?.zoho_role ===
+                                                          "Admin"
+                                                          ? false
+                                                          : true
+                                                      }
+                                                      style={{ opacity: "0" }}
+                                                    />
+                                                    <span className="slider round"></span>
+                                                  </label>
+                                                  <span>Yes</span>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td>GHI E-Card issued</td>
+                                              <td>
+                                                <div className="board">
+                                                  <span>No</span>
+                                                  <label className="switch ms-1 me-1 mt-1 ">
+                                                    <input
+                                                      type="checkbox"
+                                                      name="ghi_e_card_issued"
+                                                      className="form-control form-control-sm"
+                                                      onChange={inputEvent}
+                                                      checked={
+                                                        inputData?.ghi_e_card_issued
+                                                      }
+                                                      disabled={
+                                                        LocalStorageData?.zoho_role ===
+                                                          "Finance" ||
+                                                        LocalStorageData?.zoho_role ===
+                                                          "Admin"
+                                                          ? false
+                                                          : true
+                                                      }
+                                                      style={{ opacity: "0" }}
+                                                    />
+                                                    <span className="slider round"></span>
+                                                  </label>
+                                                  <span>Yes</span>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          </>
+                                        )}
+                                      </tbody>
+                                    </table>
+                                  </>
+                                </Step>
+                                <Step label="Management">
+                                  <>
+                                    <>
+                                      {getUserDetailsById?.initiate_off_boarding_status &&
+                                        (inputData?.management_off_boarding_status ? (
+                                          <div
+                                            class="alert alert-success alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-check-circle-outline me-1"></i>
+                                            This step has been completed.
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            class="alert alert-danger alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-alert-octagon me-1"></i>
+                                            "This step is pending !!"
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ))}
+                                    </>
+
+                                    <table className="table table-hover">
+                                      <thead>
+                                        <tr>
+                                          <th> Field Name </th>
+                                          <th> Action </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr>
+                                          <td>Handover Complete</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label className="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="handover_complete"
+                                                  className="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  checked={
+                                                    inputData?.handover_complete
                                                   }
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
@@ -1175,18 +1336,18 @@ const Off_Boarding = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <td>GHI E-Card issued</td>
+                                          <td>Eligible for Rehire?</td>
                                           <td>
                                             <div className="board">
                                               <span>No</span>
                                               <label className="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
-                                                  name="ghi_e_card_issued"
+                                                  name="eligible_for_rehire"
                                                   className="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   checked={
-                                                    inputData?.ghi_e_card_issued
+                                                    inputData?.eligible_for_rehire
                                                   }
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===

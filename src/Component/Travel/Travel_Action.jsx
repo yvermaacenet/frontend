@@ -18,6 +18,7 @@ const Travel_Action = (props) => {
   const [loading, setLoading] = useState(false);
   const [getData, setGetData] = useState({});
   const [isManager, setIsManager] = useState(false);
+  const [isManagememnt, setIsManagememnt] = useState(false);
   const [handleButtonType, setHandleButtonType] = useState();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const {
@@ -32,7 +33,11 @@ const Travel_Action = (props) => {
     const resp = await axios.get("/get_user_list_By_Role_Name");
     const allManagersId = resp.data.Reporting_Manager;
     const filtered = allManagersId.includes(LocalStorageData?.emp_id);
+    const filteredManagement = resp?.data?.Management.includes(
+      LocalStorageData?.user_id
+    );
     setIsManager(filtered);
+    setIsManagememnt(filteredManagement);
   };
   useEffect(() => {
     const get_travel_request_by_id = async () => {
@@ -53,6 +58,7 @@ const Travel_Action = (props) => {
     get_travel_request_by_id();
     getAllManagersList();
   }, []);
+  console.log("wewewewe", getData);
   //   ====Handle Remarks
   // console.log("status", getData?.management_status);
   // const handleRemarksChange = (e) => {
@@ -125,11 +131,17 @@ const Travel_Action = (props) => {
   //     }
   //   }
   // };
+
   const onSubmitButton = async (e) => {
     if (LocalStorageData?.zoho_role === "Management" && isManager === true) {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         remarks: getData.remarks,
-        managers_approval: handleButtonType ? "Approved" : "Declined",
+        managers_approval:
+          getData?.managers_approval === "Pending"
+            ? handleButtonType
+              ? "Approved"
+              : "Declined"
+            : getData?.managers_approval,
         management_approval: handleButtonType ? "Approved" : "Declined",
       });
       if (res.data === "Updated Sucessfully") {
@@ -162,6 +174,7 @@ const Travel_Action = (props) => {
       }
     }
   };
+
   return (
     <div className="container-scroller">
       <Navbar />
@@ -204,8 +217,8 @@ const Travel_Action = (props) => {
                           <th>Phone</th>
                           <th>Start Date</th>
                           <th>End Date</th>
-                          <th>Project Id</th>
                           <th>Billable</th>
+                          <th>Project Id</th>
                           {isManager && <th>Status</th>}
                         </tr>
                       </thead>
@@ -216,8 +229,12 @@ const Travel_Action = (props) => {
                           <td>{LocalStorageData?.phone}</td>
                           <td>{getData?.travel?.start_date?.split("T")[0]}</td>
                           <td>{getData?.travel?.end_date?.split("T")[0]}</td>
-                          <td>{getData?.employee?.project_id}</td>
                           <td>{getData?.employee?.billable}</td>
+                          <td>
+                            {getData?.employee?.project_id === ""
+                              ? "N/A"
+                              : getData?.employee?.project_id}
+                          </td>
                           {isManager && (
                             <td>
                               <label

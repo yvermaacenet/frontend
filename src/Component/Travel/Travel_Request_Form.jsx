@@ -23,6 +23,7 @@ const TravelRequestForm = () => {
   const [employee, setEmployee] = useState({
     name: LocalStorageData?.name,
     email: LocalStorageData?.email,
+    user_id: LocalStorageData?.user_id,
     employee_id: LocalStorageData?.emp_id,
     phone: LocalStorageData?.phone,
     reporting_manager: LocalStorageData?.reporting_manager,
@@ -89,7 +90,10 @@ const TravelRequestForm = () => {
     setLoading(true);
     const res = await axios
       .post("/raise_travel_request", {
-        employee,
+        employee: {
+          ...employee,
+          project_id: employee?.billable === "Yes" ? employee?.project_id : "",
+        },
         travel,
         flight,
         train,
@@ -136,7 +140,6 @@ const TravelRequestForm = () => {
       };
     });
   };
-  console.log(watch());
   return (
     <>
       <div className="container-scroller">
@@ -206,6 +209,7 @@ const TravelRequestForm = () => {
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Travel Start Date</label>
+                              <span className="astik"> *</span>
                               <input
                                 className={classNames(
                                   "form-control form-control-sm",
@@ -230,6 +234,7 @@ const TravelRequestForm = () => {
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Travel End Date</label>
+                              <span className="astik"> *</span>
                               <input
                                 className={classNames(
                                   "form-control form-control-sm",
@@ -251,33 +256,11 @@ const TravelRequestForm = () => {
                               </small>
                             </div>
                           </div>
-                          <div className="col-12 col-lg-3">
-                            <div className="form-group">
-                              <label>Project Id</label>
-                              <input
-                                type="text"
-                                name="project_id"
-                                className={classNames(
-                                  "form-control form-control-sm",
-                                  {
-                                    "is-invalid": errors?.project_id,
-                                  }
-                                )}
-                                {...register("project_id", {
-                                  value: employee?.project_id,
-                                })}
-                                placeholder="Enter Project Id"
-                                value={employee?.project_id}
-                                onChange={inputEvent}
-                              />
-                              <small className="invalid-feedback">
-                                {errors.project_id?.message}
-                              </small>
-                            </div>
-                          </div>
+
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Billable</label>
+                              <span className="astik"> *</span>
                               <select
                                 className={classNames(
                                   "form-select form-control-sm",
@@ -301,12 +284,40 @@ const TravelRequestForm = () => {
                               </small>
                             </div>
                           </div>
+                          {employee?.billable === "Yes" && (
+                            <div className="col-12 col-lg-3">
+                              <div className="form-group">
+                                <label>Project Id</label>
+                                <span className="astik"> *</span>
+                                <input
+                                  type="text"
+                                  name="project_id"
+                                  className={classNames(
+                                    "form-control form-control-sm",
+                                    {
+                                      "is-invalid": errors?.project_id,
+                                    }
+                                  )}
+                                  {...register("project_id", {
+                                    value: employee?.project_id,
+                                  })}
+                                  placeholder="Enter Project Id"
+                                  value={employee?.project_id}
+                                  onChange={inputEvent}
+                                />
+                                <small className="invalid-feedback">
+                                  {errors.project_id?.message}
+                                </small>
+                              </div>
+                            </div>
+                          )}
                         </div>
 
                         <div className="row my-2">
                           <div className="col-12">
                             <div className="form-group">
                               <label>Reason for Travel</label>
+                              <span className="astik"> *</span>
                               <textarea
                                 name="reason_for_travel"
                                 className={classNames(
@@ -456,7 +467,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="">
                                 <label>From(City)</label>
-
+                                <span className="astik"> *</span>
                                 <Select
                                   className={classNames("form-select-select", {
                                     "is-invalid": errors?.flight_from_city,
@@ -487,6 +498,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City)</label>
+                                <span className="astik"> *</span>
                                 <Select
                                   className={classNames("form-select-select", {
                                     "is-invalid": errors?.flight_to_city,
@@ -568,6 +580,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>City</label>
+                                <span className="astik"> *</span>
                                 <Select
                                   className={classNames("form-select-select", {
                                     "is-invalid": errors?.hotel_city,
@@ -594,6 +607,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>Check-in</label>
+                                <span className="astik"> *</span>
                                 <input
                                   name="hotel_checkin"
                                   value={hotel?.hotel_checkin}
@@ -623,6 +637,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>Check-out</label>
+                                <span className="astik"> *</span>
                                 <input
                                   name="hotel_checkout"
                                   value={hotel?.hotel_checkout}
@@ -681,7 +696,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>From(City Name)</label>
-
+                                <span className="astik"> *</span>
                                 <Select
                                   className={classNames("form-select-select", {
                                     "is-invalid": errors?.train_from_city,
@@ -711,6 +726,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City Name)</label>
+                                <span className="astik"> *</span>
                                 <Select
                                   className={classNames("form-select-select", {
                                     "is-invalid": errors?.train_to_city,
@@ -801,6 +817,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>Type</label>
+                                <span className="astik"> *</span>
                                 <input
                                   type="text"
                                   name="other_travel_type"
@@ -830,7 +847,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>From(City Name)</label>
-
+                                <span className="astik"> *</span>
                                 <Select
                                   className={classNames("form-select-select", {
                                     "is-invalid": errors?.other_from_city,
@@ -860,6 +877,7 @@ const TravelRequestForm = () => {
                             <div className="col-12 col-lg-3">
                               <div className="form-group">
                                 <label>To(City Name)</label>
+                                <span className="astik"> *</span>
                                 <Select
                                   className={classNames("form-select-select", {
                                     "is-invalid": errors?.other_to_city,

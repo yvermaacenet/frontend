@@ -12,20 +12,24 @@ const On_Boarding = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [inductionCallWith, setInductionCallWith] = useState("Sunil");
   const [inputData, setInputData] = useState({
-    wifi_passwords: false,
+    onboard_meet_and_greet_welcome_call: false,
+    verify_acenet_email_id_zoho_id_laptop_provision_to_employee: false,
+    introduction_meeting_with_buddy: false,
+    introduction_meeting_with_line_manager_respective_senior_manager: false,
+    handover_to_project_complete: false,
+    introduction_call_with_ceo: false,
+    // wifi_passwords: false,
     genrate_mail_id: false,
     one_drive_access: false,
     teams_access: false,
     add_to_official_dls: false,
     biometric: false,
-    induction_call: false,
-    // induction_call_with: inductionCallWith,
     acenet_laptop: false,
     client_laptop: false,
-    notpad: false,
+    // notpad: false,
     t_shirt: false,
     welcome_kit: false,
-    intro_slide_shared: false,
+    // intro_slide_shared: false,
     aadhar_card: false,
     pan_card: false,
     passport: false,
@@ -51,27 +55,21 @@ const On_Boarding = () => {
     ghi_documents_received: false,
     ghi_initiated: false,
     ghi_eCard_issued: false,
-    hdfc_account_mapped: false,
-    hdfc_account_initiated: false,
-    hdfc_account_opened: false,
-    hdfc_account_benefeciary_added: false,
     zoho_people_account_created: false,
-    zoho_people_account_activated: false,
-    zoho_payroll_integrated: false,
+    // zoho_people_account_activated: false,
+    // zoho_payroll_integrated: false,
     bgv_initiated: false,
     bgv_invoice_Paid: false,
     bgv_report_Received: false,
     update_linkedIn: false,
     hr_on_boarding_status: false,
     finance_on_boarding_status: false,
-    management_on_boarding_status: false,
   });
   const [renderComponent, setRenderComponent] = useState(false);
   const [active, setActive] = useState();
   // const [steperCounter, setSteperCounter] = useState(1);
   const [getUserDetailsById, setGetUserDetailsById] = useState({});
   const [roless, setRoless] = useState([]);
-  const [state, setState] = useState(false);
   const [updated_data, setUpdated_data] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -129,9 +127,10 @@ const On_Boarding = () => {
                 : resp.data?.Finance?.includes(LocalStorageData?.user_id) ===
                   true
                 ? 2
-                : 3
+                : 1
             ),
-            setRenderComponent(false)
+            setRenderComponent(false),
+            setLoading(false)
           );
         })
         .catch((err) => {
@@ -160,7 +159,6 @@ const On_Boarding = () => {
             navigate("/error_403");
           }
         });
-      setLoading(false);
     }
     get_user_details_by_id();
   }, [renderComponent === true]);
@@ -175,19 +173,30 @@ const On_Boarding = () => {
           induction_call_with:
             inputData?.induction_call === true ? inductionCallWith : "",
           hr_on_boarding_status:
-            inputData?.wifi_passwords === true &&
+            inputData?.onboard_meet_and_greet_welcome_call === true &&
+            inputData?.verify_acenet_email_id_zoho_id_laptop_provision_to_employee ===
+              true &&
+            inputData?.introduction_meeting_with_buddy === true &&
+            inputData?.introduction_meeting_with_line_manager_respective_senior_manager ===
+              true &&
+            inputData?.handover_to_project_complete === true &&
+            inputData?.introduction_call_with_ceo === true
+              ? true
+              : false,
+          finance_on_boarding_status:
+            // inputData?.wifi_passwords === true &&
             inputData?.genrate_mail_id === true &&
             inputData?.one_drive_access === true &&
             inputData?.teams_access === true &&
             inputData?.add_to_official_dls === true &&
-            inputData?.biometric === true &&
-            inputData?.induction_call === true &&
+            // inputData?.biometric === true &&
+            inputData?.introduction_call_with_ceo === true &&
             inputData?.acenet_laptop === true &&
-            inputData?.client_laptop === true &&
-            inputData?.notpad === true &&
+            // inputData?.client_laptop === true &&
+            // inputData?.notpad === true &&
             inputData?.t_shirt === true &&
             inputData?.welcome_kit === true &&
-            inputData?.intro_slide_shared === true &&
+            // inputData?.intro_slide_shared === true &&
             inputData?.aadhar_card === true &&
             inputData?.pan_card === true &&
             inputData?.passport === true &&
@@ -204,10 +213,7 @@ const On_Boarding = () => {
             inputData?.documents_verification === true &&
             inputData?.covid_certificate === true &&
             inputData?.employee_data_sheet_bank_details === true &&
-            inputData?.other_official_documents === true
-              ? true
-              : false,
-          finance_on_boarding_status:
+            inputData?.other_official_documents === true &&
             inputData?.pf_form_recieved === true &&
             inputData?.pf_submitted_to_ca_team === true &&
             inputData?.PF_number_shared_with_the_employee === true &&
@@ -216,22 +222,16 @@ const On_Boarding = () => {
             inputData?.ghi_documents_received === true &&
             inputData?.ghi_initiated === true &&
             inputData?.ghi_eCard_issued === true &&
-            inputData?.hdfc_account_mapped === true &&
-            inputData?.hdfc_account_initiated === true &&
-            inputData?.hdfc_account_opened === true &&
-            inputData?.hdfc_account_benefeciary_added === true
-              ? true
-              : false,
-          management_on_boarding_status:
             inputData?.zoho_people_account_created === true &&
-            inputData?.zoho_people_account_activated === true &&
-            inputData?.zoho_payroll_integrated === true &&
+            // inputData?.zoho_people_account_activated === true &&
+            // inputData?.zoho_payroll_integrated === true &&
             inputData?.bgv_initiated === true &&
             inputData?.bgv_invoice_Paid === true &&
             inputData?.bgv_report_Received === true &&
             inputData?.update_linkedIn === true
               ? true
               : false,
+
           updated_by: [
             {
               user_id: LocalStorageData?.user_id,
@@ -247,38 +247,8 @@ const On_Boarding = () => {
       .then(async (res) => {
         if (res.data.message === "created") {
           setActive(active + 1);
-          // setSteperCounter(steperCounter + 1);
           setRenderComponent(true);
           navigate("/user_list/active_users");
-
-          // await axios
-          //   .put(
-          //     `/user_update/${_id}`,
-          //     {
-          //       initiate_on_boarding_status: true,
-          //       on_boarding_status:
-          //         inputData?.hr_on_boarding_status === true &&
-          //         inputData?.finance_on_boarding_status === true &&
-          //         inputData?.management_on_boarding_status === true
-          //           ? true
-          //           : false,
-          //     },
-          //     {
-          //       headers: {
-          //         Access_Token: LocalStorageData?.generate_auth_token,
-          //       },
-          //     }
-          //   )
-          //   .then((res) => {
-          //     return alert.show(res?.data.message);
-          //   })
-          //   .catch((err) => {
-          //     if (err.response.status === 500) {
-          //       navigate("/error_500");
-          //     } else {
-          //       navigate("/error_403");
-          //     }
-          //   });
         }
       })
       .catch((err) => {
@@ -300,19 +270,30 @@ const On_Boarding = () => {
             inputData?.induction_call === true ? inductionCallWith : "",
 
           hr_on_boarding_status:
-            inputData?.wifi_passwords === true &&
+            inputData?.onboard_meet_and_greet_welcome_call === true &&
+            inputData?.verify_acenet_email_id_zoho_id_laptop_provision_to_employee ===
+              true &&
+            inputData?.introduction_meeting_with_buddy === true &&
+            inputData?.introduction_meeting_with_line_manager_respective_senior_manager ===
+              true &&
+            inputData?.handover_to_project_complete === true &&
+            inputData?.introduction_call_with_ceo === true
+              ? true
+              : false,
+          finance_on_boarding_status:
+            // inputData?.wifi_passwords === true &&
             inputData?.genrate_mail_id === true &&
             inputData?.one_drive_access === true &&
             inputData?.teams_access === true &&
             inputData?.add_to_official_dls === true &&
-            inputData?.biometric === true &&
-            inputData?.induction_call === true &&
+            // inputData?.biometric === true &&
+            inputData?.introduction_call_with_ceo === true &&
             inputData?.acenet_laptop === true &&
-            inputData?.client_laptop === true &&
-            inputData?.notpad === true &&
+            // inputData?.client_laptop === true &&
+            // inputData?.notpad === true &&
             inputData?.t_shirt === true &&
             inputData?.welcome_kit === true &&
-            inputData?.intro_slide_shared === true &&
+            // inputData?.intro_slide_shared === true &&
             inputData?.aadhar_card === true &&
             inputData?.pan_card === true &&
             inputData?.passport === true &&
@@ -329,10 +310,7 @@ const On_Boarding = () => {
             inputData?.documents_verification === true &&
             inputData?.covid_certificate === true &&
             inputData?.employee_data_sheet_bank_details === true &&
-            inputData?.other_official_documents === true
-              ? true
-              : false,
-          finance_on_boarding_status:
+            inputData?.other_official_documents === true &&
             inputData?.pf_form_recieved === true &&
             inputData?.pf_submitted_to_ca_team === true &&
             inputData?.PF_number_shared_with_the_employee === true &&
@@ -341,24 +319,17 @@ const On_Boarding = () => {
             inputData?.ghi_documents_received === true &&
             inputData?.ghi_initiated === true &&
             inputData?.ghi_eCard_issued === true &&
-            inputData?.hdfc_account_mapped === true &&
-            inputData?.hdfc_account_initiated === true &&
-            inputData?.hdfc_account_opened === true &&
-            inputData?.hdfc_account_benefeciary_added === true
-              ? true
-              : false,
-          management_on_boarding_status:
             inputData?.zoho_people_account_created === true &&
-            inputData?.zoho_people_account_activated === true &&
-            inputData?.zoho_payroll_integrated === true &&
+            // inputData?.zoho_people_account_activated === true &&
+            // inputData?.zoho_payroll_integrated === true &&
             inputData?.bgv_initiated === true &&
             inputData?.bgv_invoice_Paid === true &&
             inputData?.bgv_report_Received === true &&
             inputData?.update_linkedIn === true
               ? true
               : false,
+
           updated_by: [
-            ...inputData?.updated_by,
             {
               user_id: LocalStorageData?.user_id,
               user_name: LocalStorageData?.name,
@@ -510,7 +481,6 @@ const On_Boarding = () => {
                           <th> Designation </th>
                           <th> Joining Date </th>
                           <th> Department </th>
-                          <th> Designation </th>
                           <th> Status </th>
                         </tr>
                       </thead>
@@ -529,12 +499,9 @@ const On_Boarding = () => {
                           <td>{getUserDetailsById["Date of Joining"]}</td>
 
                           <td>{getUserDetailsById["Department"]}</td>
-                          <td>{getUserDetailsById["Designation"]}</td>
                           <td>
                             {inputData?.hr_on_boarding_status === true &&
-                            inputData?.finance_on_boarding_status === true &&
-                            inputData?.management_on_boarding_status ===
-                              true ? (
+                            inputData?.finance_on_boarding_status === true ? (
                               <label className="badge badge-success">
                                 Completed
                               </label>
@@ -559,26 +526,25 @@ const On_Boarding = () => {
                   <div className="card-body">
                     {/* <!==========  Previous Button ============> */}
 
-                    <>
-                      <button
-                        class="btn btn-sm btn-gradient-primary"
-                        onClick={(e) => {
-                          return (
-                            e.preventDefault(), setActive(active - 1)
-                            // setSteperCounter(steperCounter - 1)
-                          );
-                        }}
-                        style={{
-                          visibility: active !== 1 ? "visible" : "hidden",
-                        }}
-                        disabled={active !== 1 ? false : true}
-                      >
-                        Previous
-                      </button>
-                    </>
+                    <button
+                      class="btn btn-sm btn-gradient-primary me-4"
+                      onClick={(e) => {
+                        return (
+                          e.preventDefault(), setActive(active - 1)
+                          // setSteperCounter(steperCounter - 1)
+                        );
+                      }}
+                      style={{
+                        visibility: active !== 1 ? "visible" : "hidden",
+                        marginleft: "-48px",
+                      }}
+                      disabled={active !== 1 ? false : true}
+                    >
+                      Previous
+                    </button>
 
                     {/* <!==========  Next Button ============> */}
-                    {active !== 3 && (
+                    {active !== 2 && (
                       <button
                         class="btn btn-sm btn-gradient-primary"
                         onClick={(e) => {
@@ -587,7 +553,7 @@ const On_Boarding = () => {
                             // setSteperCounter(steperCounter + 1)
                           );
                         }}
-                        style={{ float: "right" }}
+                        style={{ float: "right", marginRight: "48px" }}
                       >
                         Next
                       </button>
@@ -598,38 +564,42 @@ const On_Boarding = () => {
                         <div class="card">
                           <div class="card-body">
                             <form class="forms-sample">
-                              <MultiStepForm activeStep={active}>
+                              <MultiStepForm
+                                activeStep={active}
+                                accentColor="#07cdae"
+                              >
                                 <Step label="HR">
                                   <>
-                                    {inputData?.hr_on_boarding_status ? (
-                                      <div
-                                        class="alert alert-success alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-check-circle-outline me-1"></i>
-                                        This step has been completed.
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    ) : (
-                                      <div
-                                        class="alert alert-danger alert-dismissible fade show"
-                                        role="alert"
-                                      >
-                                        <i class="mdi mdi-alert-octagon me-1"></i>
-                                        "This step is pending !!"
-                                        <button
-                                          type="button"
-                                          class="btn-close"
-                                          data-bs-dismiss="alert"
-                                          aria-label="Close"
-                                        ></button>
-                                      </div>
-                                    )}
+                                    {getUserDetailsById?.initiate_on_boarding_status &&
+                                      (inputData?.hr_on_boarding_status ? (
+                                        <div
+                                          class="alert alert-success alert-dismissible fade show"
+                                          role="alert"
+                                        >
+                                          <i class="mdi mdi-check-circle-outline me-1"></i>
+                                          This step has been completed.
+                                          <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                          ></button>
+                                        </div>
+                                      ) : (
+                                        <div
+                                          class="alert alert-danger alert-dismissible fade show"
+                                          role="alert"
+                                        >
+                                          <i class="mdi mdi-alert-octagon me-1"></i>
+                                          "This step is pending !!"
+                                          <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="alert"
+                                            aria-label="Close"
+                                          ></button>
+                                        </div>
+                                      ))}
 
                                     <table class="table table-hover">
                                       <thead>
@@ -639,22 +609,22 @@ const On_Boarding = () => {
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        <p class="card-description mt-2 mb-0 text-center">
-                                          First Day Formalities
-                                        </p>
                                         <tr>
-                                          <td> Wifi Passwords </td>
+                                          <td>
+                                            Onboard Meet and Greet / Welcome
+                                            call
+                                          </td>
                                           <td>
                                             <div className="board">
                                               <span>No</span>
                                               <label class="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
-                                                  name="wifi_passwords"
+                                                  name="onboard_meet_and_greet_welcome_call"
                                                   class="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   checked={
-                                                    inputData?.wifi_passwords
+                                                    inputData?.onboard_meet_and_greet_welcome_call
                                                   }
                                                   style={{ opacity: 0 }}
                                                   disabled={
@@ -673,6 +643,246 @@ const On_Boarding = () => {
                                           </td>
                                         </tr>
                                         <tr>
+                                          <td>
+                                            Verify AceNet email id /zoho id/
+                                            laptop provision to employee
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="verify_acenet_email_id_zoho_id_laptop_provision_to_employee"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  checked={
+                                                    inputData?.verify_acenet_email_id_zoho_id_laptop_provision_to_employee
+                                                  }
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Hr" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            Introduction meeting with buddy
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="introduction_meeting_with_buddy"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  checked={
+                                                    inputData?.introduction_meeting_with_buddy
+                                                  }
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Hr" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>
+                                            Introduction meeting with line
+                                            manager + respective senior manager
+                                          </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="introduction_meeting_with_line_manager_respective_senior_manager"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  checked={
+                                                    inputData?.introduction_meeting_with_line_manager_respective_senior_manager
+                                                  }
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Hr" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                          <td>Handover to project complete</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="handover_to_project_complete"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  checked={
+                                                    inputData?.handover_to_project_complete
+                                                  }
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Hr" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+
+                                        <tr>
+                                          <td> Introduction Call With CEO</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="introduction_call_with_ceo"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  checked={
+                                                    inputData?.introduction_call_with_ceo
+                                                  }
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Hr" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </>
+                                </Step>
+
+                                <Step label="Finance">
+                                  <>
+                                    <>
+                                      {getUserDetailsById?.initiate_on_boarding_status &&
+                                        (inputData?.finance_on_boarding_status ? (
+                                          <div
+                                            class="alert alert-success alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-check-circle-outline me-1"></i>
+                                            This step has been completed.
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ) : (
+                                          <div
+                                            class="alert alert-danger alert-dismissible fade show"
+                                            role="alert"
+                                          >
+                                            <i class="mdi mdi-alert-octagon me-1"></i>
+                                            "This step is pending !!"
+                                            <button
+                                              type="button"
+                                              class="btn-close"
+                                              data-bs-dismiss="alert"
+                                              aria-label="Close"
+                                            ></button>
+                                          </div>
+                                        ))}
+                                    </>
+
+                                    <table class="table table-hover">
+                                      <thead>
+                                        <tr>
+                                          <th> Field Name </th>
+                                          <th> Action </th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <p class="card-description mt-2 mb-0 text-center">
+                                          First Day Formalities
+                                        </p>
+                                        {/* <tr>
+                                          <td> Wifi Passwords </td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="wifi_passwords"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  checked={
+                                                    inputData?.wifi_passwords
+                                                  }
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Finance" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr> */}
+                                        <tr>
                                           <td> Generate Mail Id </td>
                                           <td>
                                             <div className="board">
@@ -689,7 +899,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -719,7 +929,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -749,7 +959,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -779,7 +989,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -807,7 +1017,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -820,61 +1030,6 @@ const On_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                        <tr>
-                                          <td> Induction Call</td>
-                                          <td>
-                                            <div className="board">
-                                              <span>No</span>
-                                              <label class="switch ms-1 me-1 mt-1 ">
-                                                <input
-                                                  type="checkbox"
-                                                  name="induction_call"
-                                                  class="form-control form-control-sm"
-                                                  onChange={inputEvent}
-                                                  checked={
-                                                    inputData?.induction_call
-                                                  }
-                                                  style={{ opacity: 0 }}
-                                                  disabled={
-                                                    LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
-                                                    LocalStorageData?.zoho_role ===
-                                                      "Admin"
-                                                      ? false
-                                                      : true
-                                                  }
-                                                />
-                                                <span class="slider round"></span>
-                                              </label>
-                                              <span>Yes</span>
-                                            </div>
-                                          </td>
-                                        </tr>
-                                        {inputData?.induction_call === true ? (
-                                          <tr>
-                                            <td> Induction Call With</td>
-                                            <td>
-                                              <select
-                                                name="induction_call_with"
-                                                onChange={
-                                                  handleInductionCallWith
-                                                }
-                                                value={inductionCallWith}
-                                                className="form-control mt-2 "
-                                                type="text"
-                                              >
-                                                <option value="sunil">
-                                                  Sunil
-                                                </option>
-                                                <option value="amit">
-                                                  Amit
-                                                </option>
-                                              </select>
-                                            </td>
-                                          </tr>
-                                        ) : (
-                                          ""
-                                        )}
                                         <tr>
                                           <td> Acenet Laptop</td>
                                           <td>
@@ -892,7 +1047,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -922,7 +1077,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -935,7 +1090,7 @@ const On_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                        <tr>
+                                        {/* <tr>
                                           <td> Notepad </td>
                                           <td>
                                             <div className="board">
@@ -950,7 +1105,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -962,7 +1117,7 @@ const On_Boarding = () => {
                                               <span>Yes</span>
                                             </div>
                                           </td>
-                                        </tr>
+                                        </tr> */}
                                         <tr>
                                           <td> T-Shirt</td>
                                           <td>
@@ -978,7 +1133,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1008,7 +1163,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1021,7 +1176,7 @@ const On_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                        <tr>
+                                        {/* <tr>
                                           <td> Intro Slide Shared</td>
                                           <td>
                                             <div className="board">
@@ -1038,7 +1193,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1050,7 +1205,7 @@ const On_Boarding = () => {
                                               <span>Yes</span>
                                             </div>
                                           </td>
-                                        </tr>
+                                        </tr> */}
                                         <p class="card-description mt-2 mb-0 text-center">
                                           Documents
                                         </p>
@@ -1071,7 +1226,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1099,7 +1254,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1127,7 +1282,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1155,7 +1310,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1183,7 +1338,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1213,7 +1368,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1243,7 +1398,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1273,7 +1428,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1307,7 +1462,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1337,7 +1492,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1367,7 +1522,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1397,7 +1552,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1427,7 +1582,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1459,7 +1614,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1489,7 +1644,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1517,7 +1672,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1532,7 +1687,7 @@ const On_Boarding = () => {
                                         </tr>
                                         <tr>
                                           <td>
-                                            Form 16 or Taxable income statement{" "}
+                                            Form 16 or Taxable income statement
                                             <br />
                                             duly certified by previous
                                             employer(Statement showing
@@ -1553,7 +1708,7 @@ const On_Boarding = () => {
                                                   style={{ opacity: 0 }}
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
-                                                      "Hr" ||
+                                                      "Finance" ||
                                                     LocalStorageData?.zoho_role ===
                                                       "Admin"
                                                       ? false
@@ -1566,53 +1721,6 @@ const On_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
-                                      </tbody>
-                                    </table>
-                                  </>
-                                </Step>
-
-                                <Step label="Finance">
-                                  <>
-                                    <>
-                                      {inputData?.finance_on_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
-                                    </>
-
-                                    <table class="table table-hover">
-                                      <thead>
-                                        <tr>
-                                          <th> Field Name </th>
-                                          <th> Action </th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
                                         <p class="card-description mt-2 mb-0 text-center">
                                           Compliance Documents
                                         </p>
@@ -1863,18 +1971,19 @@ const On_Boarding = () => {
                                             </div>
                                           </td>
                                         </tr>
+
                                         <p class="card-description mt-2 mb-0 text-center">
-                                          HDFC Bank Details
+                                          Zoho Accounts
                                         </p>
                                         <tr>
-                                          <td> HDFC Account Mapped</td>
+                                          <td>ZOHO People Account Created</td>
                                           <td>
                                             <div className="board">
                                               <span>No</span>
                                               <label class="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
-                                                  name="hdfc_account_mapped"
+                                                  name="zoho_people_account_created"
                                                   class="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   style={{ opacity: 0 }}
@@ -1887,7 +1996,100 @@ const On_Boarding = () => {
                                                       : true
                                                   }
                                                   checked={
-                                                    inputData?.hdfc_account_mapped
+                                                    inputData?.zoho_people_account_created
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                        {/* <tr>
+                                          <td>Zoho People Account Activated</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="zoho_people_account_activated"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Finance" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                  checked={
+                                                    inputData?.zoho_people_account_activated
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr> */}
+                                        {/* <tr>
+                                          <td>Zoho Payroll Integrated</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="zoho_payroll_integrated"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Finance" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
+                                                  }
+                                                  checked={
+                                                    inputData?.zoho_payroll_integrated
+                                                  }
+                                                />
+                                                <span class="slider round"></span>
+                                              </label>
+                                              <span>Yes</span>
+                                            </div>
+                                          </td>
+                                        </tr> */}
+                                        <p class="card-description mt-2 mb-0 text-center">
+                                          Other Formalities
+                                        </p>
+                                        <tr>
+                                          <td> BGV Initiated</td>
+                                          <td>
+                                            <div className="board">
+                                              <span>No</span>
+                                              <label class="switch ms-1 me-1 mt-1 ">
+                                                <input
+                                                  type="checkbox"
+                                                  name="bgv_initiated"
+                                                  class="form-control form-control-sm"
+                                                  onChange={inputEvent}
+                                                  style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.bgv_initiated
+                                                  }
+                                                  disabled={
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Finance" ||
+                                                    LocalStorageData?.zoho_role ===
+                                                      "Admin"
+                                                      ? false
+                                                      : true
                                                   }
                                                 />
                                                 <span class="slider round"></span>
@@ -1897,17 +2099,20 @@ const On_Boarding = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <td> HDFC Account Initiated</td>
+                                          <td> BGV Invoice Paid</td>
                                           <td>
                                             <div className="board">
                                               <span>No</span>
                                               <label class="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
-                                                  name="hdfc_account_initiated"
+                                                  name="bgv_invoice_Paid"
                                                   class="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.bgv_invoice_Paid
+                                                  }
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
                                                       "Finance" ||
@@ -1915,9 +2120,6 @@ const On_Boarding = () => {
                                                       "Admin"
                                                       ? false
                                                       : true
-                                                  }
-                                                  checked={
-                                                    inputData?.hdfc_account_initiated
                                                   }
                                                 />
                                                 <span class="slider round"></span>
@@ -1927,17 +2129,20 @@ const On_Boarding = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <td> HDFC Account Opened</td>
+                                          <td> BGV Report Received</td>
                                           <td>
                                             <div className="board">
                                               <span>No</span>
                                               <label class="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
-                                                  name="hdfc_account_opened"
+                                                  name="bgv_report_Received"
                                                   class="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.bgv_report_Received
+                                                  }
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
                                                       "Finance" ||
@@ -1945,9 +2150,6 @@ const On_Boarding = () => {
                                                       "Admin"
                                                       ? false
                                                       : true
-                                                  }
-                                                  checked={
-                                                    inputData?.hdfc_account_opened
                                                   }
                                                 />
                                                 <span class="slider round"></span>
@@ -1957,19 +2159,20 @@ const On_Boarding = () => {
                                           </td>
                                         </tr>
                                         <tr>
-                                          <td>
-                                            HDFC Account Benefeciary added
-                                          </td>
+                                          <td> Update LinkedIn</td>
                                           <td>
                                             <div className="board">
                                               <span>No</span>
                                               <label class="switch ms-1 me-1 mt-1 ">
                                                 <input
                                                   type="checkbox"
-                                                  name="hdfc_account_benefeciary_added"
+                                                  name="update_linkedIn"
                                                   class="form-control form-control-sm"
                                                   onChange={inputEvent}
                                                   style={{ opacity: 0 }}
+                                                  checked={
+                                                    inputData?.update_linkedIn
+                                                  }
                                                   disabled={
                                                     LocalStorageData?.zoho_role ===
                                                       "Finance" ||
@@ -1977,9 +2180,6 @@ const On_Boarding = () => {
                                                       "Admin"
                                                       ? false
                                                       : true
-                                                  }
-                                                  checked={
-                                                    inputData?.hdfc_account_benefeciary_added
                                                   }
                                                 />
                                                 <span class="slider round"></span>
@@ -1990,273 +2190,6 @@ const On_Boarding = () => {
                                         </tr>
                                       </tbody>
                                     </table>
-                                  </>
-                                </Step>
-
-                                <Step label="Management">
-                                  <>
-                                    <>
-                                      {inputData?.management_on_boarding_status ? (
-                                        <div
-                                          class="alert alert-success alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-check-circle-outline me-1"></i>
-                                          This step has been completed.
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      ) : (
-                                        <div
-                                          class="alert alert-danger alert-dismissible fade show"
-                                          role="alert"
-                                        >
-                                          <i class="mdi mdi-alert-octagon me-1"></i>
-                                          "This step is pending !!"
-                                          <button
-                                            type="button"
-                                            class="btn-close"
-                                            data-bs-dismiss="alert"
-                                            aria-label="Close"
-                                          ></button>
-                                        </div>
-                                      )}
-                                    </>
-
-                                    <>
-                                      <table class="table table-hover">
-                                        <thead>
-                                          <p class="card-description mt-2 mb-0 text-center">
-                                            Zoho Accounts
-                                          </p>
-                                          <tr>
-                                            <th> Field Name </th>
-                                            <th> Action </th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr>
-                                            <td>ZOHO People Account Created</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="zoho_people_account_created"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    disabled={
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Management" ||
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Admin"
-                                                        ? false
-                                                        : true
-                                                    }
-                                                    checked={
-                                                      inputData?.zoho_people_account_created
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>
-                                              Zoho People Account Activated
-                                            </td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="zoho_people_account_activated"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    disabled={
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Management" ||
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Admin"
-                                                        ? false
-                                                        : true
-                                                    }
-                                                    checked={
-                                                      inputData?.zoho_people_account_activated
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td>Zoho Payroll Integrated</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="zoho_payroll_integrated"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    disabled={
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Management" ||
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Admin"
-                                                        ? false
-                                                        : true
-                                                    }
-                                                    checked={
-                                                      inputData?.zoho_payroll_integrated
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <p class="card-description mt-2 mb-0 text-center">
-                                            Other Formalities
-                                          </p>
-                                          <tr>
-                                            <td> BGV Initiated</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="bgv_initiated"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.bgv_initiated
-                                                    }
-                                                    disabled={
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Management" ||
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Admin"
-                                                        ? false
-                                                        : true
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> BGV Invoice Paid</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="bgv_invoice_Paid"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.bgv_invoice_Paid
-                                                    }
-                                                    disabled={
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Management" ||
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Admin"
-                                                        ? false
-                                                        : true
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> BGV Report Received</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="bgv_report_Received"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.bgv_report_Received
-                                                    }
-                                                    disabled={
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Management" ||
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Admin"
-                                                        ? false
-                                                        : true
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td> Update LinkedIn</td>
-                                            <td>
-                                              <div className="board">
-                                                <span>No</span>
-                                                <label class="switch ms-1 me-1 mt-1 ">
-                                                  <input
-                                                    type="checkbox"
-                                                    name="update_linkedIn"
-                                                    class="form-control form-control-sm"
-                                                    onChange={inputEvent}
-                                                    style={{ opacity: 0 }}
-                                                    checked={
-                                                      inputData?.update_linkedIn
-                                                    }
-                                                    disabled={
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Management" ||
-                                                      LocalStorageData?.zoho_role ===
-                                                        "Admin"
-                                                        ? false
-                                                        : true
-                                                    }
-                                                  />
-                                                  <span class="slider round"></span>
-                                                </label>
-                                                <span>Yes</span>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </>
                                   </>
                                 </Step>
                               </MultiStepForm>
@@ -2278,7 +2211,7 @@ const On_Boarding = () => {
                                 </>
                               )}
                               {/* <!==========  Next Button ============> */}
-                              {active !== 3 && (
+                              {active !== 2 && (
                                 <button
                                   class="btn btn-sm btn-gradient-primary me-2 mt-4 mb-4"
                                   onClick={(e) => {

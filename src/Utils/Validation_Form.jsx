@@ -488,9 +488,14 @@ export const travel_request_form_validation = yup.object({
         }
       }
     ),
-  project_id: yup.string().required("This field is required"),
-  reason_for_travel: yup.string().required("This field is required"),
   billable: yup.string().required("This field is required"),
+
+  project_id: yup.string().when("billable", (val, schema) => {
+    if (val[0] === "Yes") {
+      return yup.string().required("This field is required");
+    } else return yup.string().notRequired();
+  }),
+  reason_for_travel: yup.string().required("This field is required"),
   flight_travel: yup.string().notRequired(),
   flight_from_city: yup.string().when("flight_travel", (val, schema) => {
     if (val[0] === "true") {

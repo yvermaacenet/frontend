@@ -1,12 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [cookies, setCookie, removeCookie] = useCookies();
+  const [getData, setGetData] = useState({});
+  const [isManager, setIsManager] = useState(false);
 
+  useEffect(() => {
+    const getAllManagersList = async () => {
+      const resp = await axios.get("/get_user_list_By_Role_Name");
+      const allManagersId = resp.data.Reporting_Manager;
+      const filtered = allManagersId.includes(LocalStorageData?.emp_id);
+      setIsManager(filtered);
+    };
+    getAllManagersList();
+
+    const get_notifications_counter = async () => {
+      const res = await axios
+        .get(
+          `/notifications_counter/${LocalStorageData?.reporting_manager}/${LocalStorageData?.zoho_role}`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
+        .then((res) => setGetData(res.data))
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+    };
+    get_notifications_counter();
+  }, []);
   return (
     <>
       <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -169,39 +200,54 @@ const Navbar = () => {
                 <h6 className="p-3 mb-0 text-center">4 new messages</h6>
               </div>
             </li> */}
-            {/* <li className="nav-item dropdown">
-              <a
-                className="nav-link count-indicator dropdown-toggle"
-                id="notificationDropdown"
-                href="#"
-                data-bs-toggle="dropdown"
-              >
-                <i className="mdi mdi-bell-outline"></i>
-                <span className="count-symbol bg-danger"></span>
-              </a>
-              <div
-                className="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
-                aria-labelledby="notificationDropdown"
-              >
-                <h6 className="p-3 mb-0">Notifications</h6>
-                <div className="dropdown-divider"></div>
-                <a className="dropdown-item preview-item">
-                  <div className="preview-thumbnail">
-                    <div className="preview-icon bg-success">
-                      <i className="mdi mdi-calendar"></i>
-                    </div>
-                  </div>
-                  <div className="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                    <h6 className="preview-subject font-weight-normal mb-1">
-                      Event today
-                    </h6>
-                    <p className="text-gray ellipsis mb-0">
-                      Just a reminder that you have an event today
-                    </p>
-                  </div>
+            {(isManager ||
+              LocalStorageData?.zoho_role === "Management" ||
+              LocalStorageData?.zoho_role === "Admin") && (
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link count-indicator dropdown-toggle"
+                  id="notificationDropdown"
+                  href="#"
+                  data-bs-toggle="dropdown"
+                >
+                  <i className="mdi mdi-bell-outline"></i>
+                  <span
+                    className={`count-symbol ${
+                      getData?.Total_Notification === "0"
+                        ? "bg-success"
+                        : "bg-danger"
+                    }`}
+                  ></span>
                 </a>
-                <div className="dropdown-divider"></div>
-                <a className="dropdown-item preview-item">
+                <div
+                  className="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                  aria-labelledby="notificationDropdown"
+                >
+                  <h6 className="p-3 mb-0">Notifications</h6>
+                  <div className="dropdown-divider"></div>
+                  {getData?.Total_Notification > 0 && (
+                    <NavLink
+                      className="dropdown-item preview-item"
+                      to="/travelrequestreceived"
+                    >
+                      <div className="preview-thumbnail">
+                        <div className="preview-icon bg-danger">
+                          <i className="mdi mdi-wallet-travel"></i>
+                        </div>
+                      </div>
+
+                      <div className="preview-item-content d-flex align-items-start flex-column justify-content-center">
+                        <h6 className="preview-subject font-weight-normal mb-1">
+                          Travel Request
+                        </h6>
+                        <p className="text-gray ellipsis mb-0">
+                          {getData?.Total_Notification} request has been pending
+                        </p>
+                      </div>
+                    </NavLink>
+                  )}
+                  <div className="dropdown-divider"></div>
+                  {/* <a className="dropdown-item preview-item">
                   <div className="preview-thumbnail">
                     <div className="preview-icon bg-warning">
                       <i className="mdi mdi-settings"></i>
@@ -228,10 +274,11 @@ const Navbar = () => {
                     <p className="text-gray ellipsis mb-0"> New admin wow! </p>
                   </div>
                 </a>
-                <div className="dropdown-divider"></div>
-                <h6 className="p-3 mb-0 text-center">See all notifications</h6>
-              </div>
-            </li> */}
+                <div className="dropdown-divider"></div> */}
+                  {/* <h6 className="p-3 mb-0 text-center">See all notifications</h6> */}
+                </div>
+              </li>
+            )}
             <li className="nav-item nav-logout d-none d-lg-block">
               <NavLink
                 className="nav-link"

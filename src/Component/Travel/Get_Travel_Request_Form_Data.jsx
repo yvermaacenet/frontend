@@ -86,11 +86,11 @@ const GetTravelRequestForm_Data = () => {
                   Raise Request
                 </button>
               </NavLink> */}
-              {isManager && (
-                <NavLink to="/travelrequestreceived">
-                  <button className="btn btn-sm btn-dark">Take Action</button>
-                </NavLink>
-              )}
+              {/* {isManager && ( */}
+              {/* <NavLink to="/travelrequestreceived">
+                <button className="btn btn-sm btn-dark">Take Action</button>
+              </NavLink> */}
+              {/* )} */}
             </div>
             {loading && (
               <div className="loader-container">
@@ -107,6 +107,7 @@ const GetTravelRequestForm_Data = () => {
                           <th>Sr.no</th>
                           <th>Requested On</th>
                           {/* <th>Reason for travel</th> */}
+                          <th>Manager Name</th>
                           <th>Manager Approval</th>
                           <th>Actions</th>
                         </tr>
@@ -117,7 +118,7 @@ const GetTravelRequestForm_Data = () => {
                             <tr>
                               <td>{index + 1}</td>
                               <td>{val?.createdAt?.split("T")[0]}</td>
-                              {/* <td>{val?.travel?.reason_for_travel}</td> */}
+                              <td>{val?.reporting_manager}</td>
                               <td>
                                 <label
                                   class={`${

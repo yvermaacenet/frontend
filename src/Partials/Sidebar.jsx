@@ -1,12 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import ImportScript from "../Utils/ImportScript";
+import axios from "axios";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [state, setState] = useState(LocalStorageData);
   const scriptArrsy = ["/assets/js/misc.js"];
   ImportScript(scriptArrsy);
+  const [isManager, setIsManager] = useState(false);
+  const [counterList, setCounterList] = useState([]);
+
+  useEffect(() => {
+    const getAllManagersList = async () => {
+      const resp = await axios.get("/get_user_list_By_Role_Name");
+      const allManagersId = resp?.data?.Reporting_Manager;
+      const filtered = allManagersId?.includes(LocalStorageData?.emp_id);
+      setIsManager(filtered);
+    };
+    getAllManagersList();
+    async function get_counterList() {
+      await axios
+        .get(
+          `/documents_counter/${LocalStorageData?.user_id}/${LocalStorageData?.reporting_manager}/${LocalStorageData?.zoho_role}`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
+        .then((res) => {
+          return setCounterList(res?.data);
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+    }
+
+    get_counterList();
+  }, []);
+  console.log(counterList);
+
   return (
     <>
       <nav className="sidebar sidebar-offcanvas" id="sidebar">
@@ -28,18 +65,15 @@ const Sidebar = () => {
               <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
             </NavLink>
           </li>
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <NavLink className="nav-link" to="/">
               <span className="menu-title">Dashboard</span>
               <i className="mdi mdi-home menu-icon"></i>
             </NavLink>
-          </li>
+          </li> */}
 
           <>
-            {(state?.zoho_role === "Admin" ||
-              state?.zoho_role === "Hr" ||
-              state?.zoho_role === "Finance" ||
-              state?.zoho_role === "Management") && (
+            {state?.zoho_role !== "Team member" && (
               <li class="nav-item">
                 <a
                   class="nav-link"
@@ -59,7 +93,7 @@ const Sidebar = () => {
                         className="nav-link"
                         to="/user_list/active_users"
                       >
-                        Users List
+                        Users List ({counterList?.Active_Users})
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -67,7 +101,7 @@ const Sidebar = () => {
                         className="nav-link"
                         to="/user_list/pending_onboarding_users"
                       >
-                        Pending Onboarding
+                        Pending Onboarding ({counterList?.Pending_Onboarding})
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -75,7 +109,7 @@ const Sidebar = () => {
                         className="nav-link"
                         to="/user_list/pending_offboarding_users"
                       >
-                        Pending Offboarding
+                        Pending Offboarding ({counterList?.Pending_Offboarding})
                       </NavLink>
                     </li>
                   </ul>
@@ -136,16 +170,6 @@ const Sidebar = () => {
                       Form Flexible Benefit
                     </NavLink>
                   </li>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/alltravelrequest">
-                      Travel Request
-                    </NavLink>
-                  </li>
-                  {/* <li className="nav-item">
-                    <NavLink className="nav-link" to="/alltravelrequest">
-                      All Travel Requests
-                    </NavLink>
-                  </li> */}
 
                   {(LocalStorageData?.zoho_role === "Finance" ||
                     LocalStorageData?.zoho_role === "Admin") && (
@@ -165,6 +189,44 @@ const Sidebar = () => {
                         </NavLink>
                       </li>
                     </>
+                  )}
+                </ul>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                data-bs-toggle="collapse"
+                href="#ui-travel_request"
+                aria-expanded="false"
+                aria-controls="ui-basic"
+              >
+                <span class="menu-title">Travel Request</span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-book-plus menu-icon"></i>
+              </a>
+              <div class="collapse" id="ui-travel_request">
+                <ul class="nav flex-column sub-menu">
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/alltravelrequest">
+                      View Request ({counterList?.Travel_Request_By_User_ID})
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink className="nav-link" to="/travelrequestform">
+                      Create Request
+                    </NavLink>
+                  </li>
+                  {(isManager ||
+                    LocalStorageData?.zoho_role === "Management" ||
+                    LocalStorageData?.zoho_role === "Admin") && (
+                    <li className="nav-item">
+                      <NavLink className="nav-link" to="/travelrequestreceived">
+                        Approve/Decline
+                        <br /> Request (
+                        {counterList?.Travel_Request_By_Manager_and_Management})
+                      </NavLink>
+                    </li>
                   )}
                 </ul>
               </div>
