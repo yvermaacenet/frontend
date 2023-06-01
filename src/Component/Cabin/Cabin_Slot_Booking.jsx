@@ -37,6 +37,7 @@ const Cabin_Slot_Booking = () => {
   const [filteredCabinList, setFilteredCabinList] = useState([]);
   const [startDate, setStartdate] = useState("");
   const [invalidText, setInvalidText] = useState("");
+  // to add the start and end time manaually
   const [timeValue, setTimeValue] = useState({
     manual_date: convertDateFormate(startDate),
     start_manual_time: "",
@@ -54,7 +55,7 @@ const Cabin_Slot_Booking = () => {
       };
     });
   };
-
+  // to compare the start and the end time so that end time should not be less than the start time
   const compareTime = (d1, d2) => {
     let date1 = new Date(d1);
     let date2 = new Date(d2);
@@ -87,6 +88,7 @@ const Cabin_Slot_Booking = () => {
       };
     });
   };
+  //to get all the location ( gurgram, Pune)
   const fetch_Location = async () => {
     const res = await axios
       .get("/get_location", {
@@ -101,6 +103,9 @@ const Cabin_Slot_Booking = () => {
         }
       });
   };
+
+  //to get the bookings via cabin
+
   const fetch_cabin_slot_booking_by_location = async (loc) => {
     const res = await axios
       .get(`/cabin_slot_booking_by_location/${loc}`, {
@@ -285,10 +290,8 @@ const Cabin_Slot_Booking = () => {
       timeValue?.end_manual_time
     );
     if (timeCompare === "no") {
-      console.log("end is smaller");
       setInvalidText("End time Should be greater than start time");
     } else if (timeCompare === "equal") {
-      console.log("bothequal");
       setInvalidText("Start time and End time can't be equal");
     } else {
       setLoading(true);
@@ -342,6 +345,7 @@ const Cabin_Slot_Booking = () => {
       setLoading(false);
     }
   };
+  console.log("caddadadadbin", selectCabin_id);
 
   const onRemoveCabinSlotBookingButton = async (e) => {
     e.preventDefault();
@@ -407,7 +411,6 @@ const Cabin_Slot_Booking = () => {
       timeValue?.start_manual_time,
       timeValue?.end_manual_time
     );
-    console.log("timeCompare", timeCompare);
     if (timeCompare === "no") {
       setInvalidText("End time Should be greater than start time");
     } else if (timeCompare === "equal") {
@@ -555,8 +558,11 @@ const Cabin_Slot_Booking = () => {
   );
 
   const handleLocationChange = (e) => {
+    if (selectCabin_id !== "all") {
+      setSelectCabin_id("all");
+    }
     setLocationValue(e.target.value);
-    setSelectCabin_id("all");
+    // setSelectCabin_id("all");
     let filteredCabinList = [];
     let filtered = getCabinList?.filter((x) => x.location === e.target.value);
     filteredCabinList.push(filtered);
@@ -578,7 +584,7 @@ const Cabin_Slot_Booking = () => {
               page_heading="Cabin Booking"
               page_title="Cabin"
               page_title_icon="mdi-home-modern"
-              page_title_button=""
+              page_title_button="Back"
               page_title_button_link="/dashboard"
             />
             {loading && (
@@ -601,7 +607,7 @@ const Cabin_Slot_Booking = () => {
                               onChange={handleLocationChange}
                             >
                               <option value="all_location" selected="selected">
-                                All Booking
+                                Select
                               </option>
                               {location?.map((item) => {
                                 return (
@@ -620,10 +626,9 @@ const Cabin_Slot_Booking = () => {
                               onChange={(e) =>
                                 setSelectCabin_id(e.target.value)
                               }
+                              value={selectCabin_id}
                             >
-                              <option value="all" selected="selected">
-                                All Booking
-                              </option>
+                              <option value="all">Select</option>
                               {filteredCabinList[0]?.map((val, index) => {
                                 return (
                                   <>
@@ -638,29 +643,35 @@ const Cabin_Slot_Booking = () => {
                         </div>
                       </div>
                     </form>
-                    <DragAndDropCalendar
-                      events={getCabinSlotBookingList}
-                      localizer={localizer}
-                      onEventDrop={moveEvent}
-                      onEventResize={resizeEvent}
-                      resizable={true}
-                      selectable
-                      onSelectSlot={handleSelect}
-                      resourceIdAccessor="resourceId"
-                      onSelectEvent={onSelectEvent}
-                      resourceTitleAccessor="resourceTitle"
-                      startAccessor="start"
-                      endAccessor="end"
-                      defaultView={"week"}
-                      // min={minDate_time}
-                      // max={maxDate_time}
-                      style={{
-                        height: "100vh",
-                      }}
-                      showMultiDayTimes={true}
-                      step={15}
-                      eventPropGetter={eventStyleGetter}
-                    />
+                    {selectCabin_id !== "all" ? (
+                      <DragAndDropCalendar
+                        events={getCabinSlotBookingList}
+                        localizer={localizer}
+                        onEventDrop={moveEvent}
+                        onEventResize={resizeEvent}
+                        resizable={true}
+                        selectable
+                        onSelectSlot={handleSelect}
+                        resourceIdAccessor="resourceId"
+                        onSelectEvent={onSelectEvent}
+                        resourceTitleAccessor="resourceTitle"
+                        startAccessor="start"
+                        endAccessor="end"
+                        defaultView={"week"}
+                        // min={minDate_time}
+                        // max={maxDate_time}
+
+                        style={{
+                          height: "100vh",
+                        }}
+                        showMultiDayTimes={true}
+                        step={15}
+                        eventPropGetter={eventStyleGetter}
+                      />
+                    ) : (
+                      ""
+                    )}
+
                     <PureModal
                       header="Cabin Booking"
                       isOpen={addEventModal}

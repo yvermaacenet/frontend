@@ -209,7 +209,7 @@ const Sidebar = () => {
                 <ul class="nav flex-column sub-menu">
                   <li className="nav-item">
                     <NavLink className="nav-link" to="/alltravelrequest">
-                      View Request ({counterList?.Travel_Request_By_User_ID})
+                      My Requests ({counterList?.Travel_Request_By_User_ID})
                     </NavLink>
                   </li>
                   <li className="nav-item">
@@ -222,7 +222,7 @@ const Sidebar = () => {
                     LocalStorageData?.zoho_role === "Admin") && (
                     <li className="nav-item">
                       <NavLink className="nav-link" to="/travelrequestreceived">
-                        View Approval/Decline
+                        Approval/Decline
                         <br /> Request (
                         {counterList?.Travel_Request_For_Approval_and_Decline})
                       </NavLink>
