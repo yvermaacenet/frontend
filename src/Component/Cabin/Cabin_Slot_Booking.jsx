@@ -290,10 +290,8 @@ const Cabin_Slot_Booking = () => {
       timeValue?.end_manual_time
     );
     if (timeCompare === "no") {
-      console.log("end is smaller");
       setInvalidText("End time Should be greater than start time");
     } else if (timeCompare === "equal") {
-      console.log("bothequal");
       setInvalidText("Start time and End time can't be equal");
     } else {
       setLoading(true);
@@ -347,6 +345,7 @@ const Cabin_Slot_Booking = () => {
       setLoading(false);
     }
   };
+  console.log("caddadadadbin", selectCabin_id);
 
   const onRemoveCabinSlotBookingButton = async (e) => {
     e.preventDefault();
@@ -412,7 +411,6 @@ const Cabin_Slot_Booking = () => {
       timeValue?.start_manual_time,
       timeValue?.end_manual_time
     );
-    console.log("timeCompare", timeCompare);
     if (timeCompare === "no") {
       setInvalidText("End time Should be greater than start time");
     } else if (timeCompare === "equal") {
@@ -560,6 +558,9 @@ const Cabin_Slot_Booking = () => {
   );
 
   const handleLocationChange = (e) => {
+    if (selectCabin_id !== "all") {
+      setSelectCabin_id("all");
+    }
     setLocationValue(e.target.value);
     // setSelectCabin_id("all");
     let filteredCabinList = [];
@@ -606,7 +607,7 @@ const Cabin_Slot_Booking = () => {
                               onChange={handleLocationChange}
                             >
                               <option value="all_location" selected="selected">
-                                All Booking
+                                Select
                               </option>
                               {location?.map((item) => {
                                 return (
@@ -625,10 +626,9 @@ const Cabin_Slot_Booking = () => {
                               onChange={(e) =>
                                 setSelectCabin_id(e.target.value)
                               }
+                              value={selectCabin_id}
                             >
-                              <option value="all" selected="selected">
-                                All Booking
-                              </option>
+                              <option value="all">Select</option>
                               {filteredCabinList[0]?.map((val, index) => {
                                 return (
                                   <>
@@ -643,29 +643,35 @@ const Cabin_Slot_Booking = () => {
                         </div>
                       </div>
                     </form>
-                    <DragAndDropCalendar
-                      events={getCabinSlotBookingList}
-                      localizer={localizer}
-                      onEventDrop={moveEvent}
-                      onEventResize={resizeEvent}
-                      resizable={true}
-                      selectable
-                      onSelectSlot={handleSelect}
-                      resourceIdAccessor="resourceId"
-                      onSelectEvent={onSelectEvent}
-                      resourceTitleAccessor="resourceTitle"
-                      startAccessor="start"
-                      endAccessor="end"
-                      defaultView={"week"}
-                      // min={minDate_time}
-                      // max={maxDate_time}
-                      style={{
-                        height: "100vh",
-                      }}
-                      showMultiDayTimes={true}
-                      step={15}
-                      eventPropGetter={eventStyleGetter}
-                    />
+                    {selectCabin_id !== "all" ? (
+                      <DragAndDropCalendar
+                        events={getCabinSlotBookingList}
+                        localizer={localizer}
+                        onEventDrop={moveEvent}
+                        onEventResize={resizeEvent}
+                        resizable={true}
+                        selectable
+                        onSelectSlot={handleSelect}
+                        resourceIdAccessor="resourceId"
+                        onSelectEvent={onSelectEvent}
+                        resourceTitleAccessor="resourceTitle"
+                        startAccessor="start"
+                        endAccessor="end"
+                        defaultView={"week"}
+                        // min={minDate_time}
+                        // max={maxDate_time}
+
+                        style={{
+                          height: "100vh",
+                        }}
+                        showMultiDayTimes={true}
+                        step={15}
+                        eventPropGetter={eventStyleGetter}
+                      />
+                    ) : (
+                      ""
+                    )}
+
                     <PureModal
                       header="Cabin Booking"
                       isOpen={addEventModal}
