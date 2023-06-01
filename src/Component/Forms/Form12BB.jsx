@@ -477,7 +477,7 @@ const Form12BB = () => {
               <Page_Header
                 page_heading="Form 12 BB (See rule 26C)"
                 page_title_icon="mdi-book-plus"
-                page_title_button="Back"
+                page_title_button=""
                 page_title_button_link="/dashboard"
               />
               {loading && (

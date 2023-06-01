@@ -23,7 +23,7 @@ const Sidebar = () => {
     async function get_counterList() {
       await axios
         .get(
-          `/documents_counter/${LocalStorageData?.user_id}/${LocalStorageData?.emp_id}/${LocalStorageData?.zoho_role}`,
+          `/documents_counter/${LocalStorageData?.user_id}/${LocalStorageData?.emp_id}/${LocalStorageData?.zoho_role}/${LocalStorageData?.email}`,
           {
             headers: { Access_Token: LocalStorageData?.generate_auth_token },
           }
@@ -42,7 +42,7 @@ const Sidebar = () => {
 
     get_counterList();
   }, []);
-  console.log(counterList);
+  // console.log(counterList);
 
   return (
     <>
@@ -82,7 +82,7 @@ const Sidebar = () => {
                   aria-expanded="false"
                   aria-controls="ui-basic"
                 >
-                  <span class="menu-title">Users</span>
+                  <span class="menu-title">Employee</span>
                   <i class="menu-arrow"></i>
                   <i class="mdi mdi-account-multiple-outline menu-icon"></i>
                 </a>
@@ -91,15 +91,15 @@ const Sidebar = () => {
                     <li className="nav-item">
                       <NavLink
                         className="nav-link"
-                        to="/user_list/active_users"
+                        to="/user_list/active_employee"
                       >
-                        Users List ({counterList?.Active_Users})
+                        Employee List ({counterList?.Active_Users})
                       </NavLink>
                     </li>
                     <li className="nav-item">
                       <NavLink
                         className="nav-link"
-                        to="/user_list/pending_onboarding_users"
+                        to="/user_list/pending_onboarding_employee"
                       >
                         Pending Onboarding ({counterList?.Pending_Onboarding})
                       </NavLink>
@@ -107,7 +107,7 @@ const Sidebar = () => {
                     <li className="nav-item">
                       <NavLink
                         className="nav-link"
-                        to="/user_list/pending_offboarding_users"
+                        to="/user_list/pending_offboarding_employee"
                       >
                         Pending Offboarding ({counterList?.Pending_Offboarding})
                       </NavLink>
@@ -116,7 +116,7 @@ const Sidebar = () => {
                 </div>
               </li>
             )}
-            <li class="nav-item">
+            {/* <li class="nav-item">
               <a
                 class="nav-link"
                 data-bs-toggle="collapse"
@@ -145,7 +145,7 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </div>
-            </li>
+            </li> */}
             <li class="nav-item">
               <a
                 class="nav-link"
@@ -154,7 +154,7 @@ const Sidebar = () => {
                 aria-expanded="false"
                 aria-controls="ui-basic"
               >
-                <span class="menu-title">Forms</span>
+                <span class="menu-title">Text Forms</span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-book-plus menu-icon"></i>
               </a>
@@ -203,7 +203,7 @@ const Sidebar = () => {
               >
                 <span class="menu-title">Travel Request</span>
                 <i class="menu-arrow"></i>
-                <i class="mdi mdi-book-plus menu-icon"></i>
+                <i class="mdi mdi-wallet-travel menu-icon"></i>
               </a>
               <div class="collapse" id="ui-travel_request">
                 <ul class="nav flex-column sub-menu">
@@ -222,14 +222,20 @@ const Sidebar = () => {
                     LocalStorageData?.zoho_role === "Admin") && (
                     <li className="nav-item">
                       <NavLink className="nav-link" to="/travelrequestreceived">
-                        Approve/Decline
+                        View Approval/Decline
                         <br /> Request (
-                        {counterList?.Travel_Request_By_Manager_and_Management})
+                        {counterList?.Travel_Request_For_Approval_and_Decline})
                       </NavLink>
                     </li>
                   )}
                 </ul>
               </div>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/cabin_slot_booking">
+                <span className="menu-title">Cabin Slot Booking</span>
+                <i className="mdi mdi-home-modern menu-icon"></i>
+              </NavLink>
             </li>
           </>
         </ul>

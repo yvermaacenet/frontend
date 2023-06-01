@@ -24,6 +24,9 @@ const TravelApprovalRequest = () => {
   const [allData, setAllData] = useState([]);
   const [history, setHistory] = useState([false]);
   const [originalData, setOriginalData] = useState([]);
+  const [getButtoncode, setButtoncode] = useState(
+    "Pending Approval/Decline Request List"
+  );
 
   // const [historyStatus, setHistoryStatus] = useState(false);
   useEffect(() => {
@@ -38,7 +41,9 @@ const TravelApprovalRequest = () => {
           setAllData(resp);
 
           const filtered = resp?.filter(
-            (x) => x?.reporting_manager?.slice(-2) === LocalStorageData?.emp_id
+            (x) =>
+              x?.employee?.reporting_manager?.slice(-2) ===
+              LocalStorageData?.emp_id
           );
           setOriginalData(filtered);
           const filteredRequest = filtered?.filter(
@@ -46,7 +51,11 @@ const TravelApprovalRequest = () => {
           );
           return setGettravelrequestdata(
             LocalStorageData?.zoho_role === "Management"
-              ? resp.filter((x) => x.management_approval === "Pending")
+              ? resp.filter(
+                  (x) =>
+                    x.management_approval === "Pending" &&
+                    x?.employee?.email !== LocalStorageData?.email
+                )
               : filteredRequest
           );
         })
@@ -69,9 +78,14 @@ const TravelApprovalRequest = () => {
     );
     setGettravelrequestdata(
       LocalStorageData?.zoho_role === "Management"
-        ? allData.filter((x) => x.management_approval === "Pending")
+        ? allData.filter(
+            (x) =>
+              x.management_approval === "Pending" &&
+              x?.employee?.email !== LocalStorageData?.email
+          )
         : filteredRequest
     );
+    setButtoncode("Pending Approval/Decline Request List");
   };
   const handleHistoryClick = (e) => {
     e.preventDefault();
@@ -88,6 +102,7 @@ const TravelApprovalRequest = () => {
           )
         : filteredRequest
     );
+    setButtoncode("History");
   };
   // const handleAllClick = (e) => {
   //   e.preventDefault();
@@ -111,10 +126,10 @@ const TravelApprovalRequest = () => {
         <div className="main-panel">
           <div className="content-wrapper">
             <Page_Header
-              page_heading="Travel Requests list for Approvals"
-              page_title_icon="mdi-home-modern"
-              page_title_button="Back"
-              page_title_button_link="/alltravelrequest"
+              page_heading="Travel Requests list for Approval"
+              page_title_icon="mdi-wallet-travel"
+              page_title_button=""
+              page_title_button_link="#"
             />
             {loading && (
               <div className="loader-container">
@@ -142,6 +157,9 @@ const TravelApprovalRequest = () => {
               <div className="col-lg-12 grid-margin stretch-card">
                 <div className="card">
                   <div className="card-body">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span class="card-description">{getButtoncode}</span>
+                    </div>
                     <table class="table table-striped">
                       <thead>
                         <tr>

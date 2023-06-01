@@ -289,7 +289,7 @@ const Off_Boarding = () => {
               page_heading="Boarding"
               page_title_icon="mdi-view-dashboard"
               page_title_button="Back"
-              page_title_button_link="/user_list/active_users"
+              page_title_button_link="/user_list/pending_offboarding_users"
             />
             {loading && (
               <div className="loader-container">

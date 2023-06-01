@@ -40,10 +40,13 @@ const User_List = () => {
             })
             .then(async (result) => {
               const resp = result?.data;
+              console.log("resp", resp);
+              console.log("result_user_list", result_user_list);
               const tt = await result_user_list?.data.map((a) => ({
                 ...a,
                 ...resp?.find((b) => b?.user_id === a?._id),
               }));
+              console.log("tt", tt);
               return await axios
                 .get(`/off_boarding`, {
                   headers: {
@@ -295,6 +298,7 @@ const User_List = () => {
     }
     loadZohoData();
   };
+  console.log("getUserList", getUserList);
   return (
     <>
       <div className="container-scroller">
@@ -304,10 +308,10 @@ const User_List = () => {
           <div className="main-panel">
             <div className="content-wrapper">
               <Page_Header
-                page_heading="User List"
+                page_heading="Employee List"
                 // page_title="User"
                 page_title_icon="mdi-account-multiple-outline"
-                page_title_button="Back"
+                page_title_button=""
                 page_title_button_link="/dashboard"
               />
               {loading && (
@@ -320,7 +324,7 @@ const User_List = () => {
                   <button
                     type="button"
                     className="btn btn-sm btn-inverse-info btn-fw ms-1"
-                    onClick={() => setStatus_code("active_users")}
+                    onClick={() => setStatus_code("active_employee")}
                   >
                     All
                   </button>
@@ -328,14 +332,14 @@ const User_List = () => {
                   <button
                     type="button"
                     className="btn btn-sm btn-inverse-primary btn-fw ms-1"
-                    onClick={() => setStatus_code("pending_onboarding_users")}
+                    onClick={() => setStatus_code("pending_onboarding_employee")}
                   >
                     Pending Onboarding
                   </button>
                   <button
                     type="button"
                     className="btn btn-sm btn-inverse-dark btn-fw ms-1"
-                    onClick={() => setStatus_code("pending_offboarding_users")}
+                    onClick={() => setStatus_code("pending_offboarding_employee")}
                   >
                     Pending Offboarding
                   </button>
@@ -354,11 +358,11 @@ const User_List = () => {
                     >
                       <div className="d-flex justify-content-between align-items-center">
                         <span class="card-description">
-                          {status_code === "active_users"
-                            ? "Users List"
-                            : status_code === "pending_onboarding_users"
-                            ? "Pending Onboarding Users List"
-                            : "Pending Offboarding Users List"}
+                          {status_code === "active_employee"
+                            ? "Employee List"
+                            : status_code === "pending_onboarding_employee"
+                            ? "Pending Onboarding Employee List"
+                            : "Pending Offboarding Employee List"}
                         </span>
                       </div>
                       <table className="table table-striped">
@@ -369,12 +373,14 @@ const User_List = () => {
 
                             <th>Phone</th>
                             <th>Email</th>
-                            {(status_code === "active_users" ||
-                              status_code === "pending_onboarding_users") && (
+                            {(status_code === "active_employee" ||
+                              status_code ===
+                                "pending_onboarding_employee") && (
                               <th>Onboarding </th>
                             )}
-                            {(status_code === "active_users" ||
-                              status_code === "pending_offboarding_users") && (
+                            {(status_code === "active_employee" ||
+                              status_code ===
+                                "pending_offboarding_employee") && (
                               <th>Offboarding</th>
                             )}
                           </tr>
@@ -411,9 +417,9 @@ const User_List = () => {
                                     : value["Personal Mobile Number"]}
                                 </td>
                                 <td> {value["Email address"]} </td>
-                                {(status_code === "active_users" ||
+                                {(status_code === "active_employee" ||
                                   status_code ===
-                                    "pending_onboarding_users") && (
+                                    "pending_onboarding_employee") && (
                                   <td>
                                     {compareDates1(
                                       value?.creation_date?.split("T")[0],
@@ -422,16 +428,15 @@ const User_List = () => {
                                       (LocalStorageData?.zoho_role ===
                                         "Admin" ||
                                       LocalStorageData?.zoho_role ===
-                                        "Management" ||
-                                      LocalStorageData?.zoho_role ===
                                         "Finance" ||
                                       LocalStorageData?.zoho_role === "Hr" ? (
                                         <button
                                           type="button"
                                           className={`btn btn-sm ${
-                                            value?.hr_on_boarding_status ===
+                                            value?.hr?.hr_on_boarding_status ===
                                               true &&
-                                            value?.finance_on_boarding_status ===
+                                            value?.finance
+                                              ?.finance_on_boarding_status ===
                                               true
                                               ? "btn-inverse-success"
                                               : value?.initiate_on_boarding_status ===
@@ -444,9 +449,11 @@ const User_List = () => {
                                             const confirmationButton =
                                               !value?.initiate_on_boarding_status &&
                                               window.confirm(
-                                                value?.hr_on_boarding_status ===
+                                                value?.hr
+                                                  ?.hr_on_boarding_status ===
                                                   true &&
-                                                  value?.finance_on_boarding_status ===
+                                                  value?.finance
+                                                    ?.finance_on_boarding_status ===
                                                     true
                                                   ? "Do you really want to check onboarding?"
                                                   : "Do you really want to initiate onboarding?"
@@ -466,9 +473,10 @@ const User_List = () => {
                                             }
                                           }}
                                         >
-                                          {value?.hr_on_boarding_status ===
+                                          {value?.hr?.hr_on_boarding_status ===
                                             true &&
-                                          value?.finance_on_boarding_status ===
+                                          value?.finance
+                                            ?.finance_on_boarding_status ===
                                             true
                                             ? "Completed"
                                             : value?.initiate_on_boarding_status ===
@@ -482,9 +490,9 @@ const User_List = () => {
                                   </td>
                                 )}
 
-                                {(status_code === "active_users" ||
+                                {(status_code === "active_employee" ||
                                   status_code ===
-                                    "pending_offboarding_users") && (
+                                    "pending_offboarding_employee") && (
                                   <td>
                                     {(compareDates1(
                                       value?.creation_date?.split("T")[0],

@@ -38,6 +38,7 @@ const Travel_Action = (props) => {
     );
     setIsManager(filtered);
     setIsManagememnt(filteredManagement);
+    setLoading(false);
   };
   useEffect(() => {
     const get_travel_request_by_id = async () => {
@@ -46,7 +47,7 @@ const Travel_Action = (props) => {
         .get(`/get_travel_request_by_id/${_id}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
-        .then((res) => setGetData(res.data), setLoading(false))
+        .then((res) => setGetData(res.data))
         .catch((err) => {
           if (err.response.status === 500) {
             navigate("/error_500");
@@ -58,7 +59,6 @@ const Travel_Action = (props) => {
     get_travel_request_by_id();
     getAllManagersList();
   }, []);
-  console.log("wewewewe", getData);
   //   ====Handle Remarks
   // console.log("status", getData?.management_status);
   // const handleRemarksChange = (e) => {
@@ -184,7 +184,7 @@ const Travel_Action = (props) => {
           <div className="content-wrapper">
             <Page_Header
               page_heading="View Travel Request"
-              page_title_icon="mdi-home-modern"
+              page_title_icon="mdi-wallet-travel"
               page_title_button="Back"
               page_title_button_link={`${
                 isManager &&
@@ -441,57 +441,60 @@ const Travel_Action = (props) => {
                         </table>
                       </>
                     )}
-                    {isManager &&
-                      getData?.employee?.email !== LocalStorageData?.email && (
-                        <form
-                          className="forms-sample"
-                          onSubmit={handleSubmit(onSubmitButton)}
-                        >
-                          <div class="col-12 mt-2">
-                            <div class="form-group">
-                              <label>Remarks</label>
-                              <textarea
-                                name="remarks"
-                                className={classNames(
-                                  "form-control form-control-sm font-bold",
-                                  {
-                                    "is-invalid": errors.remarks,
-                                  }
-                                )}
-                                {...register("remarks", {
-                                  value: getData?.remarks,
-                                })}
-                                onChange={(e) =>
-                                  setGetData({
-                                    ...getData,
-                                    remarks: e.target.value,
-                                  })
+                    {((isManager &&
+                      getData?.employee?.email !== LocalStorageData?.email) ||
+                      (LocalStorageData?.zoho_role === "Management" &&
+                        getData?.employee?.email !==
+                          LocalStorageData?.email)) && (
+                      <form
+                        className="forms-sample"
+                        onSubmit={handleSubmit(onSubmitButton)}
+                      >
+                        <div class="col-12 mt-2">
+                          <div class="form-group">
+                            <label>Remarks</label>
+                            <textarea
+                              name="remarks"
+                              className={classNames(
+                                "form-control form-control-sm font-bold",
+                                {
+                                  "is-invalid": errors.remarks,
                                 }
-                                value={getData?.remarks}
-                                placeholder="Enter Remarks"
-                                rows={4}
-                              ></textarea>
-                            </div>
+                              )}
+                              {...register("remarks", {
+                                value: getData?.remarks,
+                              })}
+                              onChange={(e) =>
+                                setGetData({
+                                  ...getData,
+                                  remarks: e.target.value,
+                                })
+                              }
+                              value={getData?.remarks}
+                              placeholder="Enter Remarks"
+                              rows={4}
+                            ></textarea>
                           </div>
+                        </div>
 
-                          <div className="text-center">
-                            <button
-                              type="submit"
-                              className="btn btn-sm btn-gradient-success me-2"
-                              onClick={() => setHandleButtonType(true)}
-                            >
-                              Approve
-                            </button>
-                            <button
-                              type="submit"
-                              className="btn btn-sm btn-gradient-danger me-2"
-                              onClick={() => setHandleButtonType(false)}
-                            >
-                              Decline
-                            </button>
-                          </div>
-                        </form>
-                      )}
+                        <div className="text-center">
+                          <button
+                            type="submit"
+                            className="btn btn-sm btn-gradient-success me-2"
+                            onClick={() => setHandleButtonType(true)}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            type="submit"
+                            className="btn btn-sm btn-gradient-danger me-2"
+                            onClick={() => setHandleButtonType(false)}
+                          >
+                            Decline
+                          </button>
+                        </div>
+                      </form>
+                    )}
                   </div>
                 </div>
               </div>

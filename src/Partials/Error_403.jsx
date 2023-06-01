@@ -3,12 +3,12 @@ import { NavLink } from "react-router-dom";
 import { useCookies } from "react-cookie";
 const Error_403 = () => {
   const [cookies, setCookie, removeCookie] = useCookies([]);
-  useEffect(() => {
-    async function aa() {
-      return await localStorage.clear(), removeCookie(["Access_Token"]);
-    }
-    aa();
-  }, []);
+  // useEffect(() => {
+  //   async function aa() {
+  //     return await localStorage.clear(), removeCookie(["Access_Token"]);
+  //   }
+  //   aa();
+  // }, []);
   return (
     <div className="container-scroller" style={{ height: "100vh" }}>
       <div className="container-fluid page-body-wrapper full-page-wrapper">
