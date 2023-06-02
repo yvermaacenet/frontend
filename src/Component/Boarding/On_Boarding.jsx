@@ -312,6 +312,7 @@ const On_Boarding = () => {
       setInputData({ ...inputData, finance: response });
     }
   };
+  console.log("getUserDetailsById", getUserDetailsById);
   return (
     <div class="container-scroller">
       <Navbar />
@@ -367,11 +368,11 @@ const On_Boarding = () => {
                               {inputData?.hr?.hr_on_boarding_status === true &&
                               inputData?.finance?.finance_on_boarding_status ===
                                 true ? (
-                                <label className="badge badge-success">
+                                <label className="text-success fw-bold">
                                   Completed
                                 </label>
                               ) : (
-                                <label className="badge badge-danger">
+                                <label className="text-danger fw-bold">
                                   Pending
                                 </label>
                               )}
@@ -2075,6 +2076,8 @@ const On_Boarding = () => {
                         </div>
                       </div>
                       {/* <!==========  Update & Save Button ============> */}
+                      {/* {!inputData?.hr?.hr_on_boarding_status &&
+                        !inputData?.finance?.finance_on_boarding_status && ( */}
                       <div className="text-center">
                         {inputData?._id ? (
                           <>
@@ -2124,6 +2127,7 @@ const On_Boarding = () => {
                           </button>
                         )}
                       </div>
+                      {/* )} */}
                     </form>
                   </div>
                 </div>
