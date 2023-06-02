@@ -224,9 +224,9 @@ const Travel_Action = (props) => {
                       </thead>
                       <tbody>
                         <tr>
-                          <td>{LocalStorageData?.name}</td>
-                          <td>{LocalStorageData?.email}</td>
-                          <td>{LocalStorageData?.phone}</td>
+                          <td>{getData?.employee?.name}</td>
+                          <td>{getData?.employee?.email}</td>
+                          <td>{getData?.employee?.phone}</td>
                           <td>{getData?.travel?.start_date?.split("T")[0]}</td>
                           <td>{getData?.travel?.end_date?.split("T")[0]}</td>
                           <td>{getData?.employee?.billable}</td>
