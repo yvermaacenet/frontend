@@ -154,7 +154,7 @@ const Sidebar = () => {
                 aria-expanded="false"
                 aria-controls="ui-basic"
               >
-                <span class="menu-title">Text Forms</span>
+                <span class="menu-title">Tax Forms</span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-book-plus menu-icon"></i>
               </a>
@@ -233,7 +233,7 @@ const Sidebar = () => {
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/cabin_slot_booking">
-                <span className="menu-title">Cabin Slot Booking</span>
+                <span className="menu-title">Cabin Booking</span>
                 <i className="mdi mdi-home-modern menu-icon"></i>
               </NavLink>
             </li>

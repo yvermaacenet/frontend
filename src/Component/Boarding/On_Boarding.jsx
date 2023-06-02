@@ -208,7 +208,7 @@ const On_Boarding = () => {
         if (res.data.message === "created") {
           setActive(active + 1);
           setRenderComponent(true);
-          navigate("/user_list/active_employee");
+          navigate("/user_list/pending_onboarding_employee");
         }
       })
       .catch((err) => {
@@ -257,7 +257,7 @@ const On_Boarding = () => {
           setActive(active + 1);
           setRenderComponent(true);
           setUpdated_data([]);
-          navigate("/user_list/active_employee");
+          navigate("/user_list/pending_onboarding_employee");
         }
       })
       .catch((err) => {
@@ -311,7 +311,7 @@ const On_Boarding = () => {
               page_heading="Boarding"
               page_title_icon="mdi-view-dashboard"
               page_title_button="Back"
-              page_title_button_link="/user_list/pending_onboarding_users"
+              page_title_button_link="/user_list/pending_onboarding_employee"
             />
             {loading && (
               <div className="loader-container">
@@ -330,7 +330,9 @@ const On_Boarding = () => {
                           <th> Designation </th>
                           <th> Joining Date </th>
                           <th> Department </th>
-                          <th> Status </th>
+                          {getUserDetailsById?.initiate_on_boarding_status && (
+                            <th> Status </th>
+                          )}
                         </tr>
                       </thead>
                       <tbody>
@@ -348,19 +350,21 @@ const On_Boarding = () => {
                           <td>{getUserDetailsById["Date of Joining"]}</td>
 
                           <td>{getUserDetailsById["Department"]}</td>
-                          <td>
-                            {inputData?.hr?.hr_on_boarding_status === true &&
-                            inputData?.finance?.finance_on_boarding_status ===
-                              true ? (
-                              <label className="badge badge-success">
-                                Completed
-                              </label>
-                            ) : (
-                              <label className="badge badge-danger">
-                                Pending
-                              </label>
-                            )}
-                          </td>
+                          {getUserDetailsById?.initiate_on_boarding_status && (
+                            <td>
+                              {inputData?.hr?.hr_on_boarding_status === true &&
+                              inputData?.finance?.finance_on_boarding_status ===
+                                true ? (
+                                <label className="badge badge-success">
+                                  Completed
+                                </label>
+                              ) : (
+                                <label className="badge badge-danger">
+                                  Pending
+                                </label>
+                              )}
+                            </td>
+                          )}
                         </tr>
                       </tbody>
                     </table>
@@ -374,7 +378,7 @@ const On_Boarding = () => {
                   <div class="card-body">
                     <div className=" d-flex justify-content-between align-items-center">
                       <span class="card-description">On Boarding Process</span>
-                      <div>
+                      {/* <div>
                         <a
                           style={{ float: "right" }}
                           className=" nav-link count-indicator dropdown-toggle mb-4"
@@ -441,7 +445,7 @@ const On_Boarding = () => {
                             );
                           })}
                         </div>
-                      </div>
+                      </div> */}
                     </div>
 
                     <ul
@@ -451,7 +455,7 @@ const On_Boarding = () => {
                     >
                       <li class="nav-item flex-fill" role="presentation">
                         <button
-                          class="nav-link w-100 active"
+                          class={`nav-link w-100 ${active == "1" && "active"}`}
                           id="hr-tab"
                           data-bs-toggle="tab"
                           data-bs-target="#home-justified"
@@ -460,13 +464,14 @@ const On_Boarding = () => {
                           aria-controls="home"
                           aria-selected="false"
                           tabindex="-1"
+                          onClick={() => setActive(1)}
                         >
-                          Hr
+                          HR
                         </button>
                       </li>
                       <li class="nav-item flex-fill" role="presentation">
                         <button
-                          class="nav-link w-100 "
+                          class={`nav-link w-100 ${active == "2" && "active"}`}
                           id="finance-tab"
                           data-bs-toggle="tab"
                           data-bs-target="#profile-justified"
@@ -474,15 +479,18 @@ const On_Boarding = () => {
                           role="tab"
                           aria-controls="profile"
                           aria-selected="true"
+                          onClick={() => setActive(2)}
                         >
-                          Finance
+                          FINANCE
                         </button>
                       </li>
                     </ul>
                     <form class="forms-sample">
                       <div class="tab-content pt-2" id="myTabjustifiedContent">
                         <div
-                          class="tab-pane fade active show"
+                          class={`tab-pane fade ${
+                            active == "1" && "active show"
+                          }`}
                           id="home-justified"
                           role="tabpanel"
                           aria-labelledby="hr-tab"
@@ -521,9 +529,18 @@ const On_Boarding = () => {
 
                             <div
                               class="form-check form-check-success"
-                              style={{ float: "right" }}
+                              style={{ float: "right", marginRight: "0.6rem" }}
                             >
-                              <label class="form-check-label">
+                              <label
+                                class="form-check-label"
+                                style={{
+                                  display:
+                                    LocalStorageData?.zoho_role === "Hr" ||
+                                    LocalStorageData?.zoho_role === "Admin"
+                                      ? "block"
+                                      : "none",
+                                }}
+                              >
                                 <input
                                   type="checkbox"
                                   class="form-check-input"
@@ -534,6 +551,12 @@ const On_Boarding = () => {
                                     inputData?.hr,
                                     ["hr_on_boarding_status"]
                                   )}
+                                  disabled={
+                                    LocalStorageData?.zoho_role === "Hr" ||
+                                    LocalStorageData?.zoho_role === "Admin"
+                                      ? false
+                                      : true
+                                  }
                                 />
                                 Select All <i class="input-helper"></i>
                               </label>
@@ -743,10 +766,12 @@ const On_Boarding = () => {
                                 </tr>
                               </tbody>
                             </table>
-                          </>{" "}
+                          </>
                         </div>
                         <div
-                          class="tab-pane fade "
+                          class={`tab-pane fade ${
+                            active == "2" && "active show"
+                          }`}
                           id="profile-justified"
                           role="tabpanel"
                           aria-labelledby="finance-tab"
@@ -787,9 +812,18 @@ const On_Boarding = () => {
                             </> */}
                             <div
                               class="form-check form-check-success"
-                              style={{ float: "right" }}
+                              style={{ float: "right", marginRight: "0.6rem" }}
                             >
-                              <label class="form-check-label">
+                              <label
+                                class="form-check-label"
+                                style={{
+                                  display:
+                                    LocalStorageData?.zoho_role === "Finance" ||
+                                    LocalStorageData?.zoho_role === "Admin"
+                                      ? "block"
+                                      : "none",
+                                }}
+                              >
                                 <input
                                   type="checkbox"
                                   class="form-check-input"
@@ -800,6 +834,12 @@ const On_Boarding = () => {
                                     inputData?.finance,
                                     ["finance_on_boarding_status"]
                                   )}
+                                  disabled={
+                                    LocalStorageData?.zoho_role === "Finance" ||
+                                    LocalStorageData?.zoho_role === "Admin"
+                                      ? false
+                                      : true
+                                  }
                                 />
                                 Select All <i class="input-helper"></i>
                               </label>
@@ -2019,59 +2059,59 @@ const On_Boarding = () => {
                                 </tr>
                               </tbody>
                             </table>
-                          </>{" "}
+                          </>
                         </div>
-                      </div>{" "}
+                      </div>
                       {/* <!==========  Update & Save Button ============> */}
-                      {inputData?._id ? (
-                        <>
+                      <div className="text-center">
+                        {inputData?._id ? (
+                          <>
+                            <button
+                              className="btn btn-sm btn-gradient-dark mt-4"
+                              onClick={onUpdateNextButton}
+                              style={{
+                                display:
+                                  LocalStorageData?.zoho_role === "Hr" &&
+                                  active === 1
+                                    ? "inline"
+                                    : LocalStorageData?.zoho_role ===
+                                        "Finance" && active === 2
+                                    ? "inline"
+                                    : LocalStorageData?.zoho_role ===
+                                        "Management" && active === 3
+                                    ? "inline"
+                                    : LocalStorageData?.zoho_role === "Admin"
+                                    ? "inline"
+                                    : "none",
+                              }}
+                            >
+                              Submit
+                            </button>
+                          </>
+                        ) : (
                           <button
                             className="btn btn-sm btn-gradient-dark me-2 mt-4 mb-4"
-                            onClick={onUpdateNextButton}
+                            onClick={onSaveNextButton}
                             style={{
-                              float: "right",
                               display:
                                 LocalStorageData?.zoho_role === "Hr" &&
                                 active === 1
-                                  ? "block"
+                                  ? "inline"
                                   : LocalStorageData?.zoho_role === "Finance" &&
                                     active === 2
-                                  ? "block"
+                                  ? "inline"
                                   : LocalStorageData?.zoho_role ===
                                       "Management" && active === 3
-                                  ? "block"
+                                  ? "inline"
                                   : LocalStorageData?.zoho_role === "Admin"
-                                  ? "block"
+                                  ? "inline"
                                   : "none",
                             }}
                           >
                             Submit
                           </button>
-                        </>
-                      ) : (
-                        <button
-                          className="btn btn-sm btn-gradient-dark me-2 mt-4 mb-4"
-                          onClick={onSaveNextButton}
-                          style={{
-                            float: "right",
-                            display:
-                              LocalStorageData?.zoho_role === "Hr" &&
-                              active === 1
-                                ? "block"
-                                : LocalStorageData?.zoho_role === "Finance" &&
-                                  active === 2
-                                ? "block"
-                                : LocalStorageData?.zoho_role ===
-                                    "Management" && active === 3
-                                ? "block"
-                                : LocalStorageData?.zoho_role === "Admin"
-                                ? "block"
-                                : "none",
-                          }}
-                        >
-                          Submit
-                        </button>
-                      )}
+                        )}
+                      </div>
                     </form>
                   </div>
                 </div>
