@@ -193,10 +193,10 @@ const TravelApprovalRequest = () => {
                                 <label
                                   class={`${
                                     val?.managers_approval === "Approved"
-                                      ? "badge badge-success"
+                                      ? "text-success fw-bold"
                                       : val?.managers_approval === "Declined"
-                                      ? "badge badge-danger"
-                                      : "badge badge-warning"
+                                      ? "text-danger fw-bold"
+                                      : "text-warning fw-bold"
                                   }`}
                                 >
                                   {val?.managers_approval}
@@ -206,10 +206,10 @@ const TravelApprovalRequest = () => {
                                 <label
                                   class={`${
                                     val?.management_approval === "Approved"
-                                      ? "badge badge-success"
+                                      ? "text-success fw-bold"
                                       : val?.management_approval === "Declined"
-                                      ? "badge badge-danger"
-                                      : "badge badge-warning"
+                                      ? "text-danger fw-bold"
+                                      : "text-warning fw-bold"
                                   }`}
                                 >
                                   {val?.management_approval}

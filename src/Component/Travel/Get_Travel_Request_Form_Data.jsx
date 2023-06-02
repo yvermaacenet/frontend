@@ -109,6 +109,7 @@ const GetTravelRequestForm_Data = () => {
                           {/* <th>Reason for travel</th> */}
                           <th>Manager Name</th>
                           <th>Manager Approval</th>
+                          <th>Management Approval</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -123,16 +124,28 @@ const GetTravelRequestForm_Data = () => {
                                 <label
                                   class={`${
                                     val?.managers_approval === "Approved"
-                                      ? "badge badge-success"
+                                      ? "text-success fw-bold"
                                       : val?.managers_approval === "Declined"
-                                      ? "badge badge-danger"
-                                      : "badge badge-warning"
+                                      ? "text-danger fw-bold"
+                                      : "text-warning fw-bold"
                                   }`}
                                 >
                                   {val?.managers_approval}
                                 </label>
                               </td>
-
+                              <td>
+                                <label
+                                  class={`${
+                                    val?.management_approval === "Approved"
+                                      ? "text-success fw-bold"
+                                      : val?.management_approval === "Declined"
+                                      ? "text-danger fw-bold"
+                                      : "text-warning fw-bold"
+                                  }`}
+                                >
+                                  {val?.management_approval}
+                                </label>
+                              </td>
                               <td>
                                 <td
                                   className="btn btn-outline-primary btn-sm"
