@@ -76,8 +76,8 @@ const GetTravelRequestForm_Data = () => {
             <Page_Header
               page_heading="Travel Requests List"
               page_title="Create new request"
-              page_title_icon="mdi-home-modern"
-              page_title_button="Add"
+              page_title_icon="mdi-wallet-travel"
+              page_title_button=""
               page_title_button_link="/travelrequestform"
             />
             <div className="d-flex justify-content-end mb-3">

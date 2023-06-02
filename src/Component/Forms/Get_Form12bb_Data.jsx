@@ -190,7 +190,7 @@ const Get_Form12bb_Data = () => {
             <Page_Header
               page_heading="Form 12 BB (See rule 26C)"
               page_title_icon="mdi-home-modern"
-              page_title_button="Back"
+              page_title_button=""
               page_title_button_link="/dashboard"
             />
             {loading && (

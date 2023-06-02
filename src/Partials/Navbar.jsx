@@ -200,7 +200,7 @@ const Navbar = () => {
                 <h6 className="p-3 mb-0 text-center">4 new messages</h6>
               </div>
             </li> */}
-            {(isManager ||
+            {/* {(isManager ||
               LocalStorageData?.zoho_role === "Management" ||
               LocalStorageData?.zoho_role === "Admin") && (
               <li className="nav-item dropdown">
@@ -246,8 +246,8 @@ const Navbar = () => {
                       </div>
                     </NavLink>
                   )}
-                  <div className="dropdown-divider"></div>
-                  {/* <a className="dropdown-item preview-item">
+                  <div className="dropdown-divider"></div> */}
+            {/* <a className="dropdown-item preview-item">
                   <div className="preview-thumbnail">
                     <div className="preview-icon bg-warning">
                       <i className="mdi mdi-settings"></i>
@@ -275,10 +275,10 @@ const Navbar = () => {
                   </div>
                 </a>
                 <div className="dropdown-divider"></div> */}
-                  {/* <h6 className="p-3 mb-0 text-center">See all notifications</h6> */}
-                </div>
+            {/* <h6 className="p-3 mb-0 text-center">See all notifications</h6> */}
+            {/* </div>
               </li>
-            )}
+            )} */}
             <li className="nav-item nav-logout d-none d-lg-block">
               <NavLink
                 className="nav-link"

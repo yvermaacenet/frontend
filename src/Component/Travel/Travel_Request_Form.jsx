@@ -152,7 +152,7 @@ const TravelRequestForm = () => {
               <Page_Header
                 page_title="Travel Request Form"
                 page_title_icon="mdi-book-plus"
-                page_title_button="Back"
+                page_title_button=""
                 page_title_button_link="/alltravelrequest"
               />
 
