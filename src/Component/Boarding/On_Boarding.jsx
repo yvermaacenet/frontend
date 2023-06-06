@@ -82,12 +82,6 @@ const On_Boarding = () => {
     });
     setUpdated_data({ ...updated_data, [name]: checked });
   };
-  const handleInductionCallWith = (e) => {
-    if (inputData?.induction_call === true) {
-      setInductionCallWith(e.target.value);
-    }
-  };
-  console.log(inductionCallWith);
   useEffect(() => {
     setLoading(true);
     async function get_on_boarding_list() {
@@ -97,12 +91,6 @@ const On_Boarding = () => {
         })
         .then((result) => {
           const resp = result.data[0];
-          console.log("ressss", resp);
-          if (resp === undefined) {
-            setInductionCallWith("Sunil");
-          } else {
-            setInductionCallWith(resp?.induction_call_with);
-          }
           return (
             setInputData({ ...inputData, ...resp }), setRenderComponent(false)
           );

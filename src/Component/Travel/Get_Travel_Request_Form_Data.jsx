@@ -107,8 +107,7 @@ const GetTravelRequestForm_Data = () => {
                           <th>Sr.no</th>
                           <th>Requested On</th>
                           {/* <th>Reason for travel</th> */}
-                          <th>Manager Name</th>
-                          <th>Manager Approval</th>
+                          <th>Approval Status</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -118,7 +117,6 @@ const GetTravelRequestForm_Data = () => {
                             <tr>
                               <td>{index + 1}</td>
                               <td>{val?.createdAt?.split("T")[0]}</td>
-                              <td>{val?.employee?.reporting_manager}</td>
                               <td>
                                 <label
                                   class={`${
@@ -129,7 +127,7 @@ const GetTravelRequestForm_Data = () => {
                                       : "badge badge-warning"
                                   }`}
                                 >
-                                  {val?.managers_approval}
+                                  {val?.management_approval}
                                 </label>
                               </td>
 
@@ -322,147 +320,34 @@ const GetTravelRequestForm_Data = () => {
                         </tbody>
                       </table>
                     </>
-                    {viewRequestData?.flight?.flight_travel && (
-                      <>
-                        <h6
-                          className="card-title text-primary mt-2"
-                          style={{ fontSize: "14px" }}
-                        >
-                          Flight Info
-                        </h6>
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th className="w-25">Form City</th>
-                              <th className="w-25">To City</th>
-                              <th className="w-25">Preferred Time</th>
-                              <th className="w-25">Class of Travel</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                {viewRequestData?.flight?.flight_from_city}
-                              </td>
-                              <td>{viewRequestData?.flight?.flight_to_city}</td>
-                              <td>
-                                {viewRequestData?.flight?.flight_preferred_time}
-                              </td>
-                              <td>
-                                {
-                                  viewRequestData?.flight
-                                    ?.flight_class_preferred
-                                }
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </>
-                    )}
-                    {viewRequestData?.hotel?.hotel_travel && (
-                      <>
-                        <h6
-                          className="card-title text-primary mt-2"
-                          style={{ fontSize: "14px" }}
-                        >
-                          Hotel Info
-                        </h6>
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th className="w-25">City</th>
-                              <th className="w-25">Check-in</th>
-                              <th className="w-25">Check-out</th>
-                              <th className="w-25">No. of Rooms</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>{viewRequestData?.hotel?.hotel_city}</td>
-                              <td>
-                                {
-                                  viewRequestData?.hotel?.hotel_checkin?.split(
-                                    "T"
-                                  )[0]
-                                }
-                              </td>
-                              <td>
-                                {
-                                  viewRequestData?.hotel?.hotel_checkout?.split(
-                                    "T"
-                                  )[0]
-                                }
-                              </td>
-                              <td>
-                                {viewRequestData?.hotel?.hotel_number_of_rooms}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </>
-                    )}
-
-                    {viewRequestData?.train?.train_travel && (
-                      <>
-                        <h6
-                          className="card-title text-primary mt-2"
-                          style={{ fontSize: "14px" }}
-                        >
-                          Train Info
-                        </h6>
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th className="w-25">Form City</th>
-                              <th className="w-25">To City</th>
-                              <th className="w-25">Preferred Time</th>
-                              <th className="w-25">Class of Travel</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>{viewRequestData?.train?.train_from_city}</td>
-                              <td>{viewRequestData?.train?.train_to_city}</td>
-                              <td>
-                                {viewRequestData?.train?.train_preferred_time}
-                              </td>
-                              <td>
-                                {viewRequestData?.train?.train_class_preferred}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </>
-                    )}
-
-                    {viewRequestData?.other?.other_travel && (
-                      <>
-                        <h6
-                          className="card-title text-primary mt-2"
-                          style={{ fontSize: "14px" }}
-                        >
-                          Other Info
-                        </h6>
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th className="w-25">Type</th>
-                              <th className="w-25">Form City</th>
-                              <th>To City</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>
-                                {viewRequestData?.other?.other_travel_type}
-                              </td>
-                              <td>{viewRequestData?.other?.other_from_city}</td>
-                              <td>{viewRequestData?.other?.other_to_city}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </>
-                    )}
+                    <h6
+                      className="card-title text-primary mt-2"
+                      style={{ fontSize: "14px" }}
+                    >
+                      Flight Info
+                    </h6>
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th className="w-25">Form City</th>
+                          <th className="w-25">To City</th>
+                          <th className="w-25">Preferred Time</th>
+                          <th className="w-25">Class of Travel</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{viewRequestData?.flight?.flight_from_city}</td>
+                          <td>{viewRequestData?.flight?.flight_to_city}</td>
+                          <td>
+                            {viewRequestData?.flight?.flight_preferred_time}
+                          </td>
+                          <td>
+                            {viewRequestData?.flight?.flight_class_preferred}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>

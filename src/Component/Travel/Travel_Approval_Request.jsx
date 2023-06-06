@@ -39,24 +39,22 @@ const TravelApprovalRequest = () => {
         .then((result) => {
           const resp = result?.data;
           setAllData(resp);
-
-          const filtered = resp?.filter(
-            (x) =>
-              x?.employee?.reporting_manager?.slice(-2) ===
-              LocalStorageData?.emp_id
-          );
-          setOriginalData(filtered);
-          const filteredRequest = filtered?.filter(
-            (x) => x.managers_approval === "Pending"
-          );
+          console.log("res", resp);
+          // const filtered = resp?.filter(
+          //   (x) =>
+          //     x?.employee?.reporting_manager?.slice(-2) ===
+          //     LocalStorageData?.emp_id
+          // );
+          setOriginalData(resp);
+          // const filteredRequest = filtered?.filter(
+          //   (x) => x.managers_approval === "Pending"
+          // );
           return setGettravelrequestdata(
             LocalStorageData?.zoho_role === "Management"
               ? resp.filter(
-                  (x) =>
-                    x.management_approval === "Pending" &&
-                    x?.employee?.email !== LocalStorageData?.email
+                  (x) => x?.employee?.email !== LocalStorageData?.email
                 )
-              : filteredRequest
+              : resp
           );
         })
         .catch((err) => {
@@ -74,7 +72,7 @@ const TravelApprovalRequest = () => {
   const handleActiveClick = (e) => {
     e.preventDefault();
     const filteredRequest = originalData.filter(
-      (x) => x.managers_approval === "Pending"
+      (x) => x.management_approval === "Pending"
     );
     setGettravelrequestdata(
       LocalStorageData?.zoho_role === "Management"
@@ -89,34 +87,20 @@ const TravelApprovalRequest = () => {
   };
   const handleHistoryClick = (e) => {
     e.preventDefault();
-    const filteredRequest = originalData.filter(
-      (x) =>
-        x.managers_approval === "Approved" || x.managers_approval === "Declined"
-    );
+    // const filteredRequest = originalData.filter(
+    //   (x) =>
+    //     x.managers_approval === "Approved" || x.managers_approval === "Declined"
+    // );
     setGettravelrequestdata(
-      LocalStorageData?.zoho_role === "Management"
-        ? allData.filter(
-            (x) =>
-              x.management_approval === "Approved" ||
-              x.management_approval === "Declined"
-          )
-        : filteredRequest
+      LocalStorageData?.zoho_role === "Management" &&
+        allData.filter(
+          (x) =>
+            x.management_approval === "Approved" ||
+            x.management_approval === "Declined"
+        )
     );
     setButtoncode("History");
   };
-  // const handleAllClick = (e) => {
-  //   e.preventDefault();
-
-  //   setGettravelrequestdata(originalData);
-  // };
-  // ==========Show only data to management that is approved by Managers============
-  // if (LocalStorageData?.zoho_role === "Management") {
-  //   const filteredDataForManagement = resp.filter(
-  //     (x) => x.managers_approval === "Approved"
-  //   );
-
-  //   setGettravelrequestdata(filteredDataForManagement);
-  // }
 
   return (
     <div className="container-scroller">
@@ -169,8 +153,8 @@ const TravelApprovalRequest = () => {
                           {/* <th>destination</th> */}
                           {/* <th>amount</th> */}
 
-                          <th>Manager Name</th>
-                          <th>Action from Manager</th>
+                          {/* <th>Manager Name</th> */}
+                          {/* <th>Action from Manager</th> */}
                           <th>Action from Management</th>
                           <th>Remarks</th>
                           <th>Actions</th>
@@ -187,9 +171,9 @@ const TravelApprovalRequest = () => {
                               {/* <td>{val?.destination}</td> */}
                               {/* <td>{val.estimated_amount}</td> */}
                               {/* <td>{val.type_of_request}</td> */}
-                              <td>{val?.employee?.reporting_manager}</td>
+                              {/* <td>{val?.employee?.reporting_manager}</td> */}
 
-                              <td>
+                              {/* <td>
                                 <label
                                   class={`${
                                     val?.managers_approval === "Approved"
@@ -201,7 +185,7 @@ const TravelApprovalRequest = () => {
                                 >
                                   {val?.managers_approval}
                                 </label>
-                              </td>
+                              </td> */}
                               <td>
                                 <label
                                   class={`${

@@ -36,7 +36,7 @@ const Travel_Action = (props) => {
     const filteredManagement = resp?.data?.Management.includes(
       LocalStorageData?.user_id
     );
-    setIsManager(filtered);
+    // setIsManager(filtered);
     setIsManagememnt(filteredManagement);
     setLoading(false);
   };
@@ -59,6 +59,8 @@ const Travel_Action = (props) => {
     get_travel_request_by_id();
     getAllManagersList();
   }, []);
+
+  console.log("getData", getData);
   //   ====Handle Remarks
   // console.log("status", getData?.management_status);
   // const handleRemarksChange = (e) => {
@@ -187,7 +189,7 @@ const Travel_Action = (props) => {
               page_title_icon="mdi-wallet-travel"
               page_title_button="Back"
               page_title_button_link={`${
-                isManager &&
+                // isManager &&
                 getData?.employee?.email !== LocalStorageData?.email
                   ? "/travelrequestreceived"
                   : "/alltravelrequest"
@@ -212,289 +214,173 @@ const Travel_Action = (props) => {
                     <table className="table table-bordered">
                       <thead>
                         <tr>
+                          <th>ID</th>
                           <th>Name</th>
                           <th>Email</th>
                           <th>Phone</th>
-                          <th>Start Date</th>
-                          <th>End Date</th>
                           <th>Billable</th>
                           <th>Project Id</th>
-                          {isManager && <th>Status</th>}
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td>{getData?.employee?.name}</td>
+                          <td className="py-3">
+                            {getData?.employee?.employee_id}
+                          </td>
                           <td>{getData?.employee?.email}</td>
                           <td>{getData?.employee?.phone}</td>
-                          <td>{getData?.travel?.start_date?.split("T")[0]}</td>
-                          <td>{getData?.travel?.end_date?.split("T")[0]}</td>
                           <td>{getData?.employee?.billable}</td>
                           <td>
                             {getData?.employee?.project_id === ""
                               ? "N/A"
                               : getData?.employee?.project_id}
                           </td>
-                          {isManager && (
-                            <td>
-                              <label
-                                class={`${
-                                  getData?.managers_approval === "Approved"
-                                    ? "badge badge-success"
-                                    : getData?.managers_approval === "Declined"
-                                    ? "badge badge-danger"
-                                    : "badge badge-warning"
-                                }`}
-                              >
-                                {getData?.managers_approval}
-                              </label>
-                            </td>
-                          )}
+                          {/* {isManager && ( */}
+                          {/* <td>
+                            <label
+                              class={`${
+                                getData?.managers_approval === "Approved"
+                                  ? "badge badge-success"
+                                  : getData?.managers_approval === "Declined"
+                                  ? "badge badge-danger"
+                                  : "badge badge-warning"
+                              }`}
+                            >
+                              {getData?.managers_approval}
+                            </label>
+                          </td> */}
+                          {/* )} */}
                         </tr>
                         <tr>
-                          <th>Reason for Travel</th>
+                          <th className="py-4">Reason for Travel</th>
                           <td colSpan={7}>
-                            {getData?.travel?.reason_for_travel}
+                            {getData?.employee?.reason_for_travel}
                           </td>
                         </tr>
                       </tbody>
                     </table>
                     <>
                       <h6
-                        className="card-title text-primary mt-2"
+                        className="card-title text-primary mt-4"
                         style={{ fontSize: "14px" }}
                       >
-                        Travel Type
+                        Travel Information
                       </h6>
-                      <table className="table table-bordered">
+                      <table className="table table-bordered my-4">
                         <thead>
                           <tr>
-                            <th className="w-25">Flight</th>
-                            <th className="w-25">Hotel</th>
-                            <th className="w-25">Train</th>
-                            <th className="w-25">Other</th>
+                            <th className="w-25">Travel Date</th>
+                            <th className="w-25">Name(s)</th>
+                            <th className="w-25">Travel Type(s)</th>
+                            <th className="w-25">From City</th>
+                            <th className="w-25">To City</th>
+                            <th className="w-25">Preferred Time</th>
+                            <th className="w-25">Accomendation</th>
+                            <th className="w-25">Checkin Date</th>
+                            <th className="w-25">Checkout Date</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>
-                              <label className="form-check-label">
-                                <input
-                                  name="other_travel"
-                                  type="checkbox"
-                                  checked={getData?.flight?.flight_travel}
-                                  disabled
-                                />
-                                <i className="input-helper"></i>
-                              </label>
-                            </td>
-                            <td>
-                              <label className="form-check-label">
-                                <input
-                                  name="other_travel"
-                                  type="checkbox"
-                                  checked={getData?.hotel?.hotel_travel}
-                                  disabled
-                                />
-                                <i className="input-helper"></i>
-                              </label>
-                            </td>
-                            <td>
-                              <label className="form-check-label">
-                                <input
-                                  name="other_travel"
-                                  type="checkbox"
-                                  checked={getData?.train?.train_travel}
-                                  disabled
-                                />
-                                <i className="input-helper"></i>
-                              </label>
-                            </td>
-                            <td>
-                              <label className="form-check-label">
-                                <input
-                                  name="other_travel"
-                                  type="checkbox"
-                                  checked={getData?.other?.other_travel}
-                                  disabled
-                                />
-                                <i className="input-helper"></i>
-                              </label>
-                            </td>
-                          </tr>
+                          {getData?.travel_request?.map((val) => {
+                            return (
+                              <tr>
+                                {" "}
+                                <td>{val?.travel_date}</td>
+                                <td>
+                                  {(val?.booking_for).map((val) => {
+                                    return (
+                                      <small className="d-block m-1">
+                                        {`${val},`}
+                                      </small>
+                                    );
+                                  })}
+                                </td>
+                                <td>{val?.travel_type}</td>
+                                <td>{val?.flight_from_city}</td>
+                                <td>{val?.flight_to_city}</td>
+                                <td>{val?.flight_preferred_time}</td>
+                                <td>{val?.accomendation_type}</td>
+                                <td>{val?.hotel_checkin_date}</td>
+                                <td>{val?.hotel_checkout_date}</td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       </table>
+                      <div>
+                        <span className="fw-bold"> Special Request</span> :{" "}
+                        <small>{getData?.employee?.special_request}</small>
+                      </div>
                     </>
-                    {getData?.flight?.flight_travel && (
-                      <>
-                        <h6
-                          className="card-title text-primary mt-2"
-                          style={{ fontSize: "14px" }}
-                        >
-                          Flight Info
-                        </h6>
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th className="w-25">Form City</th>
-                              <th className="w-25">To City</th>
-                              <th className="w-25">Preferred Time</th>
-                              <th className="w-25">Class of Travel</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>{getData?.flight?.flight_from_city}</td>
-                              <td>{getData?.flight?.flight_to_city}</td>
-                              <td>{getData?.flight?.flight_preferred_time}</td>
-                              <td>{getData?.flight?.flight_class_preferred}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </>
-                    )}
-                    {getData?.hotel?.hotel_travel && (
-                      <>
-                        <h6
-                          className="card-title text-primary mt-2"
-                          style={{ fontSize: "14px" }}
-                        >
-                          Hotel Info
-                        </h6>
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th className="w-25">City</th>
-                              <th className="w-25">Check-in</th>
-                              <th className="w-25">Check-out</th>
-                              <th className="w-25">No. of Rooms</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>{getData?.hotel?.hotel_city}</td>
-                              <td>
-                                {getData?.hotel?.hotel_checkin?.split("T")[0]}
-                              </td>
-                              <td>
-                                {getData?.hotel?.hotel_checkout?.split("T")[0]}
-                              </td>
-                              <td>{getData?.hotel?.hotel_number_of_rooms}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </>
-                    )}
 
-                    {getData?.train?.train_travel && (
-                      <>
-                        <h6
-                          className="card-title text-primary mt-2"
-                          style={{ fontSize: "14px" }}
+                    {
+                      // isManager &&
+                      LocalStorageData?.zoho_role === "Management" &&
+                      getData?.employee?.email !== LocalStorageData?.email &&
+                      getData?.management_approval === "Pending" ? (
+                        <form
+                          className="forms-sample"
+                          onSubmit={handleSubmit(onSubmitButton)}
                         >
-                          Train Info
-                        </h6>
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th className="w-25">Form City</th>
-                              <th className="w-25">To City</th>
-                              <th className="w-25">Preferred Time</th>
-                              <th className="w-25">Class of Travel</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>{getData?.train?.train_from_city}</td>
-                              <td>{getData?.train?.train_to_city}</td>
-                              <td>{getData?.train?.train_preferred_time}</td>
-                              <td>{getData?.train?.train_class_preferred}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </>
-                    )}
-
-                    {getData?.other?.other_travel && (
-                      <>
-                        <h6
-                          className="card-title text-primary mt-2"
-                          style={{ fontSize: "14px" }}
-                        >
-                          Other Info
-                        </h6>
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th className="w-25">Type</th>
-                              <th className="w-25">Form City</th>
-                              <th>To City</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td>{getData?.other?.other_travel_type}</td>
-                              <td>{getData?.other?.other_from_city}</td>
-                              <td>{getData?.other?.other_to_city}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </>
-                    )}
-                    {((isManager &&
-                      getData?.employee?.email !== LocalStorageData?.email) ||
-                      (LocalStorageData?.zoho_role === "Management" &&
-                        getData?.employee?.email !==
-                          LocalStorageData?.email)) && (
-                      <form
-                        className="forms-sample"
-                        onSubmit={handleSubmit(onSubmitButton)}
-                      >
-                        <div class="col-12 mt-2">
-                          <div class="form-group">
-                            <label>Remarks</label>
-                            <textarea
-                              name="remarks"
-                              className={classNames(
-                                "form-control form-control-sm font-bold",
-                                {
-                                  "is-invalid": errors.remarks,
+                          <div class="col-12 mt-2">
+                            <div class="form-group">
+                              <label>Remarks</label>
+                              <textarea
+                                name="remarks"
+                                className={classNames(
+                                  "form-control form-control-sm font-bold",
+                                  {
+                                    "is-invalid": errors.remarks,
+                                  }
+                                )}
+                                {...register("remarks", {
+                                  value: getData?.remarks,
+                                })}
+                                onChange={(e) =>
+                                  setGetData({
+                                    ...getData,
+                                    remarks: e.target.value,
+                                  })
                                 }
-                              )}
-                              {...register("remarks", {
-                                value: getData?.remarks,
-                              })}
-                              onChange={(e) =>
-                                setGetData({
-                                  ...getData,
-                                  remarks: e.target.value,
-                                })
-                              }
-                              value={getData?.remarks}
-                              placeholder="Enter Remarks"
-                              rows={4}
-                            ></textarea>
+                                value={getData?.remarks}
+                                placeholder="Enter Remarks"
+                                rows={4}
+                              ></textarea>
+                            </div>
                           </div>
-                        </div>
 
-                        <div className="text-center">
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-gradient-success me-2"
-                            onClick={() => setHandleButtonType(true)}
-                          >
-                            Approve
-                          </button>
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-gradient-danger me-2"
-                            onClick={() => setHandleButtonType(false)}
-                          >
-                            Decline
-                          </button>
+                          <div className="text-center">
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-success me-2"
+                              onClick={() => setHandleButtonType(true)}
+                            >
+                              Approve
+                            </button>
+                            <button
+                              type="submit"
+                              className="btn btn-sm btn-gradient-danger me-2"
+                              onClick={() => setHandleButtonType(false)}
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        </form>
+                      ) : (
+                        <div
+                          className={
+                            getData?.management_approval === "Approved"
+                              ? "text-success text-center fs-4"
+                              : "text-danger text-center fs-4"
+                          }
+                        >
+                          <small>
+                            {" "}
+                            {`You have already ${getData?.management_approval} this request`}
+                          </small>
                         </div>
-                      </form>
-                    )}
+                      )
+                    }
                   </div>
                 </div>
               </div>
