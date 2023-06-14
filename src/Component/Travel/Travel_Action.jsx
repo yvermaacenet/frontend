@@ -379,10 +379,10 @@ const Travel_Action = (props) => {
                               : "text-danger text-center fs-4"
                           }
                         >
-                          <small>
+                          <p className="fw-bold">
                             {" "}
-                            {`You have already ${getData?.management_approval} this request`}
-                          </small>
+                            Status: {` ${getData?.management_approval} `}
+                          </p>
                         </div>
                       )
                     }

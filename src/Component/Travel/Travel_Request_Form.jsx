@@ -507,7 +507,7 @@ const TravelRequestForm = () => {
                               <label>Travel Type:</label>
                               <span className="astik"> *</span>
                               <select
-                                // required
+                                required
                                 name="travel_type"
                                 id=""
                                 value={flightData?.travel_type}
@@ -527,7 +527,7 @@ const TravelRequestForm = () => {
                               <label>Date</label>
                               <span className="astik"> *</span>
                               <input
-                                // required
+                                required
                                 type="date"
                                 value={flightData?.travel_date}
                                 name="travel_date"
@@ -552,7 +552,7 @@ const TravelRequestForm = () => {
                                   //   "is-invalid": errors?.flight_from_city,
                                   // }
                                 )}
-                                // required
+                                required
                                 styles={CustomStyles}
                                 isClearable={true}
                                 name="flight_from_city"
@@ -584,7 +584,7 @@ const TravelRequestForm = () => {
                                   //   "is-invalid": errors?.flight_to_city,
                                   // }
                                 )}
-                                // required
+                                required
                                 styles={CustomStyles}
                                 // value={flightData?.flight_to_city}
                                 isClearable={true}
@@ -642,7 +642,7 @@ const TravelRequestForm = () => {
                             <div className="form-group">
                               <label>Accomendation Type</label>
                               <select
-                                // required
+                                required
                                 value={flightData?.accomendation_type}
                                 name="accomendation_type"
                                 className="form-select form-control-sm"
@@ -663,6 +663,7 @@ const TravelRequestForm = () => {
                                   <label>Checkin Date</label>
                                   <span className="astik"> *</span>
                                   <input
+                                    required
                                     type="date"
                                     value={flightData?.hotel_checkin_date}
                                     name="hotel_checkin_date"
@@ -676,6 +677,7 @@ const TravelRequestForm = () => {
                                   <label>Checkout Date</label>
                                   <span className="astik"> *</span>
                                   <input
+                                    required
                                     type="date"
                                     value={flightData?.hotel_checkout_date}
                                     name="hotel_checkout_date"

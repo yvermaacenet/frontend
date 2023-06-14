@@ -107,8 +107,8 @@ const GetTravelRequestForm_Data = () => {
                           <th>Sr.no</th>
                           <th>Requested On</th>
                           {/* <th>Reason for travel</th> */}
-                          <th>Approval Status</th>
-                          <th>Actions</th>
+                          <th> Status</th>
+                          <th>Remarks</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -130,19 +130,11 @@ const GetTravelRequestForm_Data = () => {
                                   {val?.management_approval}
                                 </label>
                               </td>
-                              <td>
-                                <label
-                                  class={`${
-                                    val?.management_approval === "Approved"
-                                      ? "text-success fw-bold"
-                                      : val?.management_approval === "Declined"
-                                      ? "text-danger fw-bold"
-                                      : "text-warning fw-bold"
-                                  }`}
-                                >
-                                  {val?.management_approval}
-                                </label>
-                              </td>
+                              {val?.remarks && (
+                                <td>
+                                  <label>{val?.remarks}</label>
+                                </td>
+                              )}
                               <td>
                                 <td
                                   className="btn btn-outline-primary btn-sm"
@@ -167,7 +159,7 @@ const GetTravelRequestForm_Data = () => {
                                   className="btn btn-sm btn-outline-danger mx-2"
                                   style={{
                                     visibility:
-                                      val?.managers_approval === "Pending"
+                                      val?.management_approval === "Pending"
                                         ? ""
                                         : "hidden",
                                   }}
