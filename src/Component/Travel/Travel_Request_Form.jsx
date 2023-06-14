@@ -96,8 +96,8 @@ const TravelRequestForm = () => {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    // Create a new object with the form data
 
+    // Create a new object with the form data
     const BookingForArray = selectedEmployeesValues.map((val) => val.value);
     const newData = {
       booking_for: BookingForArray,
@@ -110,8 +110,7 @@ const TravelRequestForm = () => {
       hotel_checkin_date: flightData.hotel_checkin_date,
       hotel_checkout_date: flightData.hotel_checkout_date,
     };
-    console.log("newData", newData);
-    // Update the getFlightTabledata stat692692e with the new data
+    // Update the getFlightTabledata state with the new data
     setGetFlightTabledata((prevData) => [...prevData, newData]);
 
     // Clear the form fields
@@ -127,17 +126,7 @@ const TravelRequestForm = () => {
       travel_type: "",
     });
   };
-  // d
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   watch,
-  //   setValue,
-  //   formState: { errors },
-  // } = useForm({
-  //   mode: "onTouched",
-  //   resolver: yupResolver(travel_request_form_validation),
-  // });
+
   const CustomStyles = {
     control: (provided, state) => ({
       ...provided,
@@ -229,7 +218,6 @@ const TravelRequestForm = () => {
       });
   };
 
-  console.log(getFlightTabledata);
   return (
     <>
       <div className="container-scroller">
@@ -255,7 +243,7 @@ const TravelRequestForm = () => {
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <form onSubmit={onSubmitButton}>
+                      <form onSubmit={onSubmitButton} className="my-4">
                         <div className="row my-2">
                           <div className="col-12 col-lg-2">
                             <div className="form-group">
@@ -307,7 +295,7 @@ const TravelRequestForm = () => {
                           </div>
                         </div>
 
-                        <div className="row my-2">
+                        <div className="row ">
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Billable</label>
@@ -362,10 +350,7 @@ const TravelRequestForm = () => {
                               </div>
                             </div>
                           )}
-                        </div>
-
-                        <div className="row">
-                          <div className="col-12">
+                          <div className="col-12 col-lg-6">
                             <div className="form-group">
                               <label>Reason for Travel</label>
                               <span className="astik"> *</span>
@@ -373,333 +358,85 @@ const TravelRequestForm = () => {
                                 name="reason_for_travel"
                                 className={classNames(
                                   "form-control form-control-sm"
-                                  // {
-                                  //   "is-invalid": errors?.reason_for_travel,
-                                  // }
                                 )}
-                                // {...register("reason_for_travel", {
-                                //   value: travel?.reason_for_travel,
-                                // })}
                                 onChange={inputEvent}
                                 placeholder="Enter Reason for Travel"
-                                rows={4}
                               />
-                              {/* <small className="invalid-feedback">
-                                {errors.reason_for_travel?.message}
-                              </small> */}
                             </div>
                           </div>
                         </div>
-                        <div className="form-group m-0 p-0 row overflow-auto w-100">
-                          <div className="row">
-                            <div className="col-lg-12 grid-margin stretch-card">
-                              <div className="card">
-                                <div className="card-body">
-                                  <table className="table fs-6 table-bordered w-100">
-                                    <thead>
-                                      <tr>
-                                        <th>Travel Date</th>
-                                        <th>Name(s)</th>
-                                        <th>Travel Type(s)</th>
-                                        <th>From City</th>
-                                        <th>To City</th>
-                                        <th>Preferred Time</th>
-                                        <th>Accomendation</th>
-                                        <th>Checkin Date</th>
-                                        <th>Checkout Date</th>
-                                        <th>Action</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {getFlightTabledata?.map((val, index) => {
-                                        return (
-                                          <tr>
-                                            {/* <td>{index + 1}</td> */}
-                                            <td>{val?.travel_date}</td>
-                                            <td>
-                                              {(val?.booking_for).map((val) => {
-                                                return (
-                                                  <small className="d-block m-1">
-                                                    {`${val},`}
-                                                  </small>
-                                                );
-                                              })}
-                                            </td>
-                                            <td>{val?.travel_type}</td>
-                                            <td>{val?.flight_from_city}</td>
-                                            <td>{val?.flight_to_city}</td>
-                                            <td>
-                                              {val?.flight_preferred_time}
-                                            </td>
-                                            <td>{val?.accomendation_type}</td>
-                                            <td>{val?.hotel_checkin_date}</td>
-                                            <td>{val?.hotel_checkout_date}</td>
-                                            <td>
-                                              <td
-                                                className="btn btn-outline-primary  btn-sm"
-                                                type="button"
-                                                onClick={() => {
-                                                  removeData(index);
-                                                }}
 
-                                                // onClick={() => {
-                                                //   return (
-                                                //     setViewRequestModal(true),
-                                                //     setViewRequestData(val)
-                                                //   );
-                                                // }}
-                                                // onClick={() => {
-                                                //   return (
-                                                //     // setModalData(val),
-                                                //     setId(val._id),
-                                                //     navigate(
-                                                //       `/travelactionpage/${val._id}`
-                                                //     )
-                                                //   );
-                                                // }}
-                                              >
-                                                Remove
-                                              </td>
-                                            </td>
-                                          </tr>
-                                        );
-                                      })}
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <form className="p-4 border" action="">
-                            <div className="row g-3 m-auto">
-                              <div className="col-12 col-lg-3">
-                                <div className="">
-                                  <label>Booking For:</label>
-                                  <span className="astik"> *</span>
-
-                                  <Select
-                                    className={classNames(
-                                      "form-select-select"
-                                      // {
-
-                                      //   "is-invalid": errors?.flight_from_city,
-                                      // }
-                                    )}
-                                    // styles={CustomSty  les}
-                                    defaultValue={[
-                                      userNames[defaultFlightUser],
-                                    ]}
-                                    isMulti
-                                    isClearable={true}
-                                    name="booking_for"
-                                    options={userNames}
-                                    value={selectedEmployeesValues}
-                                    classNamePrefix="select"
-                                    // onChange={handleFlightDataChange}
-                                    onChange={(selectedOptions) => {
-                                      // const values = selectedOptions.map(
-                                      //   (option) => option.value
-                                      // );
-                                      setSelectedEmployeesValues(
-                                        selectedOptions
+                        <table className="table my-4 overflow-auto fs-6 table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Travel Date</th>
+                              <th>Name(s)</th>
+                              <th>Travel Type(s)</th>
+                              <th>From City</th>
+                              <th>To City</th>
+                              <th>Preferred Time</th>
+                              <th>Accomendation</th>
+                              <th>Checkin Date</th>
+                              <th>Checkout Date</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {getFlightTabledata?.map((val, index) => {
+                              return (
+                                <tr>
+                                  {/* <td>{index + 1}</td> */}
+                                  <td>{val?.travel_date}</td>
+                                  <td>
+                                    {(val?.booking_for).map((val) => {
+                                      return (
+                                        <small className="d-block m-1">
+                                          {`${val},`}
+                                        </small>
                                       );
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                              <div className="col-lg-3 col-12">
-                                <div className="">
-                                  <label>Travel Type:</label>
-                                  <span className="astik"> *</span>
-                                  <select
-                                    name="travel_type"
-                                    id=""
-                                    value={flightData?.travel_type}
-                                    className="form-control form-control-sm"
-                                    onChange={handleFlightDataChange}
-                                  >
-                                    <option value="none" selected>
-                                      Select
-                                    </option>
-                                    <option value="Flight">Flight</option>
-                                    <option value="Train">Train</option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div className="col-12 col-lg-3">
-                                <div className="">
-                                  <label>Date</label>
-                                  <span className="astik"> *</span>
-                                  <input
-                                    type="date"
-                                    value={flightData?.travel_date}
-                                    name="travel_date"
-                                    className="form-control form-control-sm"
-                                    onChange={handleFlightDataChange}
-                                  />
+                                    })}
+                                  </td>
+                                  <td>{val?.travel_type}</td>
+                                  <td>{val?.flight_from_city}</td>
+                                  <td>{val?.flight_to_city}</td>
+                                  <td>{val?.flight_preferred_time}</td>
+                                  <td>{val?.accomendation_type}</td>
+                                  <td>{val?.hotel_checkin_date}</td>
+                                  <td>{val?.hotel_checkout_date}</td>
+                                  <td>
+                                    <td
+                                      className="btn btn-outline-primary  btn-sm"
+                                      type="button"
+                                      onClick={() => {
+                                        removeData(index);
+                                      }}
 
-                                  {/* <small className="invalid-feedback">
-                                      {errors.flight_from_city?.message}
-                                    </small> */}
-                                </div>
-                              </div>
-                              <div className="col-12 col-lg-3">
-                                <div className="">
-                                  <label>From(City)</label>
-                                  <span className="astik"> *</span>
-                                  <Select
-                                    className={classNames(
-                                      "form-select-select"
-                                      // {
+                                      // onClick={() => {
+                                      //   return (
+                                      //     setViewRequestModal(true),
+                                      //     setViewRequestData(val)
+                                      //   );
+                                      // }}
+                                      // onClick={() => {
+                                      //   return (
+                                      //     // setModalData(val),
+                                      //     setId(val._id),
+                                      //     navigate(
+                                      //       `/travelactionpage/${val._id}`
+                                      //     )
+                                      //   );
+                                      // }}
+                                    >
+                                      Remove
+                                    </td>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
 
-                                      //   "is-invalid": errors?.flight_from_city,
-                                      // }
-                                    )}
-                                    styles={CustomStyles}
-                                    isClearable={true}
-                                    name="flight_from_city"
-                                    options={cityData}
-                                    defaultValue={[cityData[0]]}
-                                    // value={flightData?.flight_from_city}
-                                    // onChange={handleFlightDataChange}
-                                    onChange={(e) => {
-                                      return setFlightData({
-                                        ...flightData,
-                                        flight_from_city: e ? e.value : "",
-                                      });
-                                    }}
-                                  />
-                                  {/* <small className="invalid-feedback">
-                                      {errors.flight_from_city?.message}
-                                    </small> */}
-                                </div>
-                              </div>
-
-                              <div className="col-12 col-lg-3">
-                                <div className="form-group">
-                                  <label>To(City)</label>
-                                  <span className="astik"> *</span>
-                                  <Select
-                                    className={classNames(
-                                      "form-select-select"
-                                      // {
-                                      //   "is-invalid": errors?.flight_to_city,
-                                      // }
-                                    )}
-                                    styles={CustomStyles}
-                                    value={flightData?.flight_to_city}
-                                    isClearable={true}
-                                    name="flight_to_city"
-                                    options={cityData}
-                                    // onChange={handleFlightDataChange}
-
-                                    onChange={(e) => {
-                                      return setFlightData({
-                                        ...flightData,
-                                        flight_to_city: e ? e.value : "",
-                                      });
-                                    }}
-                                  />
-                                  {/* <small className="invalid-feedback">
-                                      {errors.flight_to_city?.message}
-                                    </small> */}
-                                </div>
-                              </div>
-                              <div className="col-12 col-lg-3">
-                                <div className="form-group">
-                                  <label>Preferred Time</label>
-                                  <select
-                                    value={flightData?.flight_preferred_time}
-                                    name="flight_preferred_time"
-                                    className="form-select form-control-sm"
-                                    onChange={handleFlightDataChange}
-
-                                    // onChange={(e) => {
-                                    //   setFlight({
-                                    //     ...flight,
-                                    //     flight_preferred_time: e.target.value,
-                                    //   });
-                                    // }}
-                                    // value={flight?.flight_preferred_time}
-                                  >
-                                    <option value="">Select...</option>
-                                    <option value="00:00 : 06:00">
-                                      00:00 : 06:00
-                                    </option>
-                                    <option value="06:00 : 12:00">
-                                      06:00 : 12:00
-                                    </option>
-                                    <option value="12:00 : 18:00">
-                                      12:00 : 18:00
-                                    </option>
-                                    <option value="18:00 : 24:00">
-                                      18:00 : 24:00
-                                    </option>
-                                  </select>
-                                </div>
-                              </div>
-
-                              <div className="col-12 col-lg-3">
-                                <div className="form-group">
-                                  <label>Accomendation Type</label>
-                                  <select
-                                    value={flightData?.accomendation_type}
-                                    name="accomendation_type"
-                                    className="form-select form-control-sm"
-                                    onChange={handleFlightDataChange}
-                                  >
-                                    <option value="">Select...</option>
-                                    <option value="AM" selected>
-                                      Not Required
-                                    </option>
-                                    <option value="Hotel">Hotel</option>
-                                  </select>
-                                </div>
-                              </div>
-                              {flightData?.accomendation_type === "Hotel" && (
-                                <>
-                                  <div className="col-12 col-lg-3">
-                                    <div className="">
-                                      <label>Checkin Date</label>
-                                      <span className="astik"> *</span>
-                                      <input
-                                        type="date"
-                                        value={flightData?.hotel_checkin_date}
-                                        name="hotel_checkin_date"
-                                        className="form-control form-control-sm"
-                                        onChange={handleFlightDataChange}
-                                      />
-                                    </div>
-                                  </div>
-                                  <div className="col-12 col-lg-3">
-                                    <div className="">
-                                      <label>Checkout Date</label>
-                                      <span className="astik"> *</span>
-                                      <input
-                                        type="date"
-                                        value={flightData?.hotel_checkout_date}
-                                        name="hotel_checkout_date"
-                                        className="form-control form-control-sm"
-                                        onChange={handleFlightDataChange}
-                                      />
-                                    </div>
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                            <div className="d-flex justify-content-center align-items-center">
-                              <button
-                                className="btn btn-sm btn-primary"
-                                onClick={handleAdd}
-                              >
-                                Add
-                              </button>
-                            </div>
-                          </form>
-                        </div>
-
-                        <div className="row my-3">
+                        <div className="row ">
                           <div className="col-12">
                             <div className="col-12 col-lg-12">
                               <div className="form-group">
@@ -721,6 +458,242 @@ const TravelRequestForm = () => {
                             className="btn  btn-gradient-success me-2"
                           >
                             Submit
+                          </button>
+                        </div>
+                      </form>
+
+                      <h4 className="text-secondary">Add Requests:</h4>
+
+                      <form
+                        // type="submit"
+                        onSubmit={handleAdd}
+                        className="p-4 border"
+                      >
+                        <div className="row g-3 m-auto">
+                          <div className="col-12 col-lg-3">
+                            <div className="">
+                              <label>Booking For:</label>
+                              <span className="astik"> *</span>
+
+                              <Select
+                                defaultValue={[userNames[defaultFlightUser]]}
+                                className={classNames(
+                                  "form-select-select"
+                                  // {
+
+                                  //   "is-invalid": errors?.flight_from_city,
+                                  // }
+                                )}
+                                // styles={CustomSty  les}
+                                required
+                                isMulti
+                                isClearable={true}
+                                name="booking_for"
+                                options={userNames}
+                                // value={selectedEmployeesValues}
+                                classNamePrefix="select"
+                                // onChange={handleFlightDataChange}
+                                onChange={(selectedOptions) => {
+                                  // const values = selectedOptions.map(
+                                  //   (option) => option.value
+                                  // );
+                                  setSelectedEmployeesValues(selectedOptions);
+                                }}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-lg-3 col-12">
+                            <div className="">
+                              <label>Travel Type:</label>
+                              <span className="astik"> *</span>
+                              <select
+                                // required
+                                name="travel_type"
+                                id=""
+                                value={flightData?.travel_type}
+                                className="form-control form-control-sm"
+                                onChange={handleFlightDataChange}
+                              >
+                                <option value="" selected>
+                                  Select
+                                </option>
+                                <option value="Flight">Flight</option>
+                                <option value="Train">Train</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-3">
+                            <div className="">
+                              <label>Date</label>
+                              <span className="astik"> *</span>
+                              <input
+                                // required
+                                type="date"
+                                value={flightData?.travel_date}
+                                name="travel_date"
+                                className="form-control form-control-sm"
+                                onChange={handleFlightDataChange}
+                              />
+
+                              {/* <small className="invalid-feedback">
+                                      {errors.flight_from_city?.message}
+                                    </small> */}
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-3">
+                            <div className="">
+                              <label>From(City)</label>
+                              <span className="astik"> *</span>
+                              <Select
+                                className={classNames(
+                                  "form-select-select"
+                                  // {
+
+                                  //   "is-invalid": errors?.flight_from_city,
+                                  // }
+                                )}
+                                // required
+                                styles={CustomStyles}
+                                isClearable={true}
+                                name="flight_from_city"
+                                options={cityData}
+                                defaultValue={[cityData[0]]}
+                                // value={flightData?.flight_from_city}
+                                // onChange={handleFlightDataChange}
+                                onChange={(e) => {
+                                  return setFlightData({
+                                    ...flightData,
+                                    flight_from_city: e ? e.value : "",
+                                  });
+                                }}
+                              />
+                              {/* <small className="invalid-feedback">
+                                      {errors.flight_from_city?.message}
+                                    </small> */}
+                            </div>
+                          </div>
+
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>To(City)</label>
+                              <span className="astik"> *</span>
+                              <Select
+                                className={classNames(
+                                  "form-select-select"
+                                  // {
+                                  //   "is-invalid": errors?.flight_to_city,
+                                  // }
+                                )}
+                                // required
+                                styles={CustomStyles}
+                                // value={flightData?.flight_to_city}
+                                isClearable={true}
+                                name="flight_to_city"
+                                options={cityData}
+                                // onChange={handleFlightDataChange}
+                                defaultValue={[cityData[0]]}
+                                onChange={(e) => {
+                                  return setFlightData({
+                                    ...flightData,
+                                    flight_to_city: e ? e.value : "",
+                                  });
+                                }}
+                              />
+                              {/* <small className="invalid-feedback">
+                                      {errors.flight_to_city?.message}
+                                    </small> */}
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>Preferred Time</label>
+                              <select
+                                value={flightData?.flight_preferred_time}
+                                name="flight_preferred_time"
+                                className="form-select form-control-sm"
+                                onChange={handleFlightDataChange}
+
+                                // onChange={(e) => {
+                                //   setFlight({
+                                //     ...flight,
+                                //     flight_preferred_time: e.target.value,
+                                //   });
+                                // }}
+                                // value={flight?.flight_preferred_time}
+                              >
+                                <option value="">Select...</option>
+                                <option value="00:00 : 06:00">
+                                  00:00 : 06:00
+                                </option>
+                                <option value="06:00 : 12:00">
+                                  06:00 : 12:00
+                                </option>
+                                <option value="12:00 : 18:00">
+                                  12:00 : 18:00
+                                </option>
+                                <option value="18:00 : 24:00">
+                                  18:00 : 24:00
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>Accomendation Type</label>
+                              <select
+                                // required
+                                value={flightData?.accomendation_type}
+                                name="accomendation_type"
+                                className="form-select form-control-sm"
+                                onChange={handleFlightDataChange}
+                              >
+                                <option value="">Select...</option>
+                                <option value="AM" selected>
+                                  Not Required
+                                </option>
+                                <option value="Hotel">Hotel</option>
+                              </select>
+                            </div>
+                          </div>
+                          {flightData?.accomendation_type === "Hotel" && (
+                            <>
+                              <div className="col-12 col-lg-3">
+                                <div className="">
+                                  <label>Checkin Date</label>
+                                  <span className="astik"> *</span>
+                                  <input
+                                    type="date"
+                                    value={flightData?.hotel_checkin_date}
+                                    name="hotel_checkin_date"
+                                    className="form-control form-control-sm"
+                                    onChange={handleFlightDataChange}
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-12 col-lg-3">
+                                <div className="">
+                                  <label>Checkout Date</label>
+                                  <span className="astik"> *</span>
+                                  <input
+                                    type="date"
+                                    value={flightData?.hotel_checkout_date}
+                                    name="hotel_checkout_date"
+                                    className="form-control form-control-sm"
+                                    onChange={handleFlightDataChange}
+                                  />
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                        <div className="d-flex justify-content-center align-items-center">
+                          <button
+                            className="btn btn-sm btn-primary"
+                            // onClick={handleAdd}
+                            type="submit"
+                          >
+                            Add
                           </button>
                         </div>
                       </form>
