@@ -133,7 +133,6 @@ const Travel_Action = (props) => {
   //     }
   //   }
   // };
-
   const onSubmitButton = async (e) => {
     if (LocalStorageData?.zoho_role === "Management" && isManager === true) {
       const res = await axios.put(`/update_travel_request/${_id}`, {
@@ -155,6 +154,12 @@ const Travel_Action = (props) => {
     } else if (LocalStorageData?.zoho_role === "Management") {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         remarks: getData.remarks,
+        managers_approval:
+          getData?.managers_approval === "Pending"
+            ? handleButtonType
+              ? "Approved"
+              : "Declined"
+            : getData?.managers_approval,
         management_approval: handleButtonType ? "Approved" : "Declined",
       });
       if (res.data === "Updated Sucessfully") {
