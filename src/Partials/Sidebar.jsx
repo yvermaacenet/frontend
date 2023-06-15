@@ -13,13 +13,13 @@ const Sidebar = () => {
   const [counterList, setCounterList] = useState([]);
 
   useEffect(() => {
-    const getAllManagersList = async () => {
-      const resp = await axios.get("/get_user_list_By_Role_Name");
-      const allManagersId = resp?.data?.Reporting_Manager;
-      const filtered = allManagersId?.includes(LocalStorageData?.emp_id);
-      setIsManager(filtered);
-    };
-    getAllManagersList();
+    // const getAllManagersList = async () => {
+    //   const resp = await axios.get("/get_user_list_By_Role_Name");
+    //   const allManagersId = resp?.data?.Reporting_Manager;
+    //   const filtered = allManagersId?.includes(LocalStorageData?.emp_id);
+    //   setIsManager(filtered);
+    // };
+    // getAllManagersList();
     async function get_counterList() {
       await axios
         .get(
@@ -217,8 +217,7 @@ const Sidebar = () => {
                       Create Request
                     </NavLink>
                   </li>
-                  {(isManager ||
-                    LocalStorageData?.zoho_role === "Management" ||
+                  {(LocalStorageData?.zoho_role === "Management" ||
                     LocalStorageData?.zoho_role === "Admin") && (
                     <li className="nav-item">
                       <NavLink className="nav-link" to="/travelrequestreceived">

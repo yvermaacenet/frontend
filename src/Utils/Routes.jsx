@@ -103,7 +103,7 @@ const Routes_Array = [
   {
     path: "/travelrequestreceived",
     component: Travel_Approval_Request,
-    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+    allowedRoles: ["Admin", "Hr", "Finance", "Management"],
   },
 
   {

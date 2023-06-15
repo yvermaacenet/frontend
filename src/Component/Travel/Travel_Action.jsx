@@ -29,17 +29,17 @@ const Travel_Action = (props) => {
     mode: "onChange",
     resolver: yupResolver(form_travel_request_action_validation),
   });
-  const getAllManagersList = async () => {
-    const resp = await axios.get("/get_user_list_By_Role_Name");
-    const allManagersId = resp.data.Reporting_Manager;
-    const filtered = allManagersId.includes(LocalStorageData?.emp_id);
-    const filteredManagement = resp?.data?.Management.includes(
-      LocalStorageData?.user_id
-    );
-    // setIsManager(filtered);
-    setIsManagememnt(filteredManagement);
-    setLoading(false);
-  };
+  // const getAllManagersList = async () => {
+  //   const resp = await axios.get("/get_user_list_By_Role_Name");
+  //   const allManagersId = resp.data.Reporting_Manager;
+  //   const filtered = allManagersId.includes(LocalStorageData?.emp_id);
+  //   const filteredManagement = resp?.data?.Management.includes(
+  //     LocalStorageData?.user_id
+  //   );
+  //   // setIsManager(filtered);
+  //   setIsManagememnt(filteredManagement);
+  //   setLoading(false);
+  // };
   useEffect(() => {
     const get_travel_request_by_id = async () => {
       setLoading(true);
@@ -57,10 +57,11 @@ const Travel_Action = (props) => {
         });
     };
     get_travel_request_by_id();
-    getAllManagersList();
+    setLoading(false);
+
+    // getAllManagersList();
   }, []);
 
-  console.log("getData", getData);
   //   ====Handle Remarks
   // console.log("status", getData?.management_status);
   // const handleRemarksChange = (e) => {
@@ -134,7 +135,14 @@ const Travel_Action = (props) => {
   //   }
   // };
   const onSubmitButton = async (e) => {
-    if (LocalStorageData?.zoho_role === "Management" && isManager === true) {
+    // if (LocalStorageData?.zoho_role === "Management") {
+
+    const confirmation = window.confirm(
+      `Do you really want ${
+        handleButtonType ? "Approve" : "Decline"
+      } this request`
+    );
+    if (confirmation === true) {
       const res = await axios.put(`/update_travel_request/${_id}`, {
         remarks: getData.remarks,
         managers_approval:
@@ -145,34 +153,7 @@ const Travel_Action = (props) => {
             : getData?.managers_approval,
         management_approval: handleButtonType ? "Approved" : "Declined",
       });
-      if (res.data === "Updated Sucessfully") {
-        alert.show(
-          `${handleButtonType ? "Approved" : "Declined"} Successfully`
-        );
-        navigate("/travelrequestreceived");
-      }
-    } else if (LocalStorageData?.zoho_role === "Management") {
-      const res = await axios.put(`/update_travel_request/${_id}`, {
-        remarks: getData.remarks,
-        managers_approval:
-          getData?.managers_approval === "Pending"
-            ? handleButtonType
-              ? "Approved"
-              : "Declined"
-            : getData?.managers_approval,
-        management_approval: handleButtonType ? "Approved" : "Declined",
-      });
-      if (res.data === "Updated Sucessfully") {
-        alert.show(
-          `${handleButtonType ? "Approved" : "Declined"} Successfully`
-        );
-        navigate("/travelrequestreceived");
-      }
-    } else {
-      const res = await axios.put(`/update_travel_request/${_id}`, {
-        remarks: getData.remarks,
-        managers_approval: handleButtonType ? "Approved" : "Declined",
-      });
+
       if (res.data === "Updated Sucessfully") {
         alert.show(
           `${handleButtonType ? "Approved" : "Declined"} Successfully`
@@ -180,6 +161,36 @@ const Travel_Action = (props) => {
         navigate("/travelrequestreceived");
       }
     }
+
+    // } else if (LocalStorageData?.zoho_role === "Management") {
+    //   const res = await axios.put(`/update_travel_request/${_id}`, {
+    //     remarks: getData.remarks,
+    //     managers_approval:
+    //       getData?.managers_approval === "Pending"
+    //         ? handleButtonType
+    //           ? "Approved"
+    //           : "Declined"
+    //         : getData?.managers_approval,
+    //     management_approval: handleButtonType ? "Approved" : "Declined",
+    //   });
+    //   if (res.data === "Updated Sucessfully") {
+    //     alert.show(
+    //       `${handleButtonType ? "Approved" : "Declined"} Successfully`
+    //     );
+    //     navigate("/travelrequestreceived");
+    //   }
+    // } else {
+    //   const res = await axios.put(`/update_travel_request/${_id}`, {
+    //     remarks: getData.remarks,
+    //     managers_approval: handleButtonType ? "Approved" : "Declined",
+    //   });
+    //   if (res.data === "Updated Sucessfully") {
+    //     alert.show(
+    //       `${handleButtonType ? "Approved" : "Declined"} Successfully`
+    //     );
+    //     navigate("/travelrequestreceived");
+    //   }
+    // }
   };
 
   return (
@@ -232,6 +243,7 @@ const Travel_Action = (props) => {
                           <td className="py-3">
                             {getData?.employee?.employee_id}
                           </td>
+                          <td className="py-3">{getData?.employee?.name}</td>
                           <td>{getData?.employee?.email}</td>
                           <td>{getData?.employee?.phone}</td>
                           <td>{getData?.employee?.billable}</td>
