@@ -35,6 +35,7 @@ const TravelRequestForm = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const alert = useAlert();
   let [loading, setLoading] = useState(false);
+  let [allData, setAllData] = useState([]);
   let [cityData, setCityData] = useState([]);
   const [employeeId, setEmployeeId] = useState(LocalStorageData?.emp_id);
   const [getEmployeeDataById, setEmployeeDataById] = useState([]);
@@ -134,8 +135,6 @@ const TravelRequestForm = () => {
     // multi_city: false,
   });
 
-  console.log("ressss", getEmployeeDataById[0]?.["Personal Mobile Number"]);
-
   const handleTravelTypeChange = (e) => {
     const name = e.target.name;
     const checked = e.target.checked;
@@ -155,6 +154,7 @@ const TravelRequestForm = () => {
   //
   //
   // ========For Travel Request========
+  console.log("dataraatatatat", allData);
   const [rows, setRows] = useState([{ data: "" }]);
 
   const handleAddRow = () => {
@@ -176,17 +176,64 @@ const TravelRequestForm = () => {
   // ==========For Travellers======
 
   const handleAddTraveller = () => {
-    const newRow = { id: travellersData.length + 1, data: {} };
+    const newRow = {
+      id: travellersData.length + 1,
+      data: { is_employee: "Yes" },
+    };
     setTravellersData([...travellersData, newRow]);
     setTravellerRowId(travellersData.length);
   };
 
-  const handleTravellerChange = (id, newData) => {
-    console.log("id", id, newData);
+  const handleTravellerChange = async (id, newData) => {
     const updatedTraveller = travellersData.map((row) =>
-      row.id === id ? { ...row, data: { ...row.data, ...newData } } : row
+      row.id === id ? { ...row, data: newData } : row
     );
     setTravellersData(updatedTraveller);
+    // Fetch data from the API based on emp_id
+    if (newData.emp_id) {
+      try {
+        const response = await axios.get(
+          `/get_employee_details_for_travel/${newData.emp_id}`
+        );
+
+        const apiData = response.data;
+        // Update the corresponding row with the retrieved data
+        const updatedRow = {
+          id: id,
+          data: {
+            ...newData,
+            name: apiData[0]["ownerName"],
+            // gender: apiData[""],
+            phone: apiData[0]["Personal Mobile Number"],
+            email: apiData[0]["Email address"],
+            dob: formatBirthdate(apiData[0]["Date of Birth"]),
+          },
+        };
+
+        const updatedRows = travellersData.map((row) =>
+          row.id === id ? updatedRow : row
+        );
+        setTravellersData(updatedRows);
+      } catch (error) {
+        console.error("Error fetching data from API:", error);
+      }
+    } else {
+      const updatedRow = {
+        id: id,
+        data: {
+          ...newData,
+          name: "",
+          phone: "",
+          email: "",
+          dob: "",
+        },
+      };
+
+      const updatedRows = travellersData.map((row) =>
+        row.id === id ? updatedRow : row
+      );
+      setTravellersData(updatedRows);
+    }
   };
 
   const handleTravellerDeleteRow = (id) => {
@@ -233,18 +280,73 @@ const TravelRequestForm = () => {
   //
 
   // ==================For Rooms=====================
-  const [roomsData, setRoomsData] = useState([{ id: 1, data: {} }]);
+  const [roomsData, setRoomsData] = useState([
+    // { id: 1, data: { is_employee: "Yes" } },
+  ]);
 
   const handleAddRoom = () => {
     const newRow = { id: roomsData.length + 1, data: {} };
     setRoomsData([...roomsData, newRow]);
   };
 
-  const handleRoomChange = (id, newData) => {
+  // const handleRoomChange = (id, newData) => {
+  //   const updatedRooms = roomsData.map((row) =>
+  //     row.id === id ? { ...row, data: { ...row.data, ...newData } } : row
+  //   );
+  //   setRoomsData(updatedRooms);
+  // };
+  const handleRoomChange = async (id, newData) => {
     const updatedRooms = roomsData.map((row) =>
-      row.id === id ? { ...row, data: { ...row.data, ...newData } } : row
+      row.id === id ? { ...row, data: newData } : row
     );
     setRoomsData(updatedRooms);
+
+    // Fetch data from the API based on emp_id
+    if (newData.emp_id) {
+      try {
+        const response = await axios.get(
+          `/get_employee_details_for_travel/${newData.emp_id}`
+        );
+
+        const apiData = response.data;
+        console.log("erchiba", apiData);
+        // Update the corresponding row with the retrieved data
+        const updatedRow = {
+          id: id,
+          data: {
+            ...newData,
+            name: apiData[0]["ownerName"],
+            // gender: apiData[""],
+            phone: apiData[0]["Personal Mobile Number"],
+            email: apiData[0]["Email address"],
+            dob: formatBirthdate(apiData[0]["Date of Birth"]),
+          },
+        };
+
+        const updatedRows = roomsData.map((row) =>
+          row.id === id ? updatedRow : row
+        );
+        setRoomsData(updatedRows);
+      } catch (error) {
+        console.error("Error fetching data from API:", error);
+      }
+    } else {
+      const updatedRow = {
+        id: id,
+        data: {
+          ...newData,
+          name: "",
+          phone: "",
+          email: "",
+          dob: "",
+        },
+      };
+
+      const updatedRows = travellersData.map((row) =>
+        row.id === id ? updatedRow : row
+      );
+      setTravellersData(updatedRows);
+    }
   };
 
   const handleRoomDeleteRow = (id) => {
@@ -384,7 +486,7 @@ const TravelRequestForm = () => {
 
                       {/* ===================================Travel============================ */}
                       <div className="">
-                        <h3 className="text-primary">Travel</h3>
+                        <h5 className="text-primary">Travel</h5>
 
                         {/* ===========Radio Box======= */}
                         <div className="row my-2">
@@ -537,7 +639,7 @@ const TravelRequestForm = () => {
                               </td>
                               <td>
                                 <button
-                                  className="btn btn-danger btn-sm btn-sm"
+                                  className="btn btn-danger btn-sm "
                                   onClick={() => handleDeleteRow(row.id)}
                                 >
                                   <RiDeleteBin6Line />
@@ -545,23 +647,18 @@ const TravelRequestForm = () => {
                               </td>
                             </tr>
                           ))}
-                          <tr>
-                            <td className="text-end">
-                              <button
-                                className="btn btn-primary btn-sm"
-                                onClick={handleAddRow}
-                              >
-                                <RiAddFill />
-                              </button>
-                            </td>
-                          </tr>
                         </tbody>
                       </table>
-
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={handleAddRow}
+                      >
+                        <RiAddFill />
+                      </button>
                       {/* ===============================Travellers==================== */}
                       <hr />
                       <div className="mt-2">
-                        <h3 className="text-primary">Travellers</h3>
+                        <h5 className="text-primary">Travellers</h5>
                       </div>
                       <table className="table table-bordered">
                         <thead>
@@ -586,15 +683,21 @@ const TravelRequestForm = () => {
                                   className="form-control form-control-sm"
                                   value={traveller?.data?.is_employee}
                                   onChange={(e) =>
-                                    handleTravellerChange(traveller.id, {
-                                      is_employee: e.target.value,
-                                    })
+                                    handleTravellerChange(
+                                      traveller.id,
+
+                                      {
+                                        is_employee: e.target.value,
+                                      }
+                                    )
                                   }
                                 >
-                                  <option value="" disabled>
+                                  {/* <option value="" disabled>
                                     Select
+                                  </option> */}
+                                  <option value="Yes" selected>
+                                    Yes
                                   </option>
-                                  <option value="Yes">Yes</option>
                                   <option value="No">No</option>
                                 </select>
                               </td>
@@ -604,13 +707,11 @@ const TravelRequestForm = () => {
                                   required
                                   name="emp_id"
                                   className="form-control form-control-sm"
-                                  // value={traveller?.data?.emp_id}
+                                  value={traveller?.data?.emp_id}
                                   onChange={(e) =>
-                                    // handleTravellerChange(traveller.id, {
-                                    //   emp_id: e.target.value,
-                                    // }
-                                    // )
-                                    setEmployeeId(e.target.value)
+                                    handleTravellerChange(traveller.id, {
+                                      emp_id: e.target.value,
+                                    })
                                   }
                                 />
                               </td>
@@ -701,6 +802,9 @@ const TravelRequestForm = () => {
                               </td>
                               <td>
                                 <button
+                                  disabled={
+                                    travellersData?.length > 1 ? false : true
+                                  }
                                   className="btn btn-danger btn-sm"
                                   onClick={() =>
                                     handleTravellerDeleteRow(traveller.id)
@@ -724,7 +828,7 @@ const TravelRequestForm = () => {
                       {/* ===============================Accomendation====================== */}
                       <hr />
                       <div className="mt-2">
-                        <h3 className="text-primary">Accomendation</h3>
+                        <h5 className="text-primary">Accomendation</h5>
                       </div>
 
                       <table className="table table-bordered">
@@ -740,20 +844,35 @@ const TravelRequestForm = () => {
                           {accommodationData.map((accommodation) => (
                             <tr key={accommodation.id}>
                               <td>
-                                <input
+                                <Select
+                                  isClearable={true}
+                                  name="city"
+                                  options={cityData}
+                                  value={accommodationData?.data?.city}
+                                  onChange={(selectedOption) =>
+                                    handleAccommodationChange(
+                                      accommodation.id,
+                                      {
+                                        ...accommodation.data,
+                                        city: selectedOption,
+                                      }
+                                    )
+                                  }
+                                />
+                                {/* <input
                                   type="text"
                                   value={accommodation.data.city}
                                   name="city"
                                   className="form-control form-control-sm"
                                   onChange={(e) =>
-                                    handleAccommodationChange(
-                                      accommodation.id,
-                                      {
-                                        city: e.target.value,
+                                    // handleAccommodationChange(
+                                    //   accommodation.id,
+                                    //   {
+                                    //     city: e.target.value,
                                       }
                                     )
                                   }
-                                />
+                                /> */}
                               </td>
                               <td>
                                 <input
@@ -802,7 +921,7 @@ const TravelRequestForm = () => {
                                     )
                                   }
                                 >
-                                  <option value="" disabled>
+                                  <option value="" selected disabled>
                                     Select
                                   </option>
                                   <option value="Yes">Yes</option>
@@ -835,12 +954,12 @@ const TravelRequestForm = () => {
                       {/* ===============================Rooms=================================== */}
                       <hr />
                       <div className="mt-2">
-                        <h3 className="text-primary">Rooms</h3>
+                        <h5 className="text-primary">Rooms</h5>
                       </div>
                       <table className="table table-bordered">
                         <thead>
                           <tr>
-                            <th>Employe</th>
+                            <th>Employee</th>
                             <th>Emp ID</th>
                             <th>Name</th>
                             <th>Gender</th>
@@ -855,12 +974,12 @@ const TravelRequestForm = () => {
                               <td>
                                 <select
                                   type="text"
-                                  value={room?.data?.is_emp}
-                                  name="empId"
+                                  value={room?.data?.is_employee}
+                                  name="is_employee"
                                   className="form-control form-control-sm"
                                   onChange={(e) =>
                                     handleRoomChange(room.id, {
-                                      is_emp: e.target.value,
+                                      is_employee: e.target.value,
                                     })
                                   }
                                 >
@@ -873,12 +992,12 @@ const TravelRequestForm = () => {
                               <td>
                                 <input
                                   type="text"
-                                  value={room.data.empId}
-                                  name="empId"
+                                  value={room.data.emp_id}
+                                  name="emp_id"
                                   className="form-control form-control-sm"
                                   onChange={(e) =>
                                     handleRoomChange(room.id, {
-                                      empId: e.target.value,
+                                      emp_id: e.target.value,
                                     })
                                   }
                                 />
@@ -937,7 +1056,7 @@ const TravelRequestForm = () => {
                               </td>
                               <td>
                                 <input
-                                  type="text"
+                                  type="date"
                                   value={room.data.dob}
                                   name="dob"
                                   className="form-control form-control-sm"
@@ -972,15 +1091,21 @@ const TravelRequestForm = () => {
                           <button
                             className="btn btn-primary btn-sm"
                             onClick={() => {
-                              console.log("TravelData", [
+                              const res = axios.post(
+                                "all_travel_request_data",
                                 {
                                   rows,
                                   travellersData,
                                   accommodationData,
                                   roomsData,
-                                },
-                              ]);
+                                }
+                              );
                             }}
+                            // onClick={() => {
+                            //   setAllData([
+                            //
+                            //   ]);
+                            // }}
                           >
                             Submit
                           </button>
