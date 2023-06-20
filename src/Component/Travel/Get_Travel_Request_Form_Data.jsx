@@ -43,24 +43,6 @@ const GetTravelRequestForm_Data = () => {
         });
     }
     getData();
-    async function getAllManagersList() {
-      const resp = await axios
-        .get("/get_user_list_By_Role_Name")
-        .then((result) => {
-          const resp = result.data.Reporting_Manager;
-          const filtered = resp?.includes(LocalStorageData?.emp_id);
-          return setIsManager(filtered);
-        })
-        .catch((err) => {
-          if (err.response.status === 500) {
-            navigate("/error_500");
-          } else {
-            navigate("/error_403");
-          }
-        });
-    }
-
-    getAllManagersList();
   }, [renderComponent]);
 
   // =========Revoke RRequest=========
@@ -219,7 +201,7 @@ const GetTravelRequestForm_Data = () => {
                       className="card-title text-primary mt-2"
                       style={{ fontSize: "14px" }}
                     >
-                      Information
+                      Informationa
                     </h6>
                     <table className="table table-bordered">
                       <thead>

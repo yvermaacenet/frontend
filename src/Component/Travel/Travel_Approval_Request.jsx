@@ -51,9 +51,7 @@ const TravelApprovalRequest = () => {
           // );
           return setGettravelrequestdata(
             LocalStorageData?.zoho_role === "Management"
-              ? resp.filter(
-                  (x) => x?.employee?.email !== LocalStorageData?.email
-                )
+              ? resp.filter((x) => x?.created_by !== LocalStorageData?.email)
               : resp
           );
         })

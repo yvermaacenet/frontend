@@ -230,174 +230,238 @@ const Travel_Action = (props) => {
                     <table className="table table-bordered">
                       <thead>
                         <tr>
-                          <th>ID</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                          <th>Phone</th>
                           <th>Billable</th>
-                          <th>Project Id</th>
+                          <th>Client Id</th>
+                          <th>Project ID</th>
+                          <th>Reason For Travel</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
                           <td className="py-3">
-                            {getData?.employee?.employee_id}
+                            {getData?.basicDetails?.billable}
                           </td>
-                          <td className="py-3">{getData?.employee?.name}</td>
-                          <td>{getData?.employee?.email}</td>
-                          <td>{getData?.employee?.phone}</td>
-                          <td>{getData?.employee?.billable}</td>
-                          <td>
-                            {getData?.employee?.project_id === ""
-                              ? "N/A"
-                              : getData?.employee?.project_id}
+                          <td className="py-3">
+                            {getData?.basicDetails?.client_id}
                           </td>
-                          {/* {isManager && ( */}
-                          {/* <td>
-                            <label
-                              class={`${
-                                getData?.managers_approval === "Approved"
-                                  ? "badge badge-success"
-                                  : getData?.managers_approval === "Declined"
-                                  ? "badge badge-danger"
-                                  : "badge badge-warning"
-                              }`}
-                            >
-                              {getData?.managers_approval}
-                            </label>
-                          </td> */}
-                          {/* )} */}
-                        </tr>
-                        <tr>
-                          <th className="py-4">Reason for Travel</th>
-                          <td colSpan={7}>
-                            {getData?.employee?.reason_for_travel}
-                          </td>
+                          <td>{getData?.basicDetails?.project_id}</td>
+                          <td>{getData?.basicDetails?.reason_for_travel}</td>
+                          <td>{getData?.employee?.reason_for_travel}</td>
                         </tr>
                       </tbody>
                     </table>
                     <>
+                      {/* =================Travel================================================ */}
+
                       <h6
                         className="card-title text-primary mt-4"
                         style={{ fontSize: "14px" }}
                       >
-                        Travel Information
+                        Travel
                       </h6>
                       <table className="table table-bordered my-4">
                         <thead>
                           <tr>
-                            <th className="w-25">Travel Date</th>
-                            <th className="w-25">Name(s)</th>
-                            <th className="w-25">Travel Type(s)</th>
+                            <th className="w-25">Travel Mode</th>
                             <th className="w-25">From City</th>
                             <th className="w-25">To City</th>
-                            <th className="w-25">Preferred Time</th>
-                            <th className="w-25">Accomendation</th>
-                            <th className="w-25">Checkin Date</th>
-                            <th className="w-25">Checkout Date</th>
+                            <th className="w-25">Departure Date</th>
+                            <th className="w-25">Return</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {getData?.travel_request?.map((val) => {
+                          {getData?.rows?.map((val) => {
                             return (
                               <tr>
                                 {" "}
-                                <td>{val?.travel_date}</td>
-                                <td>
-                                  {(val?.booking_for).map((val) => {
-                                    return (
-                                      <small className="d-block m-1">
-                                        {`${val},`}
-                                      </small>
-                                    );
-                                  })}
-                                </td>
-                                <td>{val?.travel_type}</td>
-                                <td>{val?.flight_from_city}</td>
-                                <td>{val?.flight_to_city}</td>
-                                <td>{val?.flight_preferred_time}</td>
-                                <td>{val?.accomendation_type}</td>
-                                <td>{val?.hotel_checkin_date}</td>
-                                <td>{val?.hotel_checkout_date}</td>
+                                <td>{val?.data?.travel_mode}</td>
+                                <td>{val?.data?.travel_from_city.value}</td>
+                                <td>{val?.data?.travel_to_city.value}</td>
+                                <td>{val?.data?.departure?.split("T")[0]}</td>
+                                <td>{val?.data?.return?.split("T")[0]}</td>
                               </tr>
                             );
                           })}
                         </tbody>
                       </table>
-                      <div>
-                        <span className="fw-bold"> Special Request</span> :{" "}
-                        <small>{getData?.employee?.special_request}</small>
-                      </div>
+                      {/* =================Travellers================================================ */}
+                      <hr />
+                      <h6
+                        className="card-title text-primary mt-4"
+                        style={{ fontSize: "14px" }}
+                      >
+                        Travellers
+                      </h6>
+                      <table className="table table-bordered my-4">
+                        <thead>
+                          <tr>
+                            <th className="w-25">Employee</th>
+                            <th className="w-25">Employee ID</th>
+                            <th className="w-25">Full Name</th>
+                            <th className="w-25">Gender</th>
+                            <th className="w-25">Phone</th>
+                            <th className="w-25">Email</th>
+                            <th className="w-25">DOB(yyyy-dd-mm)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {getData?.travellersData?.map((val) => {
+                            return (
+                              <tr>
+                                {" "}
+                                <td>{val?.data?.is_employee}</td>
+                                <td>{val?.data.emp_id}</td>
+                                <td>{val?.data?.name}</td>
+                                <td>{val?.data?.gender}</td>
+                                <td>{val?.data?.phone}</td>
+                                <td>{val?.data?.email}</td>
+                                <td>{val?.data?.dob?.split("T")[0]}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                      {/* =================Accomodation================================================ */}
+                      <hr />
+                      <h6
+                        className="card-title text-primary mt-4"
+                        style={{ fontSize: "14px" }}
+                      >
+                        Accomodation
+                      </h6>
+                      <table className="table table-bordered my-4">
+                        <thead>
+                          <tr>
+                            <th>City</th>
+                            <th>Check-in</th>
+                            <th>Check-out</th>
+                            <th>Breakfast Required</th>
+                            <th>Rooms Required</th>
+                            <th>No. Of Adults</th>
+                            <th>No. of Children</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {getData?.accommodationData?.map((val) => {
+                            return (
+                              <tr>
+                                {" "}
+                                <td>{val?.data.city.value}</td>
+                                <td>{(val?.data?.checkIn).split("T")[0]}</td>
+                                <td>{(val?.data?.checkOut).split("T")[0]}</td>
+                                <td>{val?.data?.breakfastRequired}</td>
+                                <td>{val?.data?.number_of_rooms}</td>
+                                <td>{val?.data?.number_of_adults}</td>
+                                <td>{val?.data?.number_of_children}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                      {/* =================Travellers================================================ */}
+                      <hr />
+                      <h6
+                        className="card-title text-primary mt-4"
+                        style={{ fontSize: "14px" }}
+                      >
+                        Occupancy
+                      </h6>
+                      <table className="table table-bordered my-4">
+                        <thead>
+                          <tr>
+                            <th className="w-25">Employee</th>
+                            <th className="w-25">Employee ID</th>
+                            <th className="w-25">Full Name</th>
+                            <th className="w-25">Gender</th>
+                            <th className="w-25">Phone</th>
+                            <th className="w-25">Email</th>
+                            <th className="w-25">DOB(yyyy-dd-mm)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {getData?.roomsData?.map((val) => {
+                            return (
+                              <tr>
+                                {" "}
+                                <td>{val?.data?.is_employee}</td>
+                                <td>{val?.data?.emp_id}</td>
+                                <td>{val?.data?.name}</td>
+                                <td>{val?.data?.gender}</td>
+                                <td>{val?.data?.phone}</td>
+                                <td>{val?.data?.email}</td>
+                                <td>{val?.data?.dob?.split("T")[0]}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
                     </>
 
-                    {
-                      // isManager &&
-                      LocalStorageData?.zoho_role === "Management" &&
-                      getData?.employee?.email !== LocalStorageData?.email &&
-                      getData?.management_approval === "Pending" ? (
-                        <form
-                          className="forms-sample"
-                          onSubmit={handleSubmit(onSubmitButton)}
-                        >
-                          <div class="col-12 mt-2">
-                            <div class="form-group">
-                              <label>Remarks</label>
-                              <textarea
-                                name="remarks"
-                                className={classNames(
-                                  "form-control form-control-sm font-bold",
-                                  {
-                                    "is-invalid": errors.remarks,
-                                  }
-                                )}
-                                {...register("remarks", {
-                                  value: getData?.remarks,
-                                })}
-                                onChange={(e) =>
-                                  setGetData({
-                                    ...getData,
-                                    remarks: e.target.value,
-                                  })
+                    {LocalStorageData?.zoho_role === "Management" &&
+                    getData?.created_by !== LocalStorageData?.email &&
+                    getData?.management_approval === "Pending" ? (
+                      <form
+                        className="forms-sample"
+                        onSubmit={handleSubmit(onSubmitButton)}
+                      >
+                        <div class="col-12 mt-2">
+                          <div class="form-group">
+                            <label>Remarks</label>
+                            <textarea
+                              name="remarks"
+                              className={classNames(
+                                "form-control form-control-sm font-bold",
+                                {
+                                  "is-invalid": errors.remarks,
                                 }
-                                value={getData?.remarks}
-                                placeholder="Enter Remarks"
-                                rows={4}
-                              ></textarea>
-                            </div>
+                              )}
+                              {...register("remarks", {
+                                value: getData?.remarks,
+                              })}
+                              onChange={(e) =>
+                                setGetData({
+                                  ...getData,
+                                  remarks: e.target.value,
+                                })
+                              }
+                              value={getData?.remarks}
+                              placeholder="Enter Remarks"
+                              rows={4}
+                            ></textarea>
                           </div>
-
-                          <div className="text-center">
-                            <button
-                              type="submit"
-                              className="btn btn-sm btn-gradient-success me-2"
-                              onClick={() => setHandleButtonType(true)}
-                            >
-                              Approve
-                            </button>
-                            <button
-                              type="submit"
-                              className="btn btn-sm btn-gradient-danger me-2"
-                              onClick={() => setHandleButtonType(false)}
-                            >
-                              Decline
-                            </button>
-                          </div>
-                        </form>
-                      ) : (
-                        <div
-                          className={
-                            getData?.management_approval === "Approved"
-                              ? "text-success text-center fs-4"
-                              : "text-danger text-center fs-4"
-                          }
-                        >
-                          <p className="fw-bold">
-                            {" "}
-                            Status: {` ${getData?.management_approval} `}
-                          </p>
                         </div>
-                      )
-                    }
+
+                        <div className="text-center">
+                          <button
+                            type="submit"
+                            className="btn btn-sm btn-gradient-success me-2"
+                            onClick={() => setHandleButtonType(true)}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            type="submit"
+                            className="btn btn-sm btn-gradient-danger me-2"
+                            onClick={() => setHandleButtonType(false)}
+                          >
+                            Decline
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <div
+                        className={
+                          getData?.management_approval === "Approved"
+                            ? "text-success text-center fs-4"
+                            : "text-danger text-center fs-4"
+                        }
+                      >
+                        <p className="fw-bold">
+                          {" "}
+                          Status: {` ${getData?.management_approval} `}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
