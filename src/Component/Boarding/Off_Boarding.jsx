@@ -15,38 +15,37 @@ const Off_Boarding = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const [inputData, setInputData] = useState({
     offboarding_hr: {
-      acceptance_of_resignation_and_last_date_communication_to_employee: false,
-      appraisals_for_reportees: false,
+      acceptance_of_resignation_and_last_date_communication_to_employee: "NO",
+      appraisals_for_reportees: "NO",
       hr_off_boarding_status: false,
     },
     offboarding_finance: {
-      informed_client_on_exit: false,
-      project_official_duties_handover: false,
-      important_mails_transferred: false,
-      official_document_handover: false,
-      acenet_laptop: false,
-      id_card: false,
-      // data_card_hotspot: false,
-      client_asset: false,
-      biometric_disabled: false,
-      office_365_account_deletion: false,
-      email_forwarded: false,
-      zoho_account_deleted: false,
-      relieving_letter_shared: false,
-      fnf_statement_shared: false,
-      fnf_cleared: false,
-      employee_datasheet_updated: false,
-      ghi_deletion: false,
-      employee_folder_moved_to_past_employee_folder: false,
-      ghi_opt_out: false,
-      ghi_initiated: false,
+      informed_client_on_exit: "NO",
+      project_official_duties_handover: "NO",
+      important_mails_transferred: "NO",
+      official_document_handover: "NO",
+      acenet_laptop: "NO",
+      id_card: "NO",
+      client_asset: "NO",
+      biometric_disabled: "NO",
+      office_365_account_deletion: "NO",
+      email_forwarded: "NO",
+      zoho_account_deleted: "NO",
+      relieving_letter_shared: "NO",
+      fnf_statement_shared: "NO",
+      fnf_cleared: "NO",
+      employee_datasheet_updated: "NO",
+      ghi_deletion: "NO",
+      employee_folder_moved_to_past_employee_folder: "NO",
+      ghi_opt_out: "NO",
+      ghi_initiated: "NO",
+      ghi_e_card_issued: "NO",
       finance_off_boarding_status: false,
-      ghi_e_card_issued: false,
     },
     offboarding_management: {
-      handover_complete: false,
+      handover_complete: "NO",
       management_off_boarding_status: false,
-      eligible_for_rehire: false,
+      eligible_for_rehire: "NO",
     },
   });
   const [renderComponent, setRenderComponent] = useState(false);
@@ -55,34 +54,35 @@ const Off_Boarding = () => {
   const [loading, setLoading] = useState(false);
   const [updated_data, setUpdated_data] = useState([]);
   const inputEventHr = (e) => {
-    const { name, checked } = e.target;
+    const { name, value } = e.target;
     setInputData({
       ...inputData,
-      offboarding_hr: { ...inputData?.offboarding_hr, [name]: checked },
+      offboarding_hr: { ...inputData?.offboarding_hr, [name]: value },
     });
-    setUpdated_data({ ...updated_data, [name]: checked });
+    // setUpdated_data({ ...updated_data, [name]: value });
   };
+
   const inputEventFinance = (e) => {
-    const { name, checked } = e.target;
+    const { name, value } = e.target;
     setInputData({
       ...inputData,
       offboarding_finance: {
         ...inputData?.offboarding_finance,
-        [name]: checked,
+        [name]: value,
       },
     });
-    setUpdated_data({ ...updated_data, [name]: checked });
+    setUpdated_data({ ...updated_data, [name]: value });
   };
   const inputEventManagement = (e) => {
-    const { name, checked } = e.target;
+    const { name, value } = e.target;
     setInputData({
       ...inputData,
       offboarding_management: {
         ...inputData?.offboarding_management,
-        [name]: checked,
+        [name]: value,
       },
     });
-    setUpdated_data({ ...updated_data, [name]: checked });
+    setUpdated_data({ ...updated_data, [name]: value });
   };
   useEffect(() => {
     setLoading(true);
@@ -96,14 +96,14 @@ const Off_Boarding = () => {
           const resp = result.data[0];
           return (
             setInputData({ ...inputData, ...resp }),
-            setActive(
-              LocalStorageData?.zoho_role === "Hr" ||
-                LocalStorageData?.zoho_role === "Admin"
-                ? 1
-                : LocalStorageData?.zoho_role === "Finance"
-                ? 2
-                : 3
-            ),
+            // setActive(
+            //   LocalStorageData?.zoho_role === "Hr" ||
+            //     LocalStorageData?.zoho_role === "Admin"
+            //     ? 1
+            //     : LocalStorageData?.zoho_role === "Finance"
+            //     ? 2
+            //     : 3
+            // ),
             setRenderComponent(false)
           );
         })
@@ -116,7 +116,36 @@ const Off_Boarding = () => {
         });
     }
     get_off_boarding_list();
-
+    async function get_user_list_by_role_name() {
+      const result = await axios
+        .get(`/get_user_list_by_role_name`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
+        .then((resp) => {
+          return (
+            // setRoless(resp.data),
+            setActive(
+              resp.data?.Hr?.includes(LocalStorageData?.user_id) === true ||
+                resp.data?.Admin?.includes(LocalStorageData?.user_id) === true
+                ? 1
+                : resp.data?.Finance?.includes(LocalStorageData?.user_id) ===
+                  true
+                ? 2
+                : 1
+            ),
+            // setRenderComponent(false),
+            setLoading(false)
+          );
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+    }
+    get_user_list_by_role_name();
     async function get_user_details_by_id() {
       const result_user_list_by_id = await axios
         .get(`/get_user_details_By_Id/${_id}`, {
@@ -143,181 +172,124 @@ const Off_Boarding = () => {
   ) => {
     const response = Object.keys(objIncludeProperty).every((property) => {
       if (objExcludeProperty.includes(property)) {
-        return true; // Exclude introduction_call_with_ceo
+        return "YES"; // Exclude introduction_call_with_ceo
       } else {
         return (
           objIncludeProperty.hasOwnProperty(property) &&
-          objIncludeProperty[property] === true
+          objIncludeProperty[property] === "YES"
         );
       }
     });
     return response;
   };
-  const onSaveNextButton = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    await axios
-      .post(
-        `/off_boarding/${_id}`,
-        {
-          ...inputData,
 
-          offboarding_hr: {
-            ...inputData?.offboarding_hr,
-            hr_off_boarding_status: checkAllPropertiesAreTrue(
-              inputData?.offboarding_hr,
-              ["hr_off_boarding_status"]
-            ),
-          },
-          offboarding_finance: {
-            ...inputData?.offboarding_finance,
-            finance_off_boarding_status: checkAllPropertiesAreTrue(
-              inputData?.offboarding_finance,
-              [
-                "finance_off_boarding_status",
-                "ghi_opt_out",
-                "ghi_initiated",
-                "ghi_e_card_issued",
-              ]
-            ),
-          },
-          offboarding_management: {
-            ...inputData?.offboarding_management,
-            management_off_boarding_status: checkAllPropertiesAreTrue(
-              inputData?.offboarding_management,
-              ["management_off_boarding_status"]
-            ),
-          },
-
-          updated_by: [
-            {
-              user_id: LocalStorageData?.user_id,
-              user_name: LocalStorageData?.name,
-              updated_data,
+  const onFinalSubmit = async (btn_value) => {
+    const callAPI = async () => {
+      // console.log("inputData", inputData);
+      // return;
+      await axios
+        .post(
+          `/off_boarding/${btn_value}/${_id}/${inputData?._id}`,
+          {
+            ...inputData,
+            offboarding_hr: {
+              ...inputData?.offboarding_hr,
+              hr_off_boarding_status:
+                btn_value === "hr_offboarding_complete"
+                  ? true
+                  : inputData?.offboarding_hr?.hr_off_boarding_status,
             },
-          ],
-        },
-        {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        }
-      )
-      .then(async (res) => {
-        if (res.data.message === "created") {
-          setActive(active + 1);
-          setRenderComponent(true);
-          navigate("/user_list/pending_offboarding_employee");
-        }
-      })
-      .catch((err) => {
-        if (err.response.status === 500) {
-          navigate("/error_500");
-        } else {
-          navigate("/error_403");
-        }
-      });
-    setLoading(false);
-  };
-  const onUpdateNextButton = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-    await axios
-      .put(
-        `/off_boarding/${inputData?._id}`,
-        {
-          ...inputData,
-
-          offboarding_hr: {
-            ...inputData?.offboarding_hr,
-            hr_off_boarding_status: checkAllPropertiesAreTrue(
-              inputData?.offboarding_hr,
-              ["hr_off_boarding_status"]
-            ),
-          },
-          offboarding_finance: {
-            ...inputData?.offboarding_finance,
-            finance_off_boarding_status: checkAllPropertiesAreTrue(
-              inputData?.offboarding_finance,
-              [
-                "finance_off_boarding_status",
-                "ghi_opt_out",
-                "ghi_initiated",
-                "ghi_e_card_issued",
-              ]
-            ),
-          },
-          offboarding_management: {
-            ...inputData?.offboarding_management,
-            management_off_boarding_status: checkAllPropertiesAreTrue(
-              inputData?.offboarding_management,
-              ["management_off_boarding_status"]
-            ),
-          },
-
-          updated_by: [
-            {
-              user_id: LocalStorageData?.user_id,
-              user_name: LocalStorageData?.name,
-              updated_data,
+            offboarding_finance: {
+              ...inputData?.offboarding_finance,
+              finance_off_boarding_status:
+                btn_value === "finance_offboarding_complete"
+                  ? true
+                  : inputData?.offboarding_finance?.finance_off_boarding_status,
             },
-          ],
-        },
-        {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        }
-      )
-      .then(async (res) => {
-        if (res.data.message === "updated") {
-          setActive(active + 1);
+            offboarding_management: {
+              ...inputData?.offboarding_management,
+              management_off_boarding_status:
+                btn_value === "management_offboarding_complete"
+                  ? true
+                  : inputData?.offboarding_management
+                      ?.management_off_boarding_status,
+            },
+            updated_by: [
+              {
+                user_id: LocalStorageData?.user_id,
+                user_name: LocalStorageData?.name,
+                updated_data,
+              },
+            ],
+          },
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
+        .then(async (res) => {
+          alert.success(res.data.message);
           setRenderComponent(true);
-          setUpdated_data([]);
-          navigate("/user_list/pending_offboarding_employee");
-        }
-      })
-      .catch((err) => {
-        if (err.response.status === 500) {
-          navigate("/error_500");
-        } else {
-          navigate("/error_403");
-        }
-      });
-    setLoading(false);
+          if (
+            res.data.message !== "Offboarding form has been saved successfully!"
+          ) {
+            navigate("/user_list/pending_offboarding_employee");
+          }
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+    };
+    const confirmationButton =
+      btn_value === "save"
+        ? callAPI()
+        : window.confirm(
+            `Do you really want to submit ${
+              active == "1" ? "HR" : active == "2" ? "Finance" : "Management"
+            } offboarding?`
+          );
+    confirmationButton === true && callAPI();
   };
-  function convertDateFormate(str) {
-    const date = new Date(str),
-      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-      day = ("0" + date.getDate()).slice(-2);
-    return [day, mnth, date.getFullYear()].join("-");
-  }
-  function capitalize(ss) {
-    const newData = ss.split("_").join(" ");
-    const words = newData.split(" ");
-    const capitalizedWords = words.map((word) => {
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    });
-    return capitalizedWords.join(" ");
-  }
   const setAllPropertiesToTrue = (e, obj) => {
     if (obj === "hr") {
       const objHr = inputData?.offboarding_hr;
       for (let property in objHr) {
-        objHr[property] = e.target.checked;
+        objHr[property] = e.target.checked === true ? "YES" : "NO";
       }
       const response = objHr;
-      setInputData({ ...inputData, hr: response });
+      setInputData({
+        ...inputData,
+        offboarding_hr: { ...response, hr_off_boarding_status: false },
+      });
     } else if (obj === "finance") {
       const objFinance = inputData?.offboarding_finance;
       for (let property in objFinance) {
-        objFinance[property] = e.target.checked;
+        objFinance[property] = e.target.checked ? "YES" : "NO";
       }
       const response = objFinance;
-      setInputData({ ...inputData, finance: response });
+      setInputData({
+        ...inputData,
+        offboarding_finance: {
+          ...response,
+          finance_off_boarding_status: false,
+        },
+      });
     } else {
       const objManagement = inputData?.offboarding_management;
       for (let property in objManagement) {
-        objManagement[property] = e.target.checked;
+        objManagement[property] = e.target.checked ? "YES" : "NO";
       }
       const response = objManagement;
-      setInputData({ ...inputData, management: response });
+      setInputData({
+        ...inputData,
+        offboarding_management: {
+          ...response,
+          management_off_boarding_status: false,
+        },
+      });
     }
   };
   return (
@@ -534,39 +506,7 @@ const Off_Boarding = () => {
                           aria-labelledby="hr-tab"
                         >
                           <>
-                            {/* <>
-                              {getUserDetailsById?.initiate_off_boarding_status &&
-                                (inputData?.offboarding_hr_off_boarding_status ? (
-                                  <div
-                                    class="alert alert-success alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-check-circle-outline me-1"></i>
-                                    This step has been completed.
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    class="alert alert-danger alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is pending !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ))}
-                            </> */}
-                            <div
+                            {/* <div
                               class="form-check form-check-success"
                               style={{ float: "right", marginRight: "0.6rem" }}
                             >
@@ -599,7 +539,7 @@ const Off_Boarding = () => {
                                 />
                                 Select All <i class="input-helper"></i>
                               </label>
-                            </div>
+                            </div> */}
                             <table className="table table-hover">
                               <thead>
                                 <tr>
@@ -608,68 +548,209 @@ const Off_Boarding = () => {
                                 </tr>
                               </thead>
                               <tbody>
+                                {(!inputData?.offboarding_hr
+                                  ?.hr_off_boarding_status ||
+                                  LocalStorageData?.zoho_role === "Hr") && (
+                                  <tr>
+                                    <td className="w-75"></td>
+
+                                    <td colSpan={4}>
+                                      <div class="form-check form-check-success mb-0 mt-0 ">
+                                        <label class="form-check-label">
+                                          <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            onChange={(e) =>
+                                              setAllPropertiesToTrue(e, "hr")
+                                            }
+                                            checked={checkAllPropertiesAreTrue(
+                                              inputData?.offboarding_hr,
+                                              ["hr_off_boarding_status"]
+                                            )}
+                                            disabled={
+                                              LocalStorageData?.zoho_role ===
+                                                "Hr" &&
+                                              !inputData?.offboarding_hr
+                                                ?.hr_off_boarding_status
+                                                ? false
+                                                : true
+                                            }
+                                          />
+                                          Select All
+                                          <i class="input-helper"></i>
+                                        </label>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                )}
                                 <tr>
-                                  <td className="w-100">
+                                  <td className="w-75">
                                     Acceptance of Resignation and Last Date
                                     communication to employee
                                   </td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="acceptance_of_resignation_and_last_date_communication_to_employee"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventHr}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_hr
+                                              ?.acceptance_of_resignation_and_last_date_communication_to_employee ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Hr" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Hr" &&
+                                            !inputData?.offboarding_hr
+                                              ?.hr_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="acceptance_of_resignation_and_last_date_communication_to_employee"
+                                          onChange={inputEventHr}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_hr
-                                              ?.acceptance_of_resignation_and_last_date_communication_to_employee
+                                              ?.acceptance_of_resignation_and_last_date_communication_to_employee ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Hr" &&
+                                            !inputData?.offboarding_hr
+                                              ?.hr_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="acceptance_of_resignation_and_last_date_communication_to_employee"
+                                          onChange={inputEventHr}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_hr
+                                              ?.acceptance_of_resignation_and_last_date_communication_to_employee ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Hr" &&
+                                            !inputData?.offboarding_hr
+                                              ?.hr_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Appraisals for reportees</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="appraisals_for_reportees"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventHr}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_hr
+                                              ?.appraisals_for_reportees ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Hr" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Hr" &&
+                                            !inputData?.offboarding_hr
+                                              ?.hr_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="appraisals_for_reportees"
+                                          onChange={inputEventHr}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_hr
-                                              ?.appraisals_for_reportees
+                                              ?.appraisals_for_reportees ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Hr" &&
+                                            !inputData?.offboarding_hr
+                                              ?.hr_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="appraisals_for_reportees"
+                                          onChange={inputEventHr}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_hr
+                                              ?.appraisals_for_reportees ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Hr" &&
+                                            !inputData?.offboarding_hr
+                                              ?.hr_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
@@ -686,38 +767,6 @@ const Off_Boarding = () => {
                           aria-labelledby="finance-tab"
                         >
                           <>
-                            {/* <>
-                              {getUserDetailsById?.initiate_off_boarding_status &&
-                                (inputData?.offboarding_finance_off_boarding_status ? (
-                                  <div
-                                    class="alert alert-success alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-check-circle-outline me-1"></i>
-                                    This step has been completed.
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ) : (
-                                  <div
-                                    class="alert alert-danger alert-dismissible fade show"
-                                    role="alert"
-                                  >
-                                    <i class="mdi mdi-alert-octagon me-1"></i>
-                                    "This step is pending !!"
-                                    <button
-                                      type="button"
-                                      class="btn-close"
-                                      data-bs-dismiss="alert"
-                                      aria-label="Close"
-                                    ></button>
-                                  </div>
-                                ))}
-                            </> */}
                             <div
                               class="form-check form-check-success"
                               style={{ float: "right", marginRight: "0.6rem" }}
@@ -742,9 +791,16 @@ const Off_Boarding = () => {
                                     inputData?.offboarding_finance,
                                     ["finance_off_boarding_status"]
                                   )}
+                                  // disabled={
+                                  //   LocalStorageData?.zoho_role === "Finance" ||
+                                  //   LocalStorageData?.zoho_role === "Admin"
+                                  //     ? false
+                                  //     : true
+                                  // }
                                   disabled={
-                                    LocalStorageData?.zoho_role === "Finance" ||
-                                    LocalStorageData?.zoho_role === "Admin"
+                                    LocalStorageData?.zoho_role === "Finance" &&
+                                    !inputData?.offboarding_finance
+                                      ?.finance_off_boarding_status
                                       ? false
                                       : true
                                   }
@@ -765,526 +821,1328 @@ const Off_Boarding = () => {
                                     Informed Client on Exit
                                   </td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="informed_client_on_exit"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.informed_client_on_exit ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="informed_client_on_exit"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.informed_client_on_exit
+                                              ?.informed_client_on_exit ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="informed_client_on_exit"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.informed_client_on_exit ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Project/official duties handover</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="project_official_duties_handover"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.project_official_duties_handover ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="project_official_duties_handover"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.project_official_duties_handover
+                                              ?.project_official_duties_handover ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="project_official_duties_handover"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.project_official_duties_handover ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Important mails transferred</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="important_mails_transferred"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.important_mails_transferred ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="important_mails_transferred"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.important_mails_transferred
+                                              ?.important_mails_transferred ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="important_mails_transferred"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.important_mails_transferred ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td> Official document handover</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="official_document_handover"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.official_document_handover ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="official_document_handover"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.official_document_handover
+                                              ?.official_document_handover ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="official_document_handover"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.official_document_handover ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Acenet - Laptop</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="acenet_laptop"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.acenet_laptop
+                                              ?.acenet_laptop === "YES" && true
                                           }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
                                         />
-                                        <span className="slider round"></span>
+                                        YES<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="acenet_laptop"
+                                          onChange={inputEventFinance}
+                                          value="NO"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.acenet_laptop === "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NO<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="acenet_laptop"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.acenet_laptop === "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td> ID Card</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="id_card"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.id_card === "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="id_card"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.id_card
+                                              ?.id_card === "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="id_card"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.id_card === "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
-                                {/* <tr>
-                                          <td> Data card/hotspot </td>
-                                          <td>
-                                            <div className="board">
-                                              <span>No</span>
-                                              <label className="switch ms-1 me-1 mt-1 ">
-                                                <input
-                                                  type="checkbox"
-                                                  name="data_card_hotspot"
-                                                  className="form-control form-control-sm"
-                                                  onChange={inputEventFinance}
-                                                  disabled={
-                                                    LocalStorageData?.zoho_role ===
-                                                      "Finance" ||
-                                                    LocalStorageData?.zoho_role ===
-                                                      "Admin"
-                                                      ? false
-                                                      : true
-                                                  }
-                                                  style={{ opacity: "0" }}
-                                                  checked={
-                                                    inputData?.offboarding_finance?.data_card_hotspot
-                                                  }
-                                                />
-                                                <span className="slider round"></span>
-                                              </label>
-                                              <span>Yes</span>
-                                            </div>
-                                          </td>
-                                        </tr> */}
+
                                 <tr>
                                   <td> Client Asset </td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="client_asset"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.client_asset === "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="client_asset"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.client_asset
+                                              ?.client_asset === "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="client_asset"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.client_asset === "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td> Biometric Disabled </td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="biometric_disabled"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.biometric_disabled === "YES" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="biometric_disabled"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.biometric_disabled
+                                              ?.biometric_disabled === "NO" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="biometric_disabled"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.biometric_disabled === "NA" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Office 365 account deletion</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="office_365_account_deletion"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.office_365_account_deletion ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="office_365_account_deletion"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.office_365_account_deletion
+                                              ?.office_365_account_deletion ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="office_365_account_deletion"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.office_365_account_deletion ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td> Email Forwarded </td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="email_forwarded"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.email_forwarded === "YES" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="email_forwarded"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.email_forwarded
+                                              ?.email_forwarded === "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="email_forwarded"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.email_forwarded === "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td> Zoho Account Deleted</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="zoho_account_deleted"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.zoho_account_deleted ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="zoho_account_deleted"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.zoho_account_deleted
+                                              ?.zoho_account_deleted === "NO" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="zoho_account_deleted"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.zoho_account_deleted === "NA" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td> Relieving Letter shared</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="relieving_letter_shared"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.relieving_letter_shared ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="relieving_letter_shared"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.relieving_letter_shared
+                                              ?.relieving_letter_shared ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="relieving_letter_shared"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.relieving_letter_shared ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td> FnF Statement shared</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="fnf_statement_shared"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.fnf_statement_shared ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="fnf_statement_shared"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.fnf_statement_shared
+                                              ?.fnf_statement_shared === "NO" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="fnf_statement_shared"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.fnf_statement_shared === "NA" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>FnF Cleared</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="fnf_cleared"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.fnf_cleared === "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="fnf_cleared"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.fnf_cleared
+                                              ?.fnf_cleared === "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="fnf_cleared"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.fnf_cleared === "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Employee data sheet updated</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="employee_datasheet_updated"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.employee_datasheet_updated ===
+                                              "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="employee_datasheet_updated"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.employee_datasheet_updated
+                                              ?.employee_datasheet_updated ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="employee_datasheet_updated"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.employee_datasheet_updated ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>GHI Deletion</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="ghi_deletion"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_deletion === "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_deletion"
+                                          onChange={inputEventFinance}
+                                          value="NO"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.ghi_deletion
+                                              ?.ghi_deletion === "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
                                           }
                                         />
-                                        <span className="slider round"></span>
+                                        NO<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_deletion"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_deletion === "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
@@ -1294,132 +2152,334 @@ const Off_Boarding = () => {
                                     Folder
                                   </td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="employee_folder_moved_to_past_employee_folder"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.employee_folder_moved_to_past_employee_folder
+                                              ?.employee_folder_moved_to_past_employee_folder ===
+                                              "YES" && true
                                           }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
                                         />
-                                        <span className="slider round"></span>
+                                        YES<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="employee_folder_moved_to_past_employee_folder"
+                                          onChange={inputEventFinance}
+                                          value="NO"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.employee_folder_moved_to_past_employee_folder ===
+                                              "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NO<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="employee_folder_moved_to_past_employee_folder"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.employee_folder_moved_to_past_employee_folder ===
+                                              "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>GHI Opt out</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="ghi_opt_out"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventFinance}
+                                          value="YES"
                                           checked={
                                             inputData?.offboarding_finance
-                                              ?.ghi_opt_out
+                                              ?.ghi_opt_out === "YES" && true
                                           }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Finance" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
                                         />
-                                        <span className="slider round"></span>
+                                        YES<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_opt_out"
+                                          onChange={inputEventFinance}
+                                          value="NO"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_opt_out === "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NO<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_opt_out"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_opt_out === "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
-                                {inputData?.offboarding_finance
-                                  ?.ghi_opt_out && (
-                                  <>
-                                    <tr>
-                                      <td>GHI Initiated</td>
-                                      <td>
-                                        <div className="board">
-                                          <span>No</span>
-                                          <label className="switch ms-1 me-1 mt-1 ">
-                                            <input
-                                              type="checkbox"
-                                              name="ghi_initiated"
-                                              className="form-control form-control-sm"
-                                              onChange={inputEventFinance}
-                                              checked={
-                                                inputData?.offboarding_finance
-                                                  ?.ghi_initiated
-                                              }
-                                              disabled={
-                                                LocalStorageData?.zoho_role ===
-                                                  "Finance" ||
-                                                LocalStorageData?.zoho_role ===
-                                                  "Admin"
-                                                  ? false
-                                                  : true
-                                              }
-                                              style={{ opacity: "0" }}
-                                            />
-                                            <span className="slider round"></span>
-                                          </label>
-                                          <span>Yes</span>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <td>GHI E-Card issued</td>
-                                      <td>
-                                        <div className="board">
-                                          <span>No</span>
-                                          <label className="switch ms-1 me-1 mt-1 ">
-                                            <input
-                                              type="checkbox"
-                                              name="ghi_e_card_issued"
-                                              className="form-control form-control-sm"
-                                              onChange={inputEventFinance}
-                                              checked={
-                                                inputData?.offboarding_finance
-                                                  ?.ghi_e_card_issued
-                                              }
-                                              disabled={
-                                                LocalStorageData?.zoho_role ===
-                                                  "Finance" ||
-                                                LocalStorageData?.zoho_role ===
-                                                  "Admin"
-                                                  ? false
-                                                  : true
-                                              }
-                                              style={{ opacity: "0" }}
-                                            />
-                                            <span className="slider round"></span>
-                                          </label>
-                                          <span>Yes</span>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  </>
-                                )}
+
+                                <tr>
+                                  <td>GHI Initiated</td>
+                                  <td>
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_initiated"
+                                          onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_initiated === "YES" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_initiated"
+                                          onChange={inputEventFinance}
+                                          value="NO"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_initiated === "NO" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NO<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_initiated"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_initiated === "NA" && true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>GHI E-Card issued</td>
+                                  <td>
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_e_card_issued"
+                                          onChange={inputEventFinance}
+                                          value="YES"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_e_card_issued === "YES" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        YES<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_e_card_issued"
+                                          onChange={inputEventFinance}
+                                          value="NO"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_e_card_issued === "NO" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NO<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="ghi_e_card_issued"
+                                          onChange={inputEventFinance}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_finance
+                                              ?.ghi_e_card_issued === "NA" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Finance" &&
+                                            !inputData?.offboarding_finance
+                                              ?.finance_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                </tr>
                               </tbody>
                             </table>
                           </>
@@ -1493,8 +2553,9 @@ const Off_Boarding = () => {
                                   )}
                                   disabled={
                                     LocalStorageData?.zoho_role ===
-                                      "Management" ||
-                                    LocalStorageData?.zoho_role === "Admin"
+                                      "Management" &&
+                                    !inputData?.offboarding_management
+                                      ?.management_off_boarding_status
                                       ? false
                                       : true
                                   }
@@ -1513,62 +2574,168 @@ const Off_Boarding = () => {
                                 <tr>
                                   <td className="w-100">Handover Complete</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="handover_complete"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventManagement}
+                                          value="YES"
                                           checked={
                                             inputData?.offboarding_management
-                                              ?.handover_complete
+                                              ?.handover_complete === "YES" &&
+                                            true
                                           }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Management" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Management" &&
+                                            !inputData?.offboarding_management
+                                              ?.management_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
                                         />
-                                        <span className="slider round"></span>
+                                        YES<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="handover_complete"
+                                          onChange={inputEventManagement}
+                                          value="NO"
+                                          checked={
+                                            inputData?.offboarding_management
+                                              ?.handover_complete === "NO" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Management" &&
+                                            !inputData?.offboarding_management
+                                              ?.management_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NO<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="handover_complete"
+                                          onChange={inputEventManagement}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_management
+                                              ?.handover_complete === "NA" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Management" &&
+                                            !inputData?.offboarding_management
+                                              ?.management_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
                                 <tr>
                                   <td>Eligible for Rehire?</td>
                                   <td>
-                                    <div className="board">
-                                      <span>No</span>
-                                      <label className="switch ms-1 me-1 mt-1 ">
+                                    <div class="form-check form-check-success mb-0 mt-0">
+                                      <label class="form-check-label">
                                         <input
-                                          type="checkbox"
+                                          type="radio"
                                           name="eligible_for_rehire"
-                                          className="form-control form-control-sm"
                                           onChange={inputEventManagement}
+                                          value="YES"
                                           checked={
                                             inputData?.offboarding_management
-                                              ?.eligible_for_rehire
+                                              ?.eligible_for_rehire === "YES" &&
+                                            true
                                           }
+                                          style={{ opacity: "0" }}
                                           disabled={
                                             LocalStorageData?.zoho_role ===
-                                              "Management" ||
-                                            LocalStorageData?.zoho_role ===
-                                              "Admin"
+                                              "Management" &&
+                                            !inputData?.offboarding_management
+                                              ?.management_off_boarding_status
                                               ? false
                                               : true
                                           }
-                                          style={{ opacity: "0" }}
                                         />
-                                        <span className="slider round"></span>
+                                        YES<i class="input-helper"></i>
                                       </label>
-                                      <span>Yes</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-danger mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="eligible_for_rehire"
+                                          onChange={inputEventManagement}
+                                          value="NO"
+                                          checked={
+                                            inputData?.offboarding_management
+                                              ?.eligible_for_rehire === "NO" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Management" &&
+                                            !inputData?.offboarding_management
+                                              ?.management_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NO<i class="input-helper"></i>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="form-check form-check-info mb-0 mt-0">
+                                      <label class="form-check-label">
+                                        <input
+                                          type="radio"
+                                          name="eligible_for_rehire"
+                                          onChange={inputEventManagement}
+                                          value="NA"
+                                          checked={
+                                            inputData?.offboarding_management
+                                              ?.eligible_for_rehire === "NA" &&
+                                            true
+                                          }
+                                          style={{ opacity: "0" }}
+                                          disabled={
+                                            LocalStorageData?.zoho_role ===
+                                              "Management" &&
+                                            !inputData?.offboarding_management
+                                              ?.management_off_boarding_status
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        NA<i class="input-helper"></i>
+                                      </label>
                                     </div>
                                   </td>
                                 </tr>
@@ -1578,12 +2745,12 @@ const Off_Boarding = () => {
                         </div>
                       </div>
                       {/* <!==========  Update & Save Button ============> */}
-                      <div className="text-center">
+                      {/* <div className="text-center">
                         {inputData?._id ? (
                           <>
                             <button
                               className="btn btn-sm btn-gradient-dark mt-4"
-                              onClick={onUpdateNextButton}
+                              // onClick={onUpdateNextButton}
                               style={{
                                 display:
                                   LocalStorageData?.zoho_role === "Hr" &&
@@ -1606,7 +2773,7 @@ const Off_Boarding = () => {
                         ) : (
                           <button
                             className="btn btn-sm btn-gradient-dark  mt-4  "
-                            onClick={onSaveNextButton}
+                            // onClick={onSaveNextButton}
                             style={{
                               display:
                                 LocalStorageData?.zoho_role === "Hr" &&
@@ -1626,8 +2793,76 @@ const Off_Boarding = () => {
                             Submit
                           </button>
                         )}
-                      </div>
+                      </div> */}
                     </form>
+                  </div>
+                  <div className="text-center mb-4">
+                    {!getUserDetailsById?.on_boarding_status && (
+                      <>
+                        {(active == "1"
+                          ? inputData?.offboarding_hr?.hr_off_boarding_status
+                          : active == "2"
+                          ? inputData?.offboarding_finance
+                              ?.finance_off_boarding_status
+                          : inputData?.offboarding_management
+                              ?.management_off_boarding_status) && (
+                          <div className="text-success fw-bold">
+                            {active == "1"
+                              ? "HR "
+                              : active == "2"
+                              ? "Finance "
+                              : "Management "}
+                            offboarding has been completed
+                          </div>
+                        )}
+                      </>
+                    )}
+
+                    <div
+                      style={{
+                        display:
+                          LocalStorageData?.zoho_role === "Hr" &&
+                          active == "1" &&
+                          !inputData?.offboarding_hr?.hr_off_boarding_status
+                            ? "inline"
+                            : LocalStorageData?.zoho_role === "Finance" &&
+                              active == "2" &&
+                              !inputData?.offboarding_finance
+                                ?.finance_off_boarding_status
+                            ? "inline"
+                            : LocalStorageData?.zoho_role === "Management" &&
+                              active == "3" &&
+                              !inputData?.offboarding_management
+                                ?.management_off_boarding_status
+                            ? "inline"
+                            : LocalStorageData?.zoho_role === "Admin"
+                            ? "inline"
+                            : "none",
+                      }}
+                    >
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-gradient-dark me-2"
+                        onClick={() => onFinalSubmit("save")}
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-gradient-success me-2"
+                        onClick={() =>
+                          onFinalSubmit(
+                            active == "1"
+                              ? "hr_offboarding_complete"
+                              : active == "2"
+                              ? "finance_offboarding_complete"
+                              : "management_offboarding_complete"
+                          )
+                        }
+                      >
+                        Save & Submit
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
