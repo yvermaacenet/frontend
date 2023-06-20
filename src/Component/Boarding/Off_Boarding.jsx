@@ -125,12 +125,14 @@ const Off_Boarding = () => {
           return (
             // setRoless(resp.data),
             setActive(
-              resp.data?.Hr?.includes(LocalStorageData?.user_id) === true ||
-                resp.data?.Admin?.includes(LocalStorageData?.user_id) === true
+              resp.data?.Hr?.includes(LocalStorageData?.user_id) === true
                 ? 1
                 : resp.data?.Finance?.includes(LocalStorageData?.user_id) ===
                   true
                 ? 2
+                : resp.data?.Management?.includes(LocalStorageData?.user_id) ===
+                  true
+                ? 3
                 : 1
             ),
             // setRenderComponent(false),
