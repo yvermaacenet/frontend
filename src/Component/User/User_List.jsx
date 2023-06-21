@@ -40,13 +40,10 @@ const User_List = () => {
             })
             .then(async (result) => {
               const resp = result?.data;
-              console.log("resp", resp);
-              console.log("result_user_list", result_user_list);
               const tt = await result_user_list?.data.map((a) => ({
                 ...a,
                 ...resp?.find((b) => b?.user_id === a?._id),
               }));
-              console.log("tt", tt);
               return await axios
                 .get(`/off_boarding`, {
                   headers: {
@@ -298,7 +295,7 @@ const User_List = () => {
     }
     loadZohoData();
   };
-  console.log("getUserList", getUserList);
+  // console.log("getUserList", getUserList);
   return (
     <>
       <div className="container-scroller">
@@ -438,14 +435,8 @@ const User_List = () => {
                                           >
                                             Active
                                           </label>
-                                        ) : value?.offboarding_hr
-                                            ?.hr_off_boarding_status === true &&
-                                          value?.offboarding_finance
-                                            ?.finance_off_boarding_status ===
-                                            true &&
-                                          value?.offboarding_management
-                                            ?.management_off_boarding_status ===
-                                            true ? (
+                                        ) : value?.off_boarding_status ===
+                                          true ? (
                                           <label
                                             className={`text-muted fw-bold
                                          ms-2`}
@@ -460,73 +451,6 @@ const User_List = () => {
                                             Pending Offboarding
                                           </label>
                                         )}
-
-                                        {/* {(status_code === "active_employee" ||
-                                          status_code ===
-                                            "pending_offboarding_employee") &&
-                                          (compareDates1(
-                                            value?.creation_date?.split("T")[0],
-                                            specificDate
-                                          ) === false ||
-                                            value?.on_boarding_status) && (
-                                            <button
-                                              type="button"
-                                              className={`btn btn-sm ${
-                                                !value?.initiate_off_boarding_status &&
-                                                "btn-inverse-info"
-                                              } ms-2`}
-                                              title="Offboarding"
-                                              onClick={() => {
-                                                const confirmationButton =
-                                                  !value?.initiate_off_boarding_status &&
-                                                  window.confirm(
-                                                    value?.offboarding_hr
-                                                      ?.hr_off_boarding_status ===
-                                                      true &&
-                                                      value?.offboarding_finance
-                                                        ?.finance_off_boarding_status ===
-                                                        true &&
-                                                      value
-                                                        ?.offboarding_management
-                                                        ?.management_off_boarding_status ===
-                                                        true
-                                                      ? "Do you really want to check offboarding?"
-                                                      : "Do you really want to initiate offboarding?"
-                                                  );
-                                                if (
-                                                  confirmationButton === true
-                                                ) {
-                                                  navigate(
-                                                    `/off_boarding/${value?._id}`
-                                                  );
-                                                } else if (
-                                                  value?.initiate_off_boarding_status ===
-                                                  true
-                                                ) {
-                                                  navigate(
-                                                    `/off_boarding/${value?._id}`
-                                                  );
-                                                }
-                                              }}
-                                              style={{
-                                                display:
-                                                  value?.offboarding_hr
-                                                    ?.hr_off_boarding_status ===
-                                                    true &&
-                                                  value?.offboarding_finance
-                                                    ?.finance_off_boarding_status ===
-                                                    true &&
-                                                  value?.offboarding_management
-                                                    ?.management_off_boarding_status ===
-                                                    true
-                                                    ? "none"
-                                                    : "inline",
-                                              }}
-                                            >
-                                              {!value?.initiate_off_boarding_status &&
-                                                "Initiate Offboarding"}
-                                            </button>
-                                          )} */}
                                       </>
                                     )}
                                   </>
@@ -578,15 +502,7 @@ const User_List = () => {
                                             }
                                           }}
                                           disabled={
-                                            value?.offboarding_hr
-                                              ?.hr_off_boarding_status ===
-                                              true &&
-                                            value?.offboarding_finance
-                                              ?.finance_off_boarding_status ===
-                                              true &&
-                                            value?.offboarding_management
-                                              ?.management_off_boarding_status ===
-                                              true
+                                            value?.off_boarding_status
                                               ? true
                                               : false
                                           }

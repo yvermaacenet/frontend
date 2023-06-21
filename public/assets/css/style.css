@@ -17711,7 +17711,7 @@ code {
   .form-check-label
   input[type="radio"]:disabled:checked
   + .input-helper:before {
-  background: #84d9d2;
+  background: #acb0af;
 }
 .form-check
   .form-check-label

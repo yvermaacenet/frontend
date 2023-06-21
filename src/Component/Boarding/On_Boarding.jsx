@@ -75,7 +75,6 @@ const On_Boarding = () => {
   });
 
   const inputEventHr = (e) => {
-    console.log(e.target.value);
     const { name, value } = e.target;
     setInputData({ ...inputData, hr: { ...inputData?.hr, [name]: value } });
     // setUpdated_data({ ...updated_data, [name]: checked });
