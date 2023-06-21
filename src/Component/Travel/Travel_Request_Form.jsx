@@ -42,6 +42,8 @@ const TravelRequestForm = () => {
   const [error, setError] = useState(false);
   const [travellersData, setTravellersData] = useState([]);
   const [travellerRowId, setTravellerRowId] = useState("");
+  const [numberValue, setNumberValue] = useState("");
+
   // ================================================================================================================
 
   function formatBirthdate(birthdate) {
@@ -278,7 +280,7 @@ const TravelRequestForm = () => {
   ]);
 
   const handleAddRoom = () => {
-    const newRow = { id: roomsData.length + 1, data: {} };
+    const newRow = { id: roomsData.length + 1, data: { is_employee: "Yes" } };
     setRoomsData([...roomsData, newRow]);
   };
 
@@ -301,6 +303,8 @@ const TravelRequestForm = () => {
           id: id,
           data: {
             ...newData,
+            is_employee: "Yes",
+
             name: apiData[0]["ownerName"],
             gender: apiData[0]["Tags"],
             phone: apiData[0]["Personal Mobile Number"],
@@ -317,22 +321,10 @@ const TravelRequestForm = () => {
         console.error("Error fetching data from API:", error);
       }
     } else {
-      const updatedRow = {
-        id: id,
-        data: {
-          ...newData,
-          name: "",
-          gender: "",
-          phone: "",
-          email: "",
-          dob: "",
-        },
-      };
-
-      const updatedRows = travellersData.map((row) =>
-        row.id === id ? updatedRow : row
+      const updatedRooms = roomsData.map((row) =>
+        row.id === id ? { ...row, data: newData } : row
       );
-      setTravellersData(updatedRows);
+      setTravellersData(updatedRooms);
     }
   };
 
@@ -381,6 +373,31 @@ const TravelRequestForm = () => {
     }
     return options;
   };
+
+  // =========Current Date==========
+  function getCurrentDate() {
+    const today = new Date();
+    let month = String(today.getMonth() + 1);
+    let day = String(today.getDate());
+    const year = String(today.getFullYear());
+
+    // Add leading zeros if month or day is a single digit
+    if (month.length < 2) {
+      month = "0" + month;
+    }
+    if (day.length < 2) {
+      day = "0" + day;
+    }
+
+    return `${year}-${month}-${day}`;
+  }
+
+  // =====================filtering city data =============
+
+  console.log("citydata", cityData);
+  function filterObjectByLabel(cityData, data) {
+    return cityData.filter((item) => item.value !== data);
+  }
 
   return (
     <>
@@ -504,10 +521,10 @@ const TravelRequestForm = () => {
                         {/* ===================================Travel============================ */}
                         <hr />
                         <div className="">
-                          <div className="d-flex justify-content-start align-items-center ">
+                          <div className="d-flex justify-content-between  ">
                             <h5 className="text-primary">Travel</h5>{" "}
                             <p
-                              className="btn-sm btn mx-2 btn-primary "
+                              className="btn-sm btn  mx-2 btn-primary "
                               type="btn"
                               onClick={handleAddRow}
                             >
@@ -623,9 +640,12 @@ const TravelRequestForm = () => {
                                     isClearable={true}
                                     name="flight_to_city"
                                     required
-                                    options={cityData}
+                                    options={filterObjectByLabel(
+                                      cityData,
+                                      row.data.travel_from_city?.label
+                                    )}
                                     // defaultValue={[cityData[0]]}
-                                    value={row.data.travel_to_city}
+                                    value={row?.data?.travel_to_city}
                                     onChange={(selectedOption) =>
                                       handleDataChange(row.id, {
                                         ...row.data,
@@ -638,7 +658,7 @@ const TravelRequestForm = () => {
                                   <input
                                     type="date"
                                     required
-                                    value={row.data.departure}
+                                    min={getCurrentDate()}
                                     name="departure"
                                     className="form-control form-control-sm"
                                     onChange={(e) =>
@@ -653,6 +673,7 @@ const TravelRequestForm = () => {
                                   <input
                                     type="date"
                                     required
+                                    min={row?.data?.departure}
                                     value={row.data.return}
                                     name="return"
                                     className="form-control form-control-sm"
@@ -687,7 +708,7 @@ const TravelRequestForm = () => {
                         </button> */}
                         {/* ===============================Travellers==================== */}
                         <hr />
-                        <div className="d-flex justify-content-start align-items-center ">
+                        <div className="d-flex justify-content-between ">
                           <h5 className="text-primary">Travellers</h5>{" "}
                           <p
                             className="btn-sm btn mx-2 btn-primary "
@@ -795,30 +816,49 @@ const TravelRequestForm = () => {
                                   />
                                 </td>
                                 <td>
-                                  <input
-                                    // required
-                                    type="text"
-                                    disabled={
-                                      traveller?.data?.is_employee === "Yes"
-                                        ? true
-                                        : false
-                                    }
-                                    value={traveller?.data?.gender}
-                                    name="gender"
-                                    className="form-control form-control-sm"
-                                    onChange={(e) =>
-                                      handleTravellerChange(traveller.id, {
-                                        ...traveller?.data,
-                                        gender: e.target.value,
-                                      })
-                                    }
-                                  />
+                                  {traveller?.data?.is_employee === "Yes" ? (
+                                    <input
+                                      // required
+                                      type="text"
+                                      disabled={
+                                        traveller?.data?.is_employee === "Yes"
+                                          ? true
+                                          : false
+                                      }
+                                      value={traveller?.data?.gender}
+                                      name="gender"
+                                      className="form-control form-control-sm"
+                                      onChange={(e) =>
+                                        handleTravellerChange(traveller.id, {
+                                          ...traveller?.data,
+                                          gender: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  ) : (
+                                    <select
+                                      className="form-select form-control-sm"
+                                      onChange={(e) =>
+                                        handleTravellerChange(traveller.id, {
+                                          ...traveller?.data,
+                                          gender: e.target.value,
+                                        })
+                                      }
+                                    >
+                                      <option value="" selected disabled>
+                                        Select...
+                                      </option>
+                                      <option value="Male">Male</option>
+                                      <option value="Female">Female</option>
+                                    </select>
+                                  )}
                                 </td>
                                 <td>
                                   <input
                                     required
-                                    type="text"
-                                    maxLength="10"
+                                    type="number"
+                                    pattern="\d*"
+                                    // maxlength="10"
                                     disabled={
                                       traveller?.data?.is_employee === "Yes"
                                         ? true
@@ -827,13 +867,20 @@ const TravelRequestForm = () => {
                                     value={traveller?.data?.phone}
                                     name="phone"
                                     className="form-control form-control-sm"
-                                    onChange={(e) =>
+                                    onChange={(e) => {
+                                      let { value } = e.target;
+
+                                      // Limit the number of digits to 6
+                                      if (value.length > 10) {
+                                        value = value.slice(0, 10);
+                                      }
+
                                       handleTravellerChange(traveller.id, {
                                         ...traveller?.data,
 
-                                        phone: e.target.value,
-                                      })
-                                    }
+                                        phone: value,
+                                      });
+                                    }}
                                   />
                                 </td>
                                 <td>
@@ -905,8 +952,8 @@ const TravelRequestForm = () => {
 
                         {/* ===============================Accomendation====================== */}
                         <hr />
-                        <div className="d-flex justify-content-start align-items-center ">
-                          <h5 className="text-primary">Accomendation</h5>{" "}
+                        <div className="d-flex justify-content-between  ">
+                          <h5 className="text-primary">Accommodation </h5>{" "}
                           <p
                             className="btn-sm btn mx-2 btn-primary "
                             type="btn"
@@ -965,6 +1012,7 @@ const TravelRequestForm = () => {
                                   <input
                                     type="date"
                                     required
+                                    min={getCurrentDate()}
                                     value={accommodation.data.checkIn}
                                     name="checkIn"
                                     className="form-control form-control-sm"
@@ -984,6 +1032,7 @@ const TravelRequestForm = () => {
                                     required
                                     value={accommodation.data.checkOut}
                                     name="checkOut"
+                                    min={accommodation.data.checkIn}
                                     className="form-control form-control-sm"
                                     onChange={(e) =>
                                       handleAccommodationChange(
@@ -1023,8 +1072,9 @@ const TravelRequestForm = () => {
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                   >
-                                    Rooms: {accommodation.data.number_of_rooms}{" "}
-                                    | Adults :{" "}
+                                    Rooms:
+                                    {accommodation.data.number_of_rooms} |
+                                    Adults :{" "}
                                     {accommodation.data.number_of_adults}|
                                     Children:{" "}
                                     {accommodation.data.number_of_children}
@@ -1033,37 +1083,67 @@ const TravelRequestForm = () => {
                                   <div class="dropdown-menu form-floating">
                                     <div class="form-floating">
                                       <input
-                                        type="No. of Rooms"
+                                        type="number"
+                                        max="99"
                                         class="form-control form-control-sm h-25"
                                         id="floatingInput"
                                         name="number_of_rooms"
+                                        value={
+                                          accommodation?.data?.number_of_rooms
+                                        }
                                         placeholder="name@example.com"
-                                        onChange={(e) =>
+                                        onChange={(e) => {
+                                          let { value } = e.target;
+
+                                          // Remove leading zeros
+                                          value = value.replace(/^0+/, "");
+
+                                          // Limit the number of digits to 2
+                                          if (value.length > 2) {
+                                            value = value.slice(0, 2);
+                                          }
+
+                                          // Validate the value to be less than 99
+
                                           handleAccommodationChange(
                                             accommodation.id,
                                             {
-                                              number_of_rooms: e.target.value,
+                                              number_of_rooms: value,
                                             }
-                                          )
-                                        }
+                                          );
+                                        }}
                                       />
+
                                       <label for="floatingInput">Rooms</label>
                                     </div>
                                     <div class="form-floating">
                                       <input
-                                        type="No. of Adults"
+                                        type="number"
+                                        max={99}
                                         name="number_of_adults"
                                         class="form-control  form-control-sm h-25"
                                         id="floatingInput"
                                         placeholder="Password"
-                                        onChange={(e) =>
+                                        value={
+                                          accommodation?.data?.number_of_adults
+                                        }
+                                        onChange={(e) => {
+                                          let { value } = e.target;
+
+                                          // Remove leading zeros
+                                          value = value.replace(/^0+/, "");
+
+                                          // Limit the number of digits to 2
+                                          if (value.length > 2) {
+                                            value = value.slice(0, 2);
+                                          }
                                           handleAccommodationChange(
                                             accommodation.id,
                                             {
-                                              number_of_adults: e.target.value,
+                                              number_of_adults: value,
                                             }
-                                          )
-                                        }
+                                          );
+                                        }}
                                       />
                                       <label for="floatingPassword">
                                         Adults
@@ -1071,20 +1151,32 @@ const TravelRequestForm = () => {
                                     </div>
                                     <div class="form-floating">
                                       <input
-                                        type="No. of Children"
+                                        type="number"
                                         class="form-control  form-control-sm h-25"
                                         id="floatingInput"
                                         name="number_of_children"
+                                        value={
+                                          accommodation?.data
+                                            ?.number_of_children
+                                        }
                                         placeholder="No. of Children"
-                                        onChange={(e) =>
+                                        onChange={(e) => {
+                                          let { value } = e.target;
+
+                                          // Remove leading zeros
+                                          value = value.replace(/^0+/, "");
+
+                                          // Limit the number of digits to 2
+                                          if (value.length > 2) {
+                                            value = value.slice(0, 2);
+                                          }
                                           handleAccommodationChange(
                                             accommodation.id,
                                             {
-                                              number_of_children:
-                                                e.target.value,
+                                              number_of_children: value,
                                             }
-                                          )
-                                        }
+                                          );
+                                        }}
                                       />
                                       <label for="floatingPassword">
                                         Children
@@ -1118,7 +1210,7 @@ const TravelRequestForm = () => {
 
                         {/* ===============================Occupancy=================================== */}
                         <hr />
-                        <div className="d-flex justify-content-start align-items-center ">
+                        <div className="d-flex justify-content-between">
                           <h5 className="text-primary">Occupancy</h5>{" "}
                           <p
                             className="btn-sm btn mx-2 btn-primary "
@@ -1170,6 +1262,7 @@ const TravelRequestForm = () => {
                                     id=""
                                     onChange={(e) =>
                                       handleRoomChange(room.id, {
+                                        ...room.data,
                                         room: e.target.value,
                                       })
                                     }
@@ -1184,11 +1277,17 @@ const TravelRequestForm = () => {
                                   <input
                                     required
                                     type="text"
+                                    disabled={
+                                      room?.data?.is_employee === "Yes"
+                                        ? false
+                                        : true
+                                    }
                                     value={room.data.emp_id}
                                     name="emp_id"
                                     className="form-control form-control-sm"
                                     onChange={(e) =>
                                       handleRoomChange(room.id, {
+                                        ...room.data,
                                         emp_id: e.target.value,
                                       })
                                     }
@@ -1198,53 +1297,102 @@ const TravelRequestForm = () => {
                                   <input
                                     type="text"
                                     required
+                                    disabled={
+                                      room?.data?.is_employee === "Yes"
+                                        ? true
+                                        : false
+                                    }
                                     value={room?.data?.name}
                                     name="name"
                                     className="form-control form-control-sm"
                                     onChange={(e) =>
                                       handleRoomChange(room.id, {
+                                        ...room.data,
                                         name: e.target.value,
                                       })
                                     }
                                   />
                                 </td>
                                 <td>
-                                  <input
-                                    type="text"
-                                    required
-                                    value={room?.data?.gender}
-                                    name="gender"
-                                    className="form-control form-control-sm"
-                                    onChange={(e) =>
-                                      handleRoomChange(room.id, {
-                                        gender: e.target.value,
-                                      })
-                                    }
-                                  />
+                                  {room?.data?.is_employee === "Yes" ? (
+                                    <input
+                                      type="text"
+                                      required
+                                      disabled={
+                                        room?.data?.is_employee === "Yes"
+                                          ? true
+                                          : false
+                                      }
+                                      value={room?.data?.gender}
+                                      name="gender"
+                                      className="form-control form-control-sm"
+                                      onChange={(e) =>
+                                        handleRoomChange(room.id, {
+                                          ...room.data,
+                                          gender: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  ) : (
+                                    <select
+                                      className="form-select form-control-sm"
+                                      onChange={(e) =>
+                                        handleRoomChange(room.id, {
+                                          ...room.data,
+                                          gender: e.target.value,
+                                        })
+                                      }
+                                      value={room?.data?.gender}
+                                    >
+                                      <option value="" selected disabled>
+                                        Select...
+                                      </option>
+                                      <option value="Male">Male</option>
+                                      <option value="Female">Female</option>
+                                    </select>
+                                  )}
                                 </td>
                                 <td>
                                   <input
-                                    type="text"
+                                    type="number"
                                     required
+                                    disabled={
+                                      room?.data?.is_employee === "Yes"
+                                        ? true
+                                        : false
+                                    }
                                     value={room?.data?.phone}
                                     name="phone"
                                     className="form-control form-control-sm"
-                                    onChange={(e) =>
+                                    onChange={(e) => {
+                                      let { value } = e.target;
+
+                                      // Limit the number of digits to 6
+                                      if (value.length > 10) {
+                                        value = value.slice(0, 10);
+                                      }
                                       handleRoomChange(room.id, {
-                                        phone: e.target.value,
-                                      })
-                                    }
+                                        ...room.data,
+                                        phone: value,
+                                      });
+                                    }}
                                   />
                                 </td>
                                 <td>
                                   <input
                                     type="email"
                                     required
+                                    disabled={
+                                      room?.data?.is_employee === "Yes"
+                                        ? true
+                                        : false
+                                    }
                                     value={room?.data?.email}
                                     name="email"
                                     className="form-control form-control-sm"
                                     onChange={(e) =>
                                       handleRoomChange(room.id, {
+                                        ...room?.data,
                                         email: e.target.value,
                                       })
                                     }
@@ -1254,11 +1402,17 @@ const TravelRequestForm = () => {
                                   <input
                                     type="date"
                                     required
+                                    disabled={
+                                      room?.data?.is_employee === "Yes"
+                                        ? true
+                                        : false
+                                    }
                                     value={room?.data?.dob}
                                     name="dob"
                                     className="form-control form-control-sm"
                                     onChange={(e) =>
                                       handleRoomChange(room.id, {
+                                        ...room.data,
                                         dob: e.target.value,
                                       })
                                     }
