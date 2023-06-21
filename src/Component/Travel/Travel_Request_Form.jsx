@@ -856,8 +856,12 @@ const TravelRequestForm = () => {
                                 <td>
                                   <input
                                     required
-                                    type="number"
-                                    pattern="\d*"
+                                    type={
+                                      traveller?.data?.is_employee === "Yes"
+                                        ? "text"
+                                        : "number"
+                                    }
+                                    // pattern="\d*"
                                     // maxlength="10"
                                     disabled={
                                       traveller?.data?.is_employee === "Yes"
