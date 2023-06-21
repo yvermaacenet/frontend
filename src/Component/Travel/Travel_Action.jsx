@@ -61,7 +61,7 @@ const Travel_Action = (props) => {
 
     // getAllManagersList();
   }, []);
-
+  console.log("get", getData);
   //   ====Handle Remarks
   // console.log("status", getData?.management_status);
   // const handleRemarksChange = (e) => {
@@ -251,150 +251,190 @@ const Travel_Action = (props) => {
                       </tbody>
                     </table>
                     <>
-                      {/* =================Travel================================================ */}
+                      {/* =================Travellers================================================ */}
 
-                      <h6
-                        className="card-title text-primary mt-4"
-                        style={{ fontSize: "14px" }}
-                      >
-                        Travel
-                      </h6>
-                      <table className="table table-bordered my-4">
-                        <thead>
-                          <tr>
-                            <th className="w-25">Travel Mode</th>
-                            <th className="w-25">From City</th>
-                            <th className="w-25">To City</th>
-                            <th className="w-25">Departure Date</th>
-                            <th className="w-25">Return</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {getData?.rows?.map((val) => {
-                            return (
+                      {getData?.travellersData !== [] && (
+                        <>
+                          <hr />
+                          <h6
+                            className="card-title text-primary mt-4"
+                            style={{ fontSize: "14px" }}
+                          >
+                            Travellers
+                          </h6>
+                          <table className="table table-bordered my-4">
+                            <thead>
                               <tr>
-                                {" "}
-                                <td>{val?.data?.travel_mode}</td>
-                                <td>{val?.data?.travel_from_city.value}</td>
-                                <td>{val?.data?.travel_to_city.value}</td>
-                                <td>{val?.data?.departure?.split("T")[0]}</td>
-                                <td>{val?.data?.return?.split("T")[0]}</td>
+                                <th className="w-25">Employee</th>
+                                <th className="w-25">Employee ID</th>
+                                <th className="w-25">Full Name</th>
+                                <th className="w-25">Gender</th>
+                                <th className="w-25">Phone</th>
+                                <th className="w-25">Email</th>
+                                <th className="w-25">DOB(yyyy-dd-mm)</th>
                               </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                      {/* =================Travellers================================================ */}
-                      <hr />
-                      <h6
-                        className="card-title text-primary mt-4"
-                        style={{ fontSize: "14px" }}
-                      >
-                        Travellers
-                      </h6>
-                      <table className="table table-bordered my-4">
-                        <thead>
-                          <tr>
-                            <th className="w-25">Employee</th>
-                            <th className="w-25">Employee ID</th>
-                            <th className="w-25">Full Name</th>
-                            <th className="w-25">Gender</th>
-                            <th className="w-25">Phone</th>
-                            <th className="w-25">Email</th>
-                            <th className="w-25">DOB(yyyy-dd-mm)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {getData?.travellersData?.map((val) => {
-                            return (
-                              <tr>
-                                {" "}
-                                <td>{val?.data?.is_employee}</td>
-                                <td>{val?.data.emp_id}</td>
-                                <td>{val?.data?.name}</td>
-                                <td>{val?.data?.gender}</td>
-                                <td>{val?.data?.phone}</td>
-                                <td>{val?.data?.email}</td>
-                                <td>{val?.data?.dob?.split("T")[0]}</td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
+                            </thead>
+                            <tbody>
+                              {getData?.travellersData?.map((val) => {
+                                return (
+                                  <tr>
+                                    {" "}
+                                    <td>{val?.data?.is_employee}</td>
+                                    <td>{val?.data.emp_id}</td>
+                                    <td>{val?.data?.name}</td>
+                                    <td>{val?.data?.gender}</td>
+                                    <td>{val?.data?.phone}</td>
+                                    <td>{val?.data?.email}</td>
+                                    <td>{val?.data?.dob?.split("T")[0]}</td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </>
+                      )}
+
+                      {/* =================Travel================================================ */}
+                      {getData?.rows?.map(
+                        (val) =>
+                          val?.data !== undefined && (
+                            <>
+                              <h6
+                                className="card-title text-primary mt-4"
+                                style={{ fontSize: "14px" }}
+                              >
+                                Travel
+                              </h6>
+                              <table className="table table-bordered my-4">
+                                <thead>
+                                  <tr>
+                                    <th className="w-25">Travel Mode</th>
+                                    <th className="w-25">From City</th>
+                                    <th className="w-25">To City</th>
+                                    <th className="w-25">Departure Date</th>
+                                    <th className="w-25">Return</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {getData?.rows?.map((val) => {
+                                    return (
+                                      <tr>
+                                        {" "}
+                                        <td>{val?.data?.travel_mode}</td>
+                                        <td>
+                                          {val?.data?.travel_from_city.value}
+                                        </td>
+                                        <td>
+                                          {val?.data?.travel_to_city.value}
+                                        </td>
+                                        <td>
+                                          {val?.data?.departure?.split("T")[0]}
+                                        </td>
+                                        <td>
+                                          {val?.data?.return?.split("T")[0]}
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </>
+                          )
+                      )}
+
                       {/* =================Accomodation================================================ */}
-                      <hr />
-                      <h6
-                        className="card-title text-primary mt-4"
-                        style={{ fontSize: "14px" }}
-                      >
-                        Accomodation
-                      </h6>
-                      <table className="table table-bordered my-4">
-                        <thead>
-                          <tr>
-                            <th>City</th>
-                            <th>Check-in</th>
-                            <th>Check-out</th>
-                            <th>Breakfast Required</th>
-                            <th>Rooms Required</th>
-                            <th>No. Of Adults</th>
-                            <th>No. of Children</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {getData?.accommodationData?.map((val) => {
-                            return (
-                              <tr>
-                                {" "}
-                                <td>{val?.data.city.value}</td>
-                                <td>{(val?.data?.checkIn).split("T")[0]}</td>
-                                <td>{(val?.data?.checkOut).split("T")[0]}</td>
-                                <td>{val?.data?.breakfastRequired}</td>
-                                <td>{val?.data?.number_of_rooms}</td>
-                                <td>{val?.data?.number_of_adults}</td>
-                                <td>{val?.data?.number_of_children}</td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                      {/* =================Travellers================================================ */}
-                      <hr />
-                      <h6
-                        className="card-title text-primary mt-4"
-                        style={{ fontSize: "14px" }}
-                      >
-                        Occupancy
-                      </h6>
-                      <table className="table table-bordered my-4">
-                        <thead>
-                          <tr>
-                            <th className="w-25">Employee</th>
-                            <th className="w-25">Employee ID</th>
-                            <th className="w-25">Full Name</th>
-                            <th className="w-25">Gender</th>
-                            <th className="w-25">Phone</th>
-                            <th className="w-25">Email</th>
-                            <th className="w-25">DOB(yyyy-dd-mm)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {getData?.roomsData?.map((val) => {
-                            return (
-                              <tr>
-                                {" "}
-                                <td>{val?.data?.is_employee}</td>
-                                <td>{val?.data?.emp_id}</td>
-                                <td>{val?.data?.name}</td>
-                                <td>{val?.data?.gender}</td>
-                                <td>{val?.data?.phone}</td>
-                                <td>{val?.data?.email}</td>
-                                <td>{val?.data?.dob?.split("T")[0]}</td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
+                      {getData?.accommodationData?.map(
+                        (val) =>
+                          val?.data !== undefined && (
+                            <>
+                              <hr />
+                              <h6
+                                className="card-title text-primary mt-4"
+                                style={{ fontSize: "14px" }}
+                              >
+                                Accomodation
+                              </h6>
+                              <table className="table table-bordered my-4">
+                                <thead>
+                                  <tr>
+                                    <th>City</th>
+                                    <th>Check-in</th>
+                                    <th>Check-out</th>
+                                    <th>Breakfast Required</th>
+                                    <th>Rooms Required</th>
+                                    <th>No. Of Adults</th>
+                                    <th>No. of Children</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {getData?.accommodationData?.map((val) => {
+                                    return (
+                                      <tr>
+                                        {" "}
+                                        <td>{val?.data?.city.value}</td>
+                                        <td>
+                                          {val?.data?.checkIn?.split("T")[0]}
+                                        </td>
+                                        <td>
+                                          {val?.data?.checkOut?.split("T")[0]}
+                                        </td>
+                                        <td>{val?.data?.breakfastRequired}</td>
+                                        <td>{val?.data?.number_of_rooms}</td>
+                                        <td>{val?.data?.number_of_adults}</td>
+                                        <td>{val?.data?.number_of_children}</td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </>
+                          )
+                      )}
+
+                      {/* =================Occupancy================================================ */}
+                      {getData?.accommodationData?.map(
+                        (val) =>
+                          val?.data !== undefined && (
+                            <>
+                              <hr />
+                              <h6
+                                className="card-title text-primary mt-4"
+                                style={{ fontSize: "14px" }}
+                              >
+                                Occupancy
+                              </h6>
+                              <table className="table table-bordered my-4">
+                                <thead>
+                                  <tr>
+                                    <th className="w-25">Employee</th>
+                                    <th className="w-25">Employee ID</th>
+                                    <th className="w-25">Full Name</th>
+                                    <th className="w-25">Gender</th>
+                                    <th className="w-25">Phone</th>
+                                    <th className="w-25">Email</th>
+                                    <th className="w-25">DOB(yyyy-dd-mm)</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {getData?.roomsData?.map((val) => {
+                                    return (
+                                      <tr>
+                                        {" "}
+                                        <td>{val?.data?.is_employee}</td>
+                                        <td>{val?.data?.emp_id}</td>
+                                        <td>{val?.data?.name}</td>
+                                        <td>{val?.data?.gender}</td>
+                                        <td>{val?.data?.phone}</td>
+                                        <td>{val?.data?.email}</td>
+                                        <td>{val?.data?.dob?.split("T")[0]}</td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </>
+                          )
+                      )}
                     </>
 
                     {LocalStorageData?.zoho_role === "Management" &&
