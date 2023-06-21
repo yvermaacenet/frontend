@@ -319,7 +319,7 @@ const TravelRequestForm = () => {
       const updatedRooms = roomsData.map((row) =>
         row.id === id ? { ...row, data: newData } : row
       );
-      setTravellersData(updatedRooms);
+      setRoomsData(updatedRooms);
     }
   };
 
@@ -1228,7 +1228,7 @@ const TravelRequestForm = () => {
                         </button> */}
 
                           {/* ===============================Occupancy=================================== */}
-                          <div className="d-flex justify-content-between">
+                          <div className="d-flex justify-content-between mt-2">
                             <h5 className="text-primary">Occupancy</h5>{" "}
                             <p
                               className="btn-sm btn mx-2 btn-primary "
