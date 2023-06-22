@@ -17,16 +17,17 @@ import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
 
 // =====================Data=============
 const projectId = [
-  "ACE12345",
-  "ACE67890",
-  "ACE24680",
-  "ACE13579",
-  "WWNI9876",
-  "WWNI5432",
-  "MAMR2468",
-  "MAMR1357",
+  "ACENET-12345",
+  "ACENET-67890",
+  "ACENET-24680",
+  "ACENET-13579",
+  "WADHWANI9876",
+  "WADHWANI5432",
+  "MASTER2468",
+  "MASTER1357",
 ];
 const clientId = ["ACENET", "WADHWANI", "MASTER MARINE"];
+
 const travelMode = ["Flight", "Train", "Intercity Cab"];
 
 // =====================Data End=============
@@ -43,7 +44,18 @@ const TravelRequestForm = () => {
   const [travellersData, setTravellersData] = useState([]);
   const [travellerRowId, setTravellerRowId] = useState("");
   const [numberValue, setNumberValue] = useState("");
+  const [selectedClientId, setSelectedClientId] = useState("");
+  const [filteredProjectIds, setFilteredProjectIds] = useState([]);
 
+  const handleClientChange = (e) => {
+    const selectedClient = e.target.value;
+    setSelectedClientId(selectedClient);
+    setBasicDetails({ ...basicDetails, client_id: selectedClient });
+    const filteredProjects = projectId.filter((project) =>
+      project.startsWith(selectedClient.slice(0, 3))
+    );
+    setFilteredProjectIds(filteredProjects);
+  };
   // ================================================================================================================
 
   function formatBirthdate(birthdate) {
@@ -114,7 +126,7 @@ const TravelRequestForm = () => {
   // ==========For Top Level Details==============
   const [basicDetails, setBasicDetails] = useState({
     billable: "",
-    client_id: "",
+    client_id: selectedClientId,
     project_id: "",
     reason_for_travel: "",
     special_request: "",
@@ -153,10 +165,10 @@ const TravelRequestForm = () => {
   //
   //
   // ========For Travel Request========
-  const [rows, setRows] = useState([{ data: "" }]);
+  const [rows, setRows] = useState([{ id: 1, data: { trip_type: "OneWay" } }]);
 
   const handleAddRow = () => {
-    const newRow = { id: rows.length + 1, data: {} };
+    const newRow = { id: rows.length + 1, data: { trip_type: "OneWay" } };
     setRows([...rows, newRow]);
   };
 
@@ -392,6 +404,7 @@ const TravelRequestForm = () => {
   function filterObjectByLabel(cityData, data) {
     return cityData.filter((item) => item.value !== data);
   }
+  // =================Format date For Inputs===============
 
   return (
     <>
@@ -441,56 +454,39 @@ const TravelRequestForm = () => {
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Client Id</label>
-                              <span className="astik"> *</span>
+
                               <select
-                                // required
                                 class="form-select form-select-sm"
-                                value={basicDetails?.client_id}
-                                onChange={inputEvent}
+                                value={selectedClientId}
                                 name="client_id"
+                                onChange={handleClientChange}
                               >
-                                <option value="" disabled>
-                                  Select
-                                </option>
-                                {clientId.map((pid) => {
-                                  return <option value={pid}>{pid}</option>;
-                                })}{" "}
+                                <option value="">Select Client</option>
+                                {clientId.map((client) => (
+                                  <option key={client} value={client}>
+                                    {client}
+                                  </option>
+                                ))}
                               </select>
-                              {/* <small className="invalid-feedback">
-                                  {errors.project_id?.message}
-                                </small> */}
                             </div>
                           </div>
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Project Id</label>
-                              <span className="astik"> *</span>
+
                               <select
-                                // required
                                 class="form-select form-select-sm"
-                                // className={classNames(
-                                //   "form-select "
-                                //   // {
-                                //   //   "is-invalid": errors?.billable,
-                                //   // }
-                                // )}
-                                // {...register("billable", {
-                                //   value: employee?.billable,
-                                // })}
                                 value={setBasicDetails?.project_id}
                                 onChange={inputEvent}
                                 name="project_id"
                               >
-                                <option value="" selected disabled>
-                                  Select
-                                </option>
-                                {projectId.map((pid) => {
-                                  return <option value={pid}>{pid}</option>;
-                                })}{" "}
+                                <option value="">Select Project</option>
+                                {filteredProjectIds.map((project) => (
+                                  <option key={project} value={project}>
+                                    {project}
+                                  </option>
+                                ))}
                               </select>
-                              {/* <small className="invalid-feedback">
-                                  {errors.project_id?.message}
-                                </small> */}
                             </div>
                           </div>
                           <div className="col-12 col-lg-3">
@@ -777,7 +773,7 @@ const TravelRequestForm = () => {
                               </p>
                             </div>
                             {/* ===========Radio Box======= */}
-                            <div className="row my-2">
+                            {/* <div className="row my-2">
                               <div className="col-12 col-lg-6">
                                 <div className="row">
                                   <div className="col-12 col-lg-4">
@@ -821,16 +817,17 @@ const TravelRequestForm = () => {
                                     Multi-Way <i className="input-helper"></i>
                                   </label>
                                 </div>
-                              </div> */}
+                              </div> 
                                 </div>
                               </div>
-                            </div>
+                            </div> */}
                           </div>
 
                           <table className="table table-bordered">
                             <thead>
                               <tr>
                                 <th>Mode</th>
+                                <th>Trip</th>
                                 <th>From (City)</th>
                                 <th>To (City)</th>
                                 <th>Departure</th>
@@ -861,6 +858,25 @@ const TravelRequestForm = () => {
                                           {mode}
                                         </option>
                                       ))}
+                                    </select>
+                                  </td>
+                                  <td>
+                                    <select
+                                      // required
+                                      name="trip_type"
+                                      className="form-control form-control-sm"
+                                      value={row?.data?.trip_type}
+                                      onChange={(e) =>
+                                        handleDataChange(row.id, {
+                                          ...row.data,
+                                          trip_type: e.target.value,
+                                        })
+                                      }
+                                    >
+                                      <option value="OneWay" selected>
+                                        One-Way
+                                      </option>
+                                      <option value="Return">Return</option>
                                     </select>
                                   </td>
                                   <td>
@@ -929,7 +945,9 @@ const TravelRequestForm = () => {
                                         })
                                       }
                                       disabled={
-                                        travelType.round_trip ? false : true
+                                        row.data.trip_type === "OneWay"
+                                          ? true
+                                          : false
                                       }
                                     />
                                   </td>
