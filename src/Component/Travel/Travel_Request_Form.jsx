@@ -13,9 +13,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { travel_request_form_validation } from "../../Utils/Validation_Form";
 import { border } from "@mui/system";
 import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
-import { DatePicker } from "react-datepicker";
-// testing
+// testint
 
 // =====================Data=============
 const projectId = [
@@ -526,7 +527,9 @@ const TravelRequestForm = () => {
                           }}
                         >
                           <div className="d-flex justify-content-between ">
-                            <h3 className="text-primary">Travellers</h3>{" "}
+                            <h3 className="" style={{ color: "#d03e20" }}>
+                              Travellers
+                            </h3>{" "}
                             {/* <p
                               className="mx-2 btn btn-xs "
                               type="btn"
@@ -534,8 +537,12 @@ const TravelRequestForm = () => {
                             >
                               <RiAddFill />
                             </p> */}
-                            <div class="Btn my-2" onClick={handleAddTraveller}>
-                              <div class="sign" title="Add Traveller">
+                            <div
+                              id="add_traveller"
+                              class="Btn my-2"
+                              onClick={handleAddTraveller}
+                            >
+                              <div class="sign">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 24 24"
@@ -774,12 +781,13 @@ const TravelRequestForm = () => {
                                   </td>
                                   <td>
                                     <div
+                                      id="Delete_Traveller"
                                       class="Btn my-2"
                                       onClick={() =>
                                         handleTravellerDeleteRow(traveller.id)
                                       }
                                     >
-                                      <div class="sign" title="Add Traveller">
+                                      <div class="sign">
                                         <svg
                                           xmlns="http://www.w3.org/2000/svg"
                                           viewBox="0 0 30 30"
@@ -807,7 +815,11 @@ const TravelRequestForm = () => {
                               >
                                 <RiAddFill />
                               </p> */}
-                              <div class="Btn my-2" onClick={handleAddRow}>
+                              <div
+                                id="add_travel"
+                                class="Btn my-2"
+                                onClick={handleAddRow}
+                              >
                                 <div class="sign" title="Add Travel">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -1005,10 +1017,11 @@ const TravelRequestForm = () => {
                                   </td>
                                   <td>
                                     <div
+                                      id="Delete_Travel"
                                       class="Btn my-2"
                                       onClick={() => handleDeleteRow(row.id)}
                                     >
-                                      <div class="sign" title="Add Traveller">
+                                      <div class="sign">
                                         <svg
                                           xmlns="http://www.w3.org/2000/svg"
                                           viewBox="0 0 30 30"
@@ -1025,19 +1038,6 @@ const TravelRequestForm = () => {
                             </tbody>
                           </table>
                         </div>
-                        {/* <button
-                          className="btn btn-primary btn-sm"
-                          onClick={handleAddRow}
-                        >
-                          <RiAddFill />
-                        </button> */}
-
-                        {/* <button
-                          className="btn btn-primary btn-sm"
-                          onClick={handleAddTraveller}
-                        >
-                          <RiAddFill />
-                        </button> */}
 
                         {/* ===============================Accomendation====================== */}
                         <div
@@ -1048,7 +1048,9 @@ const TravelRequestForm = () => {
                           }}
                         >
                           <div className="d-flex justify-content-between">
-                            <h3 className="text-primary">Accommodation </h3>{" "}
+                            <h3 className="" style={{ color: "#d03e20" }}>
+                              Accommodation{" "}
+                            </h3>{" "}
                             {/* <p
                               className="btn-sm btn mx-2 btn-primary "
                               type="btn"
@@ -1057,10 +1059,11 @@ const TravelRequestForm = () => {
                               <RiAddFill />
                             </p> */}
                             <div
+                              id="add_accommodation"
                               class="Btn my-2"
                               onClick={handleAddAccommodation}
                             >
-                              <div class="sign" title="Add Accommodation">
+                              <div class="sign">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 24 24"
@@ -1314,6 +1317,7 @@ const TravelRequestForm = () => {
                                       <RiDeleteBin6Line />
                                     </button> */}
                                     <div
+                                      id="Delete_Accommodation"
                                       class="Btn my-2"
                                       onClick={() =>
                                         handleAccommodationDeleteRow(
@@ -1321,7 +1325,7 @@ const TravelRequestForm = () => {
                                         )
                                       }
                                     >
-                                      <div class="sign" title="Add Traveller">
+                                      <div class="sign">
                                         <svg
                                           xmlns="http://www.w3.org/2000/svg"
                                           viewBox="0 0 30 30"
@@ -1354,7 +1358,11 @@ const TravelRequestForm = () => {
                             >
                               <RiAddFill />
                             </p> */}
-                            <div class="Btn my-2" onClick={handleAddRoom}>
+                            <div
+                              id="add_occupancy"
+                              class="Btn my-2"
+                              onClick={handleAddRoom}
+                            >
                               <div class="sign" title="Add Occupancy">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -1577,12 +1585,13 @@ const TravelRequestForm = () => {
                                   </td>
                                   <td>
                                     <div
+                                      id="Delete_Occupancy"
                                       class="Btn my-2"
                                       onClick={() =>
                                         handleRoomDeleteRow(room.id)
                                       }
                                     >
-                                      <div class="sign" title="Add Traveller">
+                                      <div class="sign">
                                         <svg
                                           xmlns="http://www.w3.org/2000/svg"
                                           viewBox="0 0 30 30"
@@ -1617,6 +1626,7 @@ const TravelRequestForm = () => {
                         <div className="row my-4 text-center">
                           <div className="col-12">
                             <button
+                              id="res"
                               type="submit"
                               className="btn btn-primary btn-sm"
                             >
@@ -1625,6 +1635,46 @@ const TravelRequestForm = () => {
                           </div>
                         </div>
                       </form>
+                      <ReactTooltip
+                        anchorId="add_traveller"
+                        place="top"
+                        content="Add More Travellers"
+                      />
+                      <ReactTooltip
+                        anchorId="add_travel"
+                        place="top"
+                        content="Add More Travel"
+                      />
+                      <ReactTooltip
+                        anchorId="add_accommodation"
+                        place="top"
+                        content="Add More Accommodation"
+                      />
+                      <ReactTooltip
+                        anchorId="add_occupancy"
+                        place="top"
+                        content="Add More Occupancy"
+                      />
+                      <ReactTooltip
+                        anchorId="Delete_Traveller"
+                        place="right"
+                        content="Delete"
+                      />
+                      <ReactTooltip
+                        anchorId="Delete_Travel"
+                        place="right"
+                        content="Delete"
+                      />
+                      <ReactTooltip
+                        anchorId="Delete_Accommodation"
+                        place="right"
+                        content="Delete"
+                      />
+                      <ReactTooltip
+                        anchorId="Delete_Occupancy"
+                        place="right"
+                        content="Delete"
+                      />
                     </div>
                   </div>
                 </div>
