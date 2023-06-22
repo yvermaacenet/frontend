@@ -322,10 +322,10 @@ const Travel_Action = (props) => {
                                         {" "}
                                         <td>{val?.data?.travel_mode}</td>
                                         <td>
-                                          {val?.data?.travel_from_city.value}
+                                          {val?.data?.travel_from_city?.value}
                                         </td>
                                         <td>
-                                          {val?.data?.travel_to_city.value}
+                                          {val?.data?.travel_to_city?.value}
                                         </td>
                                         <td>
                                           {val?.data?.departure?.split("T")[0]}

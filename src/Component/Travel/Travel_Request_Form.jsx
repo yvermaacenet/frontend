@@ -13,6 +13,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { travel_request_form_validation } from "../../Utils/Validation_Form";
 import { border } from "@mui/system";
 import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
+
+import { DatePicker } from "react-datepicker";
 // testing
 
 // =====================Data=============
@@ -185,7 +187,8 @@ const TravelRequestForm = () => {
   //
   // ==========For Travellers======
 
-  const handleAddTraveller = () => {
+  const handleAddTraveller = (e) => {
+    e.preventDefault();
     const newRow = {
       id: travellersData.length + 1,
       data: { is_employee: "Yes" },
@@ -201,6 +204,7 @@ const TravelRequestForm = () => {
     );
     setTravellersData(updatedTraveller);
     // Fetch data from the API based on emp_id
+    // if(newData.is_employee)
     if (newData.emp_id) {
       try {
         const response = await axios.get(
@@ -522,14 +526,30 @@ const TravelRequestForm = () => {
                           }}
                         >
                           <div className="d-flex justify-content-between ">
-                            <h5 className="text-primary">Travellers</h5>{" "}
-                            <p
-                              className="btn-sm btn mx-2 btn-primary "
+                            <h3 className="text-primary">Travellers</h3>{" "}
+                            {/* <p
+                              className="mx-2 btn btn-xs "
                               type="btn"
                               onClick={handleAddTraveller}
                             >
                               <RiAddFill />
-                            </p>
+                            </p> */}
+                            <div class="Btn my-2" onClick={handleAddTraveller}>
+                              <div class="sign" title="Add Traveller">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  width="24px"
+                                  height="24px"
+                                  fill-rule="evenodd"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
                           </div>
                           <table className="table table-bordered">
                             <thead>
@@ -556,7 +576,13 @@ const TravelRequestForm = () => {
                                       value={traveller?.data?.is_employee}
                                       onChange={(e) =>
                                         handleTravellerChange(traveller.id, {
-                                          ...traveller?.data,
+                                          // ...traveller?.data,
+                                          name: "",
+                                          emp_id: "",
+                                          email: "",
+                                          phone: "",
+                                          dob: "",
+                                          gender: "",
                                           is_employee: e.target.value,
                                         })
                                       }
@@ -579,7 +605,11 @@ const TravelRequestForm = () => {
                                       }
                                       name="emp_id"
                                       className="form-control form-control-sm"
-                                      value={traveller?.data?.emp_id}
+                                      value={
+                                        traveller?.data?.is_employee
+                                          ? traveller?.data?.emp_id
+                                          : ""
+                                      }
                                       onChange={(e) =>
                                         handleTravellerChange(traveller.id, {
                                           ...traveller?.data,
@@ -743,17 +773,23 @@ const TravelRequestForm = () => {
                                     />
                                   </td>
                                   <td>
-                                    <button
-                                      // disabled={
-                                      //   travellersData?.length > 1 ? false : true
-                                      // }
-                                      className="btn btn-danger btn-sm"
+                                    <div
+                                      class="Btn my-2"
                                       onClick={() =>
                                         handleTravellerDeleteRow(traveller.id)
                                       }
                                     >
-                                      <RiDeleteBin6Line />
-                                    </button>
+                                      <div class="sign" title="Add Traveller">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          viewBox="0 0 30 30"
+                                          width="30px"
+                                          height="30px"
+                                        >
+                                          <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                        </svg>
+                                      </div>
+                                    </div>
                                   </td>
                                 </tr>
                               ))}
@@ -764,13 +800,29 @@ const TravelRequestForm = () => {
                           <div className="mt-4">
                             <div className="d-flex justify-content-between  ">
                               <h5 className="text-primary">Travel</h5>{" "}
-                              <p
+                              {/* <p
                                 className="btn-sm btn  mx-2 btn-primary "
                                 type="btn"
                                 onClick={handleAddRow}
                               >
                                 <RiAddFill />
-                              </p>
+                              </p> */}
+                              <div class="Btn my-2" onClick={handleAddRow}>
+                                <div class="sign" title="Add Travel">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    width="24px"
+                                    height="24px"
+                                    fill-rule="evenodd"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                    />
+                                  </svg>
+                                </div>
+                              </div>
                             </div>
                             {/* ===========Radio Box======= */}
                             {/* <div className="row my-2">
@@ -952,12 +1004,21 @@ const TravelRequestForm = () => {
                                     />
                                   </td>
                                   <td>
-                                    <button
-                                      className="btn btn-danger btn-sm "
+                                    <div
+                                      class="Btn my-2"
                                       onClick={() => handleDeleteRow(row.id)}
                                     >
-                                      <RiDeleteBin6Line />
-                                    </button>
+                                      <div class="sign" title="Add Traveller">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          viewBox="0 0 30 30"
+                                          width="30px"
+                                          height="30px"
+                                        >
+                                          <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                        </svg>
+                                      </div>
+                                    </div>
                                   </td>
                                 </tr>
                               ))}
@@ -986,15 +1047,34 @@ const TravelRequestForm = () => {
                             padding: "1rem",
                           }}
                         >
-                          <div className="d-flex justify-content-between  ">
-                            <h5 className="text-primary">Accommodation </h5>{" "}
-                            <p
+                          <div className="d-flex justify-content-between">
+                            <h3 className="text-primary">Accommodation </h3>{" "}
+                            {/* <p
                               className="btn-sm btn mx-2 btn-primary "
                               type="btn"
                               onClick={handleAddAccommodation}
                             >
                               <RiAddFill />
-                            </p>
+                            </p> */}
+                            <div
+                              class="Btn my-2"
+                              onClick={handleAddAccommodation}
+                            >
+                              <div class="sign" title="Add Accommodation">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  width="24px"
+                                  height="24px"
+                                  fill-rule="evenodd"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
                           </div>
 
                           <table className="table table-bordered">
@@ -1223,7 +1303,7 @@ const TravelRequestForm = () => {
                                   </td>
 
                                   <td>
-                                    <button
+                                    {/* <button
                                       className="btn btn-danger btn-sm"
                                       onClick={() =>
                                         handleAccommodationDeleteRow(
@@ -1232,7 +1312,26 @@ const TravelRequestForm = () => {
                                       }
                                     >
                                       <RiDeleteBin6Line />
-                                    </button>
+                                    </button> */}
+                                    <div
+                                      class="Btn my-2"
+                                      onClick={() =>
+                                        handleAccommodationDeleteRow(
+                                          accommodation.id
+                                        )
+                                      }
+                                    >
+                                      <div class="sign" title="Add Traveller">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          viewBox="0 0 30 30"
+                                          width="30px"
+                                          height="30px"
+                                        >
+                                          <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                        </svg>
+                                      </div>
+                                    </div>
                                   </td>
                                 </tr>
                               ))}
@@ -1246,15 +1345,31 @@ const TravelRequestForm = () => {
                         </button> */}
 
                           {/* ===============================Occupancy=================================== */}
-                          <div className="d-flex justify-content-between mt-2">
+                          <div className="d-flex justify-content-between mt-5">
                             <h5 className="text-primary">Occupancy</h5>{" "}
-                            <p
+                            {/* <p
                               className="btn-sm btn mx-2 btn-primary "
                               type="btn"
                               onClick={handleAddRoom}
                             >
                               <RiAddFill />
-                            </p>
+                            </p> */}
+                            <div class="Btn my-2" onClick={handleAddRoom}>
+                              <div class="sign" title="Add Occupancy">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  width="24px"
+                                  height="24px"
+                                  fill-rule="evenodd"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                  />
+                                </svg>
+                              </div>
+                            </div>
                           </div>
                           <table className="table table-bordered">
                             <thead>
@@ -1281,6 +1396,12 @@ const TravelRequestForm = () => {
                                       className="form-control form-control-sm"
                                       onChange={(e) =>
                                         handleRoomChange(room.id, {
+                                          name: "",
+                                          emp_id: "",
+                                          email: "",
+                                          phone: "",
+                                          dob: "",
+                                          gender: "",
                                           is_employee: e.target.value,
                                         })
                                       }
@@ -1455,14 +1576,23 @@ const TravelRequestForm = () => {
                                     />
                                   </td>
                                   <td>
-                                    <button
-                                      className="btn btn-danger btn-sm"
+                                    <div
+                                      class="Btn my-2"
                                       onClick={() =>
                                         handleRoomDeleteRow(room.id)
                                       }
                                     >
-                                      <RiDeleteBin6Line />
-                                    </button>
+                                      <div class="sign" title="Add Traveller">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          viewBox="0 0 30 30"
+                                          width="30px"
+                                          height="30px"
+                                        >
+                                          <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                        </svg>
+                                      </div>
+                                    </div>
                                   </td>
                                 </tr>
                               ))}
