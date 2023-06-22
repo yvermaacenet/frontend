@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -134,8 +136,19 @@ const Navbar = () => {
                 </NavLink>
                 <div className="dropdown-divider"></div>
               </div> */}
+
+              <ReactTooltip
+                anchorId="fullscreen_tooltip"
+                place="bottom"
+                content="Go Full Screen"
+              />
             </li>
-            <li className="nav-item d-none d-lg-block full-screen-link">
+            <li
+              data-for="enrich"
+              data-tip="sooooo cute"
+              id="fullscreen_tooltip"
+              className="nav-item d-none d-lg-block full-screen-link"
+            >
               <a className="nav-link">
                 <i className="mdi mdi-fullscreen" id="fullscreen-button"></i>
               </a>
@@ -287,7 +300,16 @@ const Navbar = () => {
             {/* </div>
               </li>
             )} */}
-            <li className="nav-item nav-logout d-none d-lg-block">
+            <ReactTooltip
+              anchorId="logout_tooltip"
+              place="bottom"
+              content="Logout"
+            />
+
+            <li
+              id="logout_tooltip"
+              className="nav-item nav-logout d-none d-lg-block"
+            >
               <NavLink
                 className="nav-link"
                 onClick={() => {
@@ -297,12 +319,20 @@ const Navbar = () => {
                   );
                 }}
                 to="/"
-                title="Signout"
               >
                 <i className="mdi mdi-power"></i>
               </NavLink>
             </li>
-            <li className="nav-item nav-settings d-none d-lg-block">
+
+            <ReactTooltip
+              anchorId="scrolltotop"
+              place="bottom"
+              content="Scroll To Top"
+            />
+            <li
+              id="scrolltotop"
+              className="nav-item nav-settings d-none d-lg-block"
+            >
               <a className="nav-link" href="#">
                 <i className="mdi mdi-format-line-spacing"></i>
               </a>
