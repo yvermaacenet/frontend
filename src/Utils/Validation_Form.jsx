@@ -474,7 +474,7 @@ export const travel_request_form_validation = yup.object({
   project_id: yup.string().required("This field is required"),
   client_id: yup.string().required("This field is required"),
   reason_for_travel: yup.string().required("This field is required"),
-  accommodation_required: yup.string().required("This field is required"),
+  // accommodation_required: yup.string().required("This field is required"),
   // emp_id: yup.string().required("This field is required"),
   // start_date: yup.string().required("This field is required"),
   // end_date: yup

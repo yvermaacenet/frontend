@@ -62,6 +62,8 @@ const TravelRequestForm = () => {
   const [numberValue, setNumberValue] = useState("");
   const [selectedClientId, setSelectedClientId] = useState("");
   const [filteredProjectIds, setFilteredProjectIds] = useState([]);
+  const [treavellerButton, setTreavellerButton] = useState(false);
+  const [accommodationButton, setAccommodationButton] = useState(false);
 
   const handleClientChange = (e) => {
     const selectedClient = e.target.value;
@@ -146,7 +148,8 @@ const TravelRequestForm = () => {
     project_id: "",
     reason_for_travel: "",
     special_request: "",
-    accommodation_required: "",
+    // accommodation_required: "",
+    // travellers_required: false,
   });
   // ================For Travel Details===========
   const [travel, setTravel] = useState({
@@ -546,7 +549,7 @@ const TravelRequestForm = () => {
                         onSubmit={handleSubmit(handleFormSubmit)}
                       >
                         <div className="row">
-                          <div className="col-12 col-lg-3">
+                          <div className="col-12 col-lg-2">
                             <div className="form-group">
                               <label>Booking For</label>
                               <span className="astik"> *</span>
@@ -578,7 +581,7 @@ const TravelRequestForm = () => {
                               </small>
                             </div>
                           </div>
-                          <div className="col-12 col-lg-3">
+                          <div className="col-12 col-lg-2">
                             <div className="form-group">
                               <label>Billable</label>
                               <span className="astik"> *</span>
@@ -606,73 +609,71 @@ const TravelRequestForm = () => {
                               </small>
                             </div>
                           </div>
-                          {basicDetails?.billable === "Yes" && (
-                            <>
-                              <div className="col-12 col-lg-3">
-                                <div className="form-group">
-                                  <label>Client Id</label>
-                                  <span className="astik"> *</span>
-                                  <select
-                                    className={classNames(
-                                      "form-select form-select-md",
-                                      {
-                                        "is-invalid": errors.client_id,
-                                      }
-                                    )}
-                                    {...register("client_id", {
-                                      value: basicDetails?.client_id,
-                                    })}
-                                    value={selectedClientId}
-                                    name="client_id"
-                                    onChange={handleClientChange}
-                                  >
-                                    <option value="">Select Client</option>
-                                    {clientId.map((client) => (
-                                      <option key={client} value={client}>
-                                        {client}
-                                      </option>
-                                    ))}
-                                  </select>
-                                  <small className="invalid-feedback">
-                                    {errors.client_id?.message}
-                                  </small>
-                                </div>
-                              </div>
-                              <div className="col-12 col-lg-3">
-                                <div className="form-group">
-                                  <label>Project Id</label>
-                                  <span className="astik"> *</span>
-                                  <select
-                                    className={classNames(
-                                      "form-select form-select-md",
-                                      {
-                                        "is-invalid": errors.project_id,
-                                      }
-                                    )}
-                                    {...register("project_id", {
-                                      value: basicDetails?.project_id,
-                                    })}
-                                    value={setBasicDetails?.project_id}
-                                    onChange={inputEvent}
-                                    name="project_id"
-                                  >
-                                    <option value="">Select Project</option>
-                                    {filteredProjectIds.map((project) => (
-                                      <option key={project} value={project}>
-                                        {project}
-                                      </option>
-                                    ))}
-                                  </select>
-                                  <small className="invalid-feedback">
-                                    {errors.project_id?.message}
-                                  </small>
-                                </div>
-                              </div>
-                            </>
-                          )}
+
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
-                              <label>Reason for Travel</label>
+                              <label>Client Id</label>
+                              <span className="astik"> *</span>
+                              <select
+                                className={classNames(
+                                  "form-select form-select-md",
+                                  {
+                                    "is-invalid": errors.client_id,
+                                  }
+                                )}
+                                {...register("client_id", {
+                                  value: basicDetails?.client_id,
+                                })}
+                                value={selectedClientId}
+                                name="client_id"
+                                onChange={handleClientChange}
+                              >
+                                <option value="">Select Client</option>
+                                {clientId.map((client) => (
+                                  <option key={client} value={client}>
+                                    {client}
+                                  </option>
+                                ))}
+                              </select>
+                              <small className="invalid-feedback">
+                                {errors.client_id?.message}
+                              </small>
+                            </div>
+                          </div>
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>Project Id</label>
+                              <span className="astik"> *</span>
+                              <select
+                                className={classNames(
+                                  "form-select form-select-md",
+                                  {
+                                    "is-invalid": errors.project_id,
+                                  }
+                                )}
+                                {...register("project_id", {
+                                  value: basicDetails?.project_id,
+                                })}
+                                value={setBasicDetails?.project_id}
+                                onChange={inputEvent}
+                                name="project_id"
+                              >
+                                <option value="">Select Project</option>
+                                {filteredProjectIds.map((project) => (
+                                  <option key={project} value={project}>
+                                    {project}
+                                  </option>
+                                ))}
+                              </select>
+                              <small className="invalid-feedback">
+                                {errors.project_id?.message}
+                              </small>
+                            </div>
+                          </div>
+
+                          <div className="col-12 col-lg-2">
+                            <div className="form-group">
+                              <label>Travel Reason</label>
                               <span className="astik"> *</span>
                               <select
                                 // required
@@ -706,133 +707,211 @@ const TravelRequestForm = () => {
                           </div>
                         </div>
                         {/* ===============================Travellers==================== */}
-                        <div
-                          style={{
-                            border: "1px solid lightgrey",
-                            padding: "1rem",
-                          }}
-                        >
-                          <div className="d-flex justify-content-between ">
-                            <h3 className="" style={{ color: "#d03e20" }}>
-                              Travellers
-                            </h3>
-                            {/* <p
+                        <div className="form-group row">
+                          <label className="col-sm-3 col-form-label">
+                            Travel Required
+                          </label>
+
+                          <div className="col-sm-3">
+                            <div className="form-check">
+                              <label className="form-check-label">
+                                <input
+                                  type="radio"
+                                  className="form-control form-control-md"
+                                  value={treavellerButton}
+                                  checked={
+                                    treavellerButton === true ? true : false
+                                  }
+                                  onChange={(e) => {
+                                    setTreavellerButton(!treavellerButton);
+                                  }}
+                                  name="travellers_required"
+                                />
+                                Yes <i className="input-helper"></i>
+                              </label>
+                            </div>
+                          </div>
+                          <div className="col-sm-3">
+                            <div className="form-check">
+                              <label className="form-check-label">
+                                <input
+                                  type="radio"
+                                  className="form-control form-control-md"
+                                  value={treavellerButton}
+                                  checked={
+                                    treavellerButton === false ? true : false
+                                  }
+                                  onChange={(e) => {
+                                    setTreavellerButton(!treavellerButton);
+                                  }}
+                                  name="travellers_required"
+                                />
+                                No <i className="input-helper"></i>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        {/* <div className="row mt-4">
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>Travellers Required</label>
+                              <span className="astik"> *</span>
+                              <select
+                                className={classNames(
+                                  "form-select form-select-md",
+                                  {
+                                    "is-invalid": errors.travellers_required,
+                                  }
+                                )}
+                                {...register("travellers_required", {
+                                  value: basicDetails?.travellers_required,
+                                })}
+                                value={basicDetails?.travellers_required}
+                                onChange={inputEvent}
+                                name="travellers_required"
+                              >
+                                <option value="" selected disabled>
+                                  Select...
+                                </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                              </select>
+                              <small className="invalid-feedback">
+                                {errors.travellers_required?.message}
+                              </small>
+                            </div>
+                          </div>
+                        </div> */}
+                        {treavellerButton && (
+                          <div
+                            style={{
+                              border: "1px solid lightgrey",
+                              padding: "1rem",
+                            }}
+                          >
+                            <div className="d-flex justify-content-between ">
+                              <h3 className="" style={{ color: "#d03e20" }}>
+                                Travellers
+                              </h3>
+                              {/* <p
                               className="mx-2 btn btn-xs "
                               type="btn"
                               onClick={handleAddTraveller}
                             >
                               <RiAddFill />
                             </p> */}
-                            <div
-                              id="add_traveller"
-                              class="Btn my-2"
-                              onClick={handleAddTraveller}
-                            >
-                              <div class="sign">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  width="24px"
-                                  height="24px"
-                                  fill-rule="evenodd"
-                                >
-                                  <path
+                              <div
+                                id="add_traveller"
+                                class="Btn my-2"
+                                onClick={handleAddTraveller}
+                              >
+                                <div class="sign">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    width="24px"
+                                    height="24px"
                                     fill-rule="evenodd"
-                                    d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-                                  />
-                                </svg>
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                    />
+                                  </svg>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Employee</th>
-                                <th>Emp ID</th>
-                                <th>Full Name</th>
-                                <th>Gender</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>DOB</th>
-                                <th>Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {travellersData?.map((traveller, index) => (
-                                <tr key={traveller.id}>
-                                  <td>
-                                    <select
-                                      // required
-                                      type="text"
-                                      name="is_employee"
-                                      className="form-control form-control-sm"
-                                      value={traveller?.data?.is_employee}
-                                      onChange={(e) =>
-                                        handleTravellerChange(traveller.id, {
-                                          // ...traveller?.data,
-                                          name: "",
-                                          emp_id: "",
-                                          email: "",
-                                          phone: "",
-                                          dob: "",
-                                          gender: "",
-                                          is_employee: e.target.value,
-                                        })
-                                      }
-                                    >
-                                      <option value="" selected disabled>
-                                        Select
-                                      </option>
-                                      <option value="Yes">Yes</option>
-                                      <option value="No">No</option>
-                                    </select>
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="text"
-                                      // required
-                                      disabled={
-                                        traveller?.data?.is_employee === "Yes"
-                                          ? false
-                                          : true
-                                      }
-                                      name="emp_id"
-                                      className={classNames(
-                                        "form-control form-control-sm",
-                                        {
-                                          "is-invalid":
-                                            validateForTravellersDataRow[index]
-                                              ?.data?.emp_id,
+                            <table className="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Employee</th>
+                                  <th>Emp ID</th>
+                                  <th>Full Name</th>
+                                  <th>Gender</th>
+                                  <th>Phone</th>
+                                  <th>Email</th>
+                                  <th>DOB</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {travellersData?.map((traveller, index) => (
+                                  <tr key={traveller.id}>
+                                    <td>
+                                      <select
+                                        // required
+                                        type="text"
+                                        name="is_employee"
+                                        className="form-control form-control-sm"
+                                        value={traveller?.data?.is_employee}
+                                        onChange={(e) =>
+                                          handleTravellerChange(traveller.id, {
+                                            // ...traveller?.data,
+                                            name: "",
+                                            emp_id: "",
+                                            email: "",
+                                            phone: "",
+                                            dob: "",
+                                            gender: "",
+                                            is_employee: e.target.value,
+                                          })
                                         }
-                                      )}
-                                      value={
-                                        traveller?.data?.is_employee
-                                          ? traveller?.data?.emp_id
-                                          : ""
-                                      }
-                                      onChange={(e) =>
-                                        handleTravellerChange(traveller.id, {
-                                          ...traveller?.data,
-                                          emp_id: e.target.value,
-                                        })
-                                      }
-                                      placeholder="Enter Employee ID"
-                                    />
+                                      >
+                                        <option value="" selected disabled>
+                                          Select
+                                        </option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                      </select>
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="text"
+                                        // required
+                                        disabled={
+                                          traveller?.data?.is_employee === "Yes"
+                                            ? false
+                                            : true
+                                        }
+                                        name="emp_id"
+                                        className={classNames(
+                                          "form-control form-control-sm",
+                                          {
+                                            "is-invalid":
+                                              validateForTravellersDataRow[
+                                                index
+                                              ]?.data?.emp_id,
+                                          }
+                                        )}
+                                        value={
+                                          traveller?.data?.is_employee
+                                            ? traveller?.data?.emp_id
+                                            : ""
+                                        }
+                                        onChange={(e) =>
+                                          handleTravellerChange(traveller.id, {
+                                            ...traveller?.data,
+                                            emp_id: e.target.value,
+                                          })
+                                        }
+                                        placeholder="Enter Employee ID"
+                                      />
 
-                                    <small
-                                      style={{
-                                        width: "100%",
-                                        marginTop: " 0.40rem",
-                                        fontSize: "100%",
-                                        color: "#dc3545",
-                                      }}
-                                    >
-                                      {validateForTravellersDataRow[index]?.data
-                                        ?.emp_id && "This field is required"}
-                                    </small>
-                                  </td>
-                                  <td>
-                                    {/* <select
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.40rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravellersDataRow[index]
+                                          ?.data?.emp_id &&
+                                          "This field is required"}
+                                      </small>
+                                    </td>
+                                    <td>
+                                      {/* <select
                                   name="name"
                                   id=""
                                   onChange={(e) =>
@@ -851,294 +930,311 @@ const TravelRequestForm = () => {
                                   })}
                                 </select> */}
 
-                                    <input
-                                      // required
-                                      type="text"
-                                      value={traveller?.data?.name}
-                                      name="name"
-                                      className={classNames(
-                                        "form-control form-control-sm",
-                                        {
-                                          "is-invalid":
-                                            validateForTravellersDataRow[index]
-                                              ?.data?.name,
-                                        }
-                                      )}
-                                      disabled={
-                                        traveller?.data?.is_employee === "Yes"
-                                          ? true
-                                          : false
-                                      }
-                                      onChange={(e) =>
-                                        handleTravellerChange(traveller.id, {
-                                          ...traveller.data,
-
-                                          name: e.target.value,
-                                        })
-                                      }
-                                      placeholder="Enter Full Name"
-                                    />
-                                    <small
-                                      style={{
-                                        width: "100%",
-                                        marginTop: " 0.25rem",
-                                        fontSize: "100%",
-                                        color: "#dc3545",
-                                      }}
-                                    >
-                                      {validateForTravellersDataRow[index]?.data
-                                        ?.name && "This field is required"}
-                                    </small>
-                                  </td>
-                                  <td>
-                                    {traveller?.data?.is_employee === "Yes" ? (
                                       <input
                                         // required
                                         type="text"
+                                        value={traveller?.data?.name}
+                                        name="name"
+                                        className={classNames(
+                                          "form-control form-control-sm",
+                                          {
+                                            "is-invalid":
+                                              validateForTravellersDataRow[
+                                                index
+                                              ]?.data?.name,
+                                          }
+                                        )}
                                         disabled={
                                           traveller?.data?.is_employee === "Yes"
                                             ? true
                                             : false
                                         }
-                                        value={traveller?.data?.gender}
-                                        name="gender"
-                                        className="form-control form-control-sm"
                                         onChange={(e) =>
                                           handleTravellerChange(traveller.id, {
-                                            ...traveller?.data,
-                                            gender: e.target.value,
+                                            ...traveller.data,
+
+                                            name: e.target.value,
                                           })
                                         }
+                                        placeholder="Enter Full Name"
                                       />
-                                    ) : (
-                                      <select
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravellersDataRow[index]
+                                          ?.data?.name &&
+                                          "This field is required"}
+                                      </small>
+                                    </td>
+                                    <td>
+                                      {traveller?.data?.is_employee ===
+                                      "Yes" ? (
+                                        <input
+                                          // required
+                                          type="text"
+                                          disabled={
+                                            traveller?.data?.is_employee ===
+                                            "Yes"
+                                              ? true
+                                              : false
+                                          }
+                                          value={traveller?.data?.gender}
+                                          name="gender"
+                                          className="form-control form-control-sm"
+                                          onChange={(e) =>
+                                            handleTravellerChange(
+                                              traveller.id,
+                                              {
+                                                ...traveller?.data,
+                                                gender: e.target.value,
+                                              }
+                                            )
+                                          }
+                                        />
+                                      ) : (
+                                        <select
+                                          className={classNames(
+                                            "form-select form-select-md",
+                                            {
+                                              "is-invalid":
+                                                validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.gender,
+                                            }
+                                          )}
+                                          onChange={(e) =>
+                                            handleTravellerChange(
+                                              traveller.id,
+                                              {
+                                                ...traveller?.data,
+                                                gender: e.target.value,
+                                              }
+                                            )
+                                          }
+                                        >
+                                          <option value="" selected disabled>
+                                            Select...
+                                          </option>
+                                          <option value="Male">Male</option>
+                                          <option value="Female">Female</option>
+                                        </select>
+                                      )}
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravellersDataRow[index]
+                                          ?.data?.gender &&
+                                          "This field is required"}
+                                      </small>
+                                    </td>
+                                    <td>
+                                      <input
+                                        // required
+                                        type={
+                                          traveller?.data?.is_employee === "Yes"
+                                            ? "text"
+                                            : "number"
+                                        }
+                                        // pattern="\d*"
+                                        // maxlength="10"
+                                        disabled={
+                                          traveller?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
+                                        value={traveller?.data?.phone}
+                                        name="phone"
                                         className={classNames(
-                                          "form-select form-select-md",
+                                          "form-control form-control-sm",
                                           {
                                             "is-invalid":
                                               validateForTravellersDataRow[
                                                 index
-                                              ]?.data?.gender,
+                                              ]?.data?.phone,
+                                          }
+                                        )}
+                                        placeholder="Enter Phone"
+                                        onChange={(e) => {
+                                          let { value } = e.target;
+
+                                          // Limit the number of digits to 6
+                                          if (value.length > 10) {
+                                            value = value.slice(0, 10);
+                                          }
+
+                                          handleTravellerChange(traveller.id, {
+                                            ...traveller?.data,
+
+                                            phone: value,
+                                          });
+                                        }}
+                                      />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravellersDataRow[index]
+                                          ?.data?.phone &&
+                                          "This field is required"}
+                                      </small>
+                                    </td>
+                                    <td>
+                                      <input
+                                        // required
+                                        type="email"
+                                        disabled={
+                                          traveller?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
+                                        value={traveller?.data?.email}
+                                        name="email"
+                                        className={classNames(
+                                          "form-control form-control-sm",
+                                          {
+                                            "is-invalid":
+                                              validateForTravellersDataRow[
+                                                index
+                                              ]?.data?.email,
+                                          }
+                                        )}
+                                        placeholder="Enter Email"
+                                        onChange={(e) =>
+                                          handleTravellerChange(traveller.id, {
+                                            ...traveller?.data,
+
+                                            email: e.target.value,
+                                          })
+                                        }
+                                      />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravellersDataRow[index]
+                                          ?.data?.email &&
+                                          "This field is required"}
+                                      </small>
+                                    </td>
+                                    <td>
+                                      <input
+                                        // required
+                                        type="date"
+                                        placeholder="Select DOB"
+                                        disabled={
+                                          traveller?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
+                                        value={traveller?.data?.dob}
+                                        name="dob"
+                                        className={classNames(
+                                          "form-control form-control-sm",
+                                          {
+                                            "is-invalid":
+                                              validateForTravellersDataRow[
+                                                index
+                                              ]?.data?.dob,
                                           }
                                         )}
                                         onChange={(e) =>
                                           handleTravellerChange(traveller.id, {
                                             ...traveller?.data,
-                                            gender: e.target.value,
+
+                                            dob: e.target.value,
                                           })
                                         }
+                                      />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
                                       >
-                                        <option value="" selected disabled>
-                                          Select...
-                                        </option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                      </select>
-                                    )}
-                                    <small
-                                      style={{
-                                        width: "100%",
-                                        marginTop: " 0.25rem",
-                                        fontSize: "100%",
-                                        color: "#dc3545",
-                                      }}
-                                    >
-                                      {validateForTravellersDataRow[index]?.data
-                                        ?.gender && "This field is required"}
-                                    </small>
-                                  </td>
-                                  <td>
-                                    <input
-                                      // required
-                                      type={
-                                        traveller?.data?.is_employee === "Yes"
-                                          ? "text"
-                                          : "number"
-                                      }
-                                      // pattern="\d*"
-                                      // maxlength="10"
-                                      disabled={
-                                        traveller?.data?.is_employee === "Yes"
-                                          ? true
-                                          : false
-                                      }
-                                      value={traveller?.data?.phone}
-                                      name="phone"
-                                      className={classNames(
-                                        "form-control form-control-sm",
-                                        {
-                                          "is-invalid":
-                                            validateForTravellersDataRow[index]
-                                              ?.data?.phone,
+                                        {validateForTravellersDataRow[index]
+                                          ?.data?.dob &&
+                                          "This field is required"}
+                                      </small>
+                                    </td>
+                                    <td>
+                                      <div
+                                        id="Delete_Traveller"
+                                        class="Btn my-2"
+                                        onClick={() =>
+                                          handleTravellerDeleteRow(traveller.id)
                                         }
-                                      )}
-                                      placeholder="Enter Phone"
-                                      onChange={(e) => {
-                                        let { value } = e.target;
-
-                                        // Limit the number of digits to 6
-                                        if (value.length > 10) {
-                                          value = value.slice(0, 10);
-                                        }
-
-                                        handleTravellerChange(traveller.id, {
-                                          ...traveller?.data,
-
-                                          phone: value,
-                                        });
-                                      }}
-                                    />
-                                    <small
-                                      style={{
-                                        width: "100%",
-                                        marginTop: " 0.25rem",
-                                        fontSize: "100%",
-                                        color: "#dc3545",
-                                      }}
-                                    >
-                                      {validateForTravellersDataRow[index]?.data
-                                        ?.phone && "This field is required"}
-                                    </small>
-                                  </td>
-                                  <td>
-                                    <input
-                                      // required
-                                      type="email"
-                                      disabled={
-                                        traveller?.data?.is_employee === "Yes"
-                                          ? true
-                                          : false
-                                      }
-                                      value={traveller?.data?.email}
-                                      name="email"
-                                      className={classNames(
-                                        "form-control form-control-sm",
-                                        {
-                                          "is-invalid":
-                                            validateForTravellersDataRow[index]
-                                              ?.data?.email,
-                                        }
-                                      )}
-                                      placeholder="Enter Email"
-                                      onChange={(e) =>
-                                        handleTravellerChange(traveller.id, {
-                                          ...traveller?.data,
-
-                                          email: e.target.value,
-                                        })
-                                      }
-                                    />
-                                    <small
-                                      style={{
-                                        width: "100%",
-                                        marginTop: " 0.25rem",
-                                        fontSize: "100%",
-                                        color: "#dc3545",
-                                      }}
-                                    >
-                                      {validateForTravellersDataRow[index]?.data
-                                        ?.email && "This field is required"}
-                                    </small>
-                                  </td>
-                                  <td>
-                                    <input
-                                      // required
-                                      type="date"
-                                      placeholder="Select DOB"
-                                      disabled={
-                                        traveller?.data?.is_employee === "Yes"
-                                          ? true
-                                          : false
-                                      }
-                                      value={traveller?.data?.dob}
-                                      name="dob"
-                                      className={classNames(
-                                        "form-control form-control-sm",
-                                        {
-                                          "is-invalid":
-                                            validateForTravellersDataRow[index]
-                                              ?.data?.dob,
-                                        }
-                                      )}
-                                      onChange={(e) =>
-                                        handleTravellerChange(traveller.id, {
-                                          ...traveller?.data,
-
-                                          dob: e.target.value,
-                                        })
-                                      }
-                                    />
-                                    <small
-                                      style={{
-                                        width: "100%",
-                                        marginTop: " 0.25rem",
-                                        fontSize: "100%",
-                                        color: "#dc3545",
-                                      }}
-                                    >
-                                      {validateForTravellersDataRow[index]?.data
-                                        ?.dob && "This field is required"}
-                                    </small>
-                                  </td>
-                                  <td>
-                                    <div
-                                      id="Delete_Traveller"
-                                      class="Btn my-2"
-                                      onClick={() =>
-                                        handleTravellerDeleteRow(traveller.id)
-                                      }
-                                    >
-                                      <div class="sign">
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          viewBox="0 0 30 30"
-                                          width="30px"
-                                          height="30px"
-                                        >
-                                          <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                        </svg>
+                                      >
+                                        <div class="sign">
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 30 30"
+                                            width="30px"
+                                            height="30px"
+                                          >
+                                            <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                          </svg>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
 
-                          {/* ===================================Travel============================ */}
-                          <div className="mt-4">
-                            <div className="d-flex justify-content-between  ">
-                              <h5 className="text-primary">Travel</h5>
-                              {/* <p
+                            {/* ===================================Travel============================ */}
+                            <div className="mt-4">
+                              <div className="d-flex justify-content-between  ">
+                                <h5 className="text-primary">Travel</h5>
+                                {/* <p
                                 className="btn-sm btn  mx-2 btn-primary "
                                 type="btn"
                                 onClick={handleAddRow}
                               >
                                 <RiAddFill />
                               </p> */}
-                              <div
-                                id="add_travel"
-                                class="Btn my-2"
-                                onClick={handleAddRow}
-                              >
-                                <div class="sign" title="Add Travel">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    width="24px"
-                                    height="24px"
-                                    fill-rule="evenodd"
-                                  >
-                                    <path
+                                <div
+                                  id="add_travel"
+                                  class="Btn my-2"
+                                  onClick={handleAddRow}
+                                >
+                                  <div class="sign" title="Add Travel">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      width="24px"
+                                      height="24px"
                                       fill-rule="evenodd"
-                                      d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-                                    />
-                                  </svg>
+                                    >
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                      />
+                                    </svg>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            {/* ===========Radio Box======= */}
-                            {/* <div className="row my-2">
+                              {/* ===========Radio Box======= */}
+                              {/* <div className="row my-2">
                               <div className="col-12 col-lg-6">
                                 <div className="row">
                                   <div className="col-12 col-lg-4">
@@ -1186,171 +1282,218 @@ const TravelRequestForm = () => {
                                 </div>
                               </div>
                             </div> */}
-                          </div>
+                            </div>
 
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Mode</th>
-                                <th>Trip</th>
-                                <th>From (City)</th>
-                                <th>To (City)</th>
-                                <th>Departure</th>
-                                {/* {rows.map(
+                            <table className="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Mode</th>
+                                  <th>Trip</th>
+                                  <th>From (City)</th>
+                                  <th>To (City)</th>
+                                  <th>Departure</th>
+                                  {/* {rows.map(
                                   (row) =>
                                     row?.data?.trip_type === "Return" && (
                                       <th>Return</th>
                                     )
                                 )} */}
-                                <th>Return</th>
-                                <th>Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {rows.map((row) => (
-                                <tr key={row.id}>
-                                  <td className="w-25">
-                                    <select
-                                      // required
-                                      className="form-select form-select-md"
-                                      value={row.data.travel_mode}
-                                      onChange={(e) =>
-                                        handleDataChange(row.id, {
-                                          ...row.data,
-                                          travel_mode: e.target.value,
-                                        })
-                                      }
-                                    >
-                                      <option value="" selected disabled>
-                                        Select
-                                      </option>
-                                      {travelMode.map((mode) => (
-                                        <option value={mode} key={mode}>
-                                          {mode}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  </td>
-                                  <td className="w-25">
-                                    <select
-                                      // required
-                                      name="trip_type"
-                                      className="form-select form-select-md"
-                                      value={row?.data?.trip_type}
-                                      onChange={(e) =>
-                                        handleDataChange(row.id, {
-                                          ...row.data,
-                                          trip_type: e.target.value,
-                                        })
-                                      }
-                                    >
-                                      <option value="" selected disabled>
-                                        Select
-                                      </option>
-                                      <option value="OneWay">One-Way</option>
-                                      <option value="Return">Return</option>
-                                    </select>
-                                  </td>
-                                  <td className="w-25">
-                                    <Select
-                                      // required
-                                      isClearable={true}
-                                      name="flight_from_city"
-                                      options={cityData}
-                                      // defaultValue={[cityData[0]]}
-                                      value={row.data.travel_from_city}
-                                      onChange={(selectedOption) =>
-                                        handleDataChange(row.id, {
-                                          ...row.data,
-                                          travel_from_city: selectedOption,
-                                        })
-                                      }
-                                    />
-                                  </td>
-                                  <td className="w-25">
-                                    <Select
-                                      className="form-select-select"
-                                      isClearable={true}
-                                      name="flight_to_city"
-                                      // required
-                                      options={filterObjectByLabel(
-                                        cityData,
-                                        row.data.travel_from_city?.label
-                                      )}
-                                      // defaultValue={[cityData[0]]}
-                                      value={row?.data?.travel_to_city}
-                                      onChange={(selectedOption) =>
-                                        handleDataChange(row.id, {
-                                          ...row.data,
-                                          travel_to_city: selectedOption,
-                                        })
-                                      }
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="date"
-                                      // required
-                                      min={getCurrentDate()}
-                                      name="departure"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) =>
-                                        handleDataChange(row.id, {
-                                          ...row.data,
-                                          departure: e.target.value,
-                                        })
-                                      }
-                                    />
-                                  </td>
-                                  {/* {row?.data?.trip_type === "Return" && ( */}
-                                  <td>
-                                    <input
-                                      type="date"
-                                      // required
-                                      min={row?.data?.departure}
-                                      value={row.data.return}
-                                      name="return"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) =>
-                                        handleDataChange(row.id, {
-                                          ...row.data,
-                                          return: e.target.value,
-                                        })
-                                      }
-                                      disabled={
-                                        row.data.trip_type === "OneWay"
-                                          ? true
-                                          : false
-                                      }
-                                    />
-                                  </td>
-                                  {/* )} */}
-                                  <td>
-                                    <div
-                                      id="Delete_Travel"
-                                      class="Btn my-2"
-                                      onClick={() => handleDeleteRow(row.id)}
-                                    >
-                                      <div class="sign">
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          viewBox="0 0 30 30"
-                                          width="30px"
-                                          height="30px"
-                                        >
-                                          <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                        </svg>
-                                      </div>
-                                    </div>
-                                  </td>
+                                  <th>Return</th>
+                                  <th>Action</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
+                              </thead>
+                              <tbody>
+                                {rows.map((row) => (
+                                  <tr key={row.id}>
+                                    <td className="w-25">
+                                      <select
+                                        // required
+                                        className="form-select form-select-md"
+                                        value={row.data.travel_mode}
+                                        onChange={(e) =>
+                                          handleDataChange(row.id, {
+                                            ...row.data,
+                                            travel_mode: e.target.value,
+                                          })
+                                        }
+                                      >
+                                        <option value="" selected disabled>
+                                          Select
+                                        </option>
+                                        {travelMode.map((mode) => (
+                                          <option value={mode} key={mode}>
+                                            {mode}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    </td>
+                                    <td className="w-25">
+                                      <select
+                                        // required
+                                        name="trip_type"
+                                        className="form-select form-select-md"
+                                        value={row?.data?.trip_type}
+                                        onChange={(e) =>
+                                          handleDataChange(row.id, {
+                                            ...row.data,
+                                            trip_type: e.target.value,
+                                          })
+                                        }
+                                      >
+                                        <option value="" selected disabled>
+                                          Select
+                                        </option>
+                                        <option value="OneWay">One-Way</option>
+                                        <option value="Return">Return</option>
+                                      </select>
+                                    </td>
+                                    <td className="w-25">
+                                      <Select
+                                        // required
+                                        isClearable={true}
+                                        name="flight_from_city"
+                                        options={cityData}
+                                        // defaultValue={[cityData[0]]}
+                                        value={row.data.travel_from_city}
+                                        onChange={(selectedOption) =>
+                                          handleDataChange(row.id, {
+                                            ...row.data,
+                                            travel_from_city: selectedOption,
+                                          })
+                                        }
+                                      />
+                                    </td>
+                                    <td className="w-25">
+                                      <Select
+                                        className="form-select-select"
+                                        isClearable={true}
+                                        name="flight_to_city"
+                                        // required
+                                        options={filterObjectByLabel(
+                                          cityData,
+                                          row.data.travel_from_city?.label
+                                        )}
+                                        // defaultValue={[cityData[0]]}
+                                        value={row?.data?.travel_to_city}
+                                        onChange={(selectedOption) =>
+                                          handleDataChange(row.id, {
+                                            ...row.data,
+                                            travel_to_city: selectedOption,
+                                          })
+                                        }
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="date"
+                                        // required
+                                        min={getCurrentDate()}
+                                        name="departure"
+                                        className="form-control form-control-sm"
+                                        onChange={(e) =>
+                                          handleDataChange(row.id, {
+                                            ...row.data,
+                                            departure: e.target.value,
+                                          })
+                                        }
+                                      />
+                                    </td>
+                                    {/* {row?.data?.trip_type === "Return" && ( */}
+                                    <td>
+                                      <input
+                                        type="date"
+                                        // required
+                                        min={row?.data?.departure}
+                                        value={row.data.return}
+                                        name="return"
+                                        className="form-control form-control-sm"
+                                        onChange={(e) =>
+                                          handleDataChange(row.id, {
+                                            ...row.data,
+                                            return: e.target.value,
+                                          })
+                                        }
+                                        disabled={
+                                          row.data.trip_type === "OneWay"
+                                            ? true
+                                            : false
+                                        }
+                                      />
+                                    </td>
+                                    {/* )} */}
+                                    <td>
+                                      <div
+                                        id="Delete_Travel"
+                                        class="Btn my-2"
+                                        onClick={() => handleDeleteRow(row.id)}
+                                      >
+                                        <div class="sign">
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 30 30"
+                                            width="30px"
+                                            height="30px"
+                                          >
+                                            <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                          </svg>
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
 
                         {/* ===============================Accomendation====================== */}
-                        <div className="row mt-4">
+                        <div className="form-group row">
+                          <label className="col-sm-3 col-form-label">
+                            Accommodation Required
+                          </label>
+
+                          <div className="col-sm-3">
+                            <div className="form-check">
+                              <label className="form-check-label">
+                                <input
+                                  type="radio"
+                                  className="form-control form-control-md"
+                                  value={accommodationButton}
+                                  checked={
+                                    accommodationButton === true ? true : false
+                                  }
+                                  onChange={(e) => {
+                                    setAccommodationButton(
+                                      !accommodationButton
+                                    );
+                                  }}
+                                />
+                                Yes <i className="input-helper"></i>
+                              </label>
+                            </div>
+                          </div>
+                          <div className="col-sm-3">
+                            <div className="form-check">
+                              <label className="form-check-label">
+                                <input
+                                  type="radio"
+                                  className="form-control form-control-md"
+                                  value={accommodationButton}
+                                  checked={
+                                    accommodationButton === false ? true : false
+                                  }
+                                  onChange={(e) => {
+                                    setAccommodationButton(
+                                      !accommodationButton
+                                    );
+                                  }}
+                                />
+                                No <i className="input-helper"></i>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        {/* <div className="row mt-4">
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Accommodation Required</label>
@@ -1380,8 +1523,8 @@ const TravelRequestForm = () => {
                               </small>
                             </div>
                           </div>
-                        </div>
-                        {basicDetails?.accommodation_required === "Yes" && (
+                        </div> */}
+                        {accommodationButton && (
                           <div
                             className="mt-2"
                             style={{
@@ -1794,7 +1937,11 @@ const TravelRequestForm = () => {
                         >
                           <RiAddFill />
                         </button> */}
-
+                            <div className="mt-4">
+                              <div className="d-flex justify-content-between  ">
+                                <h5 className="text-primary">Occupancy</h5>
+                              </div>
+                            </div>
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
