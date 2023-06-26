@@ -66,8 +66,9 @@ const TravelRequestForm = () => {
   const [numberValue, setNumberValue] = useState("");
   const [selectedClientId, setSelectedClientId] = useState("");
   const [filteredProjectIds, setFilteredProjectIds] = useState([]);
-  const [treavellerButton, setTreavellerButton] = useState(true);
-  const [accommodationButton, setAccommodationButton] = useState(true);
+  const [treavellerRadioButton, setTreavellerRadioButton] = useState(false);
+  const [accommodationRadioButton, setAccommodationRadioButton] =
+    useState(false);
 
   const handleClientChange = (e) => {
     const selectedClient = e.target.value;
@@ -100,159 +101,58 @@ const TravelRequestForm = () => {
   }
 
   useEffect(() => {
-    if (basicDetails?.booking_for === "self") {
-      const fetchEmployeeData = async () => {
-        const res = await axios
-          .get(`/get_employee_details_for_travel/${LocalStorageData?.emp_id}`)
-          .then((res) => {
-            setRoomsData([
-              {
-                // id: 4,
-                data: {
-                  is_employee: "Yes",
-                  emp_id: res?.data[0]?.["Employee ID"],
-                  name: res?.data[0]?.ownerName,
-                  gender: res?.data[0]?.Tags,
-                  phone: res?.data[0]?.["Personal Mobile Number"],
-                  email: res?.data[0]?.["Email address"],
-                  dob: formatBirthdate(res?.data[0]?.["Date of Birth"]),
-                },
-              },
-            ]);
-            return setTravellersData([
-              {
-                data: {
-                  is_employee: "Yes",
-                  emp_id: "",
-                  name: "",
-                  gender: "",
-                  phone: "",
-                  email: "",
-                  dob: "",
-                },
-                // id: 4,
-                data: {
-                  is_employee: "Yes",
-                  emp_id: res?.data[0]?.["Employee ID"],
-                  name: res?.data[0]?.ownerName,
-                  gender: res?.data[0]?.Tags,
-                  phone: res?.data[0]?.["Personal Mobile Number"],
-                  email: res?.data[0]?.["Email address"],
-                  dob: formatBirthdate(res?.data[0]?.["Date of Birth"]),
-                },
-              },
-            ]);
-          })
-          .catch((err) => {
-            if (err.response.status === 500) {
-              navigate("/error_500");
-            } else {
-              navigate("/error_403");
-            }
-          });
-        setLoading(false);
-      };
-      fetchEmployeeData();
-    } else if (basicDetails?.booking_for === "others") {
-      setTravellersData([
-        {
-          // id: 4,
-          data: {
-            is_employee: "Yes",
-            emp_id: "",
-            name: "",
-            gender: "",
-            phone: "",
-            email: "",
-            dob: "",
-          },
-        },
-      ]);
-      setRoomsData([
-        {
-          // id: 4,
-          data: {
-            is_employee: "Yes",
-            emp_id: "",
-            name: "",
-            gender: "",
-            phone: "",
-            email: "",
-            dob: "",
-          },
-        },
-      ]);
-    } else {
-      const fetchEmployeeData = async () => {
-        const res = await axios
-          .get(`/get_employee_details_for_travel/${LocalStorageData?.emp_id}`)
-          .then((res) => {
-            setRoomsData([
-              // id: 4,
-              {
-                id: 1,
-                data: {
-                  is_employee: "Yes",
-                  emp_id: res?.data[0]?.["Employee ID"],
-                  name: res?.data[0]?.ownerName,
-                  gender: res?.data[0]?.Tags,
-                  phone: res?.data[0]?.["Personal Mobile Number"],
-                  email: res?.data[0]?.["Email address"],
-                  dob: formatBirthdate(res?.data[0]?.["Date of Birth"]),
-                },
-              },
-              {
-                id: 2,
-                data: {
-                  is_employee: "Yes",
-                  emp_id: "",
-                  name: "",
-                  gender: "",
-                  phone: "",
-                  email: "",
-                  dob: "",
-                },
-              },
-            ]);
-            return setTravellersData([
-              {
-                id: 2,
-                data: {
-                  is_employee: "Yes",
-                  emp_id: res?.data[0]?.["Employee ID"],
-                  name: res?.data[0]?.ownerName,
-                  gender: res?.data[0]?.Tags,
-                  phone: res?.data[0]?.["Personal Mobile Number"],
-                  email: res?.data[0]?.["Email address"],
-                  dob: formatBirthdate(res?.data[0]?.["Date of Birth"]),
-                },
-              },
-              {
-                id: 1,
-                data: {
-                  is_employee: "Yes",
-                  emp_id: "",
-                  name: "",
-                  gender: "",
-                  phone: "",
-                  email: "",
-                  dob: "",
-                },
-              },
-            ]);
-          })
-          .catch((err) => {
-            if (err.response.status === 500) {
-              navigate("/error_500");
-            } else {
-              navigate("/error_403");
-            }
-          });
-        setLoading(false);
-      };
-      fetchEmployeeData();
-    }
-  }, [employeeId, basicDetails?.booking_for]);
+    const fetchEmployeeData = async () => {
+      const res = await axios
+        .get(
+          `/get_employee_details_for_travel/${
+            basicDetails?.booking_for === "others"
+              ? 0
+              : LocalStorageData?.emp_id
+          }`
+        )
+        .then((res) => {
+          const resObj = {
+            data: {
+              is_employee: "Yes",
+              emp_id:
+                res.data.length > 0 && treavellerRadioButton
+                  ? res?.data[0]?.["Employee ID"]
+                  : "",
+              name:
+                res.data.length > 0 && treavellerRadioButton
+                  ? res?.data[0]?.ownerName
+                  : "",
+              gender:
+                res.data.length > 0 && treavellerRadioButton
+                  ? res?.data[0]?.Tags
+                  : "",
+              phone:
+                res.data.length > 0 && treavellerRadioButton
+                  ? res?.data[0]?.["Personal Mobile Number"]
+                  : "",
+              email:
+                res.data.length > 0 && treavellerRadioButton
+                  ? res?.data[0]?.["Email address"]
+                  : "",
+              dob:
+                res.data.length > 0 && treavellerRadioButton
+                  ? formatBirthdate(res?.data[0]?.["Date of Birth"])
+                  : "",
+            },
+          };
+          return setTravellersData([resObj]), setRoomsData([resObj]);
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+      setLoading(false);
+    };
+    fetchEmployeeData();
+  }, [employeeId, basicDetails?.booking_for, treavellerRadioButton]);
   useEffect(() => {
     async function getCountry() {
       setLoading(true);
@@ -278,13 +178,13 @@ const TravelRequestForm = () => {
   }, []);
 
   // ================For Travel Details===========
-  const [travel, setTravel] = useState({
-    travel_mode: "",
-    travel_from_city: "",
-    travel_to_city: "",
-    departure: "",
-    return: "",
-  });
+  // const [travel, setTravel] = useState({
+  //   travel_mode: "",
+  //   travel_from_city: "",
+  //   travel_to_city: "",
+  //   departure: "",
+  //   return: "",
+  // });
 
   const [travelType, setTravelType] = useState({
     one_way: true,
@@ -468,7 +368,6 @@ const TravelRequestForm = () => {
           data: {
             ...newData,
             is_employee: "Yes",
-
             name: apiData[0]["ownerName"],
             gender: apiData[0]["Tags"],
             phone: apiData[0]["Personal Mobile Number"],
@@ -506,7 +405,7 @@ const TravelRequestForm = () => {
       };
     });
   };
-  const fffff = () => {
+  const validateError = () => {
     let travellerDatalist = [];
     travellersData.map((item, index) => {
       travellerDatalist = [
@@ -516,17 +415,20 @@ const TravelRequestForm = () => {
             ...item.data,
             emp_id:
               (item.data.emp_id === undefined || item.data.emp_id === "") &&
-              item.data?.is_employee === "Yes"
+              item.data?.is_employee === "Yes" &&
+              treavellerRadioButton
                 ? true
                 : false,
             name:
               (item.data.name === undefined || item.data.name === "") &&
-              item.data?.is_employee === "No"
+              item.data?.is_employee === "No" &&
+              treavellerRadioButton
                 ? true
                 : false,
             gender:
               (item.data.gender === undefined || item.data.gender === "") &&
-              item.data?.is_employee === "No"
+              item.data?.is_employee === "No" &&
+              treavellerRadioButton
                 ? true
                 : false,
             phone:
@@ -536,12 +438,14 @@ const TravelRequestForm = () => {
                 : false,
             email:
               (item.data.email === undefined || item.data.email === "") &&
-              item.data?.is_employee === "No"
+              item.data?.is_employee === "No" &&
+              treavellerRadioButton
                 ? true
                 : false,
             dob:
               (item.data.email === undefined || item.data.email === "") &&
-              item.data?.is_employee === "No"
+              item.data?.is_employee === "No" &&
+              treavellerRadioButton
                 ? true
                 : false,
           },
@@ -559,27 +463,33 @@ const TravelRequestForm = () => {
           data: {
             ...item.data,
             travel_mode:
-              item.data.travel_mode === undefined ||
-              item.data.travel_mode === ""
+              (item.data.travel_mode === undefined ||
+                item.data.travel_mode === "") &&
+              treavellerRadioButton
                 ? true
                 : false,
             travel_from_city:
-              item.data.travel_from_city === undefined ||
-              item.data.travel_from_city === null
+              (item.data.travel_from_city === undefined ||
+                item.data.travel_from_city === null) &&
+              treavellerRadioButton
                 ? true
                 : false,
             travel_to_city:
-              item.data.travel_to_city === undefined ||
-              item.data.travel_to_city === null
+              (item.data.travel_to_city === undefined ||
+                item.data.travel_to_city === null) &&
+              treavellerRadioButton
                 ? true
                 : false,
             departure:
-              item.data.departure === undefined || item.data.departure === ""
+              (item.data.departure === undefined ||
+                item.data.departure === "") &&
+              treavellerRadioButton
                 ? true
                 : false,
             return:
               (item.data.return === undefined || item.data.return === "") &&
-              item?.data?.trip_type === "Return"
+              item?.data?.trip_type === "Return" &&
+              treavellerRadioButton
                 ? true
                 : false,
           },
@@ -597,20 +507,24 @@ const TravelRequestForm = () => {
           data: {
             ...item.data,
             city:
-              item.data.city === undefined || item.data.city === null
+              (item.data.city === undefined || item.data.city === null) &&
+              accommodationRadioButton
                 ? true
                 : false,
             checkIn:
-              item.data.checkIn === undefined || item.data.checkIn === ""
+              (item.data.checkIn === undefined || item.data.checkIn === "") &&
+              accommodationRadioButton
                 ? true
                 : false,
             checkOut:
-              item.data.checkOut === undefined || item.data.checkOut === ""
+              (item.data.checkOut === undefined || item.data.checkOut === "") &&
+              accommodationRadioButton
                 ? true
                 : false,
             breakfastRequired:
-              item.data.breakfastRequired === undefined ||
-              item.data.breakfastRequired === ""
+              (item.data.breakfastRequired === undefined ||
+                item.data.breakfastRequired === "") &&
+              accommodationRadioButton
                 ? true
                 : false,
           },
@@ -629,32 +543,38 @@ const TravelRequestForm = () => {
             ...item.data,
             emp_id:
               (item.data.emp_id === undefined || item.data.emp_id === "") &&
-              item.data?.is_employee === "Yes"
+              item.data?.is_employee === "Yes" &&
+              accommodationRadioButton
                 ? true
                 : false,
             name:
               (item.data.name === undefined || item.data.name === "") &&
-              item.data?.is_employee === "No"
+              item.data?.is_employee === "No" &&
+              accommodationRadioButton
                 ? true
                 : false,
             gender:
               (item.data.gender === undefined || item.data.gender === "") &&
-              item.data?.is_employee === "No"
+              item.data?.is_employee === "No" &&
+              accommodationRadioButton
                 ? true
                 : false,
             phone:
               (item.data.phone === undefined || item.data.phone === "") &&
-              item.data?.is_employee === "No"
+              item.data?.is_employee === "No" &&
+              accommodationRadioButton
                 ? true
                 : false,
             email:
               (item.data.email === undefined || item.data.email === "") &&
-              item.data?.is_employee === "No"
+              item.data?.is_employee === "No" &&
+              accommodationRadioButton
                 ? true
                 : false,
             dob:
               (item.data.email === undefined || item.data.email === "") &&
-              item.data?.is_employee === "No"
+              item.data?.is_employee === "No" &&
+              accommodationRadioButton
                 ? true
                 : false,
           },
@@ -666,6 +586,13 @@ const TravelRequestForm = () => {
 
     setValidateForOccupancyDataRow(occupancyDatalist);
   };
+  console.log("validateForTravellersDataRow", validateForTravellersDataRow);
+  console.log("validateForTravelDataRow", validateForTravelDataRow);
+  console.log(
+    "cwewcwvalidateForAccommodationDataRowecwcew",
+    validateForAccommodationDataRow
+  );
+  console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
 
   useEffect(() => {
     let travellersDataRow = validateForTravellersDataRow.filter(
@@ -718,13 +645,28 @@ const TravelRequestForm = () => {
     validateForOccupancyDataRow,
   ]);
   // ================================================================================================================
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     if (error) {
+  //       setError(true)
+  //       console.log("error", error);
+  //      }
+  //   }
+  //   fetchData();
+  // }, [error]);
   const handleFormSubmit = async (e) => {
-    // e.preventDefault();
-    if (error) {
-      alert.error("Some fields are required");
+    if (!treavellerRadioButton && !accommodationRadioButton) {
+      await alert.error("Atleast one booking request is required");
       return true;
+    } else {
+      if (error === false) {
+        alert.success("Sent");
+      } else {
+        await alert.error("Some fields are required");
+        return true;
+      }
     }
-    alert.success(" Sent");
+    //alert.success(" Sent");
 
     // const res = await axios.post("all_travel_request_data", {
     //   basicDetails,
@@ -809,7 +751,7 @@ const TravelRequestForm = () => {
                 max={new Date().toLocaleDateString("fr-ca")}
                 min="1990-12-12"
               ></input> */}
-              {/* <button type="button" onClick={fffff}>
+              {/* <button type="button" onClick={validateError}>
                 click me
               </button> */}
               <div className="row">
@@ -818,7 +760,7 @@ const TravelRequestForm = () => {
                     <div class="card-body">
                       <form
                         action=""
-                        onClick={fffff}
+                        onClick={validateError}
                         onSubmit={handleSubmit(handleFormSubmit)}
                       >
                         <div className="row">
@@ -991,12 +933,16 @@ const TravelRequestForm = () => {
                                 <input
                                   type="radio"
                                   className="form-control form-control-md"
-                                  value={treavellerButton}
+                                  value={treavellerRadioButton}
                                   checked={
-                                    treavellerButton === true ? true : false
+                                    treavellerRadioButton === true
+                                      ? true
+                                      : false
                                   }
                                   onChange={(e) => {
-                                    setTreavellerButton(!treavellerButton);
+                                    setTreavellerRadioButton(
+                                      !treavellerRadioButton
+                                    );
                                   }}
                                   name="travellers_required"
                                 />
@@ -1010,12 +956,16 @@ const TravelRequestForm = () => {
                                 <input
                                   type="radio"
                                   className="form-control form-control-md"
-                                  value={treavellerButton}
+                                  value={treavellerRadioButton}
                                   checked={
-                                    treavellerButton === false ? true : false
+                                    treavellerRadioButton === false
+                                      ? true
+                                      : false
                                   }
                                   onChange={(e) => {
-                                    setTreavellerButton(!treavellerButton);
+                                    setTreavellerRadioButton(
+                                      !treavellerRadioButton
+                                    );
                                   }}
                                   name="travellers_required"
                                 />
@@ -1055,7 +1005,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                         </div> */}
-                        {treavellerButton && (
+                        {treavellerRadioButton && (
                           <div
                             style={{
                               border: "1px solid lightgrey",
@@ -1107,8 +1057,8 @@ const TravelRequestForm = () => {
                                   <th>Gender</th>
                                   <th>Phone</th>
                                   <th>Email</th>
-                                  <th>DOB</th>
-                                  <th>Action</th>
+                                  <th colSpan={2}>DOB</th>
+                                  {/* <th>Action</th> */}
                                 </tr>
                               </thead>
                               <tbody>
@@ -1451,10 +1401,8 @@ const TravelRequestForm = () => {
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td>
-                                      {basicDetails?.booking_for === "self" ? (
-                                        ""
-                                      ) : (
+                                    {basicDetails?.booking_for !== "self" && (
+                                      <td>
                                         <div
                                           id="Delete_Traveller"
                                           class="Btn my-2"
@@ -1475,8 +1423,8 @@ const TravelRequestForm = () => {
                                             </svg>
                                           </div>
                                         </div>
-                                      )}
-                                    </td>
+                                      </td>
+                                    )}
                                   </tr>
                                 ))}
                               </tbody>
@@ -1575,7 +1523,7 @@ const TravelRequestForm = () => {
                                   <th>Departure</th>
 
                                   <th>Return</th>
-                                  <th>Action</th>
+                                  {/* <th>Action</th> */}
                                 </tr>
                               </thead>
                               <tbody>
@@ -1800,13 +1748,15 @@ const TravelRequestForm = () => {
                                 <input
                                   type="radio"
                                   className="form-control form-control-md"
-                                  value={accommodationButton}
+                                  value={accommodationRadioButton}
                                   checked={
-                                    accommodationButton === true ? true : false
+                                    accommodationRadioButton === true
+                                      ? true
+                                      : false
                                   }
                                   onChange={(e) => {
-                                    setAccommodationButton(
-                                      !accommodationButton
+                                    setAccommodationRadioButton(
+                                      !accommodationRadioButton
                                     );
                                   }}
                                 />
@@ -1820,13 +1770,15 @@ const TravelRequestForm = () => {
                                 <input
                                   type="radio"
                                   className="form-control form-control-md"
-                                  value={accommodationButton}
+                                  value={accommodationRadioButton}
                                   checked={
-                                    accommodationButton === false ? true : false
+                                    accommodationRadioButton === false
+                                      ? true
+                                      : false
                                   }
                                   onChange={(e) => {
-                                    setAccommodationButton(
-                                      !accommodationButton
+                                    setAccommodationRadioButton(
+                                      !accommodationRadioButton
                                     );
                                   }}
                                 />
@@ -1866,7 +1818,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                         </div> */}
-                        {accommodationButton && (
+                        {accommodationRadioButton && (
                           <div
                             className="mt-2"
                             style={{
