@@ -54,6 +54,7 @@ const TravelRequestForm = () => {
   const [employeeId, setEmployeeId] = useState("");
   const [getEmployeeDataById, setEmployeeDataById] = useState([]);
   const [error, setError] = useState(false);
+  const [checkError, setCheckError] = useState(false);
   const [travellersData, setTravellersData] = useState([]);
   const [validateForTravellersDataRow, setValidateForTravellersDataRow] =
     useState([]);
@@ -586,13 +587,13 @@ const TravelRequestForm = () => {
 
     setValidateForOccupancyDataRow(occupancyDatalist);
   };
-  console.log("validateForTravellersDataRow", validateForTravellersDataRow);
-  console.log("validateForTravelDataRow", validateForTravelDataRow);
-  console.log(
-    "cwewcwvalidateForAccommodationDataRowecwcew",
-    validateForAccommodationDataRow
-  );
-  console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
+  // console.log("validateForTravellersDataRow", validateForTravellersDataRow);
+  // console.log("validateForTravelDataRow", validateForTravelDataRow);
+  // console.log(
+  //   "cwewcwvalidateForAccommodationDataRowecwcew",
+  //   validateForAccommodationDataRow
+  // );
+  // console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
 
   useEffect(() => {
     let travellersDataRow = validateForTravellersDataRow.filter(
@@ -645,25 +646,26 @@ const TravelRequestForm = () => {
     validateForOccupancyDataRow,
   ]);
   // ================================================================================================================
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     if (error) {
-  //       setError(true)
-  //       console.log("error", error);
-  //      }
-  //   }
-  //   fetchData();
-  // }, [error]);
+  useEffect(() => {
+    async function fetchData() {
+      if (error) {
+        setCheckError(true);
+        console.log("error", error);
+      }
+    }
+    fetchData();
+  }, [error]);
   const handleFormSubmit = async (e) => {
     if (!treavellerRadioButton && !accommodationRadioButton) {
       await alert.error("Atleast one booking request is required");
-      return true;
+      return false;
     } else {
-      if (error === false) {
-        alert.success("Sent");
+      if (checkError) {
+        alert.error("Error");
+        return false;
       } else {
-        await alert.error("Some fields are required");
-        return true;
+        await alert.success("Some fields are required");
+        return false;
       }
     }
     //alert.success(" Sent");
