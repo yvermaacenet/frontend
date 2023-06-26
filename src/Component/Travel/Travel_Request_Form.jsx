@@ -15,7 +15,6 @@ import { border } from "@mui/system";
 import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { fcumsum } from "d3-array";
 
 // testint
 
@@ -52,7 +51,7 @@ const TravelRequestForm = () => {
   });
   let [allData, setAllData] = useState([]);
   let [cityData, setCityData] = useState([]);
-  const [employeeId, setEmployeeId] = useState(LocalStorageData?.emp_id);
+  const [employeeId, setEmployeeId] = useState("");
   const [getEmployeeDataById, setEmployeeDataById] = useState([]);
   const [error, setError] = useState(false);
   const [travellersData, setTravellersData] = useState([]);
@@ -75,7 +74,17 @@ const TravelRequestForm = () => {
     setFilteredProjectIds(filteredProjects);
   };
   // ================================================================================================================
-
+  // ==========For Top Level Details==============
+  const [basicDetails, setBasicDetails] = useState({
+    billable: "",
+    client_id: selectedClientId,
+    project_id: "",
+    reason_for_travel: "",
+    special_request: "",
+    booking_for: "self",
+    // accommodation_required: "",
+    // travellers_required: false,
+  });
   function formatBirthdate(birthdate) {
     var parts = birthdate.split("/");
     var formattedDate = new Date(parts[2], parts[1] - 1, parts[0])
@@ -86,37 +95,159 @@ const TravelRequestForm = () => {
   }
 
   useEffect(() => {
-    const fetchEmployeeData = async () => {
-      const res = await axios
-        .get(`/get_employee_details_for_travel/${employeeId}`)
-        .then((res) => {
-          return setTravellersData([
-            ...travellersData,
-            {
-              // id: 4,
-              data: {
-                is_employee: "Yes",
-                emp_id: res?.data[0]?.["Employee ID"],
-                name: res?.data[0]?.ownerName,
-                gender: res?.data[0]?.Tags,
-                phone: res?.data[0]?.["Personal Mobile Number"],
-                email: res?.data[0]?.["Email address"],
-                dob: formatBirthdate(res?.data[0]?.["Date of Birth"]),
+    if (basicDetails?.booking_for === "self") {
+      const fetchEmployeeData = async () => {
+        const res = await axios
+          .get(`/get_employee_details_for_travel/${LocalStorageData?.emp_id}`)
+          .then((res) => {
+            setRoomsData([
+              {
+                // id: 4,
+                data: {
+                  is_employee: "Yes",
+                  emp_id: res?.data[0]?.["Employee ID"],
+                  name: res?.data[0]?.ownerName,
+                  gender: res?.data[0]?.Tags,
+                  phone: res?.data[0]?.["Personal Mobile Number"],
+                  email: res?.data[0]?.["Email address"],
+                  dob: formatBirthdate(res?.data[0]?.["Date of Birth"]),
+                },
               },
-            },
-          ]);
-        })
-        .catch((err) => {
-          if (err.response.status === 500) {
-            navigate("/error_500");
-          } else {
-            navigate("/error_403");
-          }
-        });
-      setLoading(false);
-    };
-    fetchEmployeeData();
-  }, [employeeId]);
+            ]);
+            return setTravellersData([
+              {
+                data: {
+                  is_employee: "Yes",
+                  emp_id: "",
+                  name: "",
+                  gender: "",
+                  phone: "",
+                  email: "",
+                  dob: "",
+                },
+                // id: 4,
+                data: {
+                  is_employee: "Yes",
+                  emp_id: res?.data[0]?.["Employee ID"],
+                  name: res?.data[0]?.ownerName,
+                  gender: res?.data[0]?.Tags,
+                  phone: res?.data[0]?.["Personal Mobile Number"],
+                  email: res?.data[0]?.["Email address"],
+                  dob: formatBirthdate(res?.data[0]?.["Date of Birth"]),
+                },
+              },
+            ]);
+          })
+          .catch((err) => {
+            if (err.response.status === 500) {
+              navigate("/error_500");
+            } else {
+              navigate("/error_403");
+            }
+          });
+        setLoading(false);
+      };
+      fetchEmployeeData();
+    } else if (basicDetails?.booking_for === "others") {
+      setTravellersData([
+        {
+          // id: 4,
+          data: {
+            is_employee: "Yes",
+            emp_id: "",
+            name: "",
+            gender: "",
+            phone: "",
+            email: "",
+            dob: "",
+          },
+        },
+      ]);
+      setRoomsData([
+        {
+          // id: 4,
+          data: {
+            is_employee: "Yes",
+            emp_id: "",
+            name: "",
+            gender: "",
+            phone: "",
+            email: "",
+            dob: "",
+          },
+        },
+      ]);
+    } else {
+      const fetchEmployeeData = async () => {
+        const res = await axios
+          .get(`/get_employee_details_for_travel/${LocalStorageData?.emp_id}`)
+          .then((res) => {
+            setRoomsData([
+              // id: 4,
+              {
+                id: 1,
+                data: {
+                  is_employee: "Yes",
+                  emp_id: res?.data[0]?.["Employee ID"],
+                  name: res?.data[0]?.ownerName,
+                  gender: res?.data[0]?.Tags,
+                  phone: res?.data[0]?.["Personal Mobile Number"],
+                  email: res?.data[0]?.["Email address"],
+                  dob: formatBirthdate(res?.data[0]?.["Date of Birth"]),
+                },
+              },
+              {
+                id: 2,
+                data: {
+                  is_employee: "Yes",
+                  emp_id: "",
+                  name: "",
+                  gender: "",
+                  phone: "",
+                  email: "",
+                  dob: "",
+                },
+              },
+            ]);
+            return setTravellersData([
+              {
+                id: 2,
+                data: {
+                  is_employee: "Yes",
+                  emp_id: res?.data[0]?.["Employee ID"],
+                  name: res?.data[0]?.ownerName,
+                  gender: res?.data[0]?.Tags,
+                  phone: res?.data[0]?.["Personal Mobile Number"],
+                  email: res?.data[0]?.["Email address"],
+                  dob: formatBirthdate(res?.data[0]?.["Date of Birth"]),
+                },
+              },
+              {
+                id: 1,
+                data: {
+                  is_employee: "Yes",
+                  emp_id: "",
+                  name: "",
+                  gender: "",
+                  phone: "",
+                  email: "",
+                  dob: "",
+                },
+              },
+            ]);
+          })
+          .catch((err) => {
+            if (err.response.status === 500) {
+              navigate("/error_500");
+            } else {
+              navigate("/error_403");
+            }
+          });
+        setLoading(false);
+      };
+      fetchEmployeeData();
+    }
+  }, [employeeId, basicDetails?.booking_for]);
   useEffect(() => {
     async function getCountry() {
       setLoading(true);
@@ -141,16 +272,6 @@ const TravelRequestForm = () => {
     getCountry();
   }, []);
 
-  // ==========For Top Level Details==============
-  const [basicDetails, setBasicDetails] = useState({
-    billable: "",
-    client_id: selectedClientId,
-    project_id: "",
-    reason_for_travel: "",
-    special_request: "",
-    // accommodation_required: "",
-    // travellers_required: false,
-  });
   // ================For Travel Details===========
   const [travel, setTravel] = useState({
     travel_mode: "",
@@ -570,7 +691,7 @@ const TravelRequestForm = () => {
                                 <option value="" selected disabled>
                                   Select...
                                 </option>
-                                <option value="myself">My Self</option>
+                                <option value="self">Self</option>
                                 <option value="others">Others</option>
                                 <option value="myself_others">
                                   Myself + Others
@@ -800,26 +921,30 @@ const TravelRequestForm = () => {
                             >
                               <RiAddFill />
                             </p> */}
-                              <div
-                                id="add_traveller"
-                                class="Btn my-2"
-                                onClick={handleAddTraveller}
-                              >
-                                <div class="sign">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    width="24px"
-                                    height="24px"
-                                    fill-rule="evenodd"
-                                  >
-                                    <path
+                              {basicDetails?.booking_for === "self" ? (
+                                ""
+                              ) : (
+                                <div
+                                  id="add_traveller"
+                                  class="Btn my-2"
+                                  onClick={handleAddTraveller}
+                                >
+                                  <div class="sign">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      width="24px"
+                                      height="24px"
                                       fill-rule="evenodd"
-                                      d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-                                    />
-                                  </svg>
+                                    >
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                      />
+                                    </svg>
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </div>
                             <table className="table table-bordered">
                               <thead>
@@ -839,7 +964,6 @@ const TravelRequestForm = () => {
                                   <tr key={traveller.id}>
                                     <td>
                                       <select
-                                        // required
                                         type="text"
                                         name="is_employee"
                                         className="form-control form-control-sm"
@@ -867,7 +991,6 @@ const TravelRequestForm = () => {
                                     <td>
                                       <input
                                         type="text"
-                                        // required
                                         disabled={
                                           traveller?.data?.is_employee === "Yes"
                                             ? false
@@ -1177,24 +1300,30 @@ const TravelRequestForm = () => {
                                       </small>
                                     </td>
                                     <td>
-                                      <div
-                                        id="Delete_Traveller"
-                                        class="Btn my-2"
-                                        onClick={() =>
-                                          handleTravellerDeleteRow(traveller.id)
-                                        }
-                                      >
-                                        <div class="sign">
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 30 30"
-                                            width="30px"
-                                            height="30px"
-                                          >
-                                            <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                          </svg>
+                                      {basicDetails?.booking_for === "self" ? (
+                                        ""
+                                      ) : (
+                                        <div
+                                          id="Delete_Traveller"
+                                          class="Btn my-2"
+                                          onClick={() =>
+                                            handleTravellerDeleteRow(
+                                              traveller.id
+                                            )
+                                          }
+                                        >
+                                          <div class="sign">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              viewBox="0 0 30 30"
+                                              width="30px"
+                                              height="30px"
+                                            >
+                                              <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                            </svg>
+                                          </div>
                                         </div>
-                                      </div>
+                                      )}
                                     </td>
                                   </tr>
                                 ))}
