@@ -57,12 +57,17 @@ const TravelRequestForm = () => {
   const [travellersData, setTravellersData] = useState([]);
   const [validateForTravellersDataRow, setValidateForTravellersDataRow] =
     useState([]);
+  const [validateForTravelDataRow, setValidateForTravelDataRow] = useState([]);
+  const [validateForAccommodationDataRow, setValidateForAccommodationDataRow] =
+    useState([]);
+  const [validateForOccupancyDataRow, setValidateForOccupancyDataRow] =
+    useState([]);
   const [travellerRowId, setTravellerRowId] = useState("");
   const [numberValue, setNumberValue] = useState("");
   const [selectedClientId, setSelectedClientId] = useState("");
   const [filteredProjectIds, setFilteredProjectIds] = useState([]);
-  const [treavellerButton, setTreavellerButton] = useState(false);
-  const [accommodationButton, setAccommodationButton] = useState(false);
+  const [treavellerButton, setTreavellerButton] = useState(true);
+  const [accommodationButton, setAccommodationButton] = useState(true);
 
   const handleClientChange = (e) => {
     const selectedClient = e.target.value;
@@ -502,10 +507,10 @@ const TravelRequestForm = () => {
     });
   };
   const fffff = () => {
-    let qualificationlist = [];
+    let travellerDatalist = [];
     travellersData.map((item, index) => {
-      qualificationlist = [
-        ...qualificationlist,
+      travellerDatalist = [
+        ...travellerDatalist,
         {
           data: {
             ...item.data,
@@ -545,8 +550,121 @@ const TravelRequestForm = () => {
 
       return item;
     });
-    setValidateForTravellersDataRow(qualificationlist);
-    // setTravellersData(travellerDatalist);
+    setValidateForTravellersDataRow(travellerDatalist);
+    let travelDatalist = [];
+    rows.map((item, index) => {
+      travelDatalist = [
+        ...travelDatalist,
+        {
+          data: {
+            ...item.data,
+            travel_mode:
+              item.data.travel_mode === undefined ||
+              item.data.travel_mode === ""
+                ? true
+                : false,
+            travel_from_city:
+              item.data.travel_from_city === undefined ||
+              item.data.travel_from_city === null
+                ? true
+                : false,
+            travel_to_city:
+              item.data.travel_to_city === undefined ||
+              item.data.travel_to_city === null
+                ? true
+                : false,
+            departure:
+              item.data.departure === undefined || item.data.departure === ""
+                ? true
+                : false,
+            return:
+              (item.data.return === undefined || item.data.return === "") &&
+              item?.data?.trip_type === "Return"
+                ? true
+                : false,
+          },
+        },
+      ];
+
+      return item;
+    });
+    setValidateForTravelDataRow(travelDatalist);
+    let accommodationDatalist = [];
+    accommodationData?.map((item, index) => {
+      accommodationDatalist = [
+        ...accommodationDatalist,
+        {
+          data: {
+            ...item.data,
+            city:
+              item.data.city === undefined || item.data.city === null
+                ? true
+                : false,
+            checkIn:
+              item.data.checkIn === undefined || item.data.checkIn === ""
+                ? true
+                : false,
+            checkOut:
+              item.data.checkOut === undefined || item.data.checkOut === ""
+                ? true
+                : false,
+            breakfastRequired:
+              item.data.breakfastRequired === undefined ||
+              item.data.breakfastRequired === ""
+                ? true
+                : false,
+          },
+        },
+      ];
+
+      return item;
+    });
+    setValidateForAccommodationDataRow(accommodationDatalist);
+    let occupancyDatalist = [];
+    roomsData?.map((item, index) => {
+      occupancyDatalist = [
+        ...occupancyDatalist,
+        {
+          data: {
+            ...item.data,
+            emp_id:
+              (item.data.emp_id === undefined || item.data.emp_id === "") &&
+              item.data?.is_employee === "Yes"
+                ? true
+                : false,
+            name:
+              (item.data.name === undefined || item.data.name === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+            gender:
+              (item.data.gender === undefined || item.data.gender === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+            phone:
+              (item.data.phone === undefined || item.data.phone === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+            email:
+              (item.data.email === undefined || item.data.email === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+            dob:
+              (item.data.email === undefined || item.data.email === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+          },
+        },
+      ];
+
+      return item;
+    });
+
+    setValidateForOccupancyDataRow(occupancyDatalist);
   };
 
   useEffect(() => {
@@ -559,12 +677,46 @@ const TravelRequestForm = () => {
         y.data.emial == true ||
         y.data.dob == true
     );
-    if (travellersDataRow.length > 0) {
+    let travelDataRow = validateForTravelDataRow.filter(
+      (y) =>
+        y.data.travel_mode == true ||
+        y.data.travel_from_city == true ||
+        y.data.travel_to_city == true ||
+        y.data.departure == true ||
+        y.data.return == true
+    );
+    let accommodationDataRow = validateForAccommodationDataRow.filter(
+      (y) =>
+        y.data.city == true ||
+        y.data.checkIn == true ||
+        y.data.checkOut == true ||
+        y.data.breakfastRequired == true
+    );
+    let occpancyDataRow = validateForOccupancyDataRow.filter(
+      (y) =>
+        y.data.emp_id == true ||
+        y.data.name == true ||
+        y.data.gender == true ||
+        y.data.phone == true ||
+        y.data.emial == true ||
+        y.data.dob == true
+    );
+    if (
+      travellersDataRow.length > 0 ||
+      travelDataRow.length > 0 ||
+      accommodationDataRow.length > 0 ||
+      occpancyDataRow.length > 0
+    ) {
       setError(true);
     } else {
       setError(false);
     }
-  }, [validateForTravellersDataRow]);
+  }, [
+    validateForTravellersDataRow,
+    validateForTravelDataRow,
+    validateForAccommodationDataRow,
+    validateForOccupancyDataRow,
+  ]);
   // ================================================================================================================
   const handleFormSubmit = async (e) => {
     // e.preventDefault();
@@ -1421,23 +1573,25 @@ const TravelRequestForm = () => {
                                   <th>From (City)</th>
                                   <th>To (City)</th>
                                   <th>Departure</th>
-                                  {/* {rows.map(
-                                  (row) =>
-                                    row?.data?.trip_type === "Return" && (
-                                      <th>Return</th>
-                                    )
-                                )} */}
+
                                   <th>Return</th>
                                   <th>Action</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                {rows.map((row) => (
+                                {rows.map((row, index) => (
                                   <tr key={row.id}>
                                     <td className="w-25">
                                       <select
                                         // required
-                                        className="form-select form-select-md"
+                                        className={classNames(
+                                          "form-select form-select-md",
+                                          {
+                                            "is-invalid":
+                                              validateForTravelDataRow[index]
+                                                ?.data?.travel_mode,
+                                          }
+                                        )}
                                         value={row.data.travel_mode}
                                         onChange={(e) =>
                                           handleDataChange(row.id, {
@@ -1455,6 +1609,18 @@ const TravelRequestForm = () => {
                                           </option>
                                         ))}
                                       </select>
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravelDataRow[index]?.data
+                                          ?.travel_mode &&
+                                          "This field is required"}
+                                      </small>
                                     </td>
                                     <td className="w-25">
                                       <select
@@ -1480,7 +1646,7 @@ const TravelRequestForm = () => {
                                       <Select
                                         // required
                                         isClearable={true}
-                                        name="flight_from_city"
+                                        name="travel_from_city"
                                         options={cityData}
                                         // defaultValue={[cityData[0]]}
                                         value={row.data.travel_from_city}
@@ -1491,12 +1657,24 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravelDataRow[index]?.data
+                                          ?.travel_from_city &&
+                                          "This field is required"}
+                                      </small>
                                     </td>
                                     <td className="w-25">
                                       <Select
                                         className="form-select-select"
                                         isClearable={true}
-                                        name="flight_to_city"
+                                        name="travel_to_city"
                                         // required
                                         options={filterObjectByLabel(
                                           cityData,
@@ -1511,6 +1689,18 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravelDataRow[index]?.data
+                                          ?.travel_to_city &&
+                                          "This field is required"}
+                                      </small>
                                     </td>
                                     <td>
                                       <input
@@ -1526,8 +1716,20 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravelDataRow[index]?.data
+                                          ?.departure &&
+                                          "This field is required"}
+                                      </small>
                                     </td>
-                                    {/* {row?.data?.trip_type === "Return" && ( */}
+
                                     <td>
                                       <input
                                         type="date"
@@ -1548,8 +1750,19 @@ const TravelRequestForm = () => {
                                             : false
                                         }
                                       />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.25rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForTravelDataRow[index]?.data
+                                          ?.return && "This field is required"}
+                                      </small>
                                     </td>
-                                    {/* )} */}
+
                                     <td>
                                       <div
                                         id="Delete_Travel"
@@ -1705,172 +1918,282 @@ const TravelRequestForm = () => {
                                 </tr>
                               </thead>
                               <tbody>
-                                {accommodationData?.map((accommodation) => (
-                                  <tr key={accommodation.id}>
-                                    <td>
-                                      <Select
-                                        // required
-                                        isClearable={true}
-                                        name="city"
-                                        options={cityData}
-                                        value={accommodationData?.data?.city}
-                                        onChange={(selectedOption) =>
-                                          handleAccommodationChange(
-                                            accommodation.id,
-                                            {
-                                              ...accommodation.data,
-                                              city: selectedOption,
-                                            }
-                                          )
-                                        }
-                                      />
-                                      {/* <input
-                                  type="text"
-                                  value={accommodation.data.city}
-                                  name="city"
-                                  className="form-control form-control-sm"
-                                  onChange={(e) =>
-                                    // handleAccommodationChange(
-                                    //   accommodation.id,
-                                    //   {
-                                    //     city: e.target.value,
-                                      }
-                                    )
-                                  }
-                                /> */}
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="date"
-                                        // required
-                                        min={getCurrentDate()}
-                                        value={accommodation.data.checkIn}
-                                        name="checkIn"
-                                        className="form-control form-control-sm"
-                                        onChange={(e) =>
-                                          handleAccommodationChange(
-                                            accommodation.id,
-                                            {
-                                              checkIn: e.target.value,
-                                            }
-                                          )
-                                        }
-                                      />
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="date"
-                                        // required
-                                        value={accommodation.data.checkOut}
-                                        name="checkOut"
-                                        min={accommodation.data.checkIn}
-                                        className="form-control form-control-sm"
-                                        onChange={(e) =>
-                                          handleAccommodationChange(
-                                            accommodation.id,
-                                            {
-                                              checkOut: e.target.value,
-                                            }
-                                          )
-                                        }
-                                      />
-                                    </td>
-                                    <td>
-                                      <select
-                                        name="breakfastRequired"
-                                        className="form-select form-select-md"
-                                        value={
-                                          accommodation.data.breakfastRequired
-                                        }
-                                        onChange={(e) =>
-                                          handleAccommodationChange(
-                                            accommodation.id,
-                                            {
-                                              breakfastRequired: e.target.value,
-                                            }
-                                          )
-                                        }
-                                      >
-                                        <option value="" selected disabled>
-                                          Select
-                                        </option>
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
-                                      </select>
-                                    </td>
-                                    <td>
-                                      <button
-                                        class="btn btn-primary btn-sm dropdown-toggle"
-                                        type="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                      >
-                                        Rooms:
-                                        {accommodation.data.number_of_rooms} |
-                                        Adults :
-                                        {accommodation.data.number_of_adults}|
-                                        Children:
-                                        {accommodation.data.number_of_children}
-                                      </button>
-
-                                      <div class="dropdown-menu form-floating">
-                                        <div class="form-floating">
-                                          <input
-                                            type="number"
-                                            max={
-                                              9
-                                              // accommodation?.data
-                                              //   ?.number_of_adults
-                                            }
-                                            min={1}
-                                            class="form-control form-control-sm h-25"
-                                            id="floatingInput"
-                                            name="number_of_rooms"
-                                            value={
-                                              accommodation?.data
-                                                ?.number_of_rooms
-                                            }
-                                            placeholder="name@example.com"
-                                            onChange={(e) => {
-                                              let { value } = e.target;
-
-                                              // Remove leading zeros
-                                              value = value.replace(/^0+/, "");
-
-                                              // Limit the number of digits to 2
-                                              if (value.length > 2) {
-                                                value = value.slice(0, 2);
+                                {accommodationData?.map(
+                                  (accommodation, index) => (
+                                    <tr key={accommodation.id}>
+                                      <td>
+                                        <Select
+                                          // required
+                                          isClearable={true}
+                                          name="city"
+                                          options={cityData}
+                                          value={accommodationData?.data?.city}
+                                          onChange={(selectedOption) =>
+                                            handleAccommodationChange(
+                                              accommodation.id,
+                                              {
+                                                ...accommodation.data,
+                                                city: selectedOption,
                                               }
+                                            )
+                                          }
+                                        />
+                                        <small
+                                          style={{
+                                            width: "100%",
+                                            marginTop: " 0.40rem",
+                                            fontSize: "100%",
+                                            color: "#dc3545",
+                                          }}
+                                        >
+                                          {validateForAccommodationDataRow[
+                                            index
+                                          ]?.data?.city &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <input
+                                          type="date"
+                                          // required
+                                          min={getCurrentDate()}
+                                          value={accommodation.data.checkIn}
+                                          name="checkIn"
+                                          className="form-control form-control-sm"
+                                          onChange={(e) =>
+                                            handleAccommodationChange(
+                                              accommodation.id,
+                                              {
+                                                checkIn: e.target.value,
+                                              }
+                                            )
+                                          }
+                                        />
+                                        <small
+                                          style={{
+                                            width: "100%",
+                                            marginTop: " 0.40rem",
+                                            fontSize: "100%",
+                                            color: "#dc3545",
+                                          }}
+                                        >
+                                          {validateForAccommodationDataRow[
+                                            index
+                                          ]?.data?.checkIn &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <input
+                                          type="date"
+                                          // required
+                                          value={accommodation.data.checkOut}
+                                          name="checkOut"
+                                          min={accommodation.data.checkIn}
+                                          className="form-control form-control-sm"
+                                          onChange={(e) =>
+                                            handleAccommodationChange(
+                                              accommodation.id,
+                                              {
+                                                checkOut: e.target.value,
+                                              }
+                                            )
+                                          }
+                                        />
+                                        <small
+                                          style={{
+                                            width: "100%",
+                                            marginTop: " 0.40rem",
+                                            fontSize: "100%",
+                                            color: "#dc3545",
+                                          }}
+                                        >
+                                          {validateForAccommodationDataRow[
+                                            index
+                                          ]?.data?.checkOut &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <select
+                                          name="breakfastRequired"
+                                          className="form-select form-select-md"
+                                          value={
+                                            accommodation.data.breakfastRequired
+                                          }
+                                          onChange={(e) =>
+                                            handleAccommodationChange(
+                                              accommodation.id,
+                                              {
+                                                breakfastRequired:
+                                                  e.target.value,
+                                              }
+                                            )
+                                          }
+                                        >
+                                          <option value="" selected disabled>
+                                            Select
+                                          </option>
+                                          <option value="Yes">Yes</option>
+                                          <option value="No">No</option>
+                                        </select>
+                                        <small
+                                          style={{
+                                            width: "100%",
+                                            marginTop: " 0.40rem",
+                                            fontSize: "100%",
+                                            color: "#dc3545",
+                                          }}
+                                        >
+                                          {validateForAccommodationDataRow[
+                                            index
+                                          ]?.data?.breakfastRequired &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <button
+                                          class="btn btn-primary btn-sm dropdown-toggle"
+                                          type="button"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
+                                        >
+                                          Rooms:
+                                          {accommodation.data.number_of_rooms} |
+                                          Adults :
+                                          {accommodation.data.number_of_adults}|
+                                          Children:
+                                          {
+                                            accommodation.data
+                                              .number_of_children
+                                          }
+                                        </button>
 
-                                              // Validate the value to be less than 99
+                                        <div class="dropdown-menu form-floating">
+                                          <div class="form-floating">
+                                            <input
+                                              type="number"
+                                              max={
+                                                9
+                                                // accommodation?.data
+                                                //   ?.number_of_adults
+                                              }
+                                              min={1}
+                                              class="form-control form-control-sm h-25"
+                                              id="floatingInput"
+                                              name="number_of_rooms"
+                                              value={
+                                                accommodation?.data
+                                                  ?.number_of_rooms
+                                              }
+                                              placeholder="name@example.com"
+                                              onChange={(e) => {
+                                                let { value } = e.target;
 
-                                              handleAccommodationChange(
-                                                accommodation.id,
-                                                {
-                                                  number_of_rooms:
-                                                    e.target.value,
-                                                  number_of_adults:
-                                                    e.target.value <
-                                                    accommodation.data
-                                                      .number_of_adults
-                                                      ? accommodation.data
-                                                          .number_of_adults
-                                                      : e.target.value,
+                                                // Remove leading zeros
+                                                value = value.replace(
+                                                  /^0+/,
+                                                  ""
+                                                );
+
+                                                // Limit the number of digits to 2
+                                                if (value.length > 2) {
+                                                  value = value.slice(0, 2);
                                                 }
-                                              );
-                                              if (
-                                                e.target.value >
-                                                accommodation.data
-                                                  .number_of_adults
-                                              ) {
+
+                                                // Validate the value to be less than 99
+
+                                                handleAccommodationChange(
+                                                  accommodation.id,
+                                                  {
+                                                    number_of_rooms:
+                                                      e.target.value,
+                                                    number_of_adults:
+                                                      e.target.value <
+                                                      accommodation.data
+                                                        .number_of_adults
+                                                        ? accommodation.data
+                                                            .number_of_adults
+                                                        : e.target.value,
+                                                  }
+                                                );
+                                                if (
+                                                  e.target.value >
+                                                  accommodation.data
+                                                    .number_of_adults
+                                                ) {
+                                                  const dd = [];
+                                                  for (
+                                                    let i = 0;
+                                                    i <=
+                                                    eval(
+                                                      accommodation?.data
+                                                        ?.number_of_adults
+                                                    ) +
+                                                      eval(
+                                                        accommodation?.data
+                                                          ?.number_of_children
+                                                      );
+                                                    i++
+                                                  ) {
+                                                    dd.push({
+                                                      id: i,
+                                                      data: {
+                                                        is_employee: "Yes",
+                                                      },
+                                                    });
+                                                  }
+                                                  setRoomsData(dd);
+                                                }
+                                              }}
+                                            />
+
+                                            <label for="floatingInput">
+                                              Rooms
+                                            </label>
+                                          </div>
+                                          <div class="form-floating">
+                                            <input
+                                              type="number"
+                                              max={99}
+                                              min={
+                                                accommodation?.data
+                                                  ?.number_of_rooms
+                                              }
+                                              name="number_of_adults"
+                                              class="form-control  form-control-sm h-25"
+                                              id="floatingInput"
+                                              placeholder="Password"
+                                              value={
+                                                accommodation?.data
+                                                  ?.number_of_adults
+                                              }
+                                              onChange={(e) => {
+                                                let { value } = e.target;
+
+                                                // Remove leading zeros
+                                                value = value.replace(
+                                                  /^0+/,
+                                                  ""
+                                                );
+
+                                                // Limit the number of digits to 2
+                                                if (value.length > 2) {
+                                                  value = value.slice(0, 2);
+                                                }
+                                                handleAccommodationChange(
+                                                  accommodation.id,
+                                                  {
+                                                    number_of_adults:
+                                                      e.target.value,
+                                                  }
+                                                );
+
                                                 const dd = [];
                                                 for (
-                                                  let i = 0;
+                                                  let i = 1;
                                                   i <=
-                                                  eval(
-                                                    accommodation?.data
-                                                      ?.number_of_adults
-                                                  ) +
+                                                  eval(e.target.value) +
                                                     eval(
                                                       accommodation?.data
                                                         ?.number_of_children
@@ -1885,147 +2208,89 @@ const TravelRequestForm = () => {
                                                   });
                                                 }
                                                 setRoomsData(dd);
+                                              }}
+                                            />
+                                            <label for="floatingPassword">
+                                              Adults
+                                            </label>
+                                          </div>
+                                          <div class="form-floating">
+                                            <input
+                                              type="number"
+                                              class="form-control  form-control-sm h-25"
+                                              id="floatingInput"
+                                              name="number_of_children"
+                                              min={0}
+                                              value={
+                                                accommodation?.data
+                                                  ?.number_of_children
                                               }
-                                            }}
-                                          />
+                                              placeholder="No. of Children"
+                                              onChange={(e) => {
+                                                let { value } = e.target;
 
-                                          <label for="floatingInput">
-                                            Rooms
-                                          </label>
-                                        </div>
-                                        <div class="form-floating">
-                                          <input
-                                            type="number"
-                                            max={99}
-                                            min={
-                                              accommodation?.data
-                                                ?.number_of_rooms
-                                            }
-                                            name="number_of_adults"
-                                            class="form-control  form-control-sm h-25"
-                                            id="floatingInput"
-                                            placeholder="Password"
-                                            value={
-                                              accommodation?.data
-                                                ?.number_of_adults
-                                            }
-                                            onChange={(e) => {
-                                              let { value } = e.target;
+                                                // Remove leading zeros
+                                                value = value.replace(
+                                                  /^0+/,
+                                                  ""
+                                                );
 
-                                              // Remove leading zeros
-                                              value = value.replace(/^0+/, "");
-
-                                              // Limit the number of digits to 2
-                                              if (value.length > 2) {
-                                                value = value.slice(0, 2);
-                                              }
-                                              handleAccommodationChange(
-                                                accommodation.id,
-                                                {
-                                                  number_of_adults:
-                                                    e.target.value,
+                                                // Limit the number of digits to 2
+                                                if (value?.length > 2) {
+                                                  value = value.slice(0, 2);
                                                 }
-                                              );
-
-                                              const dd = [];
-                                              for (
-                                                let i = 1;
-                                                i <=
-                                                eval(e.target.value) +
-                                                  eval(
-                                                    accommodation?.data
-                                                      ?.number_of_children
-                                                  );
-                                                i++
-                                              ) {
-                                                dd.push({
-                                                  id: i,
-                                                  data: {
-                                                    is_employee: "Yes",
-                                                  },
-                                                });
-                                              }
-                                              setRoomsData(dd);
-                                            }}
-                                          />
-                                          <label for="floatingPassword">
-                                            Adults
-                                          </label>
-                                        </div>
-                                        <div class="form-floating">
-                                          <input
-                                            type="number"
-                                            class="form-control  form-control-sm h-25"
-                                            id="floatingInput"
-                                            name="number_of_children"
-                                            min={0}
-                                            value={
-                                              accommodation?.data
-                                                ?.number_of_children
-                                            }
-                                            placeholder="No. of Children"
-                                            onChange={(e) => {
-                                              let { value } = e.target;
-
-                                              // Remove leading zeros
-                                              value = value.replace(/^0+/, "");
-
-                                              // Limit the number of digits to 2
-                                              if (value?.length > 2) {
-                                                value = value.slice(0, 2);
-                                              }
-                                              handleAccommodationChange(
-                                                accommodation.id,
-                                                {
-                                                  number_of_children:
-                                                    e.target.value,
+                                                handleAccommodationChange(
+                                                  accommodation.id,
+                                                  {
+                                                    number_of_children:
+                                                      e.target.value,
+                                                  }
+                                                );
+                                                const dd = [];
+                                                for (
+                                                  let i = 1;
+                                                  i <=
+                                                  eval(e.target.value) +
+                                                    eval(
+                                                      accommodation?.data
+                                                        ?.number_of_adults
+                                                    );
+                                                  i++
+                                                ) {
+                                                  dd.push({
+                                                    id: i,
+                                                    data: {
+                                                      is_employee: "Yes",
+                                                    },
+                                                  });
                                                 }
-                                              );
-                                              const dd = [];
-                                              for (
-                                                let i = 1;
-                                                i <=
-                                                eval(e.target.value) +
-                                                  eval(
-                                                    accommodation?.data
-                                                      ?.number_of_adults
-                                                  );
-                                                i++
-                                              ) {
-                                                dd.push({
-                                                  id: i,
-                                                  data: {
-                                                    is_employee: "Yes",
-                                                  },
-                                                });
-                                              }
 
-                                              setRoomsData(dd);
-                                              // const dd = [];
-                                              // for (let i = 1; i <= value; i++) {
-                                              //   dd.push({
-                                              //     id: 1,
-                                              //     data: { is_employee: "Yes" },
-                                              //   });
-                                              // }
-                                              // const hh = {
-                                              //   id: 3,
-                                              //   data: { is_employee: "Yes" },
-                                              // };
-                                              // setRoomsData([...roomsData, hh]);
-                                              // //                                         const newRow = { id: 3, data: { is_employee: "Yes" } };
-                                              // // setRoomsData([...roomsData, newRow]);
-                                            }}
-                                          />
-                                          <label for="floatingPassword">
-                                            Children
-                                          </label>
+                                                setRoomsData(dd);
+                                                // const dd = [];
+                                                // for (let i = 1; i <= value; i++) {
+                                                //   dd.push({
+                                                //     id: 1,
+                                                //     data: { is_employee: "Yes" },
+                                                //   });
+                                                // }
+                                                // const hh = {
+                                                //   id: 3,
+                                                //   data: { is_employee: "Yes" },
+                                                // };
+                                                // setRoomsData([...roomsData, hh]);
+                                                // //                                         const newRow = { id: 3, data: { is_employee: "Yes" } };
+                                                // // setRoomsData([...roomsData, newRow]);
+                                              }}
+                                            />
+                                            <label for="floatingPassword">
+                                              Children
+                                            </label>
+                                          </div>
                                         </div>
-                                      </div>
-                                    </td>
+                                      </td>
 
-                                    <td>
-                                      {/* <button
+                                      <td>
+                                        {/* <button
                                       className="btn btn-danger btn-sm"
                                       onClick={() =>
                                         handleAccommodationDeleteRow(
@@ -2035,29 +2300,30 @@ const TravelRequestForm = () => {
                                     >
                                       <RiDeleteBin6Line />
                                     </button> */}
-                                      <div
-                                        id="Delete_Accommodation"
-                                        class="Btn my-2"
-                                        onClick={() =>
-                                          handleAccommodationDeleteRow(
-                                            accommodation.id
-                                          )
-                                        }
-                                      >
-                                        <div class="sign">
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 30 30"
-                                            width="30px"
-                                            height="30px"
-                                          >
-                                            <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                          </svg>
+                                        <div
+                                          id="Delete_Accommodation"
+                                          class="Btn my-2"
+                                          onClick={() =>
+                                            handleAccommodationDeleteRow(
+                                              accommodation.id
+                                            )
+                                          }
+                                        >
+                                          <div class="sign">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              viewBox="0 0 30 30"
+                                              width="30px"
+                                              height="30px"
+                                            >
+                                              <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                            </svg>
+                                          </div>
                                         </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                ))}
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
                               </tbody>
                             </table>
                             {/* <button
@@ -2158,6 +2424,18 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.40rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForOccupancyDataRow[index]
+                                          ?.data?.emp_id &&
+                                          "This field is required"}
+                                      </small>
                                     </td>
                                     <td>
                                       <input
@@ -2178,6 +2456,18 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.40rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForOccupancyDataRow[index]
+                                          ?.data?.name &&
+                                          "This field is required"}
+                                      </small>
                                     </td>
                                     <td>
                                       {room?.data?.is_employee === "Yes" ? (
@@ -2217,6 +2507,18 @@ const TravelRequestForm = () => {
                                           <option value="Female">Female</option>
                                         </select>
                                       )}
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.40rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForOccupancyDataRow[index]
+                                          ?.data?.gender &&
+                                          "This field is required"}
+                                      </small>
                                     </td>
                                     <td>
                                       <input
@@ -2243,6 +2545,18 @@ const TravelRequestForm = () => {
                                           });
                                         }}
                                       />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.40rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForOccupancyDataRow[index]
+                                          ?.data?.phone &&
+                                          "This field is required"}
+                                      </small>
                                     </td>
                                     <td>
                                       <input
@@ -2263,6 +2577,18 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.40rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
+                                      >
+                                        {validateForOccupancyDataRow[index]
+                                          ?.data?.email &&
+                                          "This field is required"}
+                                      </small>
                                     </td>
                                     <td>
                                       <input
@@ -2283,37 +2609,23 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
-                                    </td>
-                                    {/* <td>
-                                      <div
-                                        id="Delete_Occupancy"
-                                        class="Btn my-2"
-                                        onClick={() =>
-                                          handleRoomDeleteRow(room.id)
-                                        }
+                                      <small
+                                        style={{
+                                          width: "100%",
+                                          marginTop: " 0.40rem",
+                                          fontSize: "100%",
+                                          color: "#dc3545",
+                                        }}
                                       >
-                                        <div class="sign">
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 30 30"
-                                            width="30px"
-                                            height="30px"
-                                          >
-                                            <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                          </svg>
-                                        </div>
-                                      </div>
-                                    </td> */}
+                                        {validateForOccupancyDataRow[index]
+                                          ?.data?.dob &&
+                                          "This field is required"}
+                                      </small>
+                                    </td>
                                   </tr>
                                 ))}
                               </tbody>
                             </table>
-                            {/* <button
-                          className="btn btn-primary btn-sm"
-                          onClick={handleAddRoom}
-                        >
-                          <RiAddFill />
-                        </button> */}
                           </div>
                         )}
                         <div className="row mt-2">
