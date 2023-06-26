@@ -469,106 +469,112 @@ export const form_flexible_validation = yup.object({
 });
 
 export const travel_request_form_validation = yup.object({
-  start_date: yup.string().required("This field is required"),
-  end_date: yup
-    .string()
-    .required("This field is required")
-    .test(
-      "end_date",
-      "End date must be greater than start date",
-      function (value) {
-        if (value !== "" && value !== undefined) {
-          let D2 = this.resolve(yup.ref("end_date"));
-          let D1 = this.resolve(yup.ref("start_date"));
-          if (D2 !== "") {
-            return D2 >= D1 ? true : false;
-          } else {
-            return true;
-          }
-        }
-      }
-    ),
+  booking_for: yup.string().required("This field is required"),
   billable: yup.string().required("This field is required"),
-
-  project_id: yup.string().when("billable", (val, schema) => {
-    if (val[0] === "Yes") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
+  project_id: yup.string().required("This field is required"),
+  client_id: yup.string().required("This field is required"),
   reason_for_travel: yup.string().required("This field is required"),
-  flight_travel: yup.string().notRequired(),
-  flight_from_city: yup.string().when("flight_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
-  flight_to_city: yup.string().when("flight_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
-  hotel_travel: yup.string().notRequired(),
-  hotel_city: yup.string().when("hotel_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
-  hotel_checkin: yup.string().when("hotel_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
-  hotel_checkout: yup.string().when("hotel_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup
-        .string()
-        .required("This field is required")
-        .test(
-          "hotel_checkout",
-          "Check-out date must be greater than Check-in date",
-          function (value) {
-            if (value !== "" && value !== undefined) {
-              let D2 = this.resolve(yup.ref("hotel_checkout"));
-              let D1 = this.resolve(yup.ref("hotel_checkin"));
-              if (D2 !== "") {
-                return D2 >= D1 ? true : false;
-              } else {
-                return true;
-              }
-            }
-          }
-        );
-    } else return yup.string().notRequired();
-  }),
+  accommodation_required: yup.string().required("This field is required"),
+  // emp_id: yup.string().required("This field is required"),
+  // start_date: yup.string().required("This field is required"),
+  // end_date: yup
+  //   .string()
+  //   .required("This field is required")
+  //   .test(
+  //     "end_date",
+  //     "End date must be greater than start date",
+  //     function (value) {
+  //       if (value !== "" && value !== undefined) {
+  //         let D2 = this.resolve(yup.ref("end_date"));
+  //         let D1 = this.resolve(yup.ref("start_date"));
+  //         if (D2 !== "") {
+  //           return D2 >= D1 ? true : false;
+  //         } else {
+  //           return true;
+  //         }
+  //       }
+  //     }
+  //   ),
 
-  train_travel: yup.string().notRequired(),
-  train_from_city: yup.string().when("train_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
-  train_to_city: yup.string().when("train_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
+  // project_id: yup.string().when("billable", (val, schema) => {
+  //   if (val[0] === "Yes") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
+  // reason_for_travel: yup.string().required("This field is required"),
+  // flight_travel: yup.string().notRequired(),
+  // flight_from_city: yup.string().when("flight_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
+  // flight_to_city: yup.string().when("flight_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
+  // hotel_travel: yup.string().notRequired(),
+  // hotel_city: yup.string().when("hotel_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
+  // hotel_checkin: yup.string().when("hotel_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
+  // hotel_checkout: yup.string().when("hotel_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup
+  //       .string()
+  //       .required("This field is required")
+  //       .test(
+  //         "hotel_checkout",
+  //         "Check-out date must be greater than Check-in date",
+  //         function (value) {
+  //           if (value !== "" && value !== undefined) {
+  //             let D2 = this.resolve(yup.ref("hotel_checkout"));
+  //             let D1 = this.resolve(yup.ref("hotel_checkin"));
+  //             if (D2 !== "") {
+  //               return D2 >= D1 ? true : false;
+  //             } else {
+  //               return true;
+  //             }
+  //           }
+  //         }
+  //       );
+  //   } else return yup.string().notRequired();
+  // }),
 
-  other_travel: yup.string().notRequired(),
-  other_travel_type: yup.string().when("other_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
-  other_from_city: yup.string().when("other_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
-  other_to_city: yup.string().when("other_travel", (val, schema) => {
-    if (val[0] === "true") {
-      return yup.string().required("This field is required");
-    } else return yup.string().notRequired();
-  }),
+  // train_travel: yup.string().notRequired(),
+  // train_from_city: yup.string().when("train_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
+  // train_to_city: yup.string().when("train_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
+
+  // other_travel: yup.string().notRequired(),
+  // other_travel_type: yup.string().when("other_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
+  // other_from_city: yup.string().when("other_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
+  // other_to_city: yup.string().when("other_travel", (val, schema) => {
+  //   if (val[0] === "true") {
+  //     return yup.string().required("This field is required");
+  //   } else return yup.string().notRequired();
+  // }),
 });
 export const form_travel_request_action_validation = yup.object({
   remarks: yup.string().required("This field is required"),

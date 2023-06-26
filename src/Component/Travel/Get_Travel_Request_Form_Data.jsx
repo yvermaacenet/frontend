@@ -138,6 +138,27 @@ const GetTravelRequestForm_Data = () => {
                                   View
                                 </td>
                                 <td
+                                  className="btn btn-outline-primary btn-sm"
+                                  type="button"
+                                  // onClick={() => {
+                                  //   return (
+                                  //     setViewRequestModal(true),
+                                  //     setViewRequestData(val)
+                                  //   );
+                                  // }}
+                                  onClick={() => {
+                                    return (
+                                      // setModalData(val),
+                                      setId(val._id),
+                                      navigate(
+                                        `/edittravelactionpage/${val._id}`
+                                      )
+                                    );
+                                  }}
+                                >
+                                  Edit
+                                </td>
+                                <td
                                   className="btn btn-sm btn-outline-danger mx-2"
                                   style={{
                                     visibility:
@@ -201,7 +222,7 @@ const GetTravelRequestForm_Data = () => {
                       className="card-title text-primary mt-2"
                       style={{ fontSize: "14px" }}
                     >
-                      Informationa
+                      Information
                     </h6>
                     <table className="table table-bordered">
                       <thead>

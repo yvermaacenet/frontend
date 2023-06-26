@@ -4811,7 +4811,13 @@ textarea.form-control-lg {
   font-size: 0.875rem;
   border-radius: 0.2rem;
 }
-
+.form-select-md {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  font-size: 1rem;
+  border-radius: 0.3rem;
+}
 .form-select-lg {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;

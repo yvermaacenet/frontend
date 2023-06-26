@@ -15,6 +15,7 @@ import { border } from "@mui/system";
 import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import { fcumsum } from "d3-array";
 
 // testint
 
@@ -39,12 +40,24 @@ const TravelRequestForm = () => {
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const alert = useAlert();
   let [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(travel_request_form_validation),
+  });
   let [allData, setAllData] = useState([]);
   let [cityData, setCityData] = useState([]);
   const [employeeId, setEmployeeId] = useState(LocalStorageData?.emp_id);
   const [getEmployeeDataById, setEmployeeDataById] = useState([]);
   const [error, setError] = useState(false);
   const [travellersData, setTravellersData] = useState([]);
+  const [validateForTravellersDataRow, setValidateForTravellersDataRow] =
+    useState([]);
   const [travellerRowId, setTravellerRowId] = useState("");
   const [numberValue, setNumberValue] = useState("");
   const [selectedClientId, setSelectedClientId] = useState("");
@@ -133,6 +146,7 @@ const TravelRequestForm = () => {
     project_id: "",
     reason_for_travel: "",
     special_request: "",
+    accommodation_required: "",
   });
   // ================For Travel Details===========
   const [travel, setTravel] = useState({
@@ -260,7 +274,10 @@ const TravelRequestForm = () => {
   //
   // ================For Accomendation================
   const [accommodationData, setAccommodationData] = useState([
-    { id: 1, data: {} },
+    {
+      id: 1,
+      data: { number_of_rooms: 1, number_of_adults: 1, number_of_children: 0 },
+    },
   ]);
 
   const handleAddAccommodation = () => {
@@ -287,9 +304,15 @@ const TravelRequestForm = () => {
   //
 
   // ==================For Rooms=====================
+
   const [roomsData, setRoomsData] = useState([
-    { id: 1, data: { is_employee: "Yes" } },
+    {
+      id: 1,
+      data: { is_employee: "Yes" },
+    },
   ]);
+
+  // roomsData.push({ id: 1, data: { is_employee: "Yes" } });
 
   const handleAddRoom = () => {
     const newRow = { id: roomsData.length + 1, data: { is_employee: "Yes" } };
@@ -354,28 +377,101 @@ const TravelRequestForm = () => {
       };
     });
   };
+  const fffff = () => {
+    let qualificationlist = [];
+    travellersData.map((item, index) => {
+      qualificationlist = [
+        ...qualificationlist,
+        {
+          data: {
+            ...item.data,
+            emp_id:
+              (item.data.emp_id === undefined || item.data.emp_id === "") &&
+              item.data?.is_employee === "Yes"
+                ? true
+                : false,
+            name:
+              (item.data.name === undefined || item.data.name === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+            gender:
+              (item.data.gender === undefined || item.data.gender === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+            phone:
+              (item.data.phone === undefined || item.data.phone === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+            email:
+              (item.data.email === undefined || item.data.email === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+            dob:
+              (item.data.email === undefined || item.data.email === "") &&
+              item.data?.is_employee === "No"
+                ? true
+                : false,
+          },
+        },
+      ];
 
-  // ================================================================================================================
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    const res = await axios.post("all_travel_request_data", {
-      basicDetails,
-      rows,
-      travellersData,
-      accommodationData,
-      roomsData,
-      management_approval: "Pending",
-      created_by: LocalStorageData?.email,
+      return item;
     });
-    if (res?.data === "Created") {
-      alert.success("Request Sent");
-      navigate("/alltravelrequest");
-    }
+    setValidateForTravellersDataRow(qualificationlist);
+    // setTravellersData(travellerDatalist);
   };
 
-  const data = accommodationData?.data?.number_of_rooms;
+  useEffect(() => {
+    let travellersDataRow = validateForTravellersDataRow.filter(
+      (y) =>
+        y.data.emp_id == true ||
+        y.data.name == true ||
+        y.data.gender == true ||
+        y.data.phone == true ||
+        y.data.emial == true ||
+        y.data.dob == true
+    );
+    if (travellersDataRow.length > 0) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [validateForTravellersDataRow]);
+  // ================================================================================================================
+  const handleFormSubmit = async (e) => {
+    // e.preventDefault();
+    if (error) {
+      alert.error("Some fields are required");
+      return true;
+    }
+    alert.success(" Sent");
+
+    // const res = await axios.post("all_travel_request_data", {
+    //   basicDetails,
+    //   rows,
+    //   travellersData,
+    //   accommodationData,
+    //   roomsData,
+    //   management_approval: "Pending",
+    //   created_by: LocalStorageData?.email,
+    // });
+    // if (res?.data === "Created") {
+    //   alert.success("Request Sent");
+    //   navigate("/alltravelrequest");
+    // }
+  };
+
+  // const data = accommodationData?.data?.number_of_rooms;
   const renderOptions = (numberOfRooms) => {
-    const options = [];
+    const options = [
+      // <option value="" selected disabled>
+      //   Select
+      // </option>,
+    ];
     for (let i = 1; i <= numberOfRooms; i++) {
       options.push(
         <option key={i} value={`Room ${i}`}>
@@ -411,6 +507,7 @@ const TravelRequestForm = () => {
   }
   // =================Format date For Inputs===============
 
+  let d1 = new Date().toISOString().split("T")[0];
   return (
     <>
       <div className="container-scroller">
@@ -431,21 +528,71 @@ const TravelRequestForm = () => {
                   <div class="loader"></div>
                 </div>
               )}
-
+              {/* <input
+                type="date"
+                max={new Date().toLocaleDateString("fr-ca")}
+                min="1990-12-12"
+              ></input> */}
+              {/* <button type="button" onClick={fffff}>
+                click me
+              </button> */}
               <div className="row">
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <form action="" onSubmit={handleFormSubmit}>
+                      <form
+                        action=""
+                        onClick={fffff}
+                        onSubmit={handleSubmit(handleFormSubmit)}
+                      >
                         <div className="row">
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>Booking For</label>
+                              <span className="astik"> *</span>
+                              <select
+                                className={classNames(
+                                  "form-select form-select-md",
+                                  {
+                                    "is-invalid": errors.booking_for,
+                                  }
+                                )}
+                                {...register("booking_for", {
+                                  value: basicDetails?.booking_for,
+                                })}
+                                value={basicDetails?.booking_for}
+                                onChange={inputEvent}
+                                name="booking_for"
+                              >
+                                <option value="" selected disabled>
+                                  Select...
+                                </option>
+                                <option value="myself">My Self</option>
+                                <option value="others">Others</option>
+                                <option value="myself_others">
+                                  Myself + Others
+                                </option>
+                              </select>
+                              <small className="invalid-feedback">
+                                {errors.booking_for?.message}
+                              </small>
+                            </div>
+                          </div>
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Billable</label>
                               <span className="astik"> *</span>
                               <select
                                 // required
-                                class="form-select form-select-sm"
-                                id="exampleFormControlSelect2"
+                                className={classNames(
+                                  "form-select form-select-md",
+                                  {
+                                    "is-invalid": errors.billable,
+                                  }
+                                )}
+                                {...register("billable", {
+                                  value: basicDetails?.billable,
+                                })}
                                 value={basicDetails?.billable}
                                 onChange={inputEvent}
                                 name="billable"
@@ -454,46 +601,75 @@ const TravelRequestForm = () => {
                                 <option value="Yes">Yes</option>
                                 <option value="No">No</option>
                               </select>
+                              <small className="invalid-feedback">
+                                {errors.billable?.message}
+                              </small>
                             </div>
                           </div>
-                          <div className="col-12 col-lg-3">
-                            <div className="form-group">
-                              <label>Client Id</label>
-
-                              <select
-                                class="form-select form-select-sm"
-                                value={selectedClientId}
-                                name="client_id"
-                                onChange={handleClientChange}
-                              >
-                                <option value="">Select Client</option>
-                                {clientId.map((client) => (
-                                  <option key={client} value={client}>
-                                    {client}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
-                          <div className="col-12 col-lg-3">
-                            <div className="form-group">
-                              <label>Project Id</label>
-
-                              <select
-                                class="form-select form-select-sm"
-                                value={setBasicDetails?.project_id}
-                                onChange={inputEvent}
-                                name="project_id"
-                              >
-                                <option value="">Select Project</option>
-                                {filteredProjectIds.map((project) => (
-                                  <option key={project} value={project}>
-                                    {project}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
+                          {basicDetails?.billable === "Yes" && (
+                            <>
+                              <div className="col-12 col-lg-3">
+                                <div className="form-group">
+                                  <label>Client Id</label>
+                                  <span className="astik"> *</span>
+                                  <select
+                                    className={classNames(
+                                      "form-select form-select-md",
+                                      {
+                                        "is-invalid": errors.client_id,
+                                      }
+                                    )}
+                                    {...register("client_id", {
+                                      value: basicDetails?.client_id,
+                                    })}
+                                    value={selectedClientId}
+                                    name="client_id"
+                                    onChange={handleClientChange}
+                                  >
+                                    <option value="">Select Client</option>
+                                    {clientId.map((client) => (
+                                      <option key={client} value={client}>
+                                        {client}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <small className="invalid-feedback">
+                                    {errors.client_id?.message}
+                                  </small>
+                                </div>
+                              </div>
+                              <div className="col-12 col-lg-3">
+                                <div className="form-group">
+                                  <label>Project Id</label>
+                                  <span className="astik"> *</span>
+                                  <select
+                                    className={classNames(
+                                      "form-select form-select-md",
+                                      {
+                                        "is-invalid": errors.project_id,
+                                      }
+                                    )}
+                                    {...register("project_id", {
+                                      value: basicDetails?.project_id,
+                                    })}
+                                    value={setBasicDetails?.project_id}
+                                    onChange={inputEvent}
+                                    name="project_id"
+                                  >
+                                    <option value="">Select Project</option>
+                                    {filteredProjectIds.map((project) => (
+                                      <option key={project} value={project}>
+                                        {project}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <small className="invalid-feedback">
+                                    {errors.project_id?.message}
+                                  </small>
+                                </div>
+                              </div>
+                            </>
+                          )}
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Reason for Travel</label>
@@ -501,7 +677,15 @@ const TravelRequestForm = () => {
                               <select
                                 // required
                                 name="reason_for_travel"
-                                class="form-select form-select-sm"
+                                className={classNames(
+                                  "form-select form-select-md",
+                                  {
+                                    "is-invalid": errors.reason_for_travel,
+                                  }
+                                )}
+                                {...register("reason_for_travel", {
+                                  value: basicDetails?.reason_for_travel,
+                                })}
                                 onChange={inputEvent}
                                 placeholder="Enter Reason for Travel"
                               >
@@ -515,10 +699,12 @@ const TravelRequestForm = () => {
                                 <option value="Consulting">Consulting</option>
                                 <option value="Off-Site">Off-Site</option>
                               </select>
+                              <small className="invalid-feedback">
+                                {errors.reason_for_travel?.message}
+                              </small>
                             </div>
                           </div>
                         </div>
-
                         {/* ===============================Travellers==================== */}
                         <div
                           style={{
@@ -529,7 +715,7 @@ const TravelRequestForm = () => {
                           <div className="d-flex justify-content-between ">
                             <h3 className="" style={{ color: "#d03e20" }}>
                               Travellers
-                            </h3>{" "}
+                            </h3>
                             {/* <p
                               className="mx-2 btn btn-xs "
                               type="btn"
@@ -568,11 +754,11 @@ const TravelRequestForm = () => {
                                 <th>Phone</th>
                                 <th>Email</th>
                                 <th>DOB</th>
-                                <th></th>
+                                <th>Action</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {travellersData.map((traveller) => (
+                              {travellersData?.map((traveller, index) => (
                                 <tr key={traveller.id}>
                                   <td>
                                     <select
@@ -611,7 +797,14 @@ const TravelRequestForm = () => {
                                           : true
                                       }
                                       name="emp_id"
-                                      className="form-control form-control-sm"
+                                      className={classNames(
+                                        "form-control form-control-sm",
+                                        {
+                                          "is-invalid":
+                                            validateForTravellersDataRow[index]
+                                              ?.data?.emp_id,
+                                        }
+                                      )}
                                       value={
                                         traveller?.data?.is_employee
                                           ? traveller?.data?.emp_id
@@ -623,7 +816,20 @@ const TravelRequestForm = () => {
                                           emp_id: e.target.value,
                                         })
                                       }
+                                      placeholder="Enter Employee ID"
                                     />
+
+                                    <small
+                                      style={{
+                                        width: "100%",
+                                        marginTop: " 0.40rem",
+                                        fontSize: "100%",
+                                        color: "#dc3545",
+                                      }}
+                                    >
+                                      {validateForTravellersDataRow[index]?.data
+                                        ?.emp_id && "This field is required"}
+                                    </small>
                                   </td>
                                   <td>
                                     {/* <select
@@ -650,7 +856,14 @@ const TravelRequestForm = () => {
                                       type="text"
                                       value={traveller?.data?.name}
                                       name="name"
-                                      className="form-control form-control-sm"
+                                      className={classNames(
+                                        "form-control form-control-sm",
+                                        {
+                                          "is-invalid":
+                                            validateForTravellersDataRow[index]
+                                              ?.data?.name,
+                                        }
+                                      )}
                                       disabled={
                                         traveller?.data?.is_employee === "Yes"
                                           ? true
@@ -663,7 +876,19 @@ const TravelRequestForm = () => {
                                           name: e.target.value,
                                         })
                                       }
+                                      placeholder="Enter Full Name"
                                     />
+                                    <small
+                                      style={{
+                                        width: "100%",
+                                        marginTop: " 0.25rem",
+                                        fontSize: "100%",
+                                        color: "#dc3545",
+                                      }}
+                                    >
+                                      {validateForTravellersDataRow[index]?.data
+                                        ?.name && "This field is required"}
+                                    </small>
                                   </td>
                                   <td>
                                     {traveller?.data?.is_employee === "Yes" ? (
@@ -687,7 +912,15 @@ const TravelRequestForm = () => {
                                       />
                                     ) : (
                                       <select
-                                        className="form-select form-control-sm"
+                                        className={classNames(
+                                          "form-select form-select-md",
+                                          {
+                                            "is-invalid":
+                                              validateForTravellersDataRow[
+                                                index
+                                              ]?.data?.gender,
+                                          }
+                                        )}
                                         onChange={(e) =>
                                           handleTravellerChange(traveller.id, {
                                             ...traveller?.data,
@@ -702,6 +935,17 @@ const TravelRequestForm = () => {
                                         <option value="Female">Female</option>
                                       </select>
                                     )}
+                                    <small
+                                      style={{
+                                        width: "100%",
+                                        marginTop: " 0.25rem",
+                                        fontSize: "100%",
+                                        color: "#dc3545",
+                                      }}
+                                    >
+                                      {validateForTravellersDataRow[index]?.data
+                                        ?.gender && "This field is required"}
+                                    </small>
                                   </td>
                                   <td>
                                     <input
@@ -720,7 +964,15 @@ const TravelRequestForm = () => {
                                       }
                                       value={traveller?.data?.phone}
                                       name="phone"
-                                      className="form-control form-control-sm"
+                                      className={classNames(
+                                        "form-control form-control-sm",
+                                        {
+                                          "is-invalid":
+                                            validateForTravellersDataRow[index]
+                                              ?.data?.phone,
+                                        }
+                                      )}
+                                      placeholder="Enter Phone"
                                       onChange={(e) => {
                                         let { value } = e.target;
 
@@ -736,6 +988,17 @@ const TravelRequestForm = () => {
                                         });
                                       }}
                                     />
+                                    <small
+                                      style={{
+                                        width: "100%",
+                                        marginTop: " 0.25rem",
+                                        fontSize: "100%",
+                                        color: "#dc3545",
+                                      }}
+                                    >
+                                      {validateForTravellersDataRow[index]?.data
+                                        ?.phone && "This field is required"}
+                                    </small>
                                   </td>
                                   <td>
                                     <input
@@ -748,7 +1011,15 @@ const TravelRequestForm = () => {
                                       }
                                       value={traveller?.data?.email}
                                       name="email"
-                                      className="form-control form-control-sm"
+                                      className={classNames(
+                                        "form-control form-control-sm",
+                                        {
+                                          "is-invalid":
+                                            validateForTravellersDataRow[index]
+                                              ?.data?.email,
+                                        }
+                                      )}
+                                      placeholder="Enter Email"
                                       onChange={(e) =>
                                         handleTravellerChange(traveller.id, {
                                           ...traveller?.data,
@@ -757,11 +1028,23 @@ const TravelRequestForm = () => {
                                         })
                                       }
                                     />
+                                    <small
+                                      style={{
+                                        width: "100%",
+                                        marginTop: " 0.25rem",
+                                        fontSize: "100%",
+                                        color: "#dc3545",
+                                      }}
+                                    >
+                                      {validateForTravellersDataRow[index]?.data
+                                        ?.email && "This field is required"}
+                                    </small>
                                   </td>
                                   <td>
                                     <input
                                       // required
                                       type="date"
+                                      placeholder="Select DOB"
                                       disabled={
                                         traveller?.data?.is_employee === "Yes"
                                           ? true
@@ -769,7 +1052,14 @@ const TravelRequestForm = () => {
                                       }
                                       value={traveller?.data?.dob}
                                       name="dob"
-                                      className="form-control form-control-sm"
+                                      className={classNames(
+                                        "form-control form-control-sm",
+                                        {
+                                          "is-invalid":
+                                            validateForTravellersDataRow[index]
+                                              ?.data?.dob,
+                                        }
+                                      )}
                                       onChange={(e) =>
                                         handleTravellerChange(traveller.id, {
                                           ...traveller?.data,
@@ -778,6 +1068,17 @@ const TravelRequestForm = () => {
                                         })
                                       }
                                     />
+                                    <small
+                                      style={{
+                                        width: "100%",
+                                        marginTop: " 0.25rem",
+                                        fontSize: "100%",
+                                        color: "#dc3545",
+                                      }}
+                                    >
+                                      {validateForTravellersDataRow[index]?.data
+                                        ?.dob && "This field is required"}
+                                    </small>
                                   </td>
                                   <td>
                                     <div
@@ -807,7 +1108,7 @@ const TravelRequestForm = () => {
                           {/* ===================================Travel============================ */}
                           <div className="mt-4">
                             <div className="d-flex justify-content-between  ">
-                              <h5 className="text-primary">Travel</h5>{" "}
+                              <h5 className="text-primary">Travel</h5>
                               {/* <p
                                 className="btn-sm btn  mx-2 btn-primary "
                                 type="btn"
@@ -895,6 +1196,12 @@ const TravelRequestForm = () => {
                                 <th>From (City)</th>
                                 <th>To (City)</th>
                                 <th>Departure</th>
+                                {/* {rows.map(
+                                  (row) =>
+                                    row?.data?.trip_type === "Return" && (
+                                      <th>Return</th>
+                                    )
+                                )} */}
                                 <th>Return</th>
                                 <th>Action</th>
                               </tr>
@@ -902,10 +1209,10 @@ const TravelRequestForm = () => {
                             <tbody>
                               {rows.map((row) => (
                                 <tr key={row.id}>
-                                  <td>
+                                  <td className="w-25">
                                     <select
                                       // required
-                                      className="form-control form-control-sm"
+                                      className="form-select form-select-md"
                                       value={row.data.travel_mode}
                                       onChange={(e) =>
                                         handleDataChange(row.id, {
@@ -924,11 +1231,11 @@ const TravelRequestForm = () => {
                                       ))}
                                     </select>
                                   </td>
-                                  <td>
+                                  <td className="w-25">
                                     <select
                                       // required
                                       name="trip_type"
-                                      className="form-control form-control-sm"
+                                      className="form-select form-select-md"
                                       value={row?.data?.trip_type}
                                       onChange={(e) =>
                                         handleDataChange(row.id, {
@@ -937,13 +1244,14 @@ const TravelRequestForm = () => {
                                         })
                                       }
                                     >
-                                      <option value="OneWay" selected>
-                                        One-Way
+                                      <option value="" selected disabled>
+                                        Select
                                       </option>
+                                      <option value="OneWay">One-Way</option>
                                       <option value="Return">Return</option>
                                     </select>
                                   </td>
-                                  <td>
+                                  <td className="w-25">
                                     <Select
                                       // required
                                       isClearable={true}
@@ -959,7 +1267,7 @@ const TravelRequestForm = () => {
                                       }
                                     />
                                   </td>
-                                  <td>
+                                  <td className="w-25">
                                     <Select
                                       className="form-select-select"
                                       isClearable={true}
@@ -994,6 +1302,7 @@ const TravelRequestForm = () => {
                                       }
                                     />
                                   </td>
+                                  {/* {row?.data?.trip_type === "Return" && ( */}
                                   <td>
                                     <input
                                       type="date"
@@ -1015,6 +1324,7 @@ const TravelRequestForm = () => {
                                       }
                                     />
                                   </td>
+                                  {/* )} */}
                                   <td>
                                     <div
                                       id="Delete_Travel"
@@ -1040,77 +1350,109 @@ const TravelRequestForm = () => {
                         </div>
 
                         {/* ===============================Accomendation====================== */}
-                        <div
-                          className="mt-2"
-                          style={{
-                            border: "1px solid lightgrey",
-                            padding: "1rem",
-                          }}
-                        >
-                          <div className="d-flex justify-content-between">
-                            <h3 className="" style={{ color: "#d03e20" }}>
-                              Accommodation{" "}
-                            </h3>{" "}
-                            {/* <p
+                        <div className="row mt-4">
+                          <div className="col-12 col-lg-3">
+                            <div className="form-group">
+                              <label>Accommodation Required</label>
+                              <span className="astik"> *</span>
+                              <select
+                                className={classNames(
+                                  "form-select form-select-md",
+                                  {
+                                    "is-invalid": errors.accommodation_required,
+                                  }
+                                )}
+                                {...register("accommodation_required", {
+                                  value: basicDetails?.accommodation_required,
+                                })}
+                                value={basicDetails?.accommodation_required}
+                                onChange={inputEvent}
+                                name="accommodation_required"
+                              >
+                                <option value="" selected disabled>
+                                  Select...
+                                </option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                              </select>
+                              <small className="invalid-feedback">
+                                {errors.accommodation_required?.message}
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                        {basicDetails?.accommodation_required === "Yes" && (
+                          <div
+                            className="mt-2"
+                            style={{
+                              border: "1px solid lightgrey",
+                              padding: "1rem",
+                            }}
+                          >
+                            <div className="d-flex justify-content-between">
+                              <h3 className="" style={{ color: "#d03e20" }}>
+                                Accommodation
+                              </h3>
+                              {/* <p
                               className="btn-sm btn mx-2 btn-primary "
                               type="btn"
                               onClick={handleAddAccommodation}
                             >
                               <RiAddFill />
                             </p> */}
-                            <div
-                              id="add_accommodation"
-                              class="Btn my-2"
-                              onClick={handleAddAccommodation}
-                            >
-                              <div class="sign">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  width="24px"
-                                  height="24px"
-                                  fill-rule="evenodd"
-                                >
-                                  <path
+                              <div
+                                id="add_accommodation"
+                                class="Btn my-2"
+                                onClick={handleAddAccommodation}
+                              >
+                                <div class="sign">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    width="24px"
+                                    height="24px"
                                     fill-rule="evenodd"
-                                    d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-                                  />
-                                </svg>
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                    />
+                                  </svg>
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>City</th>
-                                <th>Check-in</th>
-                                <th>Check-out</th>
-                                <th>Breakfast Required</th>
-                                <th>Rooms Required</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {accommodationData.map((accommodation) => (
-                                <tr key={accommodation.id}>
-                                  <td>
-                                    <Select
-                                      // required
-                                      isClearable={true}
-                                      name="city"
-                                      options={cityData}
-                                      value={accommodationData?.data?.city}
-                                      onChange={(selectedOption) =>
-                                        handleAccommodationChange(
-                                          accommodation.id,
-                                          {
-                                            ...accommodation.data,
-                                            city: selectedOption,
-                                          }
-                                        )
-                                      }
-                                    />
-                                    {/* <input
+                            <table className="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>City</th>
+                                  <th>Check-in</th>
+                                  <th>Check-out</th>
+                                  <th>Breakfast Required</th>
+                                  <th>Rooms Required</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {accommodationData?.map((accommodation) => (
+                                  <tr key={accommodation.id}>
+                                    <td>
+                                      <Select
+                                        // required
+                                        isClearable={true}
+                                        name="city"
+                                        options={cityData}
+                                        value={accommodationData?.data?.city}
+                                        onChange={(selectedOption) =>
+                                          handleAccommodationChange(
+                                            accommodation.id,
+                                            {
+                                              ...accommodation.data,
+                                              city: selectedOption,
+                                            }
+                                          )
+                                        }
+                                      />
+                                      {/* <input
                                   type="text"
                                   value={accommodation.data.city}
                                   name="city"
@@ -1124,189 +1466,294 @@ const TravelRequestForm = () => {
                                     )
                                   }
                                 /> */}
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="date"
-                                      // required
-                                      min={getCurrentDate()}
-                                      value={accommodation.data.checkIn}
-                                      name="checkIn"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) =>
-                                        handleAccommodationChange(
-                                          accommodation.id,
-                                          {
-                                            checkIn: e.target.value,
-                                          }
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="date"
-                                      // required
-                                      value={accommodation.data.checkOut}
-                                      name="checkOut"
-                                      min={accommodation.data.checkIn}
-                                      className="form-control form-control-sm"
-                                      onChange={(e) =>
-                                        handleAccommodationChange(
-                                          accommodation.id,
-                                          {
-                                            checkOut: e.target.value,
-                                          }
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td>
-                                    <select
-                                      name="breakfastRequired"
-                                      className="form-control form-control-sm"
-                                      value={
-                                        accommodation.data.breakfastRequired
-                                      }
-                                      onChange={(e) =>
-                                        handleAccommodationChange(
-                                          accommodation.id,
-                                          {
-                                            breakfastRequired: e.target.value,
-                                          }
-                                        )
-                                      }
-                                    >
-                                      <option value="" selected disabled>
-                                        Select
-                                      </option>
-                                      <option value="Yes">Yes</option>
-                                      <option value="No">No</option>
-                                    </select>
-                                  </td>
-                                  <td>
-                                    <button
-                                      class="btn btn-primary btn-sm dropdown-toggle"
-                                      type="button"
-                                      data-bs-toggle="dropdown"
-                                      aria-expanded="false"
-                                    >
-                                      Rooms:
-                                      {accommodation.data.number_of_rooms} |
-                                      Adults :{" "}
-                                      {accommodation.data.number_of_adults}|
-                                      Children:{" "}
-                                      {accommodation.data.number_of_children}
-                                    </button>
-
-                                    <div class="dropdown-menu form-floating">
-                                      <div class="form-floating">
-                                        <input
-                                          type="number"
-                                          max="99"
-                                          class="form-control form-control-sm h-25"
-                                          id="floatingInput"
-                                          name="number_of_rooms"
-                                          value={
-                                            accommodation?.data?.number_of_rooms
-                                          }
-                                          placeholder="name@example.com"
-                                          onChange={(e) => {
-                                            let { value } = e.target;
-
-                                            // Remove leading zeros
-                                            value = value.replace(/^0+/, "");
-
-                                            // Limit the number of digits to 2
-                                            if (value.length > 2) {
-                                              value = value.slice(0, 2);
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="date"
+                                        // required
+                                        min={getCurrentDate()}
+                                        value={accommodation.data.checkIn}
+                                        name="checkIn"
+                                        className="form-control form-control-sm"
+                                        onChange={(e) =>
+                                          handleAccommodationChange(
+                                            accommodation.id,
+                                            {
+                                              checkIn: e.target.value,
                                             }
-
-                                            // Validate the value to be less than 99
-
-                                            handleAccommodationChange(
-                                              accommodation.id,
-                                              {
-                                                number_of_rooms: value,
-                                              }
-                                            );
-                                          }}
-                                        />
-
-                                        <label for="floatingInput">Rooms</label>
-                                      </div>
-                                      <div class="form-floating">
-                                        <input
-                                          type="number"
-                                          max={99}
-                                          name="number_of_adults"
-                                          class="form-control  form-control-sm h-25"
-                                          id="floatingInput"
-                                          placeholder="Password"
-                                          value={
-                                            accommodation?.data
-                                              ?.number_of_adults
-                                          }
-                                          onChange={(e) => {
-                                            let { value } = e.target;
-
-                                            // Remove leading zeros
-                                            value = value.replace(/^0+/, "");
-
-                                            // Limit the number of digits to 2
-                                            if (value.length > 2) {
-                                              value = value.slice(0, 2);
+                                          )
+                                        }
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="date"
+                                        // required
+                                        value={accommodation.data.checkOut}
+                                        name="checkOut"
+                                        min={accommodation.data.checkIn}
+                                        className="form-control form-control-sm"
+                                        onChange={(e) =>
+                                          handleAccommodationChange(
+                                            accommodation.id,
+                                            {
+                                              checkOut: e.target.value,
                                             }
-                                            handleAccommodationChange(
-                                              accommodation.id,
-                                              {
-                                                number_of_adults: value,
-                                              }
-                                            );
-                                          }}
-                                        />
-                                        <label for="floatingPassword">
-                                          Adults
-                                        </label>
-                                      </div>
-                                      <div class="form-floating">
-                                        <input
-                                          type="number"
-                                          class="form-control  form-control-sm h-25"
-                                          id="floatingInput"
-                                          name="number_of_children"
-                                          value={
-                                            accommodation?.data
-                                              ?.number_of_children
-                                          }
-                                          placeholder="No. of Children"
-                                          onChange={(e) => {
-                                            let { value } = e.target;
-
-                                            // Remove leading zeros
-                                            value = value.replace(/^0+/, "");
-
-                                            // Limit the number of digits to 2
-                                            if (value.length > 2) {
-                                              value = value.slice(0, 2);
+                                          )
+                                        }
+                                      />
+                                    </td>
+                                    <td>
+                                      <select
+                                        name="breakfastRequired"
+                                        className="form-select form-select-md"
+                                        value={
+                                          accommodation.data.breakfastRequired
+                                        }
+                                        onChange={(e) =>
+                                          handleAccommodationChange(
+                                            accommodation.id,
+                                            {
+                                              breakfastRequired: e.target.value,
                                             }
-                                            handleAccommodationChange(
-                                              accommodation.id,
-                                              {
-                                                number_of_children: value,
-                                              }
-                                            );
-                                          }}
-                                        />
-                                        <label for="floatingPassword">
-                                          Children
-                                        </label>
-                                      </div>
-                                    </div>
-                                  </td>
+                                          )
+                                        }
+                                      >
+                                        <option value="" selected disabled>
+                                          Select
+                                        </option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                      </select>
+                                    </td>
+                                    <td>
+                                      <button
+                                        class="btn btn-primary btn-sm dropdown-toggle"
+                                        type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                      >
+                                        Rooms:
+                                        {accommodation.data.number_of_rooms} |
+                                        Adults :
+                                        {accommodation.data.number_of_adults}|
+                                        Children:
+                                        {accommodation.data.number_of_children}
+                                      </button>
 
-                                  <td>
-                                    {/* <button
+                                      <div class="dropdown-menu form-floating">
+                                        <div class="form-floating">
+                                          <input
+                                            type="number"
+                                            max={
+                                              9
+                                              // accommodation?.data
+                                              //   ?.number_of_adults
+                                            }
+                                            min={1}
+                                            class="form-control form-control-sm h-25"
+                                            id="floatingInput"
+                                            name="number_of_rooms"
+                                            value={
+                                              accommodation?.data
+                                                ?.number_of_rooms
+                                            }
+                                            placeholder="name@example.com"
+                                            onChange={(e) => {
+                                              let { value } = e.target;
+
+                                              // Remove leading zeros
+                                              value = value.replace(/^0+/, "");
+
+                                              // Limit the number of digits to 2
+                                              if (value.length > 2) {
+                                                value = value.slice(0, 2);
+                                              }
+
+                                              // Validate the value to be less than 99
+
+                                              handleAccommodationChange(
+                                                accommodation.id,
+                                                {
+                                                  number_of_rooms:
+                                                    e.target.value,
+                                                  number_of_adults:
+                                                    e.target.value <
+                                                    accommodation.data
+                                                      .number_of_adults
+                                                      ? accommodation.data
+                                                          .number_of_adults
+                                                      : e.target.value,
+                                                }
+                                              );
+                                              if (
+                                                e.target.value >
+                                                accommodation.data
+                                                  .number_of_adults
+                                              ) {
+                                                const dd = [];
+                                                for (
+                                                  let i = 0;
+                                                  i <=
+                                                  eval(
+                                                    accommodation?.data
+                                                      ?.number_of_adults
+                                                  ) +
+                                                    eval(
+                                                      accommodation?.data
+                                                        ?.number_of_children
+                                                    );
+                                                  i++
+                                                ) {
+                                                  dd.push({
+                                                    id: i,
+                                                    data: {
+                                                      is_employee: "Yes",
+                                                    },
+                                                  });
+                                                }
+                                                setRoomsData(dd);
+                                              }
+                                            }}
+                                          />
+
+                                          <label for="floatingInput">
+                                            Rooms
+                                          </label>
+                                        </div>
+                                        <div class="form-floating">
+                                          <input
+                                            type="number"
+                                            max={99}
+                                            min={
+                                              accommodation?.data
+                                                ?.number_of_rooms
+                                            }
+                                            name="number_of_adults"
+                                            class="form-control  form-control-sm h-25"
+                                            id="floatingInput"
+                                            placeholder="Password"
+                                            value={
+                                              accommodation?.data
+                                                ?.number_of_adults
+                                            }
+                                            onChange={(e) => {
+                                              let { value } = e.target;
+
+                                              // Remove leading zeros
+                                              value = value.replace(/^0+/, "");
+
+                                              // Limit the number of digits to 2
+                                              if (value.length > 2) {
+                                                value = value.slice(0, 2);
+                                              }
+                                              handleAccommodationChange(
+                                                accommodation.id,
+                                                {
+                                                  number_of_adults:
+                                                    e.target.value,
+                                                }
+                                              );
+
+                                              const dd = [];
+                                              for (
+                                                let i = 1;
+                                                i <=
+                                                eval(e.target.value) +
+                                                  eval(
+                                                    accommodation?.data
+                                                      ?.number_of_children
+                                                  );
+                                                i++
+                                              ) {
+                                                dd.push({
+                                                  id: i,
+                                                  data: {
+                                                    is_employee: "Yes",
+                                                  },
+                                                });
+                                              }
+                                              setRoomsData(dd);
+                                            }}
+                                          />
+                                          <label for="floatingPassword">
+                                            Adults
+                                          </label>
+                                        </div>
+                                        <div class="form-floating">
+                                          <input
+                                            type="number"
+                                            class="form-control  form-control-sm h-25"
+                                            id="floatingInput"
+                                            name="number_of_children"
+                                            min={0}
+                                            value={
+                                              accommodation?.data
+                                                ?.number_of_children
+                                            }
+                                            placeholder="No. of Children"
+                                            onChange={(e) => {
+                                              let { value } = e.target;
+
+                                              // Remove leading zeros
+                                              value = value.replace(/^0+/, "");
+
+                                              // Limit the number of digits to 2
+                                              if (value?.length > 2) {
+                                                value = value.slice(0, 2);
+                                              }
+                                              handleAccommodationChange(
+                                                accommodation.id,
+                                                {
+                                                  number_of_children:
+                                                    e.target.value,
+                                                }
+                                              );
+                                              const dd = [];
+                                              for (
+                                                let i = 1;
+                                                i <=
+                                                eval(e.target.value) +
+                                                  eval(
+                                                    accommodation?.data
+                                                      ?.number_of_adults
+                                                  );
+                                                i++
+                                              ) {
+                                                dd.push({
+                                                  id: i,
+                                                  data: {
+                                                    is_employee: "Yes",
+                                                  },
+                                                });
+                                              }
+
+                                              setRoomsData(dd);
+                                              // const dd = [];
+                                              // for (let i = 1; i <= value; i++) {
+                                              //   dd.push({
+                                              //     id: 1,
+                                              //     data: { is_employee: "Yes" },
+                                              //   });
+                                              // }
+                                              // const hh = {
+                                              //   id: 3,
+                                              //   data: { is_employee: "Yes" },
+                                              // };
+                                              // setRoomsData([...roomsData, hh]);
+                                              // //                                         const newRow = { id: 3, data: { is_employee: "Yes" } };
+                                              // // setRoomsData([...roomsData, newRow]);
+                                            }}
+                                          />
+                                          <label for="floatingPassword">
+                                            Children
+                                          </label>
+                                        </div>
+                                      </div>
+                                    </td>
+
+                                    <td>
+                                      {/* <button
                                       className="btn btn-danger btn-sm"
                                       onClick={() =>
                                         handleAccommodationDeleteRow(
@@ -1316,170 +1763,127 @@ const TravelRequestForm = () => {
                                     >
                                       <RiDeleteBin6Line />
                                     </button> */}
-                                    <div
-                                      id="Delete_Accommodation"
-                                      class="Btn my-2"
-                                      onClick={() =>
-                                        handleAccommodationDeleteRow(
-                                          accommodation.id
-                                        )
-                                      }
-                                    >
-                                      <div class="sign">
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          viewBox="0 0 30 30"
-                                          width="30px"
-                                          height="30px"
-                                        >
-                                          <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                        </svg>
+                                      <div
+                                        id="Delete_Accommodation"
+                                        class="Btn my-2"
+                                        onClick={() =>
+                                          handleAccommodationDeleteRow(
+                                            accommodation.id
+                                          )
+                                        }
+                                      >
+                                        <div class="sign">
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 30 30"
+                                            width="30px"
+                                            height="30px"
+                                          >
+                                            <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                          </svg>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                          {/* <button
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            {/* <button
                           className="btn btn-primary btn-sm"
                           onClick={handleAddAccommodation}
                         >
                           <RiAddFill />
                         </button> */}
 
-                          {/* ===============================Occupancy=================================== */}
-                          <div className="d-flex justify-content-between mt-5">
-                            <h5 className="text-primary">Occupancy</h5>{" "}
-                            {/* <p
-                              className="btn-sm btn mx-2 btn-primary "
-                              type="btn"
-                              onClick={handleAddRoom}
-                            >
-                              <RiAddFill />
-                            </p> */}
-                            <div
-                              id="add_occupancy"
-                              class="Btn my-2"
-                              onClick={handleAddRoom}
-                            >
-                              <div class="sign" title="Add Occupancy">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 24 24"
-                                  width="24px"
-                                  height="24px"
-                                  fill-rule="evenodd"
-                                >
-                                  <path
-                                    fill-rule="evenodd"
-                                    d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-                                  />
-                                </svg>
-                              </div>
-                            </div>
-                          </div>
-                          <table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>Employee</th>
-                                <th>Room</th>
-                                <th>Emp ID</th>
-                                <th>Name</th>
-                                <th>Gender</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>DOB</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {roomsData.map((room) => (
-                                <tr key={room.id}>
-                                  <td>
-                                    <select
-                                      required
-                                      type="text"
-                                      value={room?.data?.is_employee}
-                                      name="is_employee"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) =>
-                                        handleRoomChange(room.id, {
-                                          name: "",
-                                          emp_id: "",
-                                          email: "",
-                                          phone: "",
-                                          dob: "",
-                                          gender: "",
-                                          is_employee: e.target.value,
-                                        })
-                                      }
-                                    >
-                                      <option value="Yes" selected>
-                                        Yes
-                                      </option>
-                                      <option value="No">No</option>
-                                    </select>
-                                  </td>
-                                  <td>
-                                    <select
-                                      className="form-control form-control-sm"
-                                      name="room"
-                                      id=""
-                                      onChange={(e) =>
-                                        handleRoomChange(room.id, {
-                                          ...room.data,
-                                          room: e.target.value,
-                                        })
-                                      }
-                                    >
-                                      {renderOptions(
-                                        accommodationData[0]?.data
-                                          ?.number_of_rooms
-                                      )}
-                                    </select>
-                                  </td>
-                                  <td>
-                                    <input
-                                      // required
-                                      type="text"
-                                      disabled={
-                                        room?.data?.is_employee === "Yes"
-                                          ? false
-                                          : true
-                                      }
-                                      value={room.data.emp_id}
-                                      name="emp_id"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) =>
-                                        handleRoomChange(room.id, {
-                                          ...room.data,
-                                          emp_id: e.target.value,
-                                        })
-                                      }
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="text"
-                                      // required
-                                      disabled={
-                                        room?.data?.is_employee === "Yes"
-                                          ? true
-                                          : false
-                                      }
-                                      value={room?.data?.name}
-                                      name="name"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) =>
-                                        handleRoomChange(room.id, {
-                                          ...room.data,
-                                          name: e.target.value,
-                                        })
-                                      }
-                                    />
-                                  </td>
-                                  <td>
-                                    {room?.data?.is_employee === "Yes" ? (
+                            <table className="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th>Employee</th>
+                                  <th>Room</th>
+                                  <th>Emp ID</th>
+                                  <th>Name</th>
+                                  <th>Gender</th>
+                                  <th>Phone</th>
+                                  <th>Email</th>
+                                  <th>DOB</th>
+                                  {/* <th>Action</th> */}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {roomsData?.map((room, index) => (
+                                  <tr key={room.id}>
+                                    <td>
+                                      <select
+                                        required
+                                        type="text"
+                                        value={room?.data?.is_employee}
+                                        name="is_employee"
+                                        className="form-select form-select-md"
+                                        onChange={(e) =>
+                                          handleRoomChange(room.id, {
+                                            name: "",
+                                            emp_id: "",
+                                            email: "",
+                                            phone: "",
+                                            dob: "",
+                                            gender: "",
+                                            is_employee: e.target.value,
+                                          })
+                                        }
+                                      >
+                                        <option value="Yes" selected>
+                                          Yes
+                                        </option>
+                                        <option value="No">No</option>
+                                      </select>
+                                    </td>
+                                    <td style={{ width: "9%" }}>
+                                      <select
+                                        className="form-select form-select-md"
+                                        name="room"
+                                        onChange={(e) =>
+                                          handleRoomChange(room.id, {
+                                            ...room.data,
+                                            room: e.target.value,
+                                          })
+                                        }
+                                        // value={
+                                        //   accommodationData[0]?.data
+                                        //     ?.number_of_rooms
+                                        // }
+                                      >
+                                        {renderOptions(
+                                          accommodationData[0]?.data
+                                            ?.number_of_rooms
+                                        )}
+                                      </select>
+                                      {/* Room - {index + 1} */}
+                                      {/* {
+                                      accommodationData[0]?.data
+                                        ?.number_of_rooms
+                                    } */}
+                                    </td>
+                                    <td style={{ width: "5%" }}>
+                                      <input
+                                        // required
+                                        type="text"
+                                        disabled={
+                                          room?.data?.is_employee === "Yes"
+                                            ? false
+                                            : true
+                                        }
+                                        value={room.data.emp_id}
+                                        name="emp_id"
+                                        className="form-control form-control-sm"
+                                        onChange={(e) =>
+                                          handleRoomChange(room.id, {
+                                            ...room.data,
+                                            emp_id: e.target.value,
+                                          })
+                                        }
+                                      />
+                                    </td>
+                                    <td>
                                       <input
                                         type="text"
                                         // required
@@ -1488,133 +1892,168 @@ const TravelRequestForm = () => {
                                             ? true
                                             : false
                                         }
-                                        value={room?.data?.gender}
-                                        name="gender"
+                                        value={room?.data?.name}
+                                        name="name"
                                         className="form-control form-control-sm"
                                         onChange={(e) =>
                                           handleRoomChange(room.id, {
                                             ...room.data,
-                                            gender: e.target.value,
+                                            name: e.target.value,
                                           })
                                         }
                                       />
-                                    ) : (
-                                      <select
-                                        className="form-select form-control-sm"
+                                    </td>
+                                    <td>
+                                      {room?.data?.is_employee === "Yes" ? (
+                                        <input
+                                          type="text"
+                                          // required
+                                          disabled={
+                                            room?.data?.is_employee === "Yes"
+                                              ? true
+                                              : false
+                                          }
+                                          value={room?.data?.gender}
+                                          name="gender"
+                                          className="form-control form-control-sm"
+                                          onChange={(e) =>
+                                            handleRoomChange(room.id, {
+                                              ...room.data,
+                                              gender: e.target.value,
+                                            })
+                                          }
+                                        />
+                                      ) : (
+                                        <select
+                                          className="form-select form-control-sm"
+                                          onChange={(e) =>
+                                            handleRoomChange(room.id, {
+                                              ...room.data,
+                                              gender: e.target.value,
+                                            })
+                                          }
+                                          value={room?.data?.gender}
+                                        >
+                                          <option value="" selected disabled>
+                                            Select...
+                                          </option>
+                                          <option value="Male">Male</option>
+                                          <option value="Female">Female</option>
+                                        </select>
+                                      )}
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="number"
+                                        // required
+                                        disabled={
+                                          room?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
+                                        value={room?.data?.phone}
+                                        name="phone"
+                                        className="form-control form-control-sm"
+                                        onChange={(e) => {
+                                          let { value } = e.target;
+
+                                          // Limit the number of digits to 6
+                                          if (value.length > 10) {
+                                            value = value.slice(0, 10);
+                                          }
+                                          handleRoomChange(room.id, {
+                                            ...room.data,
+                                            phone: value,
+                                          });
+                                        }}
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="email"
+                                        // required
+                                        disabled={
+                                          room?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
+                                        value={room?.data?.email}
+                                        name="email"
+                                        className="form-control form-control-sm"
+                                        onChange={(e) =>
+                                          handleRoomChange(room.id, {
+                                            ...room?.data,
+                                            email: e.target.value,
+                                          })
+                                        }
+                                      />
+                                    </td>
+                                    <td>
+                                      <input
+                                        type="date"
+                                        // required
+                                        disabled={
+                                          room?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
+                                        value={room?.data?.dob}
+                                        name="dob"
+                                        className="form-control form-control-sm"
                                         onChange={(e) =>
                                           handleRoomChange(room.id, {
                                             ...room.data,
-                                            gender: e.target.value,
+                                            dob: e.target.value,
                                           })
                                         }
-                                        value={room?.data?.gender}
-                                      >
-                                        <option value="" selected disabled>
-                                          Select...
-                                        </option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                      </select>
-                                    )}
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="number"
-                                      // required
-                                      disabled={
-                                        room?.data?.is_employee === "Yes"
-                                          ? true
-                                          : false
-                                      }
-                                      value={room?.data?.phone}
-                                      name="phone"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) => {
-                                        let { value } = e.target;
-
-                                        // Limit the number of digits to 6
-                                        if (value.length > 10) {
-                                          value = value.slice(0, 10);
+                                      />
+                                    </td>
+                                    {/* <td>
+                                      <div
+                                        id="Delete_Occupancy"
+                                        class="Btn my-2"
+                                        onClick={() =>
+                                          handleRoomDeleteRow(room.id)
                                         }
-                                        handleRoomChange(room.id, {
-                                          ...room.data,
-                                          phone: value,
-                                        });
-                                      }}
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="email"
-                                      // required
-                                      disabled={
-                                        room?.data?.is_employee === "Yes"
-                                          ? true
-                                          : false
-                                      }
-                                      value={room?.data?.email}
-                                      name="email"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) =>
-                                        handleRoomChange(room.id, {
-                                          ...room?.data,
-                                          email: e.target.value,
-                                        })
-                                      }
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="date"
-                                      // required
-                                      disabled={
-                                        room?.data?.is_employee === "Yes"
-                                          ? true
-                                          : false
-                                      }
-                                      value={room?.data?.dob}
-                                      name="dob"
-                                      className="form-control form-control-sm"
-                                      onChange={(e) =>
-                                        handleRoomChange(room.id, {
-                                          ...room.data,
-                                          dob: e.target.value,
-                                        })
-                                      }
-                                    />
-                                  </td>
-                                  <td>
-                                    <div
-                                      id="Delete_Occupancy"
-                                      class="Btn my-2"
-                                      onClick={() =>
-                                        handleRoomDeleteRow(room.id)
-                                      }
-                                    >
-                                      <div class="sign">
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          viewBox="0 0 30 30"
-                                          width="30px"
-                                          height="30px"
-                                        >
-                                          <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                        </svg>
+                                      >
+                                        <div class="sign">
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 30 30"
+                                            width="30px"
+                                            height="30px"
+                                          >
+                                            <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                          </svg>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                          {/* <button
+                                    </td> */}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                            {/* <button
                           className="btn btn-primary btn-sm"
                           onClick={handleAddRoom}
                         >
                           <RiAddFill />
                         </button> */}
+                          </div>
+                        )}
+                        <div className="row mt-2">
+                          <div className="col-12 col-lg-12">
+                            <div className="form-group">
+                              <label>Special Request:</label>
+                              <textarea
+                                name="special_request"
+                                className="form-control form-control-sm"
+                                placeholder="Seat preference, Food Preference...... "
+                                onChange={inputEvent}
+                              />
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex flex-column justify-content-start my-3">
+                        {/* <div className="d-flex flex-column justify-content-start my-3">
                           <label>Special Request:</label>
                           <textarea
                             name="special_request"
@@ -1622,7 +2061,7 @@ const TravelRequestForm = () => {
                             placeholder="Seat preference, Food Preference...... "
                             onChange={inputEvent}
                           />
-                        </div>
+                        </div> */}
                         <div className="row my-4 text-center">
                           <div className="col-12">
                             <button
@@ -1635,7 +2074,7 @@ const TravelRequestForm = () => {
                           </div>
                         </div>
                       </form>
-                      <ReactTooltip
+                      {/* <ReactTooltip
                         anchorId="add_traveller"
                         place="top"
                         content="Add More Travellers"
@@ -1674,7 +2113,7 @@ const TravelRequestForm = () => {
                         anchorId="Delete_Occupancy"
                         place="right"
                         content="Delete"
-                      />
+                      /> */}
                     </div>
                   </div>
                 </div>

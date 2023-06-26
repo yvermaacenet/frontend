@@ -14,6 +14,7 @@ import Travel_Request_Form from "../Component/Travel/Travel_Request_Form";
 import Get_Travel_Request_Form_Data from "../Component/Travel/Get_Travel_Request_Form_Data";
 import Travel_Approval_Request from "../Component/Travel/Travel_Approval_Request";
 import Travel_Action from "../Component/Travel/Travel_Action";
+import Edit_Travel_Action from "../Component/Travel/Edit_Travel_Action";
 import Error_404 from "../Partials/Error_404";
 import Error_403 from "../Partials/Error_403";
 import Error_500 from "../Partials/Error_500";
@@ -109,6 +110,11 @@ const Routes_Array = [
   {
     path: "/travelactionpage/:_id",
     component: Travel_Action,
+    allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
+  },
+  {
+    path: "/edittravelactionpage/:_id",
+    component: Edit_Travel_Action,
     allowedRoles: ["Admin", "Hr", "Finance", "Management", "Team member"],
   },
   {
