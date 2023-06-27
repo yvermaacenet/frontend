@@ -74,7 +74,12 @@ const TravelRequestForm = () => {
   const [treavellerRadioButton, setTreavellerRadioButton] = useState(true);
   const [accommodationRadioButton, setAccommodationRadioButton] =
     useState(false);
-
+  const [roomsData, setRoomsData] = useState([
+    {
+      id: 1,
+      data: { is_employee: "Yes", dob: new Date() },
+    },
+  ]);
   const handleClientChange = (e) => {
     const selectedClient = e.target.value;
     setSelectedClientId(selectedClient);
@@ -118,29 +123,35 @@ const TravelRequestForm = () => {
             data: {
               is_employee: "Yes",
               emp_id:
-                res.data.length > 0 && treavellerRadioButton
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
                   ? res?.data[0]?.["Employee ID"]
                   : "",
               name:
-                res.data.length > 0 && treavellerRadioButton
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
                   ? res?.data[0]?.ownerName
                   : "",
               gender:
-                res.data.length > 0 && treavellerRadioButton
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
                   ? res?.data[0]?.Tags
                   : "",
               phone:
-                res.data.length > 0 && treavellerRadioButton
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
                   ? res?.data[0]?.["Personal Mobile Number"]
                   : "",
               email:
-                res.data.length > 0 && treavellerRadioButton
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
                   ? res?.data[0]?.["Email address"]
                   : "",
               dob:
-                res.data.length > 0 && treavellerRadioButton
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
                   ? formatBirthdate(res?.data[0]?.["Date of Birth"])
-                  : new Date(),
+                  : "1990-01-01",
             },
           };
           return setTravellersData([resObj]), setRoomsData([resObj]);
@@ -238,7 +249,7 @@ const TravelRequestForm = () => {
     e.preventDefault();
     const newRow = {
       id: travellersData.length + 1,
-      data: { is_employee: "Yes" },
+      data: { is_employee: "Yes", dob: new Date() },
     };
     setTravellersData([...travellersData, newRow]);
     setTravellerRowId(travellersData.length);
@@ -312,8 +323,8 @@ const TravelRequestForm = () => {
         number_of_rooms: 1,
         number_of_adults: 1,
         number_of_children: 0,
-        checkIn: new Date(),
-        checkOut: new Date(),
+        checkIn: "",
+        // checkOut: "",
       },
     },
   ]);
@@ -343,19 +354,15 @@ const TravelRequestForm = () => {
 
   // ==================For Rooms=====================
 
-  const [roomsData, setRoomsData] = useState([
-    {
-      id: 1,
-      data: { is_employee: "Yes" },
-    },
-  ]);
-
   // roomsData.push({ id: 1, data: { is_employee: "Yes" } });
 
-  const handleAddRoom = () => {
-    const newRow = { id: roomsData.length + 1, data: { is_employee: "Yes" } };
-    setRoomsData([...roomsData, newRow]);
-  };
+  // const handleAddRoom = () => {
+  //   const newRow = {
+  //     id: roomsData.length + 1,
+  //     data: { is_employee: "Yes" },
+  //   };
+  //   setRoomsData([...roomsData, newRow]);
+  // };
 
   const handleRoomChange = async (id, newData) => {
     const updatedRooms = roomsData.map((row) =>
@@ -400,10 +407,10 @@ const TravelRequestForm = () => {
     }
   };
 
-  const handleRoomDeleteRow = (id) => {
-    const updatedRows = roomsData.filter((row) => row.id !== id);
-    setRoomsData(updatedRows);
-  };
+  // const handleRoomDeleteRow = (id) => {
+  //   const updatedRows = roomsData.filter((row) => row.id !== id);
+  //   setRoomsData(updatedRows);
+  // };
 
   const inputEvent = (event) => {
     const { name, value } = event.target;
@@ -461,7 +468,7 @@ const TravelRequestForm = () => {
                 ? true
                 : false,
             dob:
-              (item.data.email === undefined || item.data.email === "") &&
+              (item.data.dob === undefined || item.data.dob === "") &&
               item.data?.is_employee === "No" &&
               treavellerRadioButton
                 ? true
@@ -602,7 +609,7 @@ const TravelRequestForm = () => {
       return item;
     });
 
-    // setValidateForOccupancyDataRow(occupancyDatalist);
+    setValidateForOccupancyDataRow(occupancyDatalist);
 
     const basicDetailsData = Object?.keys(basicDetailsDataObj).every(
       (property) => {
@@ -672,7 +679,17 @@ const TravelRequestForm = () => {
     if (error) {
       validateError(false);
     }
-  }, [basicDetails, travellersData, rows, accommodationData, roomsData]);
+  }, [
+    //validateForBadicDetailsDataRow,
+    basicDetails?.billable,
+    basicDetails?.project_id,
+    basicDetails?.client_id,
+    basicDetails?.reason_for_travel,
+    travellersData,
+    rows,
+    accommodationData,
+    roomsData,
+  ]);
   // ================================================================================================================
   // useEffect(() => {
   //   async function fetchData() {
@@ -689,20 +706,20 @@ const TravelRequestForm = () => {
     // } else {
     //   alert.success("Done");
     // }
-    alert.success("Done");
-    // const res = await axios.post("all_travel_request_data", {
-    //   basicDetails,
-    //   rows,
-    //   travellersData,
-    //   accommodationData,
-    //   roomsData,
-    //   management_approval: "Pending",
-    //   created_by: LocalStorageData?.email,
-    // });
-    // if (res?.data === "Created") {
-    //   alert.success("Request Sent");
-    //   navigate("/alltravelrequest");
-    // }
+    // alert.success("Done");
+    const res = await axios.post("all_travel_request_data", {
+      basicDetails,
+      rows,
+      travellersData,
+      accommodationData,
+      roomsData,
+      management_approval: "Pending",
+      created_by: LocalStorageData?.email,
+    });
+    if (res?.data === "Created") {
+      alert.success("Request Sent");
+      navigate("/alltravelrequest");
+    }
   };
 
   // const data = accommodationData?.data?.number_of_rooms;
@@ -747,22 +764,27 @@ const TravelRequestForm = () => {
   }
   // =================Format date For Inputs===============
 
-  let d1 = new Date().toISOString().split("T")[0];
-  console.log("validateForBadicDetailsDataRow", validateForBadicDetailsDataRow);
-  const [startDate, setStartDate] = useState(new Date());
+  // let d1 = new Date().toISOString().split("T")[0];
+  // console.log("validateForBadicDetailsDataRow", validateForBadicDetailsDataRow);
+  // const [startDate, setStartDate] = useState(new Date());
 
-  const ExampleCustomInput = forwardRef(({ value, onClick, disabled }, ref) => (
-    <button
-      type="button"
-      className="form-control btn btn-sm form-control-sm "
-      onClick={onClick}
-      ref={ref}
-      disabled={disabled}
-    >
-      {value === "" ? "dd/mm/yyyy" : value}
-    </button>
-    // console.log("value",value === "" ?"Yes":"No")
-  ));
+  const ExampleCustomInput = forwardRef(
+    ({ value, onClick, disabled, validate }, ref) => (
+      <button
+        type="button"
+        // className="form-control btn btn-sm form-control-sm"
+        className={classNames("form-control btn btn-sm form-control-sm", {
+          "is-invalid": validate,
+        })}
+        onClick={onClick}
+        ref={ref}
+        disabled={disabled}
+      >
+        {value === "" ? "dd/mm/yyyy" : value}
+      </button>
+      // console.log("value",value === "" ?"Yes":"No")
+    )
+  );
   return (
     <>
       <div className="container-scroller">
@@ -859,14 +881,7 @@ const TravelRequestForm = () => {
                               {/* <small className="invalid-feedback">
                                 {errors.billable?.message}
                               </small> */}
-                              <small
-                                style={{
-                                  width: "100%",
-                                  marginTop: " 0.40rem",
-                                  fontSize: "100%",
-                                  color: "#dc3545",
-                                }}
-                              >
+                              <small className="isValidate">
                                 {!validateForBadicDetailsDataRow?.billable &&
                                   validateForBadicDetailsDataRow?.billable !==
                                     undefined &&
@@ -902,14 +917,7 @@ const TravelRequestForm = () => {
                                   </option>
                                 ))}
                               </select>
-                              <small
-                                style={{
-                                  width: "100%",
-                                  marginTop: " 0.40rem",
-                                  fontSize: "100%",
-                                  color: "#dc3545",
-                                }}
-                              >
+                              <small className="isValidate">
                                 {!validateForBadicDetailsDataRow?.client_id &&
                                   validateForBadicDetailsDataRow?.client_id !==
                                     undefined &&
@@ -944,14 +952,7 @@ const TravelRequestForm = () => {
                                   </option>
                                 ))}
                               </select>
-                              <small
-                                style={{
-                                  width: "100%",
-                                  marginTop: " 0.40rem",
-                                  fontSize: "100%",
-                                  color: "#dc3545",
-                                }}
-                              >
+                              <small className="isValidate">
                                 {!validateForBadicDetailsDataRow?.project_id &&
                                   validateForBadicDetailsDataRow?.project_id !==
                                     undefined &&
@@ -991,14 +992,7 @@ const TravelRequestForm = () => {
                                 <option value="Consulting">Consulting</option>
                                 <option value="Off-Site">Off-Site</option>
                               </select>
-                              <small
-                                style={{
-                                  width: "100%",
-                                  marginTop: " 0.40rem",
-                                  fontSize: "100%",
-                                  color: "#dc3545",
-                                }}
-                              >
+                              <small className="isValidate">
                                 {!validateForBadicDetailsDataRow?.reason_for_travel &&
                                   validateForBadicDetailsDataRow?.reason_for_travel !==
                                     undefined &&
@@ -1026,11 +1020,8 @@ const TravelRequestForm = () => {
                                       : false
                                   }
                                   onChange={(e) => {
-                                    return (
-                                      setTreavellerRadioButton(
-                                        !treavellerRadioButton
-                                      ),
-                                      setError(true)
+                                    return setTreavellerRadioButton(
+                                      !treavellerRadioButton
                                     );
                                   }}
                                   name="travellers_required"
@@ -1052,11 +1043,8 @@ const TravelRequestForm = () => {
                                       : false
                                   }
                                   onChange={(e) => {
-                                    return (
-                                      setTreavellerRadioButton(
-                                        !treavellerRadioButton
-                                      ),
-                                      setError(false)
+                                    return setTreavellerRadioButton(
+                                      !treavellerRadioButton
                                     );
                                   }}
                                   name="travellers_required"
@@ -1175,6 +1163,11 @@ const TravelRequestForm = () => {
                                             is_employee: e.target.value,
                                           })
                                         }
+                                        disabled={
+                                          basicDetails?.booking_for === "self"
+                                            ? true
+                                            : false
+                                        }
                                       >
                                         <option value="" selected disabled>
                                           Select
@@ -1217,14 +1210,7 @@ const TravelRequestForm = () => {
                                         placeholder="Enter Employee ID"
                                       />
 
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.40rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForTravellersDataRow[index]
                                           ?.data?.emp_id &&
                                           "This field is required"}
@@ -1278,21 +1264,14 @@ const TravelRequestForm = () => {
                                         }
                                         placeholder="Enter Full Name"
                                       />
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForTravellersDataRow[index]
                                           ?.data?.name &&
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td>
-                                      {traveller?.data?.is_employee ===
+                                    <td style={{ width: "15%" }}>
+                                      {/* {traveller?.data?.is_employee ===
                                       "Yes" ? (
                                         <input
                                           // required
@@ -1306,6 +1285,7 @@ const TravelRequestForm = () => {
                                           value={traveller?.data?.gender}
                                           name="gender"
                                           className="form-control form-control-sm"
+                                          placeholder="Select"
                                           onChange={(e) =>
                                             handleTravellerChange(
                                               traveller.id,
@@ -1316,42 +1296,40 @@ const TravelRequestForm = () => {
                                             )
                                           }
                                         />
-                                      ) : (
-                                        <select
-                                          className={classNames(
-                                            "form-select form-select-md",
-                                            {
-                                              "is-invalid":
-                                                validateForTravellersDataRow[
-                                                  index
-                                                ]?.data?.gender,
-                                            }
-                                          )}
-                                          onChange={(e) =>
-                                            handleTravellerChange(
-                                              traveller.id,
-                                              {
-                                                ...traveller?.data,
-                                                gender: e.target.value,
-                                              }
-                                            )
+                                      )  */}
+                                      {/* : ( */}
+                                      <select
+                                        className={classNames(
+                                          "form-select form-select-md",
+                                          {
+                                            "is-invalid":
+                                              validateForTravellersDataRow[
+                                                index
+                                              ]?.data?.gender,
                                           }
-                                        >
-                                          <option value="" selected disabled>
-                                            Select...
-                                          </option>
-                                          <option value="Male">Male</option>
-                                          <option value="Female">Female</option>
-                                        </select>
-                                      )}
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
+                                        )}
+                                        disabled={
+                                          traveller?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
+                                        value={traveller?.data?.gender}
+                                        placeholder="Select"
+                                        onChange={(e) =>
+                                          handleTravellerChange(traveller.id, {
+                                            ...traveller?.data,
+                                            gender: e.target.value,
+                                          })
+                                        }
                                       >
+                                        <option value="" selected disabled>
+                                          Select...
+                                        </option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                      </select>
+                                      {/* )} */}
+                                      <small className="isValidate">
                                         {validateForTravellersDataRow[index]
                                           ?.data?.gender &&
                                           "This field is required"}
@@ -1399,14 +1377,7 @@ const TravelRequestForm = () => {
                                           });
                                         }}
                                       />
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForTravellersDataRow[index]
                                           ?.data?.phone &&
                                           "This field is required"}
@@ -1441,14 +1412,7 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForTravellersDataRow[index]
                                           ?.data?.email &&
                                           "This field is required"}
@@ -1458,9 +1422,8 @@ const TravelRequestForm = () => {
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         maxDate={new Date()}
-                                        // isClearable={true}
                                         // withPortal
-                                        locale="en-US"
+                                        // locale="en-US"
                                         showWeekNumbers
                                         selected={
                                           new Date(traveller?.data?.dob)
@@ -1471,11 +1434,11 @@ const TravelRequestForm = () => {
                                             dob: e,
                                           })
                                         }
-                                        // disabled={
-                                        //   traveller?.data?.is_employee === "Yes"
-                                        //     ? true
-                                        //     : false
-                                        // }
+                                        disabled={
+                                          traveller?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
                                         customInput={
                                           <ExampleCustomInput
                                             disabled={
@@ -1483,6 +1446,11 @@ const TravelRequestForm = () => {
                                               "Yes"
                                                 ? true
                                                 : false
+                                            }
+                                            validate={
+                                              validateForTravellersDataRow[
+                                                index
+                                              ]?.data?.dob
                                             }
                                           />
                                         }
@@ -1515,14 +1483,8 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       /> */}
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <br />
+                                      <small className="isValidate">
                                         {validateForTravellersDataRow[index]
                                           ?.data?.dob &&
                                           "This field is required"}
@@ -1649,7 +1611,7 @@ const TravelRequestForm = () => {
                                   <th>To (City)</th>
                                   <th>Departure</th>
 
-                                  <th>Return</th>
+                                  <th colSpan={2}>Return</th>
                                   {/* <th>Action</th> */}
                                 </tr>
                               </thead>
@@ -1684,14 +1646,7 @@ const TravelRequestForm = () => {
                                           </option>
                                         ))}
                                       </select>
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForTravelDataRow[index]?.data
                                           ?.travel_mode &&
                                           "This field is required"}
@@ -1719,7 +1674,14 @@ const TravelRequestForm = () => {
                                     </td>
                                     <td className="w-25">
                                       <Select
-                                        // required
+                                        className={classNames(
+                                          "form-select-select",
+                                          {
+                                            "is-invalid":
+                                              validateForTravelDataRow[index]
+                                                ?.data?.travel_from_city,
+                                          }
+                                        )}
                                         isClearable={true}
                                         name="travel_from_city"
                                         options={cityData}
@@ -1732,14 +1694,7 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForTravelDataRow[index]?.data
                                           ?.travel_from_city &&
                                           "This field is required"}
@@ -1747,7 +1702,15 @@ const TravelRequestForm = () => {
                                     </td>
                                     <td className="w-25">
                                       <Select
-                                        className="form-select-select"
+                                        // className="form-select-select"
+                                        className={classNames(
+                                          "form-select-select",
+                                          {
+                                            "is-invalid":
+                                              validateForTravelDataRow[index]
+                                                ?.data?.travel_to_city,
+                                          }
+                                        )}
                                         isClearable={true}
                                         name="travel_to_city"
                                         // required
@@ -1764,14 +1727,7 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForTravelDataRow[index]?.data
                                           ?.travel_to_city &&
                                           "This field is required"}
@@ -1783,7 +1739,7 @@ const TravelRequestForm = () => {
                                         minDate={new Date()}
                                         // isClearable={true}
                                         // withPortal
-                                        locale="en-GB"
+                                        // locale="en-US"
                                         showWeekNumbers
                                         selected={row?.data?.departure}
                                         onChange={(e) =>
@@ -1792,7 +1748,14 @@ const TravelRequestForm = () => {
                                             departure: e,
                                           })
                                         }
-                                        customInput={<ExampleCustomInput />}
+                                        customInput={
+                                          <ExampleCustomInput
+                                            validate={
+                                              validateForTravelDataRow[index]
+                                                ?.data?.departure
+                                            }
+                                          />
+                                        }
                                       />
                                       {/* <input
                                         type="date"
@@ -1809,13 +1772,8 @@ const TravelRequestForm = () => {
                                           "fr-ca"
                                         )}
                                       /> */}
-                                      <p
-                                        style={{
-                                          // marginTop: " 0.25rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <br />
+                                      <small className="isValidate">
                                         {validateForTravelDataRow[index]?.data
                                           ?.departure &&
                                           "This field is required"}
@@ -1828,7 +1786,7 @@ const TravelRequestForm = () => {
                                         minDate={new Date(row?.data?.departure)}
                                         // isClearable={true}
                                         // withPortal
-                                        locale="en-GB"
+                                        // locale="en-US"
                                         showWeekNumbers
                                         selected={
                                           row?.data?.departure === undefined ||
@@ -1860,16 +1818,34 @@ const TravelRequestForm = () => {
                                                 ? true
                                                 : false
                                             }
+                                            validate={
+                                              validateForTravelDataRow[index]
+                                                ?.data?.return
+                                            }
                                           />
                                         }
                                       />
-
-                                      <p
-                                        style={{
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      {/* <input
+                                        type="date"
+                                        // required
+                                        min={row?.data?.departure}
+                                        value={row.data.return}
+                                        name="return"
+                                        className="form-control form-control-sm"
+                                        onChange={(e) =>
+                                          handleDataChange(row.id, {
+                                            ...row.data,
+                                            return: e.target.value,
+                                          })
+                                        }
+                                        disabled={
+                                          row.data.trip_type === "OneWay"
+                                            ? true
+                                            : false
+                                        }
+                                      /> */}
+                                      <br />
+                                      <small className="isValidate">
                                         {validateForTravelDataRow[index]?.data
                                           ?.return && "This field is required"}
                                       </p>
@@ -2040,7 +2016,15 @@ const TravelRequestForm = () => {
                                     <tr key={accommodation.id}>
                                       <td>
                                         <Select
-                                          // required
+                                          className={classNames(
+                                            "form-select-select",
+                                            {
+                                              "is-invalid":
+                                                validateForAccommodationDataRow[
+                                                  index
+                                                ]?.data?.city,
+                                            }
+                                          )}
                                           isClearable={true}
                                           name="city"
                                           options={cityData}
@@ -2055,14 +2039,7 @@ const TravelRequestForm = () => {
                                             )
                                           }
                                         />
-                                        <small
-                                          style={{
-                                            width: "100%",
-                                            marginTop: " 0.40rem",
-                                            fontSize: "100%",
-                                            color: "#dc3545",
-                                          }}
-                                        >
+                                        <small className="isValidate">
                                           {validateForAccommodationDataRow[
                                             index
                                           ]?.data?.city &&
@@ -2073,10 +2050,16 @@ const TravelRequestForm = () => {
                                         <DatePicker
                                           dateFormat="dd/MM/yyyy"
                                           minDate={new Date()}
-                                          locale="en-US"
+                                          // locale="en-US"
                                           showWeekNumbers
+                                          // selected={
+                                          //   new Date(accommodation.data.checkIn)
+                                          // }
                                           selected={
-                                            new Date(accommodation.data.checkIn)
+                                            accommodation?.data?.checkIn ===
+                                            undefined
+                                              ? ""
+                                              : accommodation?.data?.checkIn
                                           }
                                           onChange={(e) =>
                                             handleAccommodationChange(
@@ -2086,7 +2069,15 @@ const TravelRequestForm = () => {
                                               }
                                             )
                                           }
-                                          customInput={<ExampleCustomInput />}
+                                          customInput={
+                                            <ExampleCustomInput
+                                              validate={
+                                                validateForAccommodationDataRow[
+                                                  index
+                                                ]?.data?.checkIn
+                                              }
+                                            />
+                                          }
                                         />
                                         {/* <input
                                           type="date"
@@ -2104,14 +2095,8 @@ const TravelRequestForm = () => {
                                             )
                                           }
                                         /> */}
-                                        <small
-                                          style={{
-                                            width: "100%",
-                                            marginTop: " 0.40rem",
-                                            fontSize: "100%",
-                                            color: "#dc3545",
-                                          }}
-                                        >
+                                        <br />
+                                        <small className="isValidate">
                                           {validateForAccommodationDataRow[
                                             index
                                           ]?.data?.checkIn &&
@@ -2121,13 +2106,19 @@ const TravelRequestForm = () => {
                                       <td>
                                         <DatePicker
                                           dateFormat="dd/MM/yyyy"
-                                          minDate={new Date()}
-                                          locale="en-US"
+                                          minDate={accommodation?.data?.checkIn}
+                                          // locale="en-US"
                                           showWeekNumbers
+                                          // selected={
+                                          //   new Date(
+                                          //     accommodation.data.checkOut
+                                          //   )
+                                          // }
                                           selected={
-                                            new Date(
-                                              accommodation.data.checkOut
-                                            )
+                                            accommodation?.data?.checkOut ===
+                                            undefined
+                                              ? ""
+                                              : accommodation?.data?.checkOut
                                           }
                                           onChange={(e) =>
                                             handleAccommodationChange(
@@ -2137,7 +2128,15 @@ const TravelRequestForm = () => {
                                               }
                                             )
                                           }
-                                          customInput={<ExampleCustomInput />}
+                                          customInput={
+                                            <ExampleCustomInput
+                                              validate={
+                                                validateForAccommodationDataRow[
+                                                  index
+                                                ]?.data?.checkOut
+                                              }
+                                            />
+                                          }
                                         />
                                         {/* <input
                                           type="date"
@@ -2155,14 +2154,8 @@ const TravelRequestForm = () => {
                                             )
                                           }
                                         /> */}
-                                        <small
-                                          style={{
-                                            width: "100%",
-                                            marginTop: " 0.40rem",
-                                            fontSize: "100%",
-                                            color: "#dc3545",
-                                          }}
-                                        >
+                                        <br />
+                                        <small className="isValidate">
                                           {validateForAccommodationDataRow[
                                             index
                                           ]?.data?.checkOut &&
@@ -2172,7 +2165,16 @@ const TravelRequestForm = () => {
                                       <td>
                                         <select
                                           name="breakfastRequired"
-                                          className="form-select form-select-md"
+                                          // className="form-select form-select-md"
+                                          className={classNames(
+                                            "form-select form-select-md",
+                                            {
+                                              "is-invalid":
+                                                validateForAccommodationDataRow[
+                                                  index
+                                                ]?.data?.breakfastRequired,
+                                            }
+                                          )}
                                           value={
                                             accommodation.data.breakfastRequired
                                           }
@@ -2192,14 +2194,7 @@ const TravelRequestForm = () => {
                                           <option value="Yes">Yes</option>
                                           <option value="No">No</option>
                                         </select>
-                                        <small
-                                          style={{
-                                            width: "100%",
-                                            marginTop: " 0.40rem",
-                                            fontSize: "100%",
-                                            color: "#dc3545",
-                                          }}
-                                        >
+                                        <small className="isValidate">
                                           {validateForAccommodationDataRow[
                                             index
                                           ]?.data?.breakfastRequired &&
@@ -2212,6 +2207,11 @@ const TravelRequestForm = () => {
                                           type="button"
                                           data-bs-toggle="dropdown"
                                           aria-expanded="false"
+                                          disabled={
+                                            basicDetails?.booking_for === "self"
+                                              ? true
+                                              : false
+                                          }
                                         >
                                           Rooms:
                                           {accommodation.data.number_of_rooms} |
@@ -2295,6 +2295,7 @@ const TravelRequestForm = () => {
                                                       id: i,
                                                       data: {
                                                         is_employee: "Yes",
+                                                        dob: new Date(),
                                                       },
                                                     });
                                                   }
@@ -2359,6 +2360,7 @@ const TravelRequestForm = () => {
                                                     id: i,
                                                     data: {
                                                       is_employee: "Yes",
+                                                      dob: new Date(),
                                                     },
                                                   });
                                                 }
@@ -2416,6 +2418,7 @@ const TravelRequestForm = () => {
                                                     id: i,
                                                     data: {
                                                       is_employee: "Yes",
+                                                      dob: new Date(),
                                                     },
                                                   });
                                                 }
@@ -2527,6 +2530,11 @@ const TravelRequestForm = () => {
                                             is_employee: e.target.value,
                                           })
                                         }
+                                        disabled={
+                                          basicDetails?.booking_for === "self"
+                                            ? true
+                                            : false
+                                        }
                                       >
                                         <option value="Yes" selected>
                                           Yes
@@ -2543,6 +2551,11 @@ const TravelRequestForm = () => {
                                             ...room.data,
                                             room: e.target.value,
                                           })
+                                        }
+                                        disabled={
+                                          basicDetails?.booking_for === "self"
+                                            ? true
+                                            : false
                                         }
                                         // value={
                                         //   accommodationData[0]?.data
@@ -2565,13 +2578,23 @@ const TravelRequestForm = () => {
                                         // required
                                         type="text"
                                         disabled={
-                                          room?.data?.is_employee === "Yes"
+                                          room?.data?.is_employee === "Yes" &&
+                                          basicDetails?.booking_for !== "self"
                                             ? false
                                             : true
                                         }
+                                        placeholder="Enter Employee ID"
                                         value={room.data.emp_id}
                                         name="emp_id"
-                                        className="form-control form-control-sm"
+                                        // className="form-control form-control-sm"
+                                        className={classNames(
+                                          "form-control form-control-sm",
+                                          {
+                                            "is-invalid":
+                                              validateForOccupancyDataRow[index]
+                                                ?.data?.emp_id,
+                                          }
+                                        )}
                                         onChange={(e) =>
                                           handleRoomChange(room.id, {
                                             ...room.data,
@@ -2579,14 +2602,7 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.40rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.emp_id &&
                                           "This field is required"}
@@ -2601,9 +2617,17 @@ const TravelRequestForm = () => {
                                             ? true
                                             : false
                                         }
+                                        placeholder="Enter Full Name"
                                         value={room?.data?.name}
                                         name="name"
-                                        className="form-control form-control-sm"
+                                        className={classNames(
+                                          "form-control form-control-sm",
+                                          {
+                                            "is-invalid":
+                                              validateForOccupancyDataRow[index]
+                                                ?.data?.name,
+                                          }
+                                        )}
                                         onChange={(e) =>
                                           handleRoomChange(room.id, {
                                             ...room.data,
@@ -2611,21 +2635,14 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.40rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.name &&
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td>
-                                      {room?.data?.is_employee === "Yes" ? (
+                                    <td style={{ width: "15%" }}>
+                                      {/* {room?.data?.is_employee === "Yes" ? (
                                         <input
                                           type="text"
                                           // required
@@ -2636,6 +2653,7 @@ const TravelRequestForm = () => {
                                           }
                                           value={room?.data?.gender}
                                           name="gender"
+                                          placeholder="Select.."
                                           className="form-control form-control-sm"
                                           onChange={(e) =>
                                             handleRoomChange(room.id, {
@@ -2644,32 +2662,38 @@ const TravelRequestForm = () => {
                                             })
                                           }
                                         />
-                                      ) : (
-                                        <select
-                                          className="form-select form-control-sm"
-                                          onChange={(e) =>
-                                            handleRoomChange(room.id, {
-                                              ...room.data,
-                                              gender: e.target.value,
-                                            })
+                                      ) : ( */}
+                                      <select
+                                        className={classNames(
+                                          "form-select form-control-sm",
+                                          {
+                                            "is-invalid":
+                                              validateForOccupancyDataRow[index]
+                                                ?.data?.gender,
                                           }
-                                          value={room?.data?.gender}
-                                        >
-                                          <option value="" selected disabled>
-                                            Select...
-                                          </option>
-                                          <option value="Male">Male</option>
-                                          <option value="Female">Female</option>
-                                        </select>
-                                      )}
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.40rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
+                                        )}
+                                        disabled={
+                                          room?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
+                                        placeholder="Enter Employee ID"
+                                        onChange={(e) =>
+                                          handleRoomChange(room.id, {
+                                            ...room.data,
+                                            gender: e.target.value,
+                                          })
+                                        }
+                                        value={room?.data?.gender}
                                       >
+                                        <option value="" selected disabled>
+                                          Select...
+                                        </option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                      </select>
+                                      {/* )} */}
+                                      <small className="isValidate">
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.gender &&
                                           "This field is required"}
@@ -2686,7 +2710,15 @@ const TravelRequestForm = () => {
                                         }
                                         value={room?.data?.phone}
                                         name="phone"
-                                        className="form-control form-control-sm"
+                                        className={classNames(
+                                          "form-control form-control-sm",
+                                          {
+                                            "is-invalid":
+                                              validateForOccupancyDataRow[index]
+                                                ?.data?.phone,
+                                          }
+                                        )}
+                                        placeholder="Enter Phone"
                                         onChange={(e) => {
                                           let { value } = e.target;
 
@@ -2700,14 +2732,7 @@ const TravelRequestForm = () => {
                                           });
                                         }}
                                       />
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.40rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.phone &&
                                           "This field is required"}
@@ -2724,7 +2749,15 @@ const TravelRequestForm = () => {
                                         }
                                         value={room?.data?.email}
                                         name="email"
-                                        className="form-control form-control-sm"
+                                        placeholder="Enter Email ID"
+                                        className={classNames(
+                                          "form-control form-control-sm",
+                                          {
+                                            "is-invalid":
+                                              validateForOccupancyDataRow[index]
+                                                ?.data?.email,
+                                          }
+                                        )}
                                         onChange={(e) =>
                                           handleRoomChange(room.id, {
                                             ...room?.data,
@@ -2732,14 +2765,7 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       />
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.40rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <small className="isValidate">
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.email &&
                                           "This field is required"}
@@ -2751,15 +2777,9 @@ const TravelRequestForm = () => {
                                         maxDate={new Date()}
                                         // isClearable={true}
                                         // withPortal
-                                        locale="en-US"
+                                        // locale="en-US"
                                         showWeekNumbers
-                                        selected={
-                                          new Date(room?.data?.dob)
-
-                                          //  === undefined
-                                          //   ? new Date()
-                                          //   : row?.data?.departure
-                                        }
+                                        selected={new Date(room?.data?.dob)}
                                         onChange={(e) =>
                                           handleRoomChange(room.id, {
                                             ...room.data,
@@ -2777,6 +2797,10 @@ const TravelRequestForm = () => {
                                               room?.data?.is_employee === "Yes"
                                                 ? true
                                                 : false
+                                            }
+                                            validate={
+                                              validateForOccupancyDataRow[index]
+                                                ?.data?.dob
                                             }
                                           />
                                         }
@@ -2799,14 +2823,8 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       /> */}
-                                      <small
-                                        style={{
-                                          width: "100%",
-                                          marginTop: " 0.40rem",
-                                          fontSize: "100%",
-                                          color: "#dc3545",
-                                        }}
-                                      >
+                                      <br />
+                                      <small className="isValidate">
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.dob &&
                                           "This field is required"}
