@@ -55,7 +55,7 @@ const TravelRequestForm = () => {
   let [cityData, setCityData] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
   const [getEmployeeDataById, setEmployeeDataById] = useState([]);
-  const [error, setError] = useState(true);
+  const [error, setError] = useState(false);
   const [checkError, setCheckError] = useState(false);
   const [travellersData, setTravellersData] = useState([]);
   const [validateForBadicDetailsDataRow, setValidateForBadicDetailsDataRow] =
@@ -308,7 +308,13 @@ const TravelRequestForm = () => {
   const [accommodationData, setAccommodationData] = useState([
     {
       id: 1,
-      data: { number_of_rooms: 1, number_of_adults: 1, number_of_children: 0 },
+      data: {
+        number_of_rooms: 1,
+        number_of_adults: 1,
+        number_of_children: 0,
+        checkIn: new Date(),
+        checkOut: new Date(),
+      },
     },
   ]);
 
@@ -408,7 +414,8 @@ const TravelRequestForm = () => {
       };
     });
   };
-  const validateError = () => {
+  const validateError = (event) => {
+    console.log("Event", event);
     let basicDetailsDataObj = {
       billable: basicDetails?.billable !== "" ? true : false,
       client_id: basicDetails?.client_id !== "" ? true : false,
@@ -646,75 +653,26 @@ const TravelRequestForm = () => {
       occpancyDataRow.length > 0 ||
       !basicDetailsData
     ) {
-      alert.error("Some fields are required");
+      setError(true);
+
+      event && alert.error("Some fields are required");
     } else {
       if (!treavellerRadioButton && !accommodationRadioButton) {
-        alert.error("Atleast one booking request is required");
+        event && alert.error("Atleast one booking request is required");
       } else {
-        // alert.success("Sent");
-        handleFormSubmit();
+        setError(false);
+        event && handleFormSubmit();
       }
+      // alert.success("Sent");
+      // handleFormSubmit(false);
     }
   };
 
-  // console.log("validateForTravellersDataRow", validateForTravellersDataRow);
-  // console.log("validateForTravelDataRow", validateForTravelDataRow);
-  // console.log(
-  //   "cwewcwvalidateForAccommodationDataRowecwcew",
-  //   validateForAccommodationDataRow
-  // );
-  // console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
-
   useEffect(() => {
-    let travellersDataRow = validateForTravellersDataRow.filter(
-      (y) =>
-        y.data.emp_id == true ||
-        y.data.name == true ||
-        y.data.gender == true ||
-        y.data.phone == true ||
-        y.data.emial == true ||
-        y.data.dob == true
-    );
-    let travelDataRow = validateForTravelDataRow.filter(
-      (y) =>
-        y.data.travel_mode == true ||
-        y.data.travel_from_city == true ||
-        y.data.travel_to_city == true ||
-        y.data.departure == true ||
-        y.data.return == true
-    );
-    let accommodationDataRow = validateForAccommodationDataRow.filter(
-      (y) =>
-        y.data.city == true ||
-        y.data.checkIn == true ||
-        y.data.checkOut == true ||
-        y.data.breakfastRequired == true
-    );
-    let occpancyDataRow = validateForOccupancyDataRow.filter(
-      (y) =>
-        y.data.emp_id == true ||
-        y.data.name == true ||
-        y.data.gender == true ||
-        y.data.phone == true ||
-        y.data.emial == true ||
-        y.data.dob == true
-    );
-    if (
-      travellersDataRow.length > 0 ||
-      travelDataRow.length > 0 ||
-      accommodationDataRow.length > 0 ||
-      occpancyDataRow.length > 0
-    ) {
-      setError(true);
-    } else {
-      setError(false);
+    if (error) {
+      validateError(false);
     }
-  }, [
-    validateForTravellersDataRow,
-    validateForTravelDataRow,
-    validateForAccommodationDataRow,
-    validateForOccupancyDataRow,
-  ]);
+  }, [basicDetails, travellersData, rows, accommodationData, roomsData]);
   // ================================================================================================================
   // useEffect(() => {
   //   async function fetchData() {
@@ -725,9 +683,13 @@ const TravelRequestForm = () => {
   //   }
   //   fetchData();
   // }, [error]);
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = async (value) => {
+    // if (value) {
+    //   alert.error("Some fields are required");
+    // } else {
+    //   alert.success("Done");
+    // }
     alert.success("Done");
-
     // const res = await axios.post("all_travel_request_data", {
     //   basicDetails,
     //   rows,
@@ -2127,7 +2089,25 @@ const TravelRequestForm = () => {
                                         </small>
                                       </td>
                                       <td>
-                                        <input
+                                        <DatePicker
+                                          dateFormat="dd/MM/yyyy"
+                                          minDate={new Date()}
+                                          locale="en-US"
+                                          showWeekNumbers
+                                          selected={
+                                            new Date(accommodation.data.checkIn)
+                                          }
+                                          onChange={(e) =>
+                                            handleAccommodationChange(
+                                              accommodation.id,
+                                              {
+                                                checkIn: e,
+                                              }
+                                            )
+                                          }
+                                          customInput={<ExampleCustomInput />}
+                                        />
+                                        {/* <input
                                           type="date"
                                           // required
                                           min={getCurrentDate()}
@@ -2142,7 +2122,7 @@ const TravelRequestForm = () => {
                                               }
                                             )
                                           }
-                                        />
+                                        /> */}
                                         <small
                                           style={{
                                             width: "100%",
@@ -2158,7 +2138,27 @@ const TravelRequestForm = () => {
                                         </small>
                                       </td>
                                       <td>
-                                        <input
+                                        <DatePicker
+                                          dateFormat="dd/MM/yyyy"
+                                          minDate={new Date()}
+                                          locale="en-US"
+                                          showWeekNumbers
+                                          selected={
+                                            new Date(
+                                              accommodation.data.checkOut
+                                            )
+                                          }
+                                          onChange={(e) =>
+                                            handleAccommodationChange(
+                                              accommodation.id,
+                                              {
+                                                checkOut: e,
+                                              }
+                                            )
+                                          }
+                                          customInput={<ExampleCustomInput />}
+                                        />
+                                        {/* <input
                                           type="date"
                                           // required
                                           value={accommodation.data.checkOut}
@@ -2173,7 +2173,7 @@ const TravelRequestForm = () => {
                                               }
                                             )
                                           }
-                                        />
+                                        /> */}
                                         <small
                                           style={{
                                             width: "100%",
@@ -2865,7 +2865,7 @@ const TravelRequestForm = () => {
                               id="res"
                               type="button"
                               className="btn btn-primary btn-sm"
-                              onClick={validateError}
+                              onClick={() => validateError(true)}
                             >
                               Submit
                             </button>
