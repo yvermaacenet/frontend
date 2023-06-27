@@ -754,7 +754,7 @@ const TravelRequestForm = () => {
   const ExampleCustomInput = forwardRef(({ value, onClick, disabled }, ref) => (
     <button
       type="button"
-      className="btn btn-sm btn-outline-dark"
+      className="form-control btn btn-sm form-control-sm "
       onClick={onClick}
       ref={ref}
       disabled={disabled}
@@ -1100,6 +1100,7 @@ const TravelRequestForm = () => {
                         {treavellerRadioButton && (
                           <div
                             style={{
+                              overflow: "auto",
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
@@ -1776,7 +1777,7 @@ const TravelRequestForm = () => {
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td>
+                                    <td className=" pt-3">
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date()}
@@ -1808,10 +1809,9 @@ const TravelRequestForm = () => {
                                           "fr-ca"
                                         )}
                                       /> */}
-                                      <small
+                                      <p
                                         style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
+                                          // marginTop: " 0.25rem",
                                           fontSize: "100%",
                                           color: "#dc3545",
                                         }}
@@ -1819,10 +1819,10 @@ const TravelRequestForm = () => {
                                         {validateForTravelDataRow[index]?.data
                                           ?.departure &&
                                           "This field is required"}
-                                      </small>
+                                      </p>
                                     </td>
 
-                                    <td>
+                                    <td className="pt-3">
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date(row?.data?.departure)}
@@ -1863,36 +1863,16 @@ const TravelRequestForm = () => {
                                           />
                                         }
                                       />
-                                      {/* <input
-                                        type="date"
-                                        // required
-                                        min={row?.data?.departure}
-                                        value={row.data.return}
-                                        name="return"
-                                        className="form-control form-control-sm"
-                                        onChange={(e) =>
-                                          handleDataChange(row.id, {
-                                            ...row.data,
-                                            return: e.target.value,
-                                          })
-                                        }
-                                        disabled={
-                                          row.data.trip_type === "OneWay"
-                                            ? true
-                                            : false
-                                        }
-                                      /> */}
-                                      <small
+
+                                      <p
                                         style={{
-                                          width: "100%",
-                                          marginTop: " 0.25rem",
                                           fontSize: "100%",
                                           color: "#dc3545",
                                         }}
                                       >
                                         {validateForTravelDataRow[index]?.data
                                           ?.return && "This field is required"}
-                                      </small>
+                                      </p>
                                     </td>
 
                                     <td>
@@ -2006,6 +1986,7 @@ const TravelRequestForm = () => {
                           <div
                             className="mt-2"
                             style={{
+                              overflow: "auto",
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
