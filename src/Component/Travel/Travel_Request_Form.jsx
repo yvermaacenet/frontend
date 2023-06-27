@@ -308,7 +308,13 @@ const TravelRequestForm = () => {
   const [accommodationData, setAccommodationData] = useState([
     {
       id: 1,
-      data: { number_of_rooms: 1, number_of_adults: 1, number_of_children: 0 },
+      data: {
+        number_of_rooms: 1,
+        number_of_adults: 1,
+        number_of_children: 0,
+        checkIn: new Date(),
+        checkOut: new Date(),
+      },
     },
   ]);
 
@@ -2127,7 +2133,25 @@ const TravelRequestForm = () => {
                                         </small>
                                       </td>
                                       <td>
-                                        <input
+                                        <DatePicker
+                                          dateFormat="dd/MM/yyyy"
+                                          minDate={new Date()}
+                                          locale="en-US"
+                                          showWeekNumbers
+                                          selected={
+                                            new Date(accommodation.data.checkIn)
+                                          }
+                                          onChange={(e) =>
+                                            handleAccommodationChange(
+                                              accommodation.id,
+                                              {
+                                                checkIn: e,
+                                              }
+                                            )
+                                          }
+                                          customInput={<ExampleCustomInput />}
+                                        />
+                                        {/* <input
                                           type="date"
                                           // required
                                           min={getCurrentDate()}
@@ -2142,7 +2166,7 @@ const TravelRequestForm = () => {
                                               }
                                             )
                                           }
-                                        />
+                                        /> */}
                                         <small
                                           style={{
                                             width: "100%",
@@ -2158,7 +2182,27 @@ const TravelRequestForm = () => {
                                         </small>
                                       </td>
                                       <td>
-                                        <input
+                                        <DatePicker
+                                          dateFormat="dd/MM/yyyy"
+                                          minDate={new Date()}
+                                          locale="en-US"
+                                          showWeekNumbers
+                                          selected={
+                                            new Date(
+                                              accommodation.data.checkOut
+                                            )
+                                          }
+                                          onChange={(e) =>
+                                            handleAccommodationChange(
+                                              accommodation.id,
+                                              {
+                                                checkOut: e,
+                                              }
+                                            )
+                                          }
+                                          customInput={<ExampleCustomInput />}
+                                        />
+                                        {/* <input
                                           type="date"
                                           // required
                                           value={accommodation.data.checkOut}
@@ -2173,7 +2217,7 @@ const TravelRequestForm = () => {
                                               }
                                             )
                                           }
-                                        />
+                                        /> */}
                                         <small
                                           style={{
                                             width: "100%",
