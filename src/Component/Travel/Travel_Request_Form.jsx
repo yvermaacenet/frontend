@@ -140,7 +140,7 @@ const TravelRequestForm = () => {
               dob:
                 res.data.length > 0 && treavellerRadioButton
                   ? formatBirthdate(res?.data[0]?.["Date of Birth"])
-                  : "",
+                  : new Date(),
             },
           };
           return setTravellersData([resObj]), setRoomsData([resObj]);
@@ -583,7 +583,7 @@ const TravelRequestForm = () => {
                 ? true
                 : false,
             dob:
-              (item.data.email === undefined || item.data.email === "") &&
+              (item.data.dob === undefined || item.data.dob === "") &&
               item.data?.is_employee === "No" &&
               accommodationRadioButton
                 ? true
@@ -665,56 +665,56 @@ const TravelRequestForm = () => {
   // );
   // console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
 
-  // useEffect(() => {
-  //   let travellersDataRow = validateForTravellersDataRow.filter(
-  //     (y) =>
-  //       y.data.emp_id == true ||
-  //       y.data.name == true ||
-  //       y.data.gender == true ||
-  //       y.data.phone == true ||
-  //       y.data.emial == true ||
-  //       y.data.dob == true
-  //   );
-  //   let travelDataRow = validateForTravelDataRow.filter(
-  //     (y) =>
-  //       y.data.travel_mode == true ||
-  //       y.data.travel_from_city == true ||
-  //       y.data.travel_to_city == true ||
-  //       y.data.departure == true ||
-  //       y.data.return == true
-  //   );
-  //   let accommodationDataRow = validateForAccommodationDataRow.filter(
-  //     (y) =>
-  //       y.data.city == true ||
-  //       y.data.checkIn == true ||
-  //       y.data.checkOut == true ||
-  //       y.data.breakfastRequired == true
-  //   );
-  //   let occpancyDataRow = validateForOccupancyDataRow.filter(
-  //     (y) =>
-  //       y.data.emp_id == true ||
-  //       y.data.name == true ||
-  //       y.data.gender == true ||
-  //       y.data.phone == true ||
-  //       y.data.emial == true ||
-  //       y.data.dob == true
-  //   );
-  //   if (
-  //     travellersDataRow.length > 0 ||
-  //     travelDataRow.length > 0 ||
-  //     accommodationDataRow.length > 0 ||
-  //     occpancyDataRow.length > 0
-  //   ) {
-  //     setError(true);
-  //   } else {
-  //     setError(false);
-  //   }
-  // }, [
-  //   validateForTravellersDataRow,
-  //   validateForTravelDataRow,
-  //   validateForAccommodationDataRow,
-  //   validateForOccupancyDataRow,
-  // ]);
+  useEffect(() => {
+    let travellersDataRow = validateForTravellersDataRow.filter(
+      (y) =>
+        y.data.emp_id == true ||
+        y.data.name == true ||
+        y.data.gender == true ||
+        y.data.phone == true ||
+        y.data.emial == true ||
+        y.data.dob == true
+    );
+    let travelDataRow = validateForTravelDataRow.filter(
+      (y) =>
+        y.data.travel_mode == true ||
+        y.data.travel_from_city == true ||
+        y.data.travel_to_city == true ||
+        y.data.departure == true ||
+        y.data.return == true
+    );
+    let accommodationDataRow = validateForAccommodationDataRow.filter(
+      (y) =>
+        y.data.city == true ||
+        y.data.checkIn == true ||
+        y.data.checkOut == true ||
+        y.data.breakfastRequired == true
+    );
+    let occpancyDataRow = validateForOccupancyDataRow.filter(
+      (y) =>
+        y.data.emp_id == true ||
+        y.data.name == true ||
+        y.data.gender == true ||
+        y.data.phone == true ||
+        y.data.emial == true ||
+        y.data.dob == true
+    );
+    if (
+      travellersDataRow.length > 0 ||
+      travelDataRow.length > 0 ||
+      accommodationDataRow.length > 0 ||
+      occpancyDataRow.length > 0
+    ) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [
+    validateForTravellersDataRow,
+    validateForTravelDataRow,
+    validateForAccommodationDataRow,
+    validateForOccupancyDataRow,
+  ]);
   // ================================================================================================================
   // useEffect(() => {
   //   async function fetchData() {
@@ -1207,7 +1207,7 @@ const TravelRequestForm = () => {
                                             emp_id: "",
                                             email: "",
                                             phone: "",
-                                            dob: "",
+                                            dob: new Date(),
                                             gender: "",
                                             is_employee: e.target.value,
                                           })
@@ -1224,7 +1224,9 @@ const TravelRequestForm = () => {
                                       <input
                                         type="text"
                                         disabled={
-                                          traveller?.data?.is_employee === "Yes"
+                                          traveller?.data?.is_employee ===
+                                            "Yes" &&
+                                          basicDetails?.booking_for !== "self"
                                             ? false
                                             : true
                                         }
@@ -1490,7 +1492,39 @@ const TravelRequestForm = () => {
                                       </small>
                                     </td>
                                     <td>
-                                      <input
+                                      <DatePicker
+                                        dateFormat="dd/MM/yyyy"
+                                        maxDate={new Date()}
+                                        // isClearable={true}
+                                        // withPortal
+                                        locale="en-US"
+                                        showWeekNumbers
+                                        selected={
+                                          new Date(traveller?.data?.dob)
+                                        }
+                                        onChange={(e) =>
+                                          handleTravellerChange(traveller.id, {
+                                            ...traveller?.data,
+                                            dob: e,
+                                          })
+                                        }
+                                        // disabled={
+                                        //   traveller?.data?.is_employee === "Yes"
+                                        //     ? true
+                                        //     : false
+                                        // }
+                                        customInput={
+                                          <ExampleCustomInput
+                                            disabled={
+                                              traveller?.data?.is_employee ===
+                                              "Yes"
+                                                ? true
+                                                : false
+                                            }
+                                          />
+                                        }
+                                      />
+                                      {/* <input
                                         // required
                                         type="date"
                                         placeholder="Select DOB"
@@ -1517,7 +1551,7 @@ const TravelRequestForm = () => {
                                             dob: e.target.value,
                                           })
                                         }
-                                      />
+                                      /> */}
                                       <small
                                         style={{
                                           width: "100%",
@@ -1788,12 +1822,7 @@ const TravelRequestForm = () => {
                                         // withPortal
                                         locale="en-GB"
                                         showWeekNumbers
-                                        selected={
-                                          row?.data?.departure
-                                          //  === undefined
-                                          //   ? new Date()
-                                          //   : row?.data?.departure
-                                        }
+                                        selected={row?.data?.departure}
                                         onChange={(e) =>
                                           handleDataChange(row.id, {
                                             ...row.data,
@@ -1840,19 +1869,25 @@ const TravelRequestForm = () => {
                                         locale="en-GB"
                                         showWeekNumbers
                                         selected={
-                                          row.data.return
-                                          //  === undefined
-                                          //   ? new Date()
-                                          //   : row?.data?.departure
+                                          row?.data?.departure === undefined ||
+                                          row?.data?.trip_type === "OneWay"
+                                            ? ""
+                                            : row?.data?.return
                                         }
                                         onChange={(e) =>
                                           handleDataChange(row.id, {
                                             ...row.data,
-                                            return: e,
+                                            return:
+                                              row?.data?.departure ===
+                                                undefined ||
+                                              row?.data?.trip_type === "OneWay"
+                                                ? ""
+                                                : e,
                                           })
                                         }
                                         disabled={
-                                          row.data.trip_type === "OneWay"
+                                          row?.data?.departure === undefined ||
+                                          row?.data?.trip_type === "OneWay"
                                             ? true
                                             : false
                                         }
@@ -2506,7 +2541,7 @@ const TravelRequestForm = () => {
                                             emp_id: "",
                                             email: "",
                                             phone: "",
-                                            dob: "",
+                                            dob: new Date(),
                                             gender: "",
                                             is_employee: e.target.value,
                                           })
@@ -2730,7 +2765,42 @@ const TravelRequestForm = () => {
                                       </small>
                                     </td>
                                     <td>
-                                      <input
+                                      <DatePicker
+                                        dateFormat="dd/MM/yyyy"
+                                        maxDate={new Date()}
+                                        // isClearable={true}
+                                        // withPortal
+                                        locale="en-US"
+                                        showWeekNumbers
+                                        selected={
+                                          new Date(room?.data?.dob)
+
+                                          //  === undefined
+                                          //   ? new Date()
+                                          //   : row?.data?.departure
+                                        }
+                                        onChange={(e) =>
+                                          handleRoomChange(room.id, {
+                                            ...room.data,
+                                            dob: e,
+                                          })
+                                        }
+                                        disabled={
+                                          room?.data?.is_employee === "Yes"
+                                            ? true
+                                            : false
+                                        }
+                                        customInput={
+                                          <ExampleCustomInput
+                                            disabled={
+                                              room?.data?.is_employee === "Yes"
+                                                ? true
+                                                : false
+                                            }
+                                          />
+                                        }
+                                      />
+                                      {/* <input
                                         type="date"
                                         // required
                                         disabled={
@@ -2747,7 +2817,7 @@ const TravelRequestForm = () => {
                                             dob: e.target.value,
                                           })
                                         }
-                                      />
+                                      /> */}
                                       <small
                                         style={{
                                           width: "100%",
