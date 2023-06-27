@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import Navbar from "../../Partials/Navbar";
 import Sidebar from "../../Partials/Sidebar";
 import Page_Header from "../../Partials/Page_Header";
@@ -15,7 +15,9 @@ import { border } from "@mui/system";
 import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import DatePicker from "react-datepicker";
 
+import "react-datepicker/dist/react-datepicker.css";
 // testint
 
 // =====================Data=============
@@ -53,9 +55,11 @@ const TravelRequestForm = () => {
   let [cityData, setCityData] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
   const [getEmployeeDataById, setEmployeeDataById] = useState([]);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(true);
   const [checkError, setCheckError] = useState(false);
   const [travellersData, setTravellersData] = useState([]);
+  const [validateForBadicDetailsDataRow, setValidateForBadicDetailsDataRow] =
+    useState({});
   const [validateForTravellersDataRow, setValidateForTravellersDataRow] =
     useState([]);
   const [validateForTravelDataRow, setValidateForTravelDataRow] = useState([]);
@@ -67,7 +71,7 @@ const TravelRequestForm = () => {
   const [numberValue, setNumberValue] = useState("");
   const [selectedClientId, setSelectedClientId] = useState("");
   const [filteredProjectIds, setFilteredProjectIds] = useState([]);
-  const [treavellerRadioButton, setTreavellerRadioButton] = useState(false);
+  const [treavellerRadioButton, setTreavellerRadioButton] = useState(true);
   const [accommodationRadioButton, setAccommodationRadioButton] =
     useState(false);
 
@@ -94,9 +98,7 @@ const TravelRequestForm = () => {
   });
   function formatBirthdate(birthdate) {
     var parts = birthdate.split("/");
-    var formattedDate = new Date(parts[2], parts[1] - 1, parts[0])
-      .toISOString()
-      .split("T")[0];
+    var formattedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
 
     return formattedDate;
   }
@@ -407,6 +409,14 @@ const TravelRequestForm = () => {
     });
   };
   const validateError = () => {
+    let basicDetailsDataObj = {
+      billable: basicDetails?.billable !== "" ? true : false,
+      client_id: basicDetails?.client_id !== "" ? true : false,
+      project_id: basicDetails?.project_id !== "" ? true : false,
+      reason_for_travel: basicDetails?.reason_for_travel !== "" ? true : false,
+    };
+
+    setValidateForBadicDetailsDataRow(basicDetailsDataObj);
     let travellerDatalist = [];
     travellersData.map((item, index) => {
       travellerDatalist = [
@@ -585,18 +595,18 @@ const TravelRequestForm = () => {
       return item;
     });
 
-    setValidateForOccupancyDataRow(occupancyDatalist);
-  };
-  // console.log("validateForTravellersDataRow", validateForTravellersDataRow);
-  // console.log("validateForTravelDataRow", validateForTravelDataRow);
-  // console.log(
-  //   "cwewcwvalidateForAccommodationDataRowecwcew",
-  //   validateForAccommodationDataRow
-  // );
-  // console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
+    // setValidateForOccupancyDataRow(occupancyDatalist);
 
-  useEffect(() => {
-    let travellersDataRow = validateForTravellersDataRow.filter(
+    const basicDetailsData = Object?.keys(basicDetailsDataObj).every(
+      (property) => {
+        return (
+          basicDetailsDataObj.hasOwnProperty(property) &&
+          basicDetailsDataObj[property] === true
+        );
+      }
+    );
+    console.log("basicDetailsData", basicDetailsData);
+    let travellersDataRow = travelDatalist.filter(
       (y) =>
         y.data.emp_id == true ||
         y.data.name == true ||
@@ -605,7 +615,7 @@ const TravelRequestForm = () => {
         y.data.emial == true ||
         y.data.dob == true
     );
-    let travelDataRow = validateForTravelDataRow.filter(
+    let travelDataRow = travelDatalist.filter(
       (y) =>
         y.data.travel_mode == true ||
         y.data.travel_from_city == true ||
@@ -613,14 +623,14 @@ const TravelRequestForm = () => {
         y.data.departure == true ||
         y.data.return == true
     );
-    let accommodationDataRow = validateForAccommodationDataRow.filter(
+    let accommodationDataRow = accommodationDatalist.filter(
       (y) =>
         y.data.city == true ||
         y.data.checkIn == true ||
         y.data.checkOut == true ||
         y.data.breakfastRequired == true
     );
-    let occpancyDataRow = validateForOccupancyDataRow.filter(
+    let occpancyDataRow = occupancyDatalist.filter(
       (y) =>
         y.data.emp_id == true ||
         y.data.name == true ||
@@ -633,42 +643,90 @@ const TravelRequestForm = () => {
       travellersDataRow.length > 0 ||
       travelDataRow.length > 0 ||
       accommodationDataRow.length > 0 ||
-      occpancyDataRow.length > 0
+      occpancyDataRow.length > 0 ||
+      !basicDetailsData
     ) {
-      setError(true);
+      alert.error("Some fields are required");
     } else {
-      setError(false);
-    }
-  }, [
-    validateForTravellersDataRow,
-    validateForTravelDataRow,
-    validateForAccommodationDataRow,
-    validateForOccupancyDataRow,
-  ]);
-  // ================================================================================================================
-  useEffect(() => {
-    async function fetchData() {
-      if (error) {
-        setCheckError(true);
-        console.log("error", error);
-      }
-    }
-    fetchData();
-  }, [error]);
-  const handleFormSubmit = async (e) => {
-    if (!treavellerRadioButton && !accommodationRadioButton) {
-      await alert.error("Atleast one booking request is required");
-      return false;
-    } else {
-      if (checkError) {
-        alert.error("Error");
-        return false;
+      if (!treavellerRadioButton && !accommodationRadioButton) {
+        alert.error("Atleast one booking request is required");
       } else {
-        await alert.success("Some fields are required");
-        return false;
+        // alert.success("Sent");
+        handleFormSubmit();
       }
     }
-    //alert.success(" Sent");
+  };
+
+  // console.log("validateForTravellersDataRow", validateForTravellersDataRow);
+  // console.log("validateForTravelDataRow", validateForTravelDataRow);
+  // console.log(
+  //   "cwewcwvalidateForAccommodationDataRowecwcew",
+  //   validateForAccommodationDataRow
+  // );
+  // console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
+
+  // useEffect(() => {
+  //   let travellersDataRow = validateForTravellersDataRow.filter(
+  //     (y) =>
+  //       y.data.emp_id == true ||
+  //       y.data.name == true ||
+  //       y.data.gender == true ||
+  //       y.data.phone == true ||
+  //       y.data.emial == true ||
+  //       y.data.dob == true
+  //   );
+  //   let travelDataRow = validateForTravelDataRow.filter(
+  //     (y) =>
+  //       y.data.travel_mode == true ||
+  //       y.data.travel_from_city == true ||
+  //       y.data.travel_to_city == true ||
+  //       y.data.departure == true ||
+  //       y.data.return == true
+  //   );
+  //   let accommodationDataRow = validateForAccommodationDataRow.filter(
+  //     (y) =>
+  //       y.data.city == true ||
+  //       y.data.checkIn == true ||
+  //       y.data.checkOut == true ||
+  //       y.data.breakfastRequired == true
+  //   );
+  //   let occpancyDataRow = validateForOccupancyDataRow.filter(
+  //     (y) =>
+  //       y.data.emp_id == true ||
+  //       y.data.name == true ||
+  //       y.data.gender == true ||
+  //       y.data.phone == true ||
+  //       y.data.emial == true ||
+  //       y.data.dob == true
+  //   );
+  //   if (
+  //     travellersDataRow.length > 0 ||
+  //     travelDataRow.length > 0 ||
+  //     accommodationDataRow.length > 0 ||
+  //     occpancyDataRow.length > 0
+  //   ) {
+  //     setError(true);
+  //   } else {
+  //     setError(false);
+  //   }
+  // }, [
+  //   validateForTravellersDataRow,
+  //   validateForTravelDataRow,
+  //   validateForAccommodationDataRow,
+  //   validateForOccupancyDataRow,
+  // ]);
+  // ================================================================================================================
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     if (error) {
+  //       setCheckError(true);
+  //       // console.log("error", error);
+  //     }
+  //   }
+  //   fetchData();
+  // }, [error]);
+  const handleFormSubmit = async (e) => {
+    alert.success("Done");
 
     // const res = await axios.post("all_travel_request_data", {
     //   basicDetails,
@@ -728,6 +786,20 @@ const TravelRequestForm = () => {
   // =================Format date For Inputs===============
 
   let d1 = new Date().toISOString().split("T")[0];
+  console.log("validateForBadicDetailsDataRow", validateForBadicDetailsDataRow);
+  const [startDate, setStartDate] = useState(new Date());
+
+  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+    <button
+      type="button"
+      className="btn btn-sm btn-outline-dark"
+      onClick={onClick}
+      ref={ref}
+    >
+      {value === "" ? "dd/mm/yyyy" : value}
+    </button>
+    // console.log("value",value === "" ?"Yes":"No")
+  ));
   return (
     <>
       <div className="container-scroller">
@@ -762,24 +834,16 @@ const TravelRequestForm = () => {
                     <div class="card-body">
                       <form
                         action=""
-                        onClick={validateError}
-                        onSubmit={handleSubmit(handleFormSubmit)}
+                        // onClick={validateError}
+                        // onSubmit={handleSubmit(handleFormSubmit)}
                       >
                         <div className="row">
                           <div className="col-12 col-lg-2">
                             <div className="form-group">
                               <label>Booking For</label>
-                              <span className="astik"> *</span>
+
                               <select
-                                className={classNames(
-                                  "form-select form-select-md",
-                                  {
-                                    "is-invalid": errors.booking_for,
-                                  }
-                                )}
-                                {...register("booking_for", {
-                                  value: basicDetails?.booking_for,
-                                })}
+                                className="form-select form-select-md"
                                 value={basicDetails?.booking_for}
                                 onChange={inputEvent}
                                 name="booking_for"
@@ -793,9 +857,6 @@ const TravelRequestForm = () => {
                                   Myself + Others
                                 </option>
                               </select>
-                              <small className="invalid-feedback">
-                                {errors.booking_for?.message}
-                              </small>
                             </div>
                           </div>
                           <div className="col-12 col-lg-2">
@@ -804,15 +865,26 @@ const TravelRequestForm = () => {
                               <span className="astik"> *</span>
                               <select
                                 // required
+                                // className={classNames(
+                                //   "form-select form-select-md",
+                                //   {
+                                //     "is-invalid": !validateForBadicDetailsDataRow?.billable,
+                                //   }
+                                // )}
                                 className={classNames(
                                   "form-select form-select-md",
                                   {
-                                    "is-invalid": errors.billable,
+                                    "is-invalid":
+                                      !validateForBadicDetailsDataRow?.billable &&
+                                      validateForBadicDetailsDataRow?.billable !==
+                                        undefined
+                                        ? true
+                                        : false,
                                   }
                                 )}
-                                {...register("billable", {
-                                  value: basicDetails?.billable,
-                                })}
+                                // {...register("billable", {
+                                //   value: basicDetails?.billable,
+                                // })}
                                 value={basicDetails?.billable}
                                 onChange={inputEvent}
                                 name="billable"
@@ -821,8 +893,21 @@ const TravelRequestForm = () => {
                                 <option value="Yes">Yes</option>
                                 <option value="No">No</option>
                               </select>
-                              <small className="invalid-feedback">
+                              {/* <small className="invalid-feedback">
                                 {errors.billable?.message}
+                              </small> */}
+                              <small
+                                style={{
+                                  width: "100%",
+                                  marginTop: " 0.40rem",
+                                  fontSize: "100%",
+                                  color: "#dc3545",
+                                }}
+                              >
+                                {!validateForBadicDetailsDataRow?.billable &&
+                                  validateForBadicDetailsDataRow?.billable !==
+                                    undefined &&
+                                  "This field is required"}
                               </small>
                             </div>
                           </div>
@@ -835,12 +920,14 @@ const TravelRequestForm = () => {
                                 className={classNames(
                                   "form-select form-select-md",
                                   {
-                                    "is-invalid": errors.client_id,
+                                    "is-invalid":
+                                      !validateForBadicDetailsDataRow?.client_id &&
+                                      validateForBadicDetailsDataRow?.client_id !==
+                                        undefined
+                                        ? true
+                                        : false,
                                   }
                                 )}
-                                {...register("client_id", {
-                                  value: basicDetails?.client_id,
-                                })}
                                 value={selectedClientId}
                                 name="client_id"
                                 onChange={handleClientChange}
@@ -852,8 +939,18 @@ const TravelRequestForm = () => {
                                   </option>
                                 ))}
                               </select>
-                              <small className="invalid-feedback">
-                                {errors.client_id?.message}
+                              <small
+                                style={{
+                                  width: "100%",
+                                  marginTop: " 0.40rem",
+                                  fontSize: "100%",
+                                  color: "#dc3545",
+                                }}
+                              >
+                                {!validateForBadicDetailsDataRow?.client_id &&
+                                  validateForBadicDetailsDataRow?.client_id !==
+                                    undefined &&
+                                  "This field is required"}
                               </small>
                             </div>
                           </div>
@@ -865,12 +962,14 @@ const TravelRequestForm = () => {
                                 className={classNames(
                                   "form-select form-select-md",
                                   {
-                                    "is-invalid": errors.project_id,
+                                    "is-invalid":
+                                      !validateForBadicDetailsDataRow?.project_id &&
+                                      validateForBadicDetailsDataRow?.project_id !==
+                                        undefined
+                                        ? true
+                                        : false,
                                   }
                                 )}
-                                {...register("project_id", {
-                                  value: basicDetails?.project_id,
-                                })}
                                 value={setBasicDetails?.project_id}
                                 onChange={inputEvent}
                                 name="project_id"
@@ -882,8 +981,18 @@ const TravelRequestForm = () => {
                                   </option>
                                 ))}
                               </select>
-                              <small className="invalid-feedback">
-                                {errors.project_id?.message}
+                              <small
+                                style={{
+                                  width: "100%",
+                                  marginTop: " 0.40rem",
+                                  fontSize: "100%",
+                                  color: "#dc3545",
+                                }}
+                              >
+                                {!validateForBadicDetailsDataRow?.project_id &&
+                                  validateForBadicDetailsDataRow?.project_id !==
+                                    undefined &&
+                                  "This field is required"}
                               </small>
                             </div>
                           </div>
@@ -898,12 +1007,14 @@ const TravelRequestForm = () => {
                                 className={classNames(
                                   "form-select form-select-md",
                                   {
-                                    "is-invalid": errors.reason_for_travel,
+                                    "is-invalid":
+                                      !validateForBadicDetailsDataRow?.reason_for_travel &&
+                                      validateForBadicDetailsDataRow?.reason_for_travel !==
+                                        undefined
+                                        ? true
+                                        : false,
                                   }
                                 )}
-                                {...register("reason_for_travel", {
-                                  value: basicDetails?.reason_for_travel,
-                                })}
                                 onChange={inputEvent}
                                 placeholder="Enter Reason for Travel"
                               >
@@ -917,8 +1028,18 @@ const TravelRequestForm = () => {
                                 <option value="Consulting">Consulting</option>
                                 <option value="Off-Site">Off-Site</option>
                               </select>
-                              <small className="invalid-feedback">
-                                {errors.reason_for_travel?.message}
+                              <small
+                                style={{
+                                  width: "100%",
+                                  marginTop: " 0.40rem",
+                                  fontSize: "100%",
+                                  color: "#dc3545",
+                                }}
+                              >
+                                {!validateForBadicDetailsDataRow?.reason_for_travel &&
+                                  validateForBadicDetailsDataRow?.reason_for_travel !==
+                                    undefined &&
+                                  "This field is required"}
                               </small>
                             </div>
                           </div>
@@ -942,8 +1063,11 @@ const TravelRequestForm = () => {
                                       : false
                                   }
                                   onChange={(e) => {
-                                    setTreavellerRadioButton(
-                                      !treavellerRadioButton
+                                    return (
+                                      setTreavellerRadioButton(
+                                        !treavellerRadioButton
+                                      ),
+                                      setError(true)
                                     );
                                   }}
                                   name="travellers_required"
@@ -965,8 +1089,11 @@ const TravelRequestForm = () => {
                                       : false
                                   }
                                   onChange={(e) => {
-                                    setTreavellerRadioButton(
-                                      !treavellerRadioButton
+                                    return (
+                                      setTreavellerRadioButton(
+                                        !treavellerRadioButton
+                                      ),
+                                      setError(false)
                                     );
                                   }}
                                   name="travellers_required"
@@ -1653,9 +1780,29 @@ const TravelRequestForm = () => {
                                       </small>
                                     </td>
                                     <td>
-                                      <input
+                                      <DatePicker
+                                        dateFormat="dd/MM/yyyy"
+                                        minDate={new Date()}
+                                        // isClearable={true}
+                                        // withPortal
+                                        locale="en-GB"
+                                        showWeekNumbers
+                                        selected={
+                                          row?.data?.departure
+                                          //  === undefined
+                                          //   ? new Date()
+                                          //   : row?.data?.departure
+                                        }
+                                        onChange={(e) =>
+                                          handleDataChange(row.id, {
+                                            ...row.data,
+                                            departure: e,
+                                          })
+                                        }
+                                        customInput={<ExampleCustomInput />}
+                                      />
+                                      {/* <input
                                         type="date"
-                                        // required
                                         min={getCurrentDate()}
                                         name="departure"
                                         className="form-control form-control-sm"
@@ -1665,7 +1812,10 @@ const TravelRequestForm = () => {
                                             departure: e.target.value,
                                           })
                                         }
-                                      />
+                                        max={new Date().toLocaleDateString(
+                                          "fr-ca"
+                                        )}
+                                      /> */}
                                       <small
                                         style={{
                                           width: "100%",
@@ -2608,11 +2758,20 @@ const TravelRequestForm = () => {
                           <div className="col-12">
                             <button
                               id="res"
-                              type="submit"
+                              type="button"
                               className="btn btn-primary btn-sm"
+                              onClick={validateError}
                             >
                               Submit
                             </button>
+                            {/* <button
+                              id="res"
+                              type="button"
+                              className="btn btn-primary btn-sm"
+                              onClick={validateError}
+                            >
+                              Check validation
+                            </button> */}
                           </div>
                         </div>
                       </form>

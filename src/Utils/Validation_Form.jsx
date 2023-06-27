@@ -469,7 +469,7 @@ export const form_flexible_validation = yup.object({
 });
 
 export const travel_request_form_validation = yup.object({
-  booking_for: yup.string().required("This field is required"),
+  // booking_for: yup.string().required("This field is required"),
   billable: yup.string().required("This field is required"),
   project_id: yup.string().required("This field is required"),
   client_id: yup.string().required("This field is required"),
