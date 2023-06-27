@@ -789,12 +789,13 @@ const TravelRequestForm = () => {
   console.log("validateForBadicDetailsDataRow", validateForBadicDetailsDataRow);
   const [startDate, setStartDate] = useState(new Date());
 
-  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+  const ExampleCustomInput = forwardRef(({ value, onClick, disabled }, ref) => (
     <button
       type="button"
       className="btn btn-sm btn-outline-dark"
       onClick={onClick}
       ref={ref}
+      disabled={disabled}
     >
       {value === "" ? "dd/mm/yyyy" : value}
     </button>
@@ -1831,7 +1832,41 @@ const TravelRequestForm = () => {
                                     </td>
 
                                     <td>
-                                      <input
+                                      <DatePicker
+                                        dateFormat="dd/MM/yyyy"
+                                        minDate={new Date(row?.data?.departure)}
+                                        // isClearable={true}
+                                        // withPortal
+                                        locale="en-GB"
+                                        showWeekNumbers
+                                        selected={
+                                          row.data.return
+                                          //  === undefined
+                                          //   ? new Date()
+                                          //   : row?.data?.departure
+                                        }
+                                        onChange={(e) =>
+                                          handleDataChange(row.id, {
+                                            ...row.data,
+                                            return: e,
+                                          })
+                                        }
+                                        disabled={
+                                          row.data.trip_type === "OneWay"
+                                            ? true
+                                            : false
+                                        }
+                                        customInput={
+                                          <ExampleCustomInput
+                                            disabled={
+                                              row.data.trip_type === "OneWay"
+                                                ? true
+                                                : false
+                                            }
+                                          />
+                                        }
+                                      />
+                                      {/* <input
                                         type="date"
                                         // required
                                         min={row?.data?.departure}
@@ -1849,7 +1884,7 @@ const TravelRequestForm = () => {
                                             ? true
                                             : false
                                         }
-                                      />
+                                      /> */}
                                       <small
                                         style={{
                                           width: "100%",
