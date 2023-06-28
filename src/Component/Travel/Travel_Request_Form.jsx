@@ -439,6 +439,12 @@ const TravelRequestForm = () => {
               treavellerRadioButton
                 ? true
                 : false,
+            namePattern:
+              item.data?.is_employee === "No"
+                ? /^[A-Za-z]+$/.test(item.data.name) === true
+                  ? false
+                  : true
+                : false,
             gender:
               (item.data.gender === undefined || item.data.gender === "") &&
               item.data?.is_employee === "No" &&
@@ -588,6 +594,12 @@ const TravelRequestForm = () => {
               accommodationRadioButton
                 ? true
                 : false,
+            namePattern:
+              item.data?.is_employee === "No"
+                ? /^[A-Za-z]+$/.test(item.data.name) === true
+                  ? false
+                  : true
+                : false,
             gender:
               (item.data.gender === undefined || item.data.gender === "") &&
               item.data?.is_employee === "No" &&
@@ -677,6 +689,7 @@ const TravelRequestForm = () => {
         y.data.emp_id == true ||
         y.data.empIdPattern == true ||
         y.data.name == true ||
+        y.data.namePattern == true ||
         y.data.gender == true ||
         y.data.phone == true ||
         y.data.phonePattern == true ||
@@ -704,6 +717,7 @@ const TravelRequestForm = () => {
         y.data.emp_id == true ||
         y.data.empIdPattern == true ||
         y.data.name == true ||
+        y.data.namePattern == true ||
         y.data.gender == true ||
         y.data.phone == true ||
         y.data.email == true ||
@@ -1344,6 +1358,13 @@ const TravelRequestForm = () => {
                                         {validateForTravellersDataRow[index]
                                           ?.data?.name &&
                                           "This field is required"}
+                                        {traveller?.data?.is_employee ===
+                                          "No" &&
+                                          !validateForTravellersDataRow[index]
+                                            ?.data?.name &&
+                                          validateForTravellersDataRow[index]
+                                            ?.data?.namePattern &&
+                                          "Fullname is not valid"}
                                       </small>
                                     </td>
                                     <td style={{ width: "15%" }}>
@@ -2750,6 +2771,12 @@ const TravelRequestForm = () => {
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.name &&
                                           "This field is required"}
+                                        {room?.data?.is_employee === "No" &&
+                                          !validateForOccupancyDataRow[index]
+                                            ?.data?.name &&
+                                          validateForOccupancyDataRow[index]
+                                            ?.data?.namePattern &&
+                                          "Fullname is not valid"}
                                       </small>
                                     </td>
                                     <td style={{ width: "15%" }}>
