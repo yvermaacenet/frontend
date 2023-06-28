@@ -722,7 +722,6 @@ const TravelRequestForm = () => {
           : false
         : false;
 
-    // console.log("valdateBookingForMySelf_Other", valdateBookingForMySelf_Other);
     // console.log(
     //   "travellersData.length",
     //   treavellerRadioButton ? travellersData?.length : 0
@@ -928,7 +927,10 @@ const TravelRequestForm = () => {
       // console.log("value",value === "" ?"Yes":"No")
     )
   );
-
+  // console.log();
+  // const valdateBookingForMySelf_Other_test =
+  // travellersData?.map((val)=>console.log(val?.data?.emp_id))
+  // console.log("valdateBookingForMySelf_Other_test", valdateBookingForMySelf_Other_test);
   return (
     <>
       <div className="container-scroller">
