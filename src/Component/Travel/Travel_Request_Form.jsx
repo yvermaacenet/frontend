@@ -167,8 +167,8 @@ const TravelRequestForm = () => {
   }, [
     employeeId,
     basicDetails?.booking_for,
-    treavellerRadioButton,
-    accommodationRadioButton,
+    // treavellerRadioButton,
+    // accommodationRadioButton,
   ]);
   useEffect(() => {
     async function getCountry() {
@@ -438,7 +438,11 @@ const TravelRequestForm = () => {
 
     setValidateForBadicDetailsDataRow(basicDetailsDataObj);
     let travellerDatalist = [];
+    let validationTravellerArray = [];
     travellersData.map((item, index) => {
+      // if (!validationTravellerArray.includes(item?.data?.emp_id)) {
+      validationTravellerArray.push(item?.data?.emp_id);
+      // }
       travellerDatalist = [
         ...travellerDatalist,
         {
@@ -450,6 +454,19 @@ const TravelRequestForm = () => {
               treavellerRadioButton
                 ? true
                 : false,
+
+            validationForCheckingDuplicacyInTraveller:
+              validationTravellerArray.filter((element) => element === "1")
+                .length > 1
+                ? true
+                : false,
+            //  travellersData?.some(
+            //         (val) => {
+            //           if (validationTravellerArray.includes(val?.data?.emp_id)) {
+            //             return true;
+            //           } else validationTravellerArray.push(val?.data?.emp_id);
+            //         }
+            //       ) ? false : false,
             empIdPattern:
               basicDetails?.booking_for === "others"
                 ? (item.data.emp_id === LocalStorageData?.emp_id) === true
@@ -511,6 +528,7 @@ const TravelRequestForm = () => {
 
       return item;
     });
+    console.log("validationTravellerArray", validationTravellerArray);
     console.log("travellerDatalist", travellerDatalist);
     setValidateForTravellersDataRow(travellerDatalist);
     let travelDatalist = [];
@@ -708,21 +726,30 @@ const TravelRequestForm = () => {
     //   "rooms.length",
     //   accommodationRadioButton ? roomsData?.length : 0
     // );
-    const rr = [];
+    const validationOccupancyArray = [];
     const validationForCheckingDuplicacyInOccuancy = roomsData?.some((val) => {
-      if (rr.includes(val?.data?.emp_id)) {
+      if (validationOccupancyArray.includes(val?.data?.emp_id)) {
         return true;
-      } else rr.push(val?.data?.emp_id);
+      } else validationOccupancyArray.push(val?.data?.emp_id);
     });
-    console.log(
-      "validationForCheckingDuplicacyInOccuancy",
-      validationForCheckingDuplicacyInOccuancy
-    );
+    // const validationTravellerArray = [];
+    // const validationForCheckingDuplicacyInTraveller = travellersData?.some(
+    //   (val) => {
+    //     if (validationTravellerArray.includes(val?.data?.emp_id)) {
+    //       return true;
+    //     } else validationTravellerArray.push(val?.data?.emp_id);
+    //   }
+    // );
+    // console.log(
+    //   "validationForCheckingDuplicacyInTraveller",
+    //   validationForCheckingDuplicacyInTraveller
+    // );
 
     let travellersDataRow = travellerDatalist.filter(
       (y) =>
         y.data.emp_id == true ||
         y.data.empIdPattern == true ||
+        y.data.validationForCheckingDuplicacyInTraveller == true ||
         y.data.name == true ||
         y.data.namePattern == true ||
         y.data.gender == true ||
@@ -1341,6 +1368,14 @@ const TravelRequestForm = () => {
                                           validateForTravellersDataRow[index]
                                             ?.data?.empIdPattern &&
                                           "Please select others"}
+                                        {traveller?.data?.is_employee ===
+                                          "Yes" &&
+                                          !validateForTravellersDataRow[index]
+                                            ?.data?.emp_id &&
+                                          validateForTravellersDataRow[index]
+                                            ?.data
+                                            ?.validationForCheckingDuplicacyInTraveller &&
+                                          "Same Employee Id not allowed"}
                                       </small>
                                     </td>
                                     <td>
