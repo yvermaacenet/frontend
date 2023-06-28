@@ -88,7 +88,7 @@ const GetTravelRequestForm_Data = () => {
                         <tr>
                           <th>Sr.no</th>
                           <th>Requested On</th>
-                          {/* <th>Reason for travel</th> */}
+                          <th>Special Request</th>
                           <th> Status</th>
                           <th>Remarks</th>
                         </tr>
@@ -99,6 +99,7 @@ const GetTravelRequestForm_Data = () => {
                             <tr>
                               <td>{index + 1}</td>
                               <td>{val?.createdAt?.split("T")[0]}</td>
+                              <td>{val?.basicDetails?.special_request}</td>
                               <td>
                                 <label
                                   class={`${
@@ -112,6 +113,7 @@ const GetTravelRequestForm_Data = () => {
                                   {val?.management_approval}
                                 </label>
                               </td>
+
                               {val?.remarks && (
                                 <td>
                                   <label>{val?.remarks}</label>

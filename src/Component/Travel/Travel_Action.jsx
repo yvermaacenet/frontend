@@ -441,13 +441,17 @@ const Travel_Action = (props) => {
                       )}
                     </>
 
-                    {/* <h6
+                    <h6
                       className="card-title text-primary mt-4"
                       style={{ fontSize: "14px" }}
                     >
                       Special Request
-                    </h6> */}
-
+                    </h6>
+                    <blockquote class="blockquote">
+                      <p class="mb-0">
+                        {getData?.basicDetails?.special_request}
+                      </p>
+                    </blockquote>
                     {LocalStorageData?.zoho_role === "Management" &&
                     getData?.created_by !== LocalStorageData?.email &&
                     getData?.management_approval === "Pending" ? (

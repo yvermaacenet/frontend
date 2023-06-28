@@ -120,34 +120,16 @@ const TravelRequestForm = () => {
           const resObj = {
             data: {
               is_employee: "Yes",
-              emp_id:
-                (res.data.length > 0 && treavellerRadioButton) ||
-                (res.data.length > 0 && accommodationRadioButton)
-                  ? res?.data[0]?.["Employee ID"]
-                  : "",
-              name:
-                (res.data.length > 0 && treavellerRadioButton) ||
-                (res.data.length > 0 && accommodationRadioButton)
-                  ? res?.data[0]?.ownerName
-                  : "",
-              gender:
-                (res.data.length > 0 && treavellerRadioButton) ||
-                (res.data.length > 0 && accommodationRadioButton)
-                  ? res?.data[0]?.Tags
-                  : "",
+              emp_id: res.data.length > 0 ? res?.data[0]?.["Employee ID"] : "",
+              name: res.data.length > 0 ? res?.data[0]?.ownerName : "",
+              gender: res.data.length > 0 ? res?.data[0]?.Tags : "",
               phone:
-                (res.data.length > 0 && treavellerRadioButton) ||
-                (res.data.length > 0 && accommodationRadioButton)
+                res.data.length > 0
                   ? res?.data[0]?.["Personal Mobile Number"]
                   : "",
-              email:
-                (res.data.length > 0 && treavellerRadioButton) ||
-                (res.data.length > 0 && accommodationRadioButton)
-                  ? res?.data[0]?.["Email address"]
-                  : "",
+              email: res.data.length > 0 ? res?.data[0]?.["Email address"] : "",
               dob:
-                (res.data.length > 0 && treavellerRadioButton) ||
-                (res.data.length > 0 && accommodationRadioButton)
+                res.data.length > 0
                   ? formatBirthdate(res?.data[0]?.["Date of Birth"])
                   : "1990-01-01",
             },
@@ -673,22 +655,23 @@ const TravelRequestForm = () => {
     // );
     // console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
     // console.log("validateForTravelDataRow", validateForTravelDataRow);
-    const valdateBookingForOther =
+    const valdateBookingForMySelf_Other =
       basicDetails?.booking_for === "myself_others"
         ? eval(treavellerRadioButton ? travellersData?.length : 0) +
             eval(accommodationRadioButton ? roomsData?.length : 0) <
           2
-          ? "error"
-          : "no-error"
+          ? true
+          : false
         : false;
-    //  console.log(
-    //   "travellersData.length",
-    //   treavellerRadioButton ? travellersData?.length : 0
-    // );
-    // console.log(
-    //   "rooms.length",
-    //   accommodationRadioButton ? roomsData?.length : 0
-    // );
+    console.log("valdateBookingForMySelf_Other", valdateBookingForMySelf_Other);
+    console.log(
+      "travellersData.length",
+      treavellerRadioButton ? travellersData?.length : 0
+    );
+    console.log(
+      "rooms.length",
+      accommodationRadioButton ? roomsData?.length : 0
+    );
     let travellersDataRow = travellerDatalist.filter(
       (y) =>
         y.data.emp_id == true ||
@@ -736,14 +719,14 @@ const TravelRequestForm = () => {
       accommodationDataRow.length > 0 ||
       occpancyDataRow.length > 0 ||
       !basicDetailsData
-      // || valdateBookingForOther
+      // || valdateBookingForMySelf_Other
     ) {
       setError(true);
-      event && alert.error("Some fields are required");
+      event && alert.error("Error in some fields");
     } else {
       if (!treavellerRadioButton && !accommodationRadioButton) {
         event && alert.error("Atleast one booking request is required");
-      } else if (valdateBookingForOther) {
+      } else if (valdateBookingForMySelf_Other) {
         event && alert.error("Please add more employees");
       } else {
         setError(false);
@@ -784,20 +767,20 @@ const TravelRequestForm = () => {
     // } else {
     //   alert.success("Done");
     // }
-    alert.success("Done");
-    // const res = await axios.post("all_travel_request_data", {
-    //   basicDetails,
-    //   rows: treavellerRadioButton ? rows : [],
-    //   travellersData: treavellerRadioButton ? travellersData : [],
-    //   accommodationData: accommodationRadioButton ? accommodationData : [],
-    //   roomsData: accommodationRadioButton ? roomsData : [],
-    //   management_approval: "Pending",
-    //   created_by: LocalStorageData?.email,
-    // });
-    // if (res?.data === "Created") {
-    //   alert.success("Request Sent");
-    //   navigate("/alltravelrequest");
-    // }
+    // alert.success("Done");
+    const res = await axios.post("all_travel_request_data", {
+      basicDetails,
+      rows: treavellerRadioButton ? rows : [],
+      travellersData: treavellerRadioButton ? travellersData : [],
+      accommodationData: accommodationRadioButton ? accommodationData : [],
+      roomsData: accommodationRadioButton ? roomsData : [],
+      management_approval: "Pending",
+      created_by: LocalStorageData?.email,
+    });
+    if (res?.data === "Created") {
+      alert.success("Request Sent");
+      navigate("/alltravelrequest");
+    }
   };
 
   // const data = accommodationData?.data?.number_of_rooms;
@@ -1271,7 +1254,15 @@ const TravelRequestForm = () => {
                                             "is-invalid":
                                               validateForTravellersDataRow[
                                                 index
-                                              ]?.data?.emp_id,
+                                              ]?.data?.emp_id ||
+                                              (traveller?.data?.is_employee ===
+                                                "Yes" &&
+                                                !validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.emp_id &&
+                                                validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.empIdPattern),
                                           }
                                         )}
                                         value={
@@ -2698,7 +2689,15 @@ const TravelRequestForm = () => {
                                           {
                                             "is-invalid":
                                               validateForOccupancyDataRow[index]
-                                                ?.data?.emp_id,
+                                                ?.data?.emp_id ||
+                                              (room?.data?.is_employee ===
+                                                "Yes" &&
+                                                !validateForOccupancyDataRow[
+                                                  index
+                                                ]?.data?.emp_id &&
+                                                validateForOccupancyDataRow[
+                                                  index
+                                                ]?.data?.empIdPattern),
                                           }
                                         )}
                                         onChange={(e) =>
@@ -2712,6 +2711,12 @@ const TravelRequestForm = () => {
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.emp_id &&
                                           "This field is required"}
+                                        {room?.data?.is_employee === "Yes" &&
+                                          !validateForOccupancyDataRow[index]
+                                            ?.data?.emp_id &&
+                                          validateForOccupancyDataRow[index]
+                                            ?.data?.empIdPattern &&
+                                          "Please select others"}
                                       </small>
                                     </td>
                                     <td>
