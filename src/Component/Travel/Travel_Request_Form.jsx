@@ -438,10 +438,10 @@ const TravelRequestForm = () => {
 
     setValidateForBadicDetailsDataRow(basicDetailsDataObj);
     let travellerDatalist = [];
-    let validationTravellerArray = [];
+    let validationTravellerArrayForTraveller = [];
     travellersData.map((item, index) => {
       // if (!validationTravellerArray.includes(item?.data?.emp_id)) {
-      validationTravellerArray.push(item?.data?.emp_id);
+      validationTravellerArrayForTraveller.push(item?.data?.emp_id);
       // }
       travellerDatalist = [
         ...travellerDatalist,
@@ -455,18 +455,13 @@ const TravelRequestForm = () => {
                 ? true
                 : false,
 
-            validationForCheckingDuplicacyInTraveller:
-              validationTravellerArray.filter((element) => element === "1")
-                .length > 1
+            validationForCheckingDuplicateValue:
+              validationTravellerArrayForTraveller.filter(
+                (element) => element === item.data.emp_id
+              ).length > 1
                 ? true
                 : false,
-            //  travellersData?.some(
-            //         (val) => {
-            //           if (validationTravellerArray.includes(val?.data?.emp_id)) {
-            //             return true;
-            //           } else validationTravellerArray.push(val?.data?.emp_id);
-            //         }
-            //       ) ? false : false,
+
             empIdPattern:
               basicDetails?.booking_for === "others"
                 ? (item.data.emp_id === LocalStorageData?.emp_id) === true
@@ -528,7 +523,7 @@ const TravelRequestForm = () => {
 
       return item;
     });
-    console.log("validationTravellerArray", validationTravellerArray);
+    // console.log("validationTravellerArray", validationTravellerArray);
     console.log("travellerDatalist", travellerDatalist);
     setValidateForTravellersDataRow(travellerDatalist);
     let travelDatalist = [];
@@ -611,7 +606,10 @@ const TravelRequestForm = () => {
     });
     setValidateForAccommodationDataRow(accommodationDatalist);
     let occupancyDatalist = [];
+    let validationTravellerArrayForOccupancy = [];
+
     roomsData?.map((item, index) => {
+      validationTravellerArrayForOccupancy.push(item?.data?.emp_id);
       occupancyDatalist = [
         ...occupancyDatalist,
         {
@@ -629,6 +627,13 @@ const TravelRequestForm = () => {
                   ? true
                   : false
                 : false,
+            validationForCheckingDuplicateValue:
+              validationTravellerArrayForOccupancy.filter(
+                (element) => element === item.data.emp_id
+              ).length > 1
+                ? true
+                : false,
+
             name:
               (item.data.name === undefined || item.data.name === "") &&
               item.data?.is_employee === "No" &&
@@ -726,14 +731,14 @@ const TravelRequestForm = () => {
     //   "rooms.length",
     //   accommodationRadioButton ? roomsData?.length : 0
     // );
-    const validationOccupancyArray = [];
-    const validationForCheckingDuplicacyInOccuancy = roomsData?.some((val) => {
-      if (validationOccupancyArray.includes(val?.data?.emp_id)) {
-        return true;
-      } else validationOccupancyArray.push(val?.data?.emp_id);
-    });
+    // const validationOccupancyArray = [];
+    // const validationForCheckingDuplicacyInOccuancy = roomsData?.some((val) => {
+    //   if (validationOccupancyArray.includes(val?.data?.emp_id)) {
+    //     return true;
+    //   } else validationOccupancyArray.push(val?.data?.emp_id);
+    // });
     // const validationTravellerArray = [];
-    // const validationForCheckingDuplicacyInTraveller = travellersData?.some(
+    // const validationForCheckingDuplicateValue = travellersData?.some(
     //   (val) => {
     //     if (validationTravellerArray.includes(val?.data?.emp_id)) {
     //       return true;
@@ -741,15 +746,15 @@ const TravelRequestForm = () => {
     //   }
     // );
     // console.log(
-    //   "validationForCheckingDuplicacyInTraveller",
-    //   validationForCheckingDuplicacyInTraveller
+    //   "validationForCheckingDuplicateValue",
+    //   validationForCheckingDuplicateValue
     // );
 
     let travellersDataRow = travellerDatalist.filter(
       (y) =>
         y.data.emp_id == true ||
         y.data.empIdPattern == true ||
-        y.data.validationForCheckingDuplicacyInTraveller == true ||
+        y.data.validationForCheckingDuplicateValue == true ||
         y.data.name == true ||
         y.data.namePattern == true ||
         y.data.gender == true ||
@@ -778,6 +783,7 @@ const TravelRequestForm = () => {
       (y) =>
         y.data.emp_id == true ||
         y.data.empIdPattern == true ||
+        y.data.validationForCheckingDuplicateValue == true ||
         y.data.name == true ||
         y.data.namePattern == true ||
         y.data.gender == true ||
@@ -804,8 +810,6 @@ const TravelRequestForm = () => {
         event && alert.error("Atleast one booking request is required");
       } else if (valdateBookingForMySelf_Other) {
         event && alert.error("Please add more employees");
-      } else if (validationForCheckingDuplicacyInOccuancy) {
-        event && alert.error("Please add different employee");
       } else {
         setError(false);
         event && handleFormSubmit();
@@ -1374,7 +1378,7 @@ const TravelRequestForm = () => {
                                             ?.data?.emp_id &&
                                           validateForTravellersDataRow[index]
                                             ?.data
-                                            ?.validationForCheckingDuplicacyInTraveller &&
+                                            ?.validationForCheckingDuplicateValue &&
                                           "Same Employee Id not allowed"}
                                       </small>
                                     </td>
@@ -2458,7 +2462,6 @@ const TravelRequestForm = () => {
                                                   accommodation.data
                                                     .number_of_adults
                                                 ) {
-                                                  const dd = [];
                                                   for (
                                                     let i = 0;
                                                     i <=
@@ -2472,15 +2475,16 @@ const TravelRequestForm = () => {
                                                       );
                                                     i++
                                                   ) {
-                                                    dd.push({
-                                                      id: i,
-                                                      data: {
-                                                        is_employee: "Yes",
-                                                        dob: new Date(),
-                                                      },
-                                                    });
+                                                    setRoomsData(
+                                                      roomsData.concat({
+                                                        id: i,
+                                                        data: {
+                                                          is_employee: "Yes",
+                                                          dob: new Date(),
+                                                        },
+                                                      })
+                                                    );
                                                   }
-                                                  setRoomsData(dd);
                                                 }
                                               }}
                                             />
@@ -2526,7 +2530,6 @@ const TravelRequestForm = () => {
                                                   }
                                                 );
 
-                                                const dd = [];
                                                 for (
                                                   let i = 1;
                                                   i <=
@@ -2537,15 +2540,16 @@ const TravelRequestForm = () => {
                                                     );
                                                   i++
                                                 ) {
-                                                  dd.push({
-                                                    id: i,
-                                                    data: {
-                                                      is_employee: "Yes",
-                                                      dob: new Date(),
-                                                    },
-                                                  });
+                                                  setRoomsData(
+                                                    roomsData.concat({
+                                                      id: i,
+                                                      data: {
+                                                        is_employee: "Yes",
+                                                        dob: new Date(),
+                                                      },
+                                                    })
+                                                  );
                                                 }
-                                                setRoomsData(dd);
                                               }}
                                             />
                                             <label for="floatingPassword">
@@ -2584,7 +2588,6 @@ const TravelRequestForm = () => {
                                                       e.target.value,
                                                   }
                                                 );
-                                                const dd = [];
                                                 for (
                                                   let i = 1;
                                                   i <=
@@ -2595,16 +2598,17 @@ const TravelRequestForm = () => {
                                                     );
                                                   i++
                                                 ) {
-                                                  dd.push({
-                                                    id: i,
-                                                    data: {
-                                                      is_employee: "Yes",
-                                                      dob: new Date(),
-                                                    },
-                                                  });
+                                                  setRoomsData(
+                                                    roomsData.concat({
+                                                      id: i,
+                                                      data: {
+                                                        is_employee: "Yes",
+                                                        dob: new Date(),
+                                                      },
+                                                    })
+                                                  );
                                                 }
 
-                                                setRoomsData(dd);
                                                 // const dd = [];
                                                 // for (let i = 1; i <= value; i++) {
                                                 //   dd.push({
@@ -2810,6 +2814,13 @@ const TravelRequestForm = () => {
                                           validateForOccupancyDataRow[index]
                                             ?.data?.empIdPattern &&
                                           "Please select others"}
+                                        {room?.data?.is_employee === "Yes" &&
+                                          !validateForOccupancyDataRow[index]
+                                            ?.data?.emp_id &&
+                                          validateForOccupancyDataRow[index]
+                                            ?.data
+                                            ?.validationForCheckingDuplicateValue &&
+                                          "Same Employee Id not allowed"}
                                       </small>
                                     </td>
                                     <td>
