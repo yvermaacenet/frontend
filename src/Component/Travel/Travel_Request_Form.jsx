@@ -675,15 +675,27 @@ const TravelRequestForm = () => {
           ? true
           : false
         : false;
-    console.log("valdateBookingForMySelf_Other", valdateBookingForMySelf_Other);
+
+    // console.log("valdateBookingForMySelf_Other", valdateBookingForMySelf_Other);
+    // console.log(
+    //   "travellersData.length",
+    //   treavellerRadioButton ? travellersData?.length : 0
+    // );
+    // console.log(
+    //   "rooms.length",
+    //   accommodationRadioButton ? roomsData?.length : 0
+    // );
+    const rr = [];
+    const validationForCheckingDuplicacyInOccuancy = roomsData?.some((val) => {
+      if (rr.includes(val?.data?.emp_id)) {
+        return true;
+      } else rr.push(val?.data?.emp_id);
+    });
     console.log(
-      "travellersData.length",
-      treavellerRadioButton ? travellersData?.length : 0
+      "validationForCheckingDuplicacyInOccuancy",
+      validationForCheckingDuplicacyInOccuancy
     );
-    console.log(
-      "rooms.length",
-      accommodationRadioButton ? roomsData?.length : 0
-    );
+
     let travellersDataRow = travellerDatalist.filter(
       (y) =>
         y.data.emp_id == true ||
@@ -742,6 +754,8 @@ const TravelRequestForm = () => {
         event && alert.error("Atleast one booking request is required");
       } else if (valdateBookingForMySelf_Other) {
         event && alert.error("Please add more employees");
+      } else if (validationForCheckingDuplicacyInOccuancy) {
+        event && alert.error("Please add different employee");
       } else {
         setError(false);
         event && handleFormSubmit();
