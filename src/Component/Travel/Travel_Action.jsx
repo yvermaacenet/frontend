@@ -192,7 +192,7 @@ const Travel_Action = (props) => {
     //   }
     // }
   };
-
+  console.log("getData?.travellersData", getData?.travellersData);
   return (
     <div className="container-scroller">
       <Navbar />
@@ -230,6 +230,7 @@ const Travel_Action = (props) => {
                     <table className="table table-bordered">
                       <thead>
                         <tr>
+                          <th>Booking For</th>
                           <th>Billable</th>
                           <th>Client Id</th>
                           <th>Project ID</th>
@@ -238,6 +239,9 @@ const Travel_Action = (props) => {
                       </thead>
                       <tbody>
                         <tr>
+                          <td className="py-3">
+                            {getData?.basicDetails?.booking_for}
+                          </td>
                           <td className="py-3">
                             {getData?.basicDetails?.billable}
                           </td>
@@ -253,7 +257,7 @@ const Travel_Action = (props) => {
                     <>
                       {/* =================Travellers================================================ */}
 
-                      {getData?.travellersData !== [] && (
+                      {getData?.travellersData?.length > 0 && (
                         <>
                           <hr />
                           <h6
@@ -371,7 +375,7 @@ const Travel_Action = (props) => {
                                     return (
                                       <tr>
                                         {" "}
-                                        <td>{val?.data?.city.value}</td>
+                                        <td>{val?.data?.city?.value}</td>
                                         <td>
                                           {val?.data?.checkIn?.split("T")[0]}
                                         </td>
@@ -436,6 +440,13 @@ const Travel_Action = (props) => {
                           )
                       )}
                     </>
+
+                    {/* <h6
+                      className="card-title text-primary mt-4"
+                      style={{ fontSize: "14px" }}
+                    >
+                      Special Request
+                    </h6> */}
 
                     {LocalStorageData?.zoho_role === "Management" &&
                     getData?.created_by !== LocalStorageData?.email &&

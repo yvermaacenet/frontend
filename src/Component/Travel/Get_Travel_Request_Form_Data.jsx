@@ -137,7 +137,7 @@ const GetTravelRequestForm_Data = () => {
                                 >
                                   View
                                 </td>
-                                <td
+                                {/* <td
                                   className="btn btn-outline-primary btn-sm"
                                   type="button"
                                   // onClick={() => {
@@ -157,7 +157,7 @@ const GetTravelRequestForm_Data = () => {
                                   }}
                                 >
                                   Edit
-                                </td>
+                                </td> */}
                                 <td
                                   className="btn btn-sm btn-outline-danger mx-2"
                                   style={{

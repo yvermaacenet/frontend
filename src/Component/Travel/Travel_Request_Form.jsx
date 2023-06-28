@@ -98,8 +98,6 @@ const TravelRequestForm = () => {
     reason_for_travel: "",
     special_request: "",
     booking_for: "self",
-    // accommodation_required: "",
-    // travellers_required: false,
   });
   function formatBirthdate(birthdate) {
     var parts = birthdate.split("/");
@@ -323,14 +321,17 @@ const TravelRequestForm = () => {
         number_of_rooms: 1,
         number_of_adults: 1,
         number_of_children: 0,
-        checkIn: "",
+        // checkIn: "",
         // checkOut: "",
       },
     },
   ]);
 
   const handleAddAccommodation = () => {
-    const newRow = { id: accommodationData.length + 1, data: {} };
+    const newRow = {
+      id: accommodationData.length + 1,
+      data: { number_of_rooms: 1, number_of_adults: 1, number_of_children: 0 },
+    };
     setAccommodationData([...accommodationData, newRow]);
   };
 
@@ -444,6 +445,12 @@ const TravelRequestForm = () => {
               treavellerRadioButton
                 ? true
                 : false,
+            empIdPattern:
+              basicDetails?.booking_for === "others"
+                ? (item.data.emp_id === LocalStorageData?.emp_id) === true
+                  ? true
+                  : false
+                : false,
             name:
               (item.data.name === undefined || item.data.name === "") &&
               item.data?.is_employee === "No" &&
@@ -461,11 +468,25 @@ const TravelRequestForm = () => {
               item.data?.is_employee === "No"
                 ? true
                 : false,
+            phonePattern:
+              item.data?.is_employee === "No"
+                ? /^[0-9]{10,10}$/.test(item.data.phone) === true
+                  ? false
+                  : true
+                : false,
             email:
               (item.data.email === undefined || item.data.email === "") &&
               item.data?.is_employee === "No" &&
               treavellerRadioButton
                 ? true
+                : false,
+            emailPattern:
+              item.data?.is_employee === "No"
+                ? /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+                    item.data.email
+                  ) === true
+                  ? false
+                  : true
                 : false,
             dob:
               (item.data.dob === undefined || item.data.dob === "") &&
@@ -479,6 +500,7 @@ const TravelRequestForm = () => {
 
       return item;
     });
+    console.log("travellerDatalist", travellerDatalist);
     setValidateForTravellersDataRow(travellerDatalist);
     let travelDatalist = [];
     rows.map((item, index) => {
@@ -572,6 +594,12 @@ const TravelRequestForm = () => {
               accommodationRadioButton
                 ? true
                 : false,
+            empIdPattern:
+              basicDetails?.booking_for === "others"
+                ? (item.data.emp_id === LocalStorageData?.emp_id) === true
+                  ? true
+                  : false
+                : false,
             name:
               (item.data.name === undefined || item.data.name === "") &&
               item.data?.is_employee === "No" &&
@@ -590,12 +618,28 @@ const TravelRequestForm = () => {
               accommodationRadioButton
                 ? true
                 : false,
+            phonePattern:
+              item.data?.is_employee === "No"
+                ? /^[0-9]{10,10}$/.test(item.data.phone) === true
+                  ? false
+                  : true
+                : false,
+
             email:
               (item.data.email === undefined || item.data.email === "") &&
               item.data?.is_employee === "No" &&
               accommodationRadioButton
                 ? true
                 : false,
+            emailPattern:
+              item.data?.is_employee === "No"
+                ? /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+                    item.data.email
+                  ) === true
+                  ? false
+                  : true
+                : false,
+
             dob:
               (item.data.dob === undefined || item.data.dob === "") &&
               item.data?.is_employee === "No" &&
@@ -619,14 +663,42 @@ const TravelRequestForm = () => {
         );
       }
     );
-    console.log("basicDetailsData", basicDetailsData);
-    let travellersDataRow = travelDatalist.filter(
+    // console.log(
+    //   "validateForAccommodationDataRow",
+    //   validateForAccommodationDataRow
+    // );
+    // console.log(
+    //   "validateForBadicDetailsDataRow",
+    //   validateForBadicDetailsDataRow
+    // );
+    // console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
+    // console.log("validateForTravelDataRow", validateForTravelDataRow);
+    const valdateBookingForOther =
+      basicDetails?.booking_for === "myself_others"
+        ? eval(treavellerRadioButton ? travellersData?.length : 0) +
+            eval(accommodationRadioButton ? roomsData?.length : 0) <
+          2
+          ? "error"
+          : "no-error"
+        : false;
+    //  console.log(
+    //   "travellersData.length",
+    //   treavellerRadioButton ? travellersData?.length : 0
+    // );
+    // console.log(
+    //   "rooms.length",
+    //   accommodationRadioButton ? roomsData?.length : 0
+    // );
+    let travellersDataRow = travellerDatalist.filter(
       (y) =>
         y.data.emp_id == true ||
+        y.data.empIdPattern == true ||
         y.data.name == true ||
         y.data.gender == true ||
         y.data.phone == true ||
-        y.data.emial == true ||
+        y.data.phonePattern == true ||
+        y.data.email == true ||
+        y.data.emailPattern == true ||
         y.data.dob == true
     );
     let travelDataRow = travelDatalist.filter(
@@ -647,25 +719,32 @@ const TravelRequestForm = () => {
     let occpancyDataRow = occupancyDatalist.filter(
       (y) =>
         y.data.emp_id == true ||
+        y.data.empIdPattern == true ||
         y.data.name == true ||
         y.data.gender == true ||
         y.data.phone == true ||
-        y.data.emial == true ||
+        y.data.email == true ||
+        y.data.phonePattern == true ||
+        y.data.emailPattern == true ||
         y.data.dob == true
     );
+    console.log("travellersDataRoweweweww", travellersDataRow);
+
     if (
       travellersDataRow.length > 0 ||
       travelDataRow.length > 0 ||
       accommodationDataRow.length > 0 ||
       occpancyDataRow.length > 0 ||
       !basicDetailsData
+      // || valdateBookingForOther
     ) {
       setError(true);
-
       event && alert.error("Some fields are required");
     } else {
       if (!treavellerRadioButton && !accommodationRadioButton) {
         event && alert.error("Atleast one booking request is required");
+      } else if (valdateBookingForOther) {
+        event && alert.error("Please add more employees");
       } else {
         setError(false);
         event && handleFormSubmit();
@@ -674,7 +753,6 @@ const TravelRequestForm = () => {
       // handleFormSubmit(false);
     }
   };
-
   useEffect(() => {
     if (error) {
       validateError(false);
@@ -706,20 +784,20 @@ const TravelRequestForm = () => {
     // } else {
     //   alert.success("Done");
     // }
-    // alert.success("Done");
-    const res = await axios.post("all_travel_request_data", {
-      basicDetails,
-      rows,
-      travellersData,
-      accommodationData,
-      roomsData,
-      management_approval: "Pending",
-      created_by: LocalStorageData?.email,
-    });
-    if (res?.data === "Created") {
-      alert.success("Request Sent");
-      navigate("/alltravelrequest");
-    }
+    alert.success("Done");
+    // const res = await axios.post("all_travel_request_data", {
+    //   basicDetails,
+    //   rows: treavellerRadioButton ? rows : [],
+    //   travellersData: treavellerRadioButton ? travellersData : [],
+    //   accommodationData: accommodationRadioButton ? accommodationData : [],
+    //   roomsData: accommodationRadioButton ? roomsData : [],
+    //   management_approval: "Pending",
+    //   created_by: LocalStorageData?.email,
+    // });
+    // if (res?.data === "Created") {
+    //   alert.success("Request Sent");
+    //   navigate("/alltravelrequest");
+    // }
   };
 
   // const data = accommodationData?.data?.number_of_rooms;
@@ -785,6 +863,7 @@ const TravelRequestForm = () => {
       // console.log("value",value === "" ?"Yes":"No")
     )
   );
+
   return (
     <>
       <div className="container-scroller">
@@ -1148,7 +1227,7 @@ const TravelRequestForm = () => {
                                       <select
                                         type="text"
                                         name="is_employee"
-                                        className="form-control form-control-sm"
+                                        className="form-select form-select-md"
                                         value={traveller?.data?.is_employee}
                                         onChange={(e) =>
                                           handleTravellerChange(traveller.id, {
@@ -1213,6 +1292,13 @@ const TravelRequestForm = () => {
                                         {validateForTravellersDataRow[index]
                                           ?.data?.emp_id &&
                                           "This field is required"}
+                                        {traveller?.data?.is_employee ===
+                                          "Yes" &&
+                                          !validateForTravellersDataRow[index]
+                                            ?.data?.emp_id &&
+                                          validateForTravellersDataRow[index]
+                                            ?.data?.empIdPattern &&
+                                          "Please select others"}
                                       </small>
                                     </td>
                                     <td>
@@ -1336,11 +1422,11 @@ const TravelRequestForm = () => {
                                     </td>
                                     <td>
                                       <input
-                                        // required
                                         type={
-                                          traveller?.data?.is_employee === "Yes"
-                                            ? "text"
-                                            : "number"
+                                          "text"
+                                          // traveller?.data?.is_employee === "Yes"
+                                          //   ? "text"
+                                          //   : "number"
                                         }
                                         // pattern="\d*"
                                         // maxlength="10"
@@ -1380,6 +1466,13 @@ const TravelRequestForm = () => {
                                         {validateForTravellersDataRow[index]
                                           ?.data?.phone &&
                                           "This field is required"}
+                                        {traveller?.data?.is_employee ===
+                                          "No" &&
+                                          !validateForTravellersDataRow[index]
+                                            ?.data?.phone &&
+                                          validateForTravellersDataRow[index]
+                                            ?.data?.phonePattern &&
+                                          "Phone no is not valid"}
                                       </small>
                                     </td>
                                     <td>
@@ -1415,6 +1508,13 @@ const TravelRequestForm = () => {
                                         {validateForTravellersDataRow[index]
                                           ?.data?.email &&
                                           "This field is required"}
+                                        {traveller?.data?.is_employee ===
+                                          "No" &&
+                                          !validateForTravellersDataRow[index]
+                                            ?.data?.email &&
+                                          validateForTravellersDataRow[index]
+                                            ?.data?.emailPattern &&
+                                          "Email ID is not valid"}
                                       </small>
                                     </td>
                                     <td>
@@ -1423,6 +1523,7 @@ const TravelRequestForm = () => {
                                         maxDate={new Date()}
                                         // withPortal
                                         // locale="en-US"
+
                                         showWeekNumbers
                                         selected={
                                           new Date(traveller?.data?.dob)
@@ -1976,26 +2077,28 @@ const TravelRequestForm = () => {
                             >
                               <RiAddFill />
                             </p> */}
-                              <div
-                                id="add_accommodation"
-                                class="Btn my-2"
-                                onClick={handleAddAccommodation}
-                              >
-                                <div class="sign">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 24 24"
-                                    width="24px"
-                                    height="24px"
-                                    fill-rule="evenodd"
-                                  >
-                                    <path
+                              {basicDetails?.booking_for !== "self" && (
+                                <div
+                                  id="add_accommodation"
+                                  class="Btn my-2"
+                                  onClick={handleAddAccommodation}
+                                >
+                                  <div class="sign">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 0 24 24"
+                                      width="24px"
+                                      height="24px"
                                       fill-rule="evenodd"
-                                      d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-                                    />
-                                  </svg>
+                                    >
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                      />
+                                    </svg>
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </div>
 
                             <table className="table table-bordered">
@@ -2005,7 +2108,7 @@ const TravelRequestForm = () => {
                                   <th>Check-in</th>
                                   <th>Check-out</th>
                                   <th>Breakfast Required</th>
-                                  <th>Rooms Required</th>
+                                  <th colSpan={2}>Rooms Required</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -2048,11 +2151,6 @@ const TravelRequestForm = () => {
                                         <DatePicker
                                           dateFormat="dd/MM/yyyy"
                                           minDate={new Date()}
-                                          // locale="en-US"
-                                          showWeekNumbers
-                                          // selected={
-                                          //   new Date(accommodation.data.checkIn)
-                                          // }
                                           selected={
                                             accommodation?.data?.checkIn ===
                                             undefined
@@ -2077,6 +2175,7 @@ const TravelRequestForm = () => {
                                             />
                                           }
                                         />
+
                                         {/* <input
                                           type="date"
                                           // required
@@ -2444,9 +2543,9 @@ const TravelRequestForm = () => {
                                           </div>
                                         </div>
                                       </td>
-
-                                      <td>
-                                        {/* <button
+                                      {basicDetails?.booking_for !== "self" && (
+                                        <td>
+                                          {/* <button
                                       className="btn btn-danger btn-sm"
                                       onClick={() =>
                                         handleAccommodationDeleteRow(
@@ -2456,27 +2555,33 @@ const TravelRequestForm = () => {
                                     >
                                       <RiDeleteBin6Line />
                                     </button> */}
-                                        <div
-                                          id="Delete_Accommodation"
-                                          class="Btn my-2"
-                                          onClick={() =>
-                                            handleAccommodationDeleteRow(
-                                              accommodation.id
-                                            )
-                                          }
-                                        >
-                                          <div class="sign">
-                                            <svg
-                                              xmlns="http://www.w3.org/2000/svg"
-                                              viewBox="0 0 30 30"
-                                              width="30px"
-                                              height="30px"
+                                          {index === 0 ? (
+                                            ""
+                                          ) : (
+                                            <div
+                                              id="Delete_Accommodation"
+                                              class="Btn my-2"
+                                              onClick={() =>
+                                                handleAccommodationDeleteRow(
+                                                  accommodation.id
+                                                )
+                                              }
                                             >
-                                              <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                            </svg>
-                                          </div>
-                                        </div>
-                                      </td>
+                                              <div class="sign">
+                                                <svg
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  viewBox="0 0 30 30"
+                                                  width="30px"
+                                                  height="30px"
+                                                >
+                                                  <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                                </svg>
+                                              </div>
+                                            </div>
+                                          )}
+                                          ,
+                                        </td>
+                                      )}
                                     </tr>
                                   )
                                 )}
@@ -2534,6 +2639,9 @@ const TravelRequestForm = () => {
                                             : false
                                         }
                                       >
+                                        <option value="" selected disabled>
+                                          Select
+                                        </option>
                                         <option value="Yes" selected>
                                           Yes
                                         </option>
@@ -2734,6 +2842,12 @@ const TravelRequestForm = () => {
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.phone &&
                                           "This field is required"}
+                                        {room?.data?.is_employee === "No" &&
+                                          !validateForOccupancyDataRow[index]
+                                            ?.data?.phone &&
+                                          validateForOccupancyDataRow[index]
+                                            ?.data?.phonePattern &&
+                                          "Phone no is not valid"}
                                       </small>
                                     </td>
                                     <td>
@@ -2767,6 +2881,12 @@ const TravelRequestForm = () => {
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.email &&
                                           "This field is required"}
+                                        {room?.data?.is_employee === "No" &&
+                                          !validateForOccupancyDataRow[index]
+                                            ?.data?.email &&
+                                          validateForOccupancyDataRow[index]
+                                            ?.data?.emailPattern &&
+                                          "Email Id is not valid"}
                                       </small>
                                     </td>
                                     <td>
