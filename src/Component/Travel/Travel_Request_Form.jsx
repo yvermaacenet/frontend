@@ -120,16 +120,34 @@ const TravelRequestForm = () => {
           const resObj = {
             data: {
               is_employee: "Yes",
-              emp_id: res.data.length > 0 ? res?.data[0]?.["Employee ID"] : "",
-              name: res.data.length > 0 ? res?.data[0]?.ownerName : "",
-              gender: res.data.length > 0 ? res?.data[0]?.Tags : "",
+              emp_id:
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
+                  ? res?.data[0]?.["Employee ID"]
+                  : "",
+              name:
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
+                  ? res?.data[0]?.ownerName
+                  : "",
+              gender:
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
+                  ? res?.data[0]?.Tags
+                  : "",
               phone:
-                res.data.length > 0
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
                   ? res?.data[0]?.["Personal Mobile Number"]
                   : "",
-              email: res.data.length > 0 ? res?.data[0]?.["Email address"] : "",
+              email:
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
+                  ? res?.data[0]?.["Email address"]
+                  : "",
               dob:
-                res.data.length > 0
+                (res.data.length > 0 && treavellerRadioButton) ||
+                (res.data.length > 0 && accommodationRadioButton)
                   ? formatBirthdate(res?.data[0]?.["Date of Birth"])
                   : "1990-01-01",
             },
@@ -146,7 +164,12 @@ const TravelRequestForm = () => {
       setLoading(false);
     };
     fetchEmployeeData();
-  }, [employeeId, basicDetails?.booking_for, treavellerRadioButton]);
+  }, [
+    employeeId,
+    basicDetails?.booking_for,
+    treavellerRadioButton,
+    accommodationRadioButton,
+  ]);
   useEffect(() => {
     async function getCountry() {
       setLoading(true);
