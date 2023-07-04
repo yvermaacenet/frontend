@@ -11047,7 +11047,8 @@ fieldset:disabled .btn {
 .text-primary,
 .list-wrapper .completed .remove {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  /* color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important; */
+  color: #819fe6;
 }
 
 .text-secondary,
@@ -15155,7 +15156,7 @@ code {
     from(#da8cff),
     to(#9a55ff)
   ) !important;
-  background: linear-gradient(to right, #da8cff, #9a55ff) !important;
+  background: linear-gradient(to right, #3a5dae80, #3a5dae) !important;
 }
 
 .bg-gradient-secondary {
@@ -19969,3 +19970,32 @@ input:checked + .slider:before {
   font-size: 100%;
   color: #dc3545;
 }
+.span {
+  cursor: pointer;
+}
+.number {
+  /* margin: 100px; */
+  width: 50%;
+}
+.minus,
+.plus {
+  width: 28px;
+  height: 28px;
+  background: #f2f2f2;
+  border-radius: 4px;
+  padding: 4px 10px 10px 8px;
+  border: 1px solid #ddd;
+  display: inline-block;
+  vertical-align: bottom;
+  text-align: center;
+}
+/* input{
+			height:34px;
+      width: 100px;
+      text-align: center;
+      font-size: 26px;
+			border:1px solid #ddd;
+			border-radius:4px;
+      display: inline-block;
+      vertical-align: middle;
+    } */

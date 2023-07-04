@@ -204,12 +204,13 @@ const Travel_Action = (props) => {
               page_heading="View Travel Request"
               page_title_icon="mdi-wallet-travel"
               page_title_button="Back"
-              page_title_button_link={`${
-                // isManager &&
-                getData?.employee?.email !== LocalStorageData?.email
-                  ? "/travelrequestreceived"
-                  : "/alltravelrequest"
-              }`}
+              // page_title_button_link={`${
+              //   // isManager &&
+              //   getData?.employee?.email !== LocalStorageData?.email
+              //     ? "/travelrequestreceived"
+              //     : "/alltravelrequest"
+              // }`}
+              page_title_button_link="/alltravelrequest"
             />
             {loading && (
               <div className="loader-container">
@@ -230,7 +231,6 @@ const Travel_Action = (props) => {
                     <table className="table table-bordered">
                       <thead>
                         <tr>
-                          <th>Booking For</th>
                           <th>Billable</th>
                           <th>Client Id</th>
                           <th>Project ID</th>
@@ -239,9 +239,6 @@ const Travel_Action = (props) => {
                       </thead>
                       <tbody>
                         <tr>
-                          <td className="py-3">
-                            {getData?.basicDetails?.booking_for}
-                          </td>
                           <td className="py-3">
                             {getData?.basicDetails?.billable}
                           </td>
@@ -284,7 +281,7 @@ const Travel_Action = (props) => {
                                   <tr>
                                     {" "}
                                     <td>{val?.data?.is_employee}</td>
-                                    <td>{val?.data.emp_id}</td>
+                                    <td>{val?.data.emp_id?.value}</td>
                                     <td>{val?.data?.name}</td>
                                     <td>{val?.data?.gender}</td>
                                     <td>{val?.data?.phone}</td>
@@ -425,7 +422,7 @@ const Travel_Action = (props) => {
                                       <tr>
                                         {" "}
                                         <td>{val?.data?.is_employee}</td>
-                                        <td>{val?.data?.emp_id}</td>
+                                        <td>{val?.data?.emp_id?.value}</td>
                                         <td>{val?.data?.name}</td>
                                         <td>{val?.data?.gender}</td>
                                         <td>{val?.data?.phone}</td>

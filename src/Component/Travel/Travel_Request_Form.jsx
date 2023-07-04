@@ -54,7 +54,16 @@ const TravelRequestForm = () => {
   let [allData, setAllData] = useState([]);
   let [cityData, setCityData] = useState([]);
   const [employeeId, setEmployeeId] = useState("");
-  const [getEmployeeDataById, setEmployeeDataById] = useState([]);
+  const [getEmployeeDataByStatusCode, setEmployeeDataByStatusCode] = useState(
+    []
+  );
+  // const [
+  //   getEmployeeDataByStatusCodeForRooms,
+  //   setEmployeeDataByStatusCodeForRooms,
+  // ] = useState([]);
+  const [getEmployeeFilteredData, setEmployeeFilteredData] = useState([]);
+  const [getEmployeeDefaultByStatusCode, setEmployeeDefaultByStatusCode] =
+    useState({});
   const [error, setError] = useState(false);
   const [checkError, setCheckError] = useState(false);
   const [travellersData, setTravellersData] = useState([]);
@@ -80,6 +89,8 @@ const TravelRequestForm = () => {
       data: { is_employee: "Yes", dob: new Date() },
     },
   ]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [filterText, setFilterText] = useState("");
   const handleClientChange = (e) => {
     const selectedClient = e.target.value;
     setSelectedClientId(selectedClient);
@@ -98,6 +109,7 @@ const TravelRequestForm = () => {
     reason_for_travel: "",
     special_request: "",
     booking_for: "self",
+    preferred_time: "",
   });
   function formatBirthdate(birthdate) {
     var parts = birthdate.split("/");
@@ -105,6 +117,45 @@ const TravelRequestForm = () => {
 
     return formattedDate;
   }
+  useEffect(() => {
+    // setStatus_code(status_code);
+    setLoading(true);
+    async function get_user_list() {
+      await axios
+        .get(`/user_list/active_employee`, {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        })
+        .then(async (result_user_list) => {
+          let employ = await result_user_list.data.map((val) => ({
+            value: val["Employee ID"],
+            label: `${val.ownerName}(${val["Employee ID"]})`,
+          }));
+          if (basicDetails?.booking_for === "others") {
+            let filt = employ.filter(
+              (rest) => rest.value !== LocalStorageData?.emp_id
+            );
+            return setEmployeeDataByStatusCode(filt);
+          } else {
+            let filt = employ.filter(
+              (rest) => rest.value === LocalStorageData?.emp_id
+            );
+            return (
+              setEmployeeDataByStatusCode(employ),
+              setEmployeeDefaultByStatusCode(filt)
+            );
+          }
+        })
+        .catch((err) => {
+          if (err?.response?.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+      setLoading(false);
+    }
+    get_user_list();
+  }, [basicDetails?.booking_for]);
 
   useEffect(() => {
     const fetchEmployeeData = async () => {
@@ -123,7 +174,10 @@ const TravelRequestForm = () => {
               emp_id:
                 (res.data.length > 0 && treavellerRadioButton) ||
                 (res.data.length > 0 && accommodationRadioButton)
-                  ? res?.data[0]?.["Employee ID"]
+                  ? {
+                      value: res.data[0]?.["Employee ID"],
+                      label: `${res.data[0]?.ownerName}(${res.data[0]?.["Employee ID"]})`,
+                    }
                   : "",
               name:
                 (res.data.length > 0 && treavellerRadioButton) ||
@@ -152,6 +206,7 @@ const TravelRequestForm = () => {
                   : "1990-01-01",
             },
           };
+          console.log("resObj", resObj);
           return setTravellersData([resObj]), setRoomsData([resObj]);
         })
         .catch((err) => {
@@ -167,8 +222,8 @@ const TravelRequestForm = () => {
   }, [
     employeeId,
     basicDetails?.booking_for,
-    // treavellerRadioButton,
-    // accommodationRadioButton,
+    // !treavellerRadioButton,
+    // !accommodationRadioButton,
   ]);
   useEffect(() => {
     async function getCountry() {
@@ -252,7 +307,11 @@ const TravelRequestForm = () => {
     e.preventDefault();
     const newRow = {
       id: travellersData.length + 1,
-      data: { is_employee: "Yes", dob: new Date() },
+      data: {
+        is_employee: "Yes",
+        dob: new Date(),
+        emp_id: "",
+      },
     };
     setTravellersData([...travellersData, newRow]);
     setTravellerRowId(travellersData.length);
@@ -269,7 +328,7 @@ const TravelRequestForm = () => {
     if (newData.emp_id) {
       try {
         const response = await axios.get(
-          `/get_employee_details_for_travel/${newData.emp_id}`
+          `/get_employee_details_for_travel/${newData.emp_id?.value}`
         );
 
         const apiData = response.data;
@@ -278,6 +337,10 @@ const TravelRequestForm = () => {
           id: id,
           data: {
             ...newData,
+            emp_id: {
+              value: apiData[0]["Employee ID"],
+              label: `${apiData[0].ownerName}(${apiData[0]["Employee ID"]})`,
+            },
             is_employee: "Yes",
             name: apiData[0]["ownerName"],
             gender: apiData[0].Tags,
@@ -377,10 +440,11 @@ const TravelRequestForm = () => {
     setRoomsData(updatedRooms);
 
     // Fetch data from the API based on emp_id
-    if (newData.emp_id.length > 0) {
+    // if (newData.emp_id > 0) {
+    if (newData.emp_id) {
       try {
         const response = await axios.get(
-          `/get_employee_details_for_travel/${newData.emp_id}`
+          `/get_employee_details_for_travel/${newData.emp_id?.value}`
         );
 
         const apiData = response.data;
@@ -390,6 +454,10 @@ const TravelRequestForm = () => {
           data: {
             ...newData,
             is_employee: "Yes",
+            emp_id: {
+              value: apiData[0]["Employee ID"],
+              label: `${apiData[0].ownerName}(${apiData[0]["Employee ID"]})`,
+            },
             name: apiData[0]["ownerName"],
             gender: apiData[0]["Tags"],
             phone: apiData[0]["Personal Mobile Number"],
@@ -428,7 +496,7 @@ const TravelRequestForm = () => {
     });
   };
   const validateError = (event) => {
-    console.log("Event", event);
+    // console.log("Event", event);
     let basicDetailsDataObj = {
       billable: basicDetails?.billable !== "" ? true : false,
       client_id: basicDetails?.client_id !== "" ? true : false,
@@ -471,6 +539,12 @@ const TravelRequestForm = () => {
             name:
               (item.data.name === undefined || item.data.name === "") &&
               item.data?.is_employee === "No" &&
+              treavellerRadioButton
+                ? true
+                : false,
+            preferred_time:
+              (item.data.preferred_time === undefined ||
+                item.data.preferred_time === "") &&
               treavellerRadioButton
                 ? true
                 : false,
@@ -524,7 +598,7 @@ const TravelRequestForm = () => {
       return item;
     });
     // console.log("validationTravellerArray", validationTravellerArray);
-    console.log("travellerDatalist", travellerDatalist);
+    // console.log("travellerDatalist", travellerDatalist);
     setValidateForTravellersDataRow(travellerDatalist);
     let travelDatalist = [];
     rows.map((item, index) => {
@@ -703,16 +777,7 @@ const TravelRequestForm = () => {
         );
       }
     );
-    // console.log(
-    //   "validateForAccommodationDataRow",
-    //   validateForAccommodationDataRow
-    // );
-    // console.log(
-    //   "validateForBadicDetailsDataRow",
-    //   validateForBadicDetailsDataRow
-    // );
-    // console.log("validateForOccupancyDataRow", validateForOccupancyDataRow);
-    // console.log("validateForTravelDataRow", validateForTravelDataRow);
+
     const valdateBookingForMySelf_Other =
       basicDetails?.booking_for === "myself_others"
         ? eval(treavellerRadioButton ? travellersData?.length : 0) +
@@ -722,6 +787,7 @@ const TravelRequestForm = () => {
           : false
         : false;
 
+    // console.log("valdateBookingForMySelf_Other", valdateBookingForMySelf_Other);
     // console.log(
     //   "travellersData.length",
     //   treavellerRadioButton ? travellersData?.length : 0
@@ -761,7 +827,8 @@ const TravelRequestForm = () => {
         y.data.phonePattern == true ||
         y.data.email == true ||
         y.data.emailPattern == true ||
-        y.data.dob == true
+        y.data.dob == true ||
+        y.data.preferred_time == true
     );
     let travelDataRow = travelDatalist.filter(
       (y) =>
@@ -792,7 +859,7 @@ const TravelRequestForm = () => {
         y.data.emailPattern == true ||
         y.data.dob == true
     );
-    console.log("travellersDataRoweweweww", travellersDataRow);
+    // console.log("travellersDataRoweweweww", travellersDataRow);
 
     if (
       travellersDataRow.length > 0 ||
@@ -808,7 +875,7 @@ const TravelRequestForm = () => {
       if (!treavellerRadioButton && !accommodationRadioButton) {
         event && alert.error("Atleast one booking request is required");
       } else if (valdateBookingForMySelf_Other) {
-        event && alert.error("Please add more employees");
+        event && alert.error("Please add one or more other employees");
       } else {
         setError(false);
         event && handleFormSubmit();
@@ -860,6 +927,17 @@ const TravelRequestForm = () => {
     });
     if (res?.data === "Created") {
       alert.success("Request Sent");
+      await axios.post("/email", {
+        user: LocalStorageData?.owner_name,
+        email: LocalStorageData?.email,
+        start_date: treavellerRadioButton
+          ? rows[0]?.data?.departure.split("T")[0]
+          : accommodationData[0]?.data?.checkIn,
+        destination: treavellerRadioButton
+          ? rows[0]?.data?.travel_to_city?.label
+          : accommodationData[0]?.data?.city?.label,
+        reason_for_travel: basicDetails?.reason_for_travel,
+      });
       navigate("/alltravelrequest");
     }
   };
@@ -927,10 +1005,8 @@ const TravelRequestForm = () => {
       // console.log("value",value === "" ?"Yes":"No")
     )
   );
-  // console.log();
-  // const valdateBookingForMySelf_Other_test =
-  // travellersData?.map((val)=>console.log(val?.data?.emp_id))
-  // console.log("valdateBookingForMySelf_Other_test", valdateBookingForMySelf_Other_test);
+
+  // console.log("defaultValue", defaultValue);
   return (
     <>
       <div className="container-scroller">
@@ -959,6 +1035,7 @@ const TravelRequestForm = () => {
               {/* <button type="button" onClick={validateError}>
                 click me
               </button> */}
+
               <div className="row">
                 <div class="col-lg-12 grid-margin stretch-card">
                   <div class="card">
@@ -1154,7 +1231,7 @@ const TravelRequestForm = () => {
                           </label>
 
                           <div className="col-sm-3">
-                            <div className="form-check">
+                            <div className="form-check form-check-info">
                               <label className="form-check-label">
                                 <input
                                   type="radio"
@@ -1177,7 +1254,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                           <div className="col-sm-3">
-                            <div className="form-check">
+                            <div className="form-check form-check-info">
                               <label className="form-check-label">
                                 <input
                                   type="radio"
@@ -1239,9 +1316,9 @@ const TravelRequestForm = () => {
                             }}
                           >
                             <div className="d-flex justify-content-between ">
-                              <h3 className="" style={{ color: "#d03e20" }}>
+                              <h6 className="" style={{ color: "#d03e20" }}>
                                 Travellers
-                              </h3>
+                              </h6>
                               {/* <p
                               className="mx-2 btn btn-xs "
                               type="btn"
@@ -1277,13 +1354,30 @@ const TravelRequestForm = () => {
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Employee</th>
-                                  <th>Emp ID</th>
-                                  <th>Full Name</th>
-                                  <th>Gender</th>
-                                  <th>Phone</th>
-                                  <th>Email</th>
-                                  <th colSpan={2}>DOB</th>
+                                  <th>Employee </th>
+                                  <th className="w-25">
+                                    Emp ID
+                                    <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Full Name <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Gender <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Phone <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Email <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    DOB <span className="astik"> *</span>
+                                  </th>
+                                  <th colSpan={1}>
+                                    Preferred Time{" "}
+                                    <span className="astik"> *</span>{" "}
+                                  </th>
                                   {/* <th>Action</th> */}
                                 </tr>
                               </thead>
@@ -1291,7 +1385,45 @@ const TravelRequestForm = () => {
                                 {travellersData?.map((traveller, index) => (
                                   <tr key={traveller.id}>
                                     <td>
-                                      <select
+                                      <div class="form-check form-check-info">
+                                        <label class="form-check-label">
+                                          <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            checked={
+                                              traveller?.data?.is_employee ===
+                                              "Yes"
+                                                ? true
+                                                : false
+                                            }
+                                            disabled={
+                                              basicDetails?.booking_for ===
+                                              "self"
+                                                ? true
+                                                : false
+                                            }
+                                            onChange={(e) =>
+                                              handleTravellerChange(
+                                                traveller.id,
+                                                {
+                                                  // ...traveller?.data,
+                                                  name: "",
+                                                  emp_id: "",
+                                                  email: "",
+                                                  phone: "",
+                                                  dob: new Date(),
+                                                  gender: "",
+                                                  is_employee: e.target.checked
+                                                    ? "Yes"
+                                                    : "No",
+                                                }
+                                              )
+                                            }
+                                          />{" "}
+                                          <i class="input-helper"></i>
+                                        </label>
+                                      </div>
+                                      {/* <select
                                         type="text"
                                         name="is_employee"
                                         className="form-select form-select-md"
@@ -1319,10 +1451,65 @@ const TravelRequestForm = () => {
                                         </option>
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
-                                      </select>
+                                      </select> */}
                                     </td>
                                     <td>
-                                      <input
+                                      <Select
+                                        className={classNames(
+                                          "form-select-select",
+                                          {
+                                            "is-invalid":
+                                              validateForTravellersDataRow[
+                                                index
+                                              ]?.data?.emp_id ||
+                                              (traveller?.data?.is_employee ===
+                                                "Yes" &&
+                                                !validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.emp_id &&
+                                                validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.empIdPattern),
+                                          }
+                                        )}
+                                        name="emp_id"
+                                        options={getEmployeeDataByStatusCode.map(
+                                          (val) => {
+                                            return {
+                                              ...val,
+                                              isDisabled: travellersData
+                                                ?.map((item) => {
+                                                  return item?.data?.emp_id
+                                                    ?.value;
+                                                })
+                                                .includes(val?.value),
+                                            };
+                                          }
+                                        )}
+                                        defaultValue={
+                                          getEmployeeDefaultByStatusCode[0]
+                                        }
+                                        value={
+                                          traveller?.data?.is_employee === "Yes"
+                                            ? traveller?.data?.emp_id
+                                            : ""
+                                        }
+                                        onChange={(selectedOption) =>
+                                          handleTravellerChange(traveller.id, {
+                                            ...traveller.data,
+                                            emp_id: selectedOption,
+                                          })
+                                        }
+                                        isDisabled={
+                                          traveller?.data?.is_employee ===
+                                            "Yes" &&
+                                          basicDetails?.booking_for !== "self"
+                                            ? false
+                                            : true
+                                        }
+                                      />
+
+                                      {/* <input
                                         type="text"
                                         disabled={
                                           traveller?.data?.is_employee ===
@@ -1361,7 +1548,7 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                         placeholder="Enter Employee ID"
-                                      />
+                                      /> */}
 
                                       <small className="isValidate">
                                         {validateForTravellersDataRow[index]
@@ -1385,25 +1572,6 @@ const TravelRequestForm = () => {
                                       </small>
                                     </td>
                                     <td>
-                                      {/* <select
-                                  name="name"
-                                  id=""
-                                  onChange={(e) =>
-                                    handleTravellerChange(traveller.id, {
-                                      name: e.target.value,
-                                    })
-                                  }
-                                  className="form-control form-control-sm"
-                                >
-                                  {employeeId.map((item) => {
-                                    return (
-                                      <option val={item.value}>
-                                        {item.value}
-                                      </option>
-                                    );
-                                  })}
-                                </select> */}
-
                                       <input
                                         // required
                                         type="text"
@@ -1680,6 +1848,54 @@ const TravelRequestForm = () => {
                                           "This field is required"}
                                       </small>
                                     </td>
+                                    <td>
+                                      <select
+                                        className={classNames(
+                                          "form-select form-select-md",
+                                          {
+                                            "is-invalid":
+                                              validateForTravellersDataRow[
+                                                index
+                                              ]?.data?.preferred_time,
+                                          }
+                                        )}
+                                        // disabled={
+                                        //   traveller?.data?.is_employee === "Yes"
+                                        //     ? true
+                                        //     : false
+                                        // }
+                                        name="preferred_time"
+                                        value={traveller?.data?.preferred_time}
+                                        placeholder="Select"
+                                        onChange={(e) =>
+                                          handleTravellerChange(traveller.id, {
+                                            ...traveller?.data,
+                                            preferred_time: e.target.value,
+                                          })
+                                        }
+                                      >
+                                        <option value="" selected disabled>
+                                          Select...
+                                        </option>
+                                        <option value="00:00-06:00">
+                                          00:00-06:00{" "}
+                                        </option>
+                                        <option value="06:00-12:00">
+                                          06:00-12:00{" "}
+                                        </option>
+                                        <option value="12:00-18:00">
+                                          12:00-18:00{" "}
+                                        </option>
+                                        <option value="18:00-00:00">
+                                          18:00-00:00{" "}
+                                        </option>
+                                      </select>
+                                      <small className="isValidate">
+                                        {validateForTravellersDataRow[index]
+                                          ?.data?.preferred_time &&
+                                          "This field is required"}
+                                      </small>
+                                    </td>
                                     {basicDetails?.booking_for !== "self" && (
                                       <td>
                                         <div
@@ -1712,7 +1928,7 @@ const TravelRequestForm = () => {
                             {/* ===================================Travel============================ */}
                             <div className="mt-4">
                               <div className="d-flex justify-content-between  ">
-                                <h5 className="text-primary">Travel</h5>
+                                <h6 className="text-primary">Travel</h6>
                                 {/* <p
                                 className="btn-sm btn  mx-2 btn-primary "
                                 type="btn"
@@ -1746,7 +1962,7 @@ const TravelRequestForm = () => {
                               <div className="col-12 col-lg-6">
                                 <div className="row">
                                   <div className="col-12 col-lg-4">
-                                    <div className="form-check">
+                                    <div className="form-check form-check-info">
                                       <label className="form-check-label">
                                         <input
                                           type="radio"
@@ -1760,7 +1976,7 @@ const TravelRequestForm = () => {
                                     </div>
                                   </div>
                                   <div className="col-12 col-lg-4">
-                                    <div className="form-check">
+                                    <div className="form-check form-check-info">
                                       <label className="form-check-label">
                                         <input
                                           type="radio"
@@ -1774,7 +1990,7 @@ const TravelRequestForm = () => {
                                     </div>
                                   </div>
                                   {/* <div className="col-12 col-lg-4">
-                                <div className="form-check">
+                                <div className="form-check form-check-info">
                                   <label className="form-check-label">
                                     <input
                                       type="radio"
@@ -1795,11 +2011,20 @@ const TravelRequestForm = () => {
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Mode</th>
+                                  <th>
+                                    Mode <span className="astik"> *</span>
+                                  </th>
                                   <th>Trip</th>
-                                  <th>From (City)</th>
-                                  <th>To (City)</th>
-                                  <th>Departure</th>
+                                  <th>
+                                    From (City){" "}
+                                    <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    To (City) <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Departure <span className="astik"> *</span>
+                                  </th>
 
                                   <th colSpan={2}>Return</th>
                                   {/* <th>Action</th> */}
@@ -2073,7 +2298,7 @@ const TravelRequestForm = () => {
                           </label>
 
                           <div className="col-sm-3">
-                            <div className="form-check">
+                            <div className="form-check form-check-info">
                               <label className="form-check-label">
                                 <input
                                   type="radio"
@@ -2095,7 +2320,7 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                           <div className="col-sm-3">
-                            <div className="form-check">
+                            <div className="form-check form-check-info">
                               <label className="form-check-label">
                                 <input
                                   type="radio"
@@ -2157,9 +2382,9 @@ const TravelRequestForm = () => {
                             }}
                           >
                             <div className="d-flex justify-content-between">
-                              <h3 className="" style={{ color: "#d03e20" }}>
+                              <h6 className="" style={{ color: "#d03e20" }}>
                                 Accommodation
-                              </h3>
+                              </h6>
                               {/* <p
                               className="btn-sm btn mx-2 btn-primary "
                               type="btn"
@@ -2194,11 +2419,23 @@ const TravelRequestForm = () => {
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>City</th>
-                                  <th>Check-in</th>
-                                  <th>Check-out</th>
-                                  <th>Breakfast Required</th>
-                                  <th colSpan={2}>Rooms Required</th>
+                                  <th>
+                                    City <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Check-in <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Check-out <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Breakfast Required{" "}
+                                    <span className="astik"> *</span>
+                                  </th>
+                                  <th colSpan={2}>
+                                    Rooms Required{" "}
+                                    <span className="astik"> *</span>
+                                  </th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -2411,8 +2648,8 @@ const TravelRequestForm = () => {
                                           }
                                         </button>
 
-                                        <div class="dropdown-menu form-floating">
-                                          <div class="form-floating">
+                                        <div class="dropdown-menu form-floating ">
+                                          <div class="form-floating d-flex justify-content-between">
                                             <input
                                               type="number"
                                               max={
@@ -2490,10 +2727,7 @@ const TravelRequestForm = () => {
                                                 }
                                               }}
                                             />
-
-                                            <label for="floatingInput">
-                                              Rooms
-                                            </label>
+                                            <label>Rooms</label>
                                           </div>
                                           <div class="form-floating">
                                             <input
@@ -2685,20 +2919,34 @@ const TravelRequestForm = () => {
                         </button> */}
                             <div className="mt-4">
                               <div className="d-flex justify-content-between  ">
-                                <h5 className="text-primary">Occupancy</h5>
+                                <h6 className="text-primary">Occupancy</h6>
                               </div>
                             </div>
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Employee</th>
-                                  <th>Room</th>
-                                  <th>Emp ID</th>
-                                  <th>Name</th>
-                                  <th>Gender</th>
-                                  <th>Phone</th>
-                                  <th>Email</th>
-                                  <th>DOB</th>
+                                  <th>Employee </th>
+                                  <th>
+                                    Room <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Emp ID <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Name <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Gender <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Phone <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    Email <span className="astik"> *</span>
+                                  </th>
+                                  <th>
+                                    DOB <span className="astik"> *</span>
+                                  </th>
                                   {/* <th>Action</th> */}
                                 </tr>
                               </thead>
@@ -2706,7 +2954,41 @@ const TravelRequestForm = () => {
                                 {roomsData?.map((room, index) => (
                                   <tr key={room.id}>
                                     <td>
-                                      <select
+                                      <div class="form-check form-check-info">
+                                        <label class="form-check-label">
+                                          <input
+                                            type="checkbox"
+                                            class="form-check-input"
+                                            checked={
+                                              room?.data?.is_employee === "Yes"
+                                                ? true
+                                                : false
+                                            }
+                                            disabled={
+                                              basicDetails?.booking_for ===
+                                              "self"
+                                                ? true
+                                                : false
+                                            }
+                                            onChange={(e) =>
+                                              handleRoomChange(room.id, {
+                                                // ...traveller?.data,
+                                                name: "",
+                                                emp_id: "",
+                                                email: "",
+                                                phone: "",
+                                                dob: new Date(),
+                                                gender: "",
+                                                is_employee: e.target.checked
+                                                  ? "Yes"
+                                                  : "No",
+                                              })
+                                            }
+                                          />{" "}
+                                          <i class="input-helper"></i>
+                                        </label>
+                                      </div>
+                                      {/* <select
                                         required
                                         type="text"
                                         value={room?.data?.is_employee}
@@ -2736,7 +3018,7 @@ const TravelRequestForm = () => {
                                           Yes
                                         </option>
                                         <option value="No">No</option>
-                                      </select>
+                                      </select> */}
                                     </td>
                                     <td style={{ width: "9%" }}>
                                       <select
@@ -2769,8 +3051,65 @@ const TravelRequestForm = () => {
                                         ?.number_of_rooms
                                     } */}
                                     </td>
-                                    <td style={{ width: "5%" }}>
-                                      <input
+                                    <td style={{ width: "25%" }}>
+                                      <Select
+                                        className={classNames(
+                                          "form-select-select",
+                                          {
+                                            "is-invalid":
+                                              validateForOccupancyDataRow[index]
+                                                ?.data?.emp_id ||
+                                              (room?.data?.is_employee ===
+                                                "Yes" &&
+                                                !validateForOccupancyDataRow[
+                                                  index
+                                                ]?.data?.emp_id &&
+                                                validateForOccupancyDataRow[
+                                                  index
+                                                ]?.data?.empIdPattern),
+                                          }
+                                        )}
+                                        name="emp_id"
+                                        options={getEmployeeDataByStatusCode.map(
+                                          (val) => {
+                                            return {
+                                              ...val,
+                                              isDisabled: roomsData
+                                                ?.map((item) => {
+                                                  return item?.data?.emp_id
+                                                    ?.value;
+                                                })
+                                                .includes(val?.value),
+                                            };
+                                          }
+                                        )}
+                                        defaultValue={
+                                          getEmployeeDefaultByStatusCode[0]
+                                        }
+                                        value={
+                                          room?.data?.is_employee === "Yes"
+                                            ? room?.data?.emp_id
+                                            : ""
+                                        }
+                                        onChange={
+                                          (selectedOption) =>
+                                            handleRoomChange(room.id, {
+                                              ...room.data,
+                                              emp_id: selectedOption,
+                                            })
+                                          // handleRoomChange(room.id, {
+                                          //   ...room.data,
+                                          //   emp_id: e.target.value,
+                                          // })
+                                        }
+                                        isDisabled={
+                                          room?.data?.is_employee === "Yes" &&
+                                          basicDetails?.booking_for !== "self"
+                                            ? false
+                                            : true
+                                        }
+                                      />
+                                      {/* <input
                                         // required
                                         type="text"
                                         disabled={
@@ -2805,7 +3144,7 @@ const TravelRequestForm = () => {
                                             emp_id: e.target.value,
                                           })
                                         }
-                                      />
+                                      /> */}
                                       <small className="isValidate">
                                         {validateForOccupancyDataRow[index]
                                           ?.data?.emp_id &&
@@ -2924,7 +3263,7 @@ const TravelRequestForm = () => {
                                     </td>
                                     <td>
                                       <input
-                                        type="number"
+                                        type="text"
                                         // required
                                         disabled={
                                           room?.data?.is_employee === "Yes"
@@ -3167,3 +3506,15 @@ const TravelRequestForm = () => {
 };
 
 export default TravelRequestForm;
+{
+  /* <div>
+                                              <label>
+                                                Rooms 
+                                              </label>
+                                            </div>
+                                            <div class="number">
+                                              <span class="minus" type="button" onClick={()=>alert("d")}>-</span>
+                                              <input type="text" value="100" className="w-50 rounded" disabled/>
+                                              <span class="plus">+</span>
+                                            </div> */
+}
