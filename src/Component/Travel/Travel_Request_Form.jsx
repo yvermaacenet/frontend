@@ -1313,6 +1313,7 @@ const TravelRequestForm = () => {
                         {treavellerRadioButton && (
                           <div
                             style={{
+                              overflow: "auto",
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
@@ -2150,7 +2151,7 @@ const TravelRequestForm = () => {
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td>
+                                    <td className=" pt-3">
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date()}
@@ -2194,10 +2195,10 @@ const TravelRequestForm = () => {
                                         {validateForTravelDataRow[index]?.data
                                           ?.departure &&
                                           "This field is required"}
-                                      </small>
+                                      </p>
                                     </td>
 
-                                    <td>
+                                    <td className="pt-3">
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date(row?.data?.departure)}
@@ -2265,7 +2266,7 @@ const TravelRequestForm = () => {
                                       <small className="isValidate">
                                         {validateForTravelDataRow[index]?.data
                                           ?.return && "This field is required"}
-                                      </small>
+                                      </p>
                                     </td>
 
                                     <td>
@@ -2379,6 +2380,7 @@ const TravelRequestForm = () => {
                           <div
                             className="mt-2"
                             style={{
+                              overflow: "auto",
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
