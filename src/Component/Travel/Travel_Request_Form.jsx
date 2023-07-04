@@ -931,8 +931,10 @@ const TravelRequestForm = () => {
         user: LocalStorageData?.owner_name,
         email: LocalStorageData?.email,
         start_date: treavellerRadioButton
-          ? rows[0]?.data?.departure.split("T")[0]
-          : accommodationData[0]?.data?.checkIn,
+          ? new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")
+          : new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
+              "en-GB"
+            ),
         destination: treavellerRadioButton
           ? rows[0]?.data?.travel_to_city?.label
           : accommodationData[0]?.data?.city?.label,
@@ -941,13 +943,13 @@ const TravelRequestForm = () => {
       navigate("/alltravelrequest");
     }
   };
-
+  // console.log("rows[0]?.data?.departure",new Date( accommodationData[0]?.data?.checkIn).toLocaleDateString('en-GB'),new Date(rows[0]?.data?.departure).toLocaleDateString('en-GB') );
   // const data = accommodationData?.data?.number_of_rooms;
   const renderOptions = (numberOfRooms) => {
     const options = [
       // <option value="" selected disabled>
       //   Select
-      // </option>,g
+      // </option>,
     ];
     for (let i = 1; i <= numberOfRooms; i++) {
       options.push(
