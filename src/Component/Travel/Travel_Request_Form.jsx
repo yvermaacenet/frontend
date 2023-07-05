@@ -2039,7 +2039,7 @@ const TravelRequestForm = () => {
                               <tbody>
                                 {rows.map((row, index) => (
                                   <tr key={row.id}>
-                                    <td className="w-25">
+                                    <td>
                                       <select
                                         // required
                                         className={classNames(
@@ -2073,7 +2073,7 @@ const TravelRequestForm = () => {
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td className="w-25">
+                                    <td>
                                       <select
                                         // required
                                         name="trip_type"
@@ -2093,7 +2093,7 @@ const TravelRequestForm = () => {
                                         <option value="Return">Return</option>
                                       </select>
                                     </td>
-                                    <td className="w-25">
+                                    <td>
                                       <Select
                                         className={classNames(
                                           "form-select-select",
@@ -2121,7 +2121,7 @@ const TravelRequestForm = () => {
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td className="w-25">
+                                    <td>
                                       <Select
                                         // className="form-select-select"
                                         className={classNames(
