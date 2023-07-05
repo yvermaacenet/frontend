@@ -128,7 +128,7 @@ const TravelRequestForm = () => {
         .then(async (result_user_list) => {
           let employ = await result_user_list.data.map((val) => ({
             value: val["Employee ID"],
-            label: `${val.ownerName}(${val["Employee ID"]})`,
+            label: `${val["Employee ID"]}-${val.ownerName}`,
           }));
           if (basicDetails?.booking_for === "others") {
             let filt = employ.filter(
@@ -176,7 +176,7 @@ const TravelRequestForm = () => {
                 (res.data.length > 0 && accommodationRadioButton)
                   ? {
                       value: res.data[0]?.["Employee ID"],
-                      label: `${res.data[0]?.ownerName}(${res.data[0]?.["Employee ID"]})`,
+                      label: `${res.data[0]?.["Employee ID"]}`,
                     }
                   : "",
               name:
@@ -339,7 +339,7 @@ const TravelRequestForm = () => {
             ...newData,
             emp_id: {
               value: apiData[0]["Employee ID"],
-              label: `${apiData[0].ownerName}(${apiData[0]["Employee ID"]})`,
+              label: `${apiData[0]["Employee ID"]}`,
             },
             is_employee: "Yes",
             name: apiData[0]["ownerName"],
@@ -542,12 +542,12 @@ const TravelRequestForm = () => {
               treavellerRadioButton
                 ? true
                 : false,
-            preferred_time:
-              (item.data.preferred_time === undefined ||
-                item.data.preferred_time === "") &&
-              treavellerRadioButton
-                ? true
-                : false,
+            // preferred_time:
+            //   (item.data.preferred_time === undefined ||
+            //     item.data.preferred_time === "") &&
+            // treavellerRadioButton
+            //   ? true
+            //   : false,
             namePattern:
               item.data?.is_employee === "No"
                 ? /^[A-Za-z]+$/.test(item.data.name) === true
@@ -827,8 +827,8 @@ const TravelRequestForm = () => {
         y.data.phonePattern == true ||
         y.data.email == true ||
         y.data.emailPattern == true ||
-        y.data.dob == true ||
-        y.data.preferred_time == true
+        y.data.dob == true
+      // ||        y.data.preferred_time == true
     );
     let travelDataRow = travelDatalist.filter(
       (y) =>
@@ -931,8 +931,10 @@ const TravelRequestForm = () => {
         user: LocalStorageData?.owner_name,
         email: LocalStorageData?.email,
         start_date: treavellerRadioButton
-          ? rows[0]?.data?.departure.split("T")[0]
-          : accommodationData[0]?.data?.checkIn,
+          ? new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")
+          : new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
+              "en-GB"
+            ),
         destination: treavellerRadioButton
           ? rows[0]?.data?.travel_to_city?.label
           : accommodationData[0]?.data?.city?.label,
@@ -941,13 +943,13 @@ const TravelRequestForm = () => {
       navigate("/alltravelrequest");
     }
   };
-
+  // console.log("rows[0]?.data?.departure",new Date( accommodationData[0]?.data?.checkIn).toLocaleDateString('en-GB'),new Date(rows[0]?.data?.departure).toLocaleDateString('en-GB') );
   // const data = accommodationData?.data?.number_of_rooms;
   const renderOptions = (numberOfRooms) => {
     const options = [
       // <option value="" selected disabled>
       //   Select
-      // </option>,g
+      // </option>,
     ];
     for (let i = 1; i <= numberOfRooms; i++) {
       options.push(
@@ -1311,7 +1313,7 @@ const TravelRequestForm = () => {
                         {treavellerRadioButton && (
                           <div
                             style={{
-                              overflow: "auto",
+                              width: "100%",
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
@@ -1352,11 +1354,12 @@ const TravelRequestForm = () => {
                                 </div>
                               )}
                             </div>
+
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Employee </th>
-                                  <th className="w-25">
+                                  <th>Emp </th>
+                                  <th>
                                     Emp ID
                                     <span className="astik"> *</span>
                                   </th>
@@ -1377,7 +1380,7 @@ const TravelRequestForm = () => {
                                   </th>
                                   <th colSpan={1}>
                                     Preferred Time{" "}
-                                    <span className="astik"> *</span>{" "}
+                                    {/* <span className="astik"> *</span>{" "} */}
                                   </th>
                                   {/* <th>Action</th> */}
                                 </tr>
@@ -1671,6 +1674,7 @@ const TravelRequestForm = () => {
                                         </option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
+                                        <option value="Others">Others</option>
                                       </select>
                                       {/* )} */}
                                       <small className="isValidate">
@@ -1851,15 +1855,16 @@ const TravelRequestForm = () => {
                                     </td>
                                     <td>
                                       <select
-                                        className={classNames(
-                                          "form-select form-select-md",
-                                          {
-                                            "is-invalid":
-                                              validateForTravellersDataRow[
-                                                index
-                                              ]?.data?.preferred_time,
-                                          }
-                                        )}
+                                        className="form-select form-select-md"
+                                        // className={classNames(
+                                        //   "form-select form-select-md",
+                                        //   {
+                                        //     "is-invalid":
+                                        //       validateForTravellersDataRow[
+                                        //         index
+                                        //       ]?.data?.preferred_time,
+                                        //   }
+                                        // )}
                                         // disabled={
                                         //   traveller?.data?.is_employee === "Yes"
                                         //     ? true
@@ -1891,11 +1896,11 @@ const TravelRequestForm = () => {
                                           18:00-00:00{" "}
                                         </option>
                                       </select>
-                                      <small className="isValidate">
+                                      {/* <small className="isValidate">
                                         {validateForTravellersDataRow[index]
                                           ?.data?.preferred_time &&
                                           "This field is required"}
-                                      </small>
+                                      </small> */}
                                     </td>
                                     {basicDetails?.booking_for !== "self" && (
                                       <td>
@@ -2927,7 +2932,7 @@ const TravelRequestForm = () => {
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Employee </th>
+                                  <th>Emp </th>
                                   <th>
                                     Room <span className="astik"> *</span>
                                   </th>
@@ -3022,7 +3027,7 @@ const TravelRequestForm = () => {
                                         <option value="No">No</option>
                                       </select> */}
                                     </td>
-                                    <td style={{ width: "9%" }}>
+                                    <td>
                                       <select
                                         className="form-select form-select-md"
                                         name="room"
