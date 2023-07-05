@@ -778,15 +778,49 @@ const TravelRequestForm = () => {
       }
     );
 
-    const valdateBookingForMySelf_Other =
-      basicDetails?.booking_for === "myself_others"
-        ? eval(treavellerRadioButton ? travellersData?.length : 0) +
+    // const valdateBookingForMySelf_Other =
+    //   basicDetails?.booking_for === "myself_others"
+    //     ? eval(treavellerRadioButton ? travellersData?.length : 0) +
+    //         eval(accommodationRadioButton ? roomsData?.length : 0) <
+    //       2
+    //       ? true
+    //       : false
+    //     : false;
+    const hh = [];
+    travellersData?.map((val) => hh.push(val?.data?.emp_id?.value));
+    roomsData?.map((val) => hh.push(val?.data?.emp_id?.value));
+    console.log("hh", hh);
+
+    function hasSpecificStrings(arr) {
+      let hasEmpID = false;
+      let hasOtherStrings = false;
+      let hasOtherStringsdd = true;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === LocalStorageData?.emp_id) {
+          hasEmpID = true;
+        }
+        if (arr[i] !== LocalStorageData?.emp_id) {
+          hasOtherStrings = true;
+        }
+        if (
+          eval(treavellerRadioButton ? travellersData?.length : 0) +
             eval(accommodationRadioButton ? roomsData?.length : 0) <
           2
+        ) {
+          hasOtherStringsdd = false;
+        }
+      }
+      // console.log("ffffffff", hasEmpID, hasOtherStrings, hasOtherStringsdd);
+      return hasEmpID && hasOtherStrings && hasOtherStringsdd;
+    }
+
+    // const validateForMyself_Other = hasSpecificStrings(hh);
+    const valdateBookingForMySelf_Other =
+      basicDetails?.booking_for === "myself_others"
+        ? hasSpecificStrings(hh) === false
           ? true
           : false
         : false;
-
     // console.log("valdateBookingForMySelf_Other", valdateBookingForMySelf_Other);
     // console.log(
     //   "travellersData.length",
@@ -910,11 +944,6 @@ const TravelRequestForm = () => {
   //   fetchData();
   // }, [error]);
   const handleFormSubmit = async (value) => {
-    // if (value) {
-    //   alert.error("Some fields are required");
-    // } else {
-    //   alert.success("Done");
-    // }
     // alert.success("Done");
     const res = await axios.post("all_travel_request_data", {
       basicDetails,
@@ -1783,10 +1812,13 @@ const TravelRequestForm = () => {
                                     <td>
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
-                                        maxDate={new Date()}
                                         // withPortal
                                         // locale="en-US"
-
+                                        maxDate={new Date()}
+                                        peekNextMonth
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
                                         showWeekNumbers
                                         selected={
                                           new Date(traveller?.data?.dob)
@@ -2536,7 +2568,12 @@ const TravelRequestForm = () => {
                                       <td>
                                         <DatePicker
                                           dateFormat="dd/MM/yyyy"
-                                          minDate={accommodation?.data?.checkIn}
+                                          minDate={
+                                            accommodation?.data?.checkIn ===
+                                            undefined
+                                              ? new Date()
+                                              : accommodation?.data?.checkIn
+                                          }
                                           // locale="en-US"
                                           showWeekNumbers
                                           // selected={
@@ -3355,9 +3392,10 @@ const TravelRequestForm = () => {
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         maxDate={new Date()}
-                                        // isClearable={true}
-                                        // withPortal
-                                        // locale="en-US"
+                                        peekNextMonth
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
                                         showWeekNumbers
                                         selected={new Date(room?.data?.dob)}
                                         onChange={(e) =>

@@ -11048,7 +11048,7 @@ fieldset:disabled .btn {
 .list-wrapper .completed .remove {
   --bs-text-opacity: 1;
   /* color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important; */
-  color: #819fe6;
+  color: #3a5dae;
 }
 
 .text-secondary,
@@ -18056,7 +18056,7 @@ select.form-control.border-dark:focus {
 }
 
 .form-group label {
-  color: #819fe6;
+  color: #3a5dae;
   font-weight: 600;
   font-size: 0.875rem;
   line-height: 1;
@@ -19999,3 +19999,8 @@ input:checked + .slider:before {
       display: inline-block;
       vertical-align: middle;
     } */
+.box_title {
+  text-transform: capitalize;
+  font-family: "ubuntu-medium", sans-serif;
+  font-size: 1.125rem;
+}
