@@ -1342,11 +1342,6 @@ const TravelRequestForm = () => {
                         {treavellerRadioButton && (
                           <div
                             style={{
-<<<<<<< HEAD
-                              width: "100%",
-=======
-                              overflow: "auto",
->>>>>>> origin/development
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
