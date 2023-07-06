@@ -216,7 +216,10 @@ const Travel_Action = (props) => {
 
   // const formattedNumber1 = formatPhoneNumber(phoneNumber1);
 
-  // console.log("wqw", formattedNumber1);
+  console.log(
+    "getData?.accommodationData?.length",
+    getData?.accommodationData?.length
+  );
   return (
     <div className="container-scroller">
       <Navbar />
@@ -288,6 +291,11 @@ const Travel_Action = (props) => {
                           border: "1px solid lightgrey",
                           padding: "1rem",
                           marginTop: "1rem",
+                          display: `${
+                            getData?.travellersData?.length <= 0
+                              ? "none"
+                              : "block"
+                          }`,
                         }}
                       >
                         {/* =================Travellers================================================ */}
@@ -322,7 +330,11 @@ const Travel_Action = (props) => {
                                       </td>
                                       <td>{val?.data?.email}</td>
                                       <td>{formatBirthdate(val?.data?.dob)}</td>
-                                      <td>{val?.data?.preferred_time}</td>
+                                      <td>
+                                        {val?.data?.preferred_time === undefined
+                                          ? "NA"
+                                          : val?.data?.preferred_time}
+                                      </td>
                                     </tr>
                                   );
                                 })}
@@ -387,6 +399,11 @@ const Travel_Action = (props) => {
                           border: "1px solid lightgrey",
                           padding: "1rem",
                           marginTop: "1rem",
+                          display: `${
+                            getData?.accommodationData?.length <= 0
+                              ? "none"
+                              : "block"
+                          }`,
                         }}
                       >
                         {getData?.accommodationData?.map(
@@ -487,21 +504,23 @@ const Travel_Action = (props) => {
                         )}
                       </div>
                     </>
-                    <div
-                      style={{
-                        width: "100%",
-                        border: "1px solid lightgrey",
-                        padding: "1rem",
-                        marginTop: "1rem",
-                      }}
-                    >
-                      <p class="box_title text-primary">Special Request</p>
-                      <blockquote class="blockquote">
-                        <p class="mb-0">
-                          {getData?.basicDetails?.special_request}
-                        </p>
-                      </blockquote>
-                    </div>
+                    {getData?.basicDetails?.special_request !== "" && (
+                      <div
+                        style={{
+                          width: "100%",
+                          border: "1px solid lightgrey",
+                          padding: "1rem",
+                          marginTop: "1rem",
+                        }}
+                      >
+                        <p class="box_title text-primary">Special Request</p>
+                        <blockquote class="blockquote">
+                          <p class="mb-0">
+                            {getData?.basicDetails?.special_request}
+                          </p>
+                        </blockquote>
+                      </div>
+                    )}
                     {LocalStorageData?.zoho_role === "Management" &&
                     getData?.created_by !== LocalStorageData?.email &&
                     getData?.management_approval === "Pending" ? (
