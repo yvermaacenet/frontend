@@ -1342,7 +1342,11 @@ const TravelRequestForm = () => {
                         {treavellerRadioButton && (
                           <div
                             style={{
+<<<<<<< HEAD
                               width: "100%",
+=======
+                              overflow: "auto",
+>>>>>>> origin/development
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
@@ -1351,13 +1355,13 @@ const TravelRequestForm = () => {
                               <h6 className="" style={{ color: "#d03e20" }}>
                                 Travellers
                               </h6>
-                              {/* <p
+                              {/* <small
                               className="mx-2 btn btn-xs "
                               type="btn"
                               onClick={handleAddTraveller}
                             >
                               <RiAddFill />
-                            </p> */}
+                            </small> */}
                               {basicDetails?.booking_for === "self" ? (
                                 ""
                               ) : (
@@ -1967,13 +1971,13 @@ const TravelRequestForm = () => {
                             <div className="mt-4">
                               <div className="d-flex justify-content-between  ">
                                 <h6 className="text-primary">Travel</h6>
-                                {/* <p
+                                {/* <small
                                 className="btn-sm btn  mx-2 btn-primary "
                                 type="btn"
                                 onClick={handleAddRow}
                               >
                                 <RiAddFill />
-                              </p> */}
+                              </small> */}
                                 <div
                                   id="add_travel"
                                   class="Btn my-2"
@@ -2186,7 +2190,7 @@ const TravelRequestForm = () => {
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td>
+                                    <td className=" pt-3">
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date()}
@@ -2233,7 +2237,7 @@ const TravelRequestForm = () => {
                                       </small>
                                     </td>
 
-                                    <td>
+                                    <td className="pt-3">
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date(row?.data?.departure)}
@@ -2415,6 +2419,7 @@ const TravelRequestForm = () => {
                           <div
                             className="mt-2"
                             style={{
+                              overflow: "auto",
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
@@ -2423,13 +2428,13 @@ const TravelRequestForm = () => {
                               <h6 className="" style={{ color: "#d03e20" }}>
                                 Accommodation
                               </h6>
-                              {/* <p
+                              {/* <small
                               className="btn-sm btn mx-2 btn-primary "
                               type="btn"
                               onClick={handleAddAccommodation}
                             >
                               <RiAddFill />
-                            </p> */}
+                            </small> */}
                               {basicDetails?.booking_for !== "self" && (
                                 <div
                                   id="add_accommodation"
