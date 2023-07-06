@@ -86,9 +86,24 @@ const TravelRequestForm = () => {
   const [roomsData, setRoomsData] = useState([
     {
       id: 1,
-      data: { is_employee: "Yes", dob: new Date() },
+      data: { is_employee: "Yes", dob: new Date(), emp_id: "" },
     },
   ]);
+  const [accommodationData, setAccommodationData] = useState([
+    {
+      id: 1,
+      data: {
+        number_of_rooms: 1,
+        number_of_adults: 1,
+        number_of_children: 0,
+        // checkIn: "",
+        // checkOut: "",
+      },
+    },
+  ]);
+  const [testData, setTestData] = useState([]);
+  console.log("roomsData", roomsData);
+  console.log("testData", testData);
   const [showDropdown, setShowDropdown] = useState(false);
   const [filterText, setFilterText] = useState("");
   const handleClientChange = (e) => {
@@ -109,7 +124,6 @@ const TravelRequestForm = () => {
     reason_for_travel: "",
     special_request: "",
     booking_for: "self",
-    preferred_time: "",
   });
   function formatBirthdate(birthdate) {
     var parts = birthdate.split("/");
@@ -155,6 +169,16 @@ const TravelRequestForm = () => {
       setLoading(false);
     }
     get_user_list();
+    setAccommodationData([
+      {
+        id: 1,
+        data: {
+          number_of_rooms: 1,
+          number_of_adults: 1,
+          number_of_children: 0,
+        },
+      },
+    ]);
   }, [basicDetails?.booking_for]);
 
   useEffect(() => {
@@ -382,18 +406,6 @@ const TravelRequestForm = () => {
   //
   //
   // ================For Accomendation================
-  const [accommodationData, setAccommodationData] = useState([
-    {
-      id: 1,
-      data: {
-        number_of_rooms: 1,
-        number_of_adults: 1,
-        number_of_children: 0,
-        // checkIn: "",
-        // checkOut: "",
-      },
-    },
-  ]);
 
   const handleAddAccommodation = () => {
     const newRow = {
@@ -456,7 +468,7 @@ const TravelRequestForm = () => {
             is_employee: "Yes",
             emp_id: {
               value: apiData[0]["Employee ID"],
-              label: `${apiData[0].ownerName}(${apiData[0]["Employee ID"]})`,
+              label: `${apiData[0]["Employee ID"]}`,
             },
             name: apiData[0]["ownerName"],
             gender: apiData[0]["Tags"],
@@ -945,7 +957,7 @@ const TravelRequestForm = () => {
   // }, [error]);
   const handleFormSubmit = async (value) => {
     // alert.success("Done");
-    const res = await axios.post("all_travel_request_data", {
+    const res = await axios.post("/all_travel_request_data", {
       basicDetails,
       rows: treavellerRadioButton ? rows : [],
       travellersData: treavellerRadioButton ? travellersData : [],
@@ -956,20 +968,20 @@ const TravelRequestForm = () => {
     });
     if (res?.data === "Created") {
       alert.success("Request Sent");
+      navigate("/alltravelrequest");
       await axios.post("/email", {
         user: LocalStorageData?.owner_name,
         email: LocalStorageData?.email,
         start_date: treavellerRadioButton
-          ? new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")
-          : new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
+          ? `new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")`
+          : `new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
               "en-GB"
-            ),
+            )`,
         destination: treavellerRadioButton
           ? rows[0]?.data?.travel_to_city?.label
           : accommodationData[0]?.data?.city?.label,
         reason_for_travel: basicDetails?.reason_for_travel,
       });
-      navigate("/alltravelrequest");
     }
   };
   // console.log("rows[0]?.data?.departure",new Date( accommodationData[0]?.data?.checkIn).toLocaleDateString('en-GB'),new Date(rows[0]?.data?.departure).toLocaleDateString('en-GB') );
@@ -1027,6 +1039,7 @@ const TravelRequestForm = () => {
         className={classNames("form-control btn btn-sm form-control-sm", {
           "is-invalid": validate,
         })}
+        style={{ minHeight: "2.4rem", display: "inline" }}
         onClick={onClick}
         ref={ref}
         disabled={disabled}
@@ -1387,7 +1400,7 @@ const TravelRequestForm = () => {
                               <thead>
                                 <tr>
                                   <th>Emp </th>
-                                  <th>
+                                  <th style={{ width: "15%" }}>
                                     Emp ID
                                     <span className="astik"> *</span>
                                   </th>
@@ -1407,8 +1420,8 @@ const TravelRequestForm = () => {
                                     DOB <span className="astik"> *</span>
                                   </th>
                                   <th colSpan={1}>
-                                    Preferred Time{" "}
-                                    {/* <span className="astik"> *</span>{" "} */}
+                                    Preferred Time
+                                    {/* <span className="astik"> *</span> */}
                                   </th>
                                   {/* <th>Action</th> */}
                                 </tr>
@@ -1451,7 +1464,7 @@ const TravelRequestForm = () => {
                                                 }
                                               )
                                             }
-                                          />{" "}
+                                          />
                                           <i class="input-helper"></i>
                                         </label>
                                       </div>
@@ -1915,16 +1928,16 @@ const TravelRequestForm = () => {
                                           Select...
                                         </option>
                                         <option value="00:00-06:00">
-                                          00:00-06:00{" "}
+                                          00:00-06:00
                                         </option>
                                         <option value="06:00-12:00">
-                                          06:00-12:00{" "}
+                                          06:00-12:00
                                         </option>
                                         <option value="12:00-18:00">
-                                          12:00-18:00{" "}
+                                          12:00-18:00
                                         </option>
                                         <option value="18:00-00:00">
-                                          18:00-00:00{" "}
+                                          18:00-00:00
                                         </option>
                                       </select>
                                       {/* <small className="isValidate">
@@ -2048,15 +2061,15 @@ const TravelRequestForm = () => {
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>
+                                  <th style={{ width: "20%" }}>
                                     Mode <span className="astik"> *</span>
                                   </th>
-                                  <th>Trip</th>
-                                  <th>
-                                    From (City){" "}
+                                  <th style={{ width: "15%" }}>Trip</th>
+                                  <th style={{ width: "20%" }}>
+                                    From (City)
                                     <span className="astik"> *</span>
                                   </th>
-                                  <th>
+                                  <th style={{ width: "20%" }}>
                                     To (City) <span className="astik"> *</span>
                                   </th>
                                   <th>
@@ -2185,7 +2198,7 @@ const TravelRequestForm = () => {
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td className=" pt-3">
+                                    <td>
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date()}
@@ -2232,7 +2245,7 @@ const TravelRequestForm = () => {
                                       </small>
                                     </td>
 
-                                    <td className="pt-3">
+                                    <td>
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date(row?.data?.departure)}
@@ -2304,22 +2317,28 @@ const TravelRequestForm = () => {
                                     </td>
 
                                     <td>
-                                      <div
-                                        id="Delete_Travel"
-                                        class="Btn my-2"
-                                        onClick={() => handleDeleteRow(row.id)}
-                                      >
-                                        <div class="sign">
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 30 30"
-                                            width="30px"
-                                            height="30px"
-                                          >
-                                            <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                          </svg>
+                                      {index === 0 ? (
+                                        ""
+                                      ) : (
+                                        <div
+                                          id="Delete_Travel"
+                                          class="Btn my-2"
+                                          onClick={() =>
+                                            handleDeleteRow(row.id)
+                                          }
+                                        >
+                                          <div class="sign">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              viewBox="0 0 30 30"
+                                              width="30px"
+                                              height="30px"
+                                            >
+                                              <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                            </svg>
+                                          </div>
                                         </div>
-                                      </div>
+                                      )}
                                     </td>
                                   </tr>
                                 ))}
@@ -2414,7 +2433,7 @@ const TravelRequestForm = () => {
                           <div
                             className="mt-2"
                             style={{
-                              overflow: "auto",
+                              // overflow: "auto",
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
@@ -2460,18 +2479,18 @@ const TravelRequestForm = () => {
                                   <th>
                                     City <span className="astik"> *</span>
                                   </th>
-                                  <th>
+                                  <th style={{ width: "10%" }}>
                                     Check-in <span className="astik"> *</span>
                                   </th>
-                                  <th>
+                                  <th style={{ width: "10%" }}>
                                     Check-out <span className="astik"> *</span>
                                   </th>
                                   <th>
-                                    Breakfast Required{" "}
+                                    Breakfast Required
                                     <span className="astik"> *</span>
                                   </th>
                                   <th colSpan={2}>
-                                    Rooms Required{" "}
+                                    Rooms Required
                                     <span className="astik"> *</span>
                                   </th>
                                 </tr>
@@ -2670,7 +2689,7 @@ const TravelRequestForm = () => {
                                       </td>
                                       <td>
                                         <button
-                                          class="btn btn-primary btn-sm dropdown-toggle"
+                                          class="btn btn-primary  dropdown-toggle"
                                           type="button"
                                           data-bs-toggle="dropdown"
                                           aria-expanded="false"
@@ -2679,6 +2698,7 @@ const TravelRequestForm = () => {
                                               ? true
                                               : false
                                           }
+                                          style={{ padding: "0.7rem 2.5rem" }}
                                         >
                                           Rooms:
                                           {accommodation.data.number_of_rooms} |
@@ -2708,7 +2728,6 @@ const TravelRequestForm = () => {
                                                 accommodation?.data
                                                   ?.number_of_rooms
                                               }
-                                              placeholder="name@example.com"
                                               onChange={(e) => {
                                                 let { value } = e.target;
 
@@ -2763,6 +2782,11 @@ const TravelRequestForm = () => {
                                                         data: {
                                                           is_employee: "Yes",
                                                           dob: new Date(),
+                                                          emp_id: "",
+                                                          // emp_id: {
+                                                          //   label: "",
+                                                          //   value: "",
+                                                          // },
                                                         },
                                                       })
                                                     );
@@ -2772,6 +2796,7 @@ const TravelRequestForm = () => {
                                             />
                                             <label>Rooms</label>
                                           </div>
+                                          {/* /////////////////////////////////////////////////// */}
                                           <div class="form-floating">
                                             <input
                                               type="number"
@@ -2781,9 +2806,8 @@ const TravelRequestForm = () => {
                                                   ?.number_of_rooms
                                               }
                                               name="number_of_adults"
-                                              class="form-control  form-control-sm h-25"
+                                              class="form-control form-control-sm h-25"
                                               id="floatingInput"
-                                              placeholder="Password"
                                               value={
                                                 accommodation?.data
                                                   ?.number_of_adults
@@ -2809,32 +2833,71 @@ const TravelRequestForm = () => {
                                                   }
                                                 );
 
-                                                for (
-                                                  let i = 1;
-                                                  i <=
+                                                const arr = [];
+                                                // for (
+                                                //   let i = 1;
+                                                //   i <=
+                                                //   eval(e.target.value) +
+                                                //     eval(
+                                                //       accommodation?.data
+                                                //         ?.number_of_children
+                                                //     );
+                                                //   i++
+                                                // ) {
+                                                // arr.push({
+                                                //   id: i,
+                                                //   data: {
+                                                //     is_employee: "Yes",
+                                                //     dob: new Date(),
+                                                //     // emp_id: {
+                                                //     //   label: "",
+                                                //     //   value: "",
+                                                //     // },
+                                                //   },
+                                                // });
+                                                // console.log("arr", arr);
+                                                // setRoomsData(arr);
+                                                // roomsData.splice(
+                                                //   roomsData.length,
+                                                //   1,
+                                                //   {
+                                                //     id: i,
+                                                //     data: {
+                                                //       is_employee: "Yes",
+                                                //       dob: new Date(),
+                                                //     },
+                                                //   }
+                                                // );
+
+                                                if (
                                                   eval(e.target.value) +
                                                     eval(
                                                       accommodation?.data
                                                         ?.number_of_children
-                                                    );
-                                                  i++
+                                                    ) >
+                                                  roomsData.length
                                                 ) {
                                                   setRoomsData(
                                                     roomsData.concat({
-                                                      id: i,
+                                                      id: roomsData.length + 1,
                                                       data: {
                                                         is_employee: "Yes",
                                                         dob: new Date(),
+                                                        emp_id: "",
                                                       },
                                                     })
                                                   );
+                                                } else {
+                                                  roomsData.pop();
                                                 }
+                                                // }
                                               }}
                                             />
                                             <label for="floatingPassword">
                                               Adults
                                             </label>
                                           </div>
+                                          {/* /////////////////////////////////////////////////// */}{" "}
                                           <div class="form-floating">
                                             <input
                                               type="number"
@@ -2867,26 +2930,41 @@ const TravelRequestForm = () => {
                                                       e.target.value,
                                                   }
                                                 );
-                                                for (
-                                                  let i = 1;
-                                                  i <=
-                                                  eval(e.target.value) +
-                                                    eval(
-                                                      accommodation?.data
-                                                        ?.number_of_adults
-                                                    );
-                                                  i++
-                                                ) {
-                                                  setRoomsData(
-                                                    roomsData.concat({
-                                                      id: i,
-                                                      data: {
-                                                        is_employee: "Yes",
-                                                        dob: new Date(),
-                                                      },
-                                                    })
-                                                  );
-                                                }
+                                                // const arr = [];
+
+                                                // for (
+                                                //   let i = 1;
+                                                //   i <=
+                                                //   eval(e.target.value) +
+                                                //     eval(
+                                                //       accommodation?.data
+                                                //         ?.number_of_adults
+                                                //     );
+                                                //   i++
+                                                // ) {
+                                                //   arr.push({
+                                                //     id: i,
+                                                //     data: {
+                                                //       is_employee: "Yes",
+                                                //       dob: new Date(),
+                                                //       // emp_id: {
+                                                //       //   label: "",
+                                                //       //   value: "",
+                                                //       // },
+                                                //     },
+                                                //   });
+                                                //   // setRoomsData(arr);
+
+                                                //   setRoomsData(
+                                                //     roomsData.concat({
+                                                //       id: i,
+                                                //       data: {
+                                                //         is_employee: "Yes",
+                                                //         dob: new Date(),
+                                                //       },
+                                                //     })
+                                                //   );
+                                                // }
 
                                                 // const dd = [];
                                                 // for (let i = 1; i <= value; i++) {
@@ -2902,6 +2980,27 @@ const TravelRequestForm = () => {
                                                 // setRoomsData([...roomsData, hh]);
                                                 // //                                         const newRow = { id: 3, data: { is_employee: "Yes" } };
                                                 // // setRoomsData([...roomsData, newRow]);
+                                                if (
+                                                  eval(e.target.value) +
+                                                    eval(
+                                                      accommodation?.data
+                                                        ?.number_of_adults
+                                                    ) >
+                                                  roomsData.length
+                                                ) {
+                                                  setRoomsData(
+                                                    roomsData.concat({
+                                                      id: roomsData.length + 1,
+                                                      data: {
+                                                        is_employee: "Yes",
+                                                        dob: new Date(),
+                                                        emp_id: "",
+                                                      },
+                                                    })
+                                                  );
+                                                } else {
+                                                  roomsData.pop();
+                                                }
                                               }}
                                             />
                                             <label for="floatingPassword">
@@ -3027,7 +3126,7 @@ const TravelRequestForm = () => {
                                                   : "No",
                                               })
                                             }
-                                          />{" "}
+                                          />
                                           <i class="input-helper"></i>
                                         </label>
                                       </div>
@@ -3063,7 +3162,7 @@ const TravelRequestForm = () => {
                                         <option value="No">No</option>
                                       </select> */}
                                     </td>
-                                    <td>
+                                    <td style={{ width: "10%" }}>
                                       <select
                                         className="form-select form-select-md"
                                         name="room"
@@ -3094,7 +3193,7 @@ const TravelRequestForm = () => {
                                         ?.number_of_rooms
                                     } */}
                                     </td>
-                                    <td style={{ width: "25%" }}>
+                                    <td style={{ width: "15%" }}>
                                       <Select
                                         className={classNames(
                                           "form-select-select",
