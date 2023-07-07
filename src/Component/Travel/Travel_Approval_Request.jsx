@@ -146,7 +146,8 @@ const TravelApprovalRequest = () => {
                       <thead>
                         <tr>
                           <th>Id</th>
-                          <th>Name</th>
+                          {/* <th>Name</th> */}
+                          <th>Request Id</th>
                           <th>Requested on</th>
                           {/* <th>destination</th> */}
                           {/* <th>amount</th> */}
@@ -164,7 +165,7 @@ const TravelApprovalRequest = () => {
                           return (
                             <tr>
                               <td>{index + 1}</td>
-                              <td>{val?.employee?.name}</td>
+                              <td>{val?.employee?.request_id}</td>
                               <td>{val?.createdAt?.split("T")[0]}</td>
                               {/* <td>{val?.destination}</td> */}
                               {/* <td>{val.estimated_amount}</td> */}
