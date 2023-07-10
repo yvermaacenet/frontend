@@ -242,6 +242,7 @@ const TravelRequestForm = () => {
           }
         });
       setLoading(false);
+      setIsOpen(false);
     };
     fetchEmployeeData();
   }, [
@@ -926,7 +927,7 @@ const TravelRequestForm = () => {
       } else if (rows?.length === 0) {
         event && alert.error("Please add atleast one travel request");
       } else if (valdateBookingForMySelf_Other) {
-        event && alert.error("Please add one or more other employees");
+        event && alert.error("Please add self and one or more other employees");
       } else {
         setError(false);
         event && handleFormSubmit();
@@ -974,6 +975,7 @@ const TravelRequestForm = () => {
     if (res?.data === "Created") {
       alert.success("Request Sent");
       navigate("/alltravelrequest");
+
       // await axios.post("/email", {
       //   user: LocalStorageData?.owner_name,
       //   email: LocalStorageData?.email,
@@ -2794,7 +2796,13 @@ const TravelRequestForm = () => {
                                                               accommodation
                                                                 ?.data
                                                                 ?.number_of_adults <
-                                                              9
+                                                                9 &&
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_rooms >=
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_adults
                                                                 ? accommodation
                                                                     ?.data
                                                                     ?.number_of_adults +
@@ -2807,6 +2815,10 @@ const TravelRequestForm = () => {
                                                         accommodation?.data
                                                           ?.number_of_rooms <
                                                           9 &&
+                                                          accommodation?.data
+                                                            ?.number_of_rooms >=
+                                                            accommodation?.data
+                                                              ?.number_of_adults &&
                                                           setRoomsData(
                                                             roomsData.concat({
                                                               id:
