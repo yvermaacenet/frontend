@@ -87,8 +87,9 @@ const GetTravelRequestForm_Data = () => {
                       <thead>
                         <tr>
                           <th>Sr.no</th>
+                          <th>Request ID</th>
                           <th>Requested On</th>
-                          <th>Special Request</th>
+                          {/* <th>Special Request</th> */}
                           <th> Status</th>
                           <th>Remarks</th>
                         </tr>
@@ -98,8 +99,9 @@ const GetTravelRequestForm_Data = () => {
                           return (
                             <tr>
                               <td>{index + 1}</td>
+                              <td>{val?.request_id}</td>
                               <td>{val?.createdAt?.split("T")[0]}</td>
-                              <td>{val?.basicDetails?.special_request}</td>
+                              {/* <td>{val?.basicDetails?.special_request}</td> */}
                               <td>
                                 <label
                                   class={`${

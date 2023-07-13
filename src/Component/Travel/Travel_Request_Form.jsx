@@ -78,6 +78,7 @@ const TravelRequestForm = () => {
     useState([]);
   const [travellerRowId, setTravellerRowId] = useState("");
   const [numberValue, setNumberValue] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState("");
   const [filteredProjectIds, setFilteredProjectIds] = useState([]);
   const [treavellerRadioButton, setTreavellerRadioButton] = useState(true);
@@ -86,9 +87,24 @@ const TravelRequestForm = () => {
   const [roomsData, setRoomsData] = useState([
     {
       id: 1,
-      data: { is_employee: "Yes", dob: new Date() },
+      data: { is_employee: "Yes", dob: new Date(), emp_id: "" },
     },
   ]);
+  const [accommodationData, setAccommodationData] = useState([
+    {
+      id: 1,
+      data: {
+        number_of_rooms: 1,
+        number_of_adults: 1,
+        number_of_children: 0,
+        // checkIn: "",
+        // checkOut: "",
+      },
+    },
+  ]);
+  const [testData, setTestData] = useState([]);
+  // console.log("roomsData", roomsData);
+  // console.log("testData", testData);
   const [showDropdown, setShowDropdown] = useState(false);
   const [filterText, setFilterText] = useState("");
   const handleClientChange = (e) => {
@@ -109,7 +125,6 @@ const TravelRequestForm = () => {
     reason_for_travel: "",
     special_request: "",
     booking_for: "self",
-    preferred_time: "",
   });
   function formatBirthdate(birthdate) {
     var parts = birthdate.split("/");
@@ -155,6 +170,16 @@ const TravelRequestForm = () => {
       setLoading(false);
     }
     get_user_list();
+    setAccommodationData([
+      {
+        id: 1,
+        data: {
+          number_of_rooms: 1,
+          number_of_adults: 1,
+          number_of_children: 0,
+        },
+      },
+    ]);
   }, [basicDetails?.booking_for]);
 
   useEffect(() => {
@@ -206,7 +231,7 @@ const TravelRequestForm = () => {
                   : "1990-01-01",
             },
           };
-          console.log("resObj", resObj);
+          // console.log("resObj", resObj);
           return setTravellersData([resObj]), setRoomsData([resObj]);
         })
         .catch((err) => {
@@ -217,6 +242,7 @@ const TravelRequestForm = () => {
           }
         });
       setLoading(false);
+      setIsOpen(false);
     };
     fetchEmployeeData();
   }, [
@@ -382,18 +408,6 @@ const TravelRequestForm = () => {
   //
   //
   // ================For Accomendation================
-  const [accommodationData, setAccommodationData] = useState([
-    {
-      id: 1,
-      data: {
-        number_of_rooms: 1,
-        number_of_adults: 1,
-        number_of_children: 0,
-        // checkIn: "",
-        // checkOut: "",
-      },
-    },
-  ]);
 
   const handleAddAccommodation = () => {
     const newRow = {
@@ -404,6 +418,7 @@ const TravelRequestForm = () => {
   };
 
   const handleAccommodationChange = (id, newData) => {
+    // console.log("newData", newData);
     const updatedAccommodation = accommodationData.map((row) =>
       row.id === id ? { ...row, data: { ...row.data, ...newData } } : row
     );
@@ -456,7 +471,7 @@ const TravelRequestForm = () => {
             is_employee: "Yes",
             emp_id: {
               value: apiData[0]["Employee ID"],
-              label: `${apiData[0].ownerName}(${apiData[0]["Employee ID"]})`,
+              label: `${apiData[0]["Employee ID"]}`,
             },
             name: apiData[0]["ownerName"],
             gender: apiData[0]["Tags"],
@@ -778,15 +793,49 @@ const TravelRequestForm = () => {
       }
     );
 
-    const valdateBookingForMySelf_Other =
-      basicDetails?.booking_for === "myself_others"
-        ? eval(treavellerRadioButton ? travellersData?.length : 0) +
+    // const valdateBookingForMySelf_Other =
+    //   basicDetails?.booking_for === "myself_others"
+    //     ? eval(treavellerRadioButton ? travellersData?.length : 0) +
+    //         eval(accommodationRadioButton ? roomsData?.length : 0) <
+    //       2
+    //       ? true
+    //       : false
+    //     : false;
+    const hh = [];
+    travellersData?.map((val) => hh.push(val?.data?.emp_id?.value));
+    roomsData?.map((val) => hh.push(val?.data?.emp_id?.value));
+    // console.log("hh", hh);
+
+    function hasSpecificStrings(arr) {
+      let hasEmpID = false;
+      let hasOtherStrings = false;
+      let hasOtherStringsdd = true;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === LocalStorageData?.emp_id) {
+          hasEmpID = true;
+        }
+        if (arr[i] !== LocalStorageData?.emp_id) {
+          hasOtherStrings = true;
+        }
+        if (
+          eval(treavellerRadioButton ? travellersData?.length : 0) +
             eval(accommodationRadioButton ? roomsData?.length : 0) <
           2
+        ) {
+          hasOtherStringsdd = false;
+        }
+      }
+      // console.log("ffffffff", hasEmpID, hasOtherStrings, hasOtherStringsdd);
+      return hasEmpID && hasOtherStrings && hasOtherStringsdd;
+    }
+
+    // const validateForMyself_Other = hasSpecificStrings(hh);
+    const valdateBookingForMySelf_Other =
+      basicDetails?.booking_for === "myself_others"
+        ? hasSpecificStrings(hh) === false
           ? true
           : false
         : false;
-
     // console.log("valdateBookingForMySelf_Other", valdateBookingForMySelf_Other);
     // console.log(
     //   "travellersData.length",
@@ -867,6 +916,7 @@ const TravelRequestForm = () => {
       accommodationDataRow.length > 0 ||
       occpancyDataRow.length > 0 ||
       !basicDetailsData
+
       // || valdateBookingForMySelf_Other
     ) {
       setError(true);
@@ -874,8 +924,10 @@ const TravelRequestForm = () => {
     } else {
       if (!treavellerRadioButton && !accommodationRadioButton) {
         event && alert.error("Atleast one booking request is required");
+      } else if (rows?.length === 0) {
+        event && alert.error("Please add atleast one travel request");
       } else if (valdateBookingForMySelf_Other) {
-        event && alert.error("Please add one or more other employees");
+        event && alert.error("Please add self and one or more other employees");
       } else {
         setError(false);
         event && handleFormSubmit();
@@ -910,13 +962,8 @@ const TravelRequestForm = () => {
   //   fetchData();
   // }, [error]);
   const handleFormSubmit = async (value) => {
-    // if (value) {
-    //   alert.error("Some fields are required");
-    // } else {
-    //   alert.success("Done");
-    // }
-    // alert.success("Done");
-    const res = await axios.post("all_travel_request_data", {
+    alert.success("Done");
+    const res = await axios.post("/all_travel_request_data", {
       basicDetails,
       rows: treavellerRadioButton ? rows : [],
       travellersData: treavellerRadioButton ? travellersData : [],
@@ -927,20 +974,21 @@ const TravelRequestForm = () => {
     });
     if (res?.data === "Created") {
       alert.success("Request Sent");
-      await axios.post("/email", {
-        user: LocalStorageData?.owner_name,
-        email: LocalStorageData?.email,
-        start_date: treavellerRadioButton
-          ? new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")
-          : new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
-              "en-GB"
-            ),
-        destination: treavellerRadioButton
-          ? rows[0]?.data?.travel_to_city?.label
-          : accommodationData[0]?.data?.city?.label,
-        reason_for_travel: basicDetails?.reason_for_travel,
-      });
       navigate("/alltravelrequest");
+
+      // await axios.post("/email", {
+      //   user: LocalStorageData?.owner_name,
+      //   email: LocalStorageData?.email,
+      //   start_date: treavellerRadioButton
+      //     ? `new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")`
+      //     : `new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
+      //         "en-GB"
+      //       )`,
+      //   destination: treavellerRadioButton
+      //     ? rows[0]?.data?.travel_to_city?.label
+      //     : accommodationData[0]?.data?.city?.label,
+      //   reason_for_travel: basicDetails?.reason_for_travel,
+      // });
     }
   };
   // console.log("rows[0]?.data?.departure",new Date( accommodationData[0]?.data?.checkIn).toLocaleDateString('en-GB'),new Date(rows[0]?.data?.departure).toLocaleDateString('en-GB') );
@@ -998,6 +1046,7 @@ const TravelRequestForm = () => {
         className={classNames("form-control btn btn-sm form-control-sm", {
           "is-invalid": validate,
         })}
+        style={{ minHeight: "2.4rem", display: "inline" }}
         onClick={onClick}
         ref={ref}
         disabled={disabled}
@@ -1009,6 +1058,10 @@ const TravelRequestForm = () => {
   );
 
   // console.log("defaultValue", defaultValue);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
   return (
     <>
       <div className="container-scroller">
@@ -1018,9 +1071,10 @@ const TravelRequestForm = () => {
           <div className="main-panel">
             <div className="content-wrapper">
               <Page_Header
+                page_heading="Travel Request Form"
                 page_title="Travel Request Form"
-                page_title_icon="mdi-book-plus"
-                page_title_button=""
+                page_title_icon="mdi-wallet-travel"
+                page_title_button="Create Travel Requests"
                 page_title_button_link="/alltravelrequest"
               />
 
@@ -1313,7 +1367,6 @@ const TravelRequestForm = () => {
                         {treavellerRadioButton && (
                           <div
                             style={{
-                              width: "100%",
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
@@ -1322,13 +1375,14 @@ const TravelRequestForm = () => {
                               <h6 className="" style={{ color: "#d03e20" }}>
                                 Travellers
                               </h6>
-                              {/* <p
+
+                              {/* <small
                               className="mx-2 btn btn-xs "
                               type="btn"
                               onClick={handleAddTraveller}
                             >
                               <RiAddFill />
-                            </p> */}
+                            </small> */}
                               {basicDetails?.booking_for === "self" ? (
                                 ""
                               ) : (
@@ -1359,7 +1413,7 @@ const TravelRequestForm = () => {
                               <thead>
                                 <tr>
                                   <th>Emp </th>
-                                  <th>
+                                  <th style={{ width: "15%" }}>
                                     Emp ID
                                     <span className="astik"> *</span>
                                   </th>
@@ -1379,8 +1433,8 @@ const TravelRequestForm = () => {
                                     DOB <span className="astik"> *</span>
                                   </th>
                                   <th colSpan={1}>
-                                    Preferred Time{" "}
-                                    {/* <span className="astik"> *</span>{" "} */}
+                                    Preferred Time
+                                    {/* <span className="astik"> *</span> */}
                                   </th>
                                   {/* <th>Action</th> */}
                                 </tr>
@@ -1423,7 +1477,7 @@ const TravelRequestForm = () => {
                                                 }
                                               )
                                             }
-                                          />{" "}
+                                          />
                                           <i class="input-helper"></i>
                                         </label>
                                       </div>
@@ -1783,10 +1837,13 @@ const TravelRequestForm = () => {
                                     <td>
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
-                                        maxDate={new Date()}
                                         // withPortal
                                         // locale="en-US"
-
+                                        maxDate={new Date()}
+                                        peekNextMonth
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
                                         showWeekNumbers
                                         selected={
                                           new Date(traveller?.data?.dob)
@@ -1884,16 +1941,16 @@ const TravelRequestForm = () => {
                                           Select...
                                         </option>
                                         <option value="00:00-06:00">
-                                          00:00-06:00{" "}
+                                          00:00-06:00
                                         </option>
                                         <option value="06:00-12:00">
-                                          06:00-12:00{" "}
+                                          06:00-12:00
                                         </option>
                                         <option value="12:00-18:00">
-                                          12:00-18:00{" "}
+                                          12:00-18:00
                                         </option>
                                         <option value="18:00-00:00">
-                                          18:00-00:00{" "}
+                                          18:00-00:00
                                         </option>
                                       </select>
                                       {/* <small className="isValidate">
@@ -1935,13 +1992,13 @@ const TravelRequestForm = () => {
                             <div className="mt-4">
                               <div className="d-flex justify-content-between  ">
                                 <h6 className="text-primary">Travel</h6>
-                                {/* <p
+                                {/* <small
                                 className="btn-sm btn  mx-2 btn-primary "
                                 type="btn"
                                 onClick={handleAddRow}
                               >
                                 <RiAddFill />
-                              </p> */}
+                              </small> */}
                                 <div
                                   id="add_travel"
                                   class="Btn my-2"
@@ -2017,15 +2074,15 @@ const TravelRequestForm = () => {
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>
+                                  <th style={{ width: "12%" }}>
                                     Mode <span className="astik"> *</span>
                                   </th>
-                                  <th>Trip</th>
-                                  <th>
-                                    From (City){" "}
+                                  <th style={{ width: "20%" }}>Trip</th>
+                                  <th style={{ width: "20%" }}>
+                                    From (City)
                                     <span className="astik"> *</span>
                                   </th>
-                                  <th>
+                                  <th style={{ width: "20%" }}>
                                     To (City) <span className="astik"> *</span>
                                   </th>
                                   <th>
@@ -2154,7 +2211,7 @@ const TravelRequestForm = () => {
                                           "This field is required"}
                                       </small>
                                     </td>
-                                    <td className=" pt-3">
+                                    <td>
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date()}
@@ -2198,10 +2255,10 @@ const TravelRequestForm = () => {
                                         {validateForTravelDataRow[index]?.data
                                           ?.departure &&
                                           "This field is required"}
-                                      </p>
+                                      </small>
                                     </td>
 
-                                    <td className="pt-3">
+                                    <td>
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         minDate={new Date(row?.data?.departure)}
@@ -2269,10 +2326,13 @@ const TravelRequestForm = () => {
                                       <small className="isValidate">
                                         {validateForTravelDataRow[index]?.data
                                           ?.return && "This field is required"}
-                                      </p>
+                                      </small>
                                     </td>
 
                                     <td>
+                                      {/* {index === 0 ? (
+                                        ""
+                                      ) : ( */}
                                       <div
                                         id="Delete_Travel"
                                         class="Btn my-2"
@@ -2289,6 +2349,7 @@ const TravelRequestForm = () => {
                                           </svg>
                                         </div>
                                       </div>
+                                      {/* )} */}
                                     </td>
                                   </tr>
                                 ))}
@@ -2383,7 +2444,7 @@ const TravelRequestForm = () => {
                           <div
                             className="mt-2"
                             style={{
-                              overflow: "auto",
+                              // overflow: "auto",
                               border: "1px solid lightgrey",
                               padding: "1rem",
                             }}
@@ -2392,13 +2453,13 @@ const TravelRequestForm = () => {
                               <h6 className="" style={{ color: "#d03e20" }}>
                                 Accommodation
                               </h6>
-                              {/* <p
+                              {/* <small
                               className="btn-sm btn mx-2 btn-primary "
                               type="btn"
                               onClick={handleAddAccommodation}
                             >
                               <RiAddFill />
-                            </p> */}
+                            </small> */}
                               {basicDetails?.booking_for !== "self" && (
                                 <div
                                   id="add_accommodation"
@@ -2426,21 +2487,21 @@ const TravelRequestForm = () => {
                             <table className="table table-bordered">
                               <thead>
                                 <tr>
-                                  <th>
+                                  <th style={{ width: "30%" }}>
                                     City <span className="astik"> *</span>
                                   </th>
-                                  <th>
+                                  <th style={{ width: "10%" }}>
                                     Check-in <span className="astik"> *</span>
                                   </th>
-                                  <th>
+                                  <th style={{ width: "10%" }}>
                                     Check-out <span className="astik"> *</span>
                                   </th>
                                   <th>
-                                    Breakfast Required{" "}
+                                    Breakfast Required
                                     <span className="astik"> *</span>
                                   </th>
                                   <th colSpan={2}>
-                                    Rooms Required{" "}
+                                    Rooms Required
                                     <span className="astik"> *</span>
                                   </th>
                                 </tr>
@@ -2537,7 +2598,12 @@ const TravelRequestForm = () => {
                                       <td>
                                         <DatePicker
                                           dateFormat="dd/MM/yyyy"
-                                          minDate={accommodation?.data?.checkIn}
+                                          minDate={
+                                            accommodation?.data?.checkIn ===
+                                            undefined
+                                              ? new Date()
+                                              : accommodation?.data?.checkIn
+                                          }
                                           // locale="en-US"
                                           showWeekNumbers
                                           // selected={
@@ -2633,8 +2699,353 @@ const TravelRequestForm = () => {
                                         </small>
                                       </td>
                                       <td>
-                                        <button
-                                          class="btn btn-primary btn-sm dropdown-toggle"
+                                        <div className="dropdowns">
+                                          <button
+                                            type="button"
+                                            class="btn btn-primary dropdown-toggle"
+                                            style={{ padding: "0.7rem 2.5rem" }}
+                                            onClick={toggleDropdown}
+                                            disabled={
+                                              basicDetails?.booking_for ===
+                                              "self"
+                                                ? true
+                                                : false
+                                            }
+                                          >
+                                            Rooms :
+                                            {accommodation.data.number_of_rooms}
+                                            | Adults :
+                                            {
+                                              accommodation.data
+                                                .number_of_adults
+                                            }
+                                            | Children:
+                                            {
+                                              accommodation.data
+                                                .number_of_children
+                                            }
+                                          </button>
+                                          {isOpen && (
+                                            <>
+                                              <div className="dropdowns-content ">
+                                                <div className="d-flex justify-content-between">
+                                                  <label className="dropdowns-content-label">
+                                                    Rooms :
+                                                  </label>
+                                                  <div class="number">
+                                                    <span
+                                                      class="minus"
+                                                      type="button"
+                                                      onClick={(e) => {
+                                                        handleAccommodationChange(
+                                                          accommodation.id,
+                                                          {
+                                                            number_of_rooms:
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_rooms >
+                                                              1
+                                                                ? accommodation
+                                                                    ?.data
+                                                                    ?.number_of_rooms -
+                                                                  1
+                                                                : accommodation
+                                                                    ?.data
+                                                                    ?.number_of_rooms,
+                                                          }
+                                                        );
+                                                        // accommodation?.data
+                                                        //   ?.number_of_rooms >
+                                                        //   1 && roomsData.pop();
+                                                      }}
+                                                    >
+                                                      -
+                                                    </span>
+                                                    <input
+                                                      type="number"
+                                                      value={
+                                                        accommodation?.data
+                                                          ?.number_of_rooms
+                                                      }
+                                                      className="w-25 rounded text-align-center"
+                                                      style={{
+                                                        paddingLeft: "12px",
+                                                      }}
+                                                      disabled
+                                                    />
+                                                    <span
+                                                      class="plus"
+                                                      type="button"
+                                                      onClick={(e) => {
+                                                        handleAccommodationChange(
+                                                          accommodation.id,
+                                                          {
+                                                            number_of_rooms:
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_rooms <
+                                                              9
+                                                                ? accommodation
+                                                                    ?.data
+                                                                    ?.number_of_rooms +
+                                                                  1
+                                                                : accommodation
+                                                                    ?.data
+                                                                    ?.number_of_rooms,
+                                                            number_of_adults:
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_adults <
+                                                                9 &&
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_rooms >=
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_adults
+                                                                ? accommodation
+                                                                    ?.data
+                                                                    ?.number_of_adults +
+                                                                  1
+                                                                : accommodation
+                                                                    ?.data
+                                                                    ?.number_of_adults,
+                                                          }
+                                                        );
+                                                        accommodation?.data
+                                                          ?.number_of_rooms <
+                                                          9 &&
+                                                          accommodation?.data
+                                                            ?.number_of_rooms >=
+                                                            accommodation?.data
+                                                              ?.number_of_adults &&
+                                                          setRoomsData(
+                                                            roomsData.concat({
+                                                              id:
+                                                                roomsData.length +
+                                                                1,
+                                                              data: {
+                                                                is_employee:
+                                                                  "Yes",
+                                                                dob: new Date(),
+                                                                emp_id: "",
+                                                              },
+                                                            })
+                                                          );
+                                                      }}
+                                                    >
+                                                      +
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                                <div class="dropdown-divider"></div>
+                                                <div className="d-flex justify-content-between">
+                                                  <label className="dropdowns-content-label">
+                                                    Adults :
+                                                  </label>
+                                                  <div class="number">
+                                                    <span
+                                                      class="minus"
+                                                      type="button"
+                                                      onClick={(e) => {
+                                                        handleAccommodationChange(
+                                                          accommodation.id,
+                                                          {
+                                                            number_of_adults:
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_adults >
+                                                                1 &&
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_adults >
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_rooms
+                                                                ? accommodation
+                                                                    ?.data
+                                                                    ?.number_of_adults -
+                                                                  1
+                                                                : accommodation
+                                                                    ?.data
+                                                                    ?.number_of_adults,
+                                                          }
+                                                        );
+                                                        accommodation?.data
+                                                          ?.number_of_adults >
+                                                          1 &&
+                                                          accommodation?.data
+                                                            ?.number_of_adults >
+                                                            accommodation?.data
+                                                              ?.number_of_rooms &&
+                                                          roomsData.pop();
+                                                      }}
+                                                    >
+                                                      -
+                                                    </span>
+                                                    <input
+                                                      type="number"
+                                                      value={
+                                                        accommodation?.data
+                                                          ?.number_of_adults
+                                                      }
+                                                      className="w-25 rounded text-align-center"
+                                                      style={{
+                                                        paddingLeft: "12px",
+                                                      }}
+                                                      disabled
+                                                    />
+                                                    <span
+                                                      class="plus"
+                                                      type="button"
+                                                      onClick={(e) => {
+                                                        handleAccommodationChange(
+                                                          accommodation.id,
+                                                          {
+                                                            number_of_adults:
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_adults <
+                                                              9
+                                                                ? accommodation
+                                                                    ?.data
+                                                                    ?.number_of_adults +
+                                                                  1
+                                                                : accommodation
+                                                                    ?.data
+                                                                    ?.number_of_adults,
+                                                          }
+                                                        );
+                                                        accommodation?.data
+                                                          ?.number_of_adults <
+                                                          9 &&
+                                                          setRoomsData(
+                                                            roomsData.concat({
+                                                              id:
+                                                                roomsData.length +
+                                                                1,
+                                                              data: {
+                                                                is_employee:
+                                                                  "Yes",
+                                                                dob: new Date(),
+                                                                emp_id: "",
+                                                              },
+                                                            })
+                                                          );
+                                                      }}
+                                                    >
+                                                      +
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                                <div class="dropdown-divider"></div>
+                                                <div className="d-flex justify-content-between">
+                                                  <label className="dropdowns-content-label">
+                                                    Children :
+                                                  </label>
+                                                  <div class="number">
+                                                    <span
+                                                      class="minus"
+                                                      type="button"
+                                                      onClick={(e) => {
+                                                        handleAccommodationChange(
+                                                          accommodation.id,
+                                                          {
+                                                            number_of_children:
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_children >
+                                                              0
+                                                                ? //   &&
+                                                                  // accommodation
+                                                                  //   ?.data
+                                                                  //   ?.number_of_children >
+                                                                  //   accommodation
+                                                                  //     ?.data
+                                                                  //     ?.number_of_rooms
+                                                                  accommodation
+                                                                    ?.data
+                                                                    ?.number_of_children -
+                                                                  1
+                                                                : accommodation
+                                                                    ?.data
+                                                                    ?.number_of_children,
+                                                          }
+                                                        );
+                                                        accommodation?.data
+                                                          ?.number_of_children >
+                                                          0 &&
+                                                          // &&
+                                                          // accommodation?.data
+                                                          //   ?.number_of_children >
+                                                          //   accommodation?.data
+                                                          //     ?.number_of_rooms
+                                                          roomsData.pop();
+                                                      }}
+                                                    >
+                                                      -
+                                                    </span>
+                                                    <input
+                                                      type="number"
+                                                      value={
+                                                        accommodation?.data
+                                                          ?.number_of_children
+                                                      }
+                                                      className="w-25 rounded text-align-center"
+                                                      style={{
+                                                        paddingLeft: "12px",
+                                                      }}
+                                                      disabled
+                                                    />
+                                                    <span
+                                                      class="plus"
+                                                      type="button"
+                                                      onClick={(e) => {
+                                                        handleAccommodationChange(
+                                                          accommodation.id,
+                                                          {
+                                                            number_of_children:
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_children <
+                                                              9
+                                                                ? accommodation
+                                                                    ?.data
+                                                                    ?.number_of_children +
+                                                                  1
+                                                                : accommodation
+                                                                    ?.data
+                                                                    ?.number_of_children,
+                                                          }
+                                                        );
+                                                        accommodation?.data
+                                                          ?.number_of_children <
+                                                          9 &&
+                                                          setRoomsData(
+                                                            roomsData.concat({
+                                                              id:
+                                                                roomsData.length +
+                                                                1,
+                                                              data: {
+                                                                is_employee:
+                                                                  "Yes",
+                                                                dob: new Date(),
+                                                                emp_id: "",
+                                                              },
+                                                            })
+                                                          );
+                                                      }}
+                                                    >
+                                                      +
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </>
+                                          )}
+                                        </div>
+                                        {/* <button
+                                          class="btn btn-primary  dropdown-toggle"
                                           type="button"
                                           data-bs-toggle="dropdown"
                                           aria-expanded="false"
@@ -2643,6 +3054,7 @@ const TravelRequestForm = () => {
                                               ? true
                                               : false
                                           }
+                                          style={{ padding: "0.7rem 2.5rem" }}
                                         >
                                           Rooms:
                                           {accommodation.data.number_of_rooms} |
@@ -2653,7 +3065,7 @@ const TravelRequestForm = () => {
                                             accommodation.data
                                               .number_of_children
                                           }
-                                        </button>
+                                        </button> */}
 
                                         <div class="dropdown-menu form-floating ">
                                           <div class="form-floating d-flex justify-content-between">
@@ -2672,7 +3084,6 @@ const TravelRequestForm = () => {
                                                 accommodation?.data
                                                   ?.number_of_rooms
                                               }
-                                              placeholder="name@example.com"
                                               onChange={(e) => {
                                                 let { value } = e.target;
 
@@ -2727,6 +3138,11 @@ const TravelRequestForm = () => {
                                                         data: {
                                                           is_employee: "Yes",
                                                           dob: new Date(),
+                                                          emp_id: "",
+                                                          // emp_id: {
+                                                          //   label: "",
+                                                          //   value: "",
+                                                          // },
                                                         },
                                                       })
                                                     );
@@ -2736,6 +3152,7 @@ const TravelRequestForm = () => {
                                             />
                                             <label>Rooms</label>
                                           </div>
+                                          {/* /////////////////////////////////////////////////// */}
                                           <div class="form-floating">
                                             <input
                                               type="number"
@@ -2745,9 +3162,8 @@ const TravelRequestForm = () => {
                                                   ?.number_of_rooms
                                               }
                                               name="number_of_adults"
-                                              class="form-control  form-control-sm h-25"
+                                              class="form-control form-control-sm h-25"
                                               id="floatingInput"
-                                              placeholder="Password"
                                               value={
                                                 accommodation?.data
                                                   ?.number_of_adults
@@ -2773,33 +3189,76 @@ const TravelRequestForm = () => {
                                                   }
                                                 );
 
-                                                for (
-                                                  let i = 1;
-                                                  i <=
+                                                const arr = [];
+                                                // for (
+                                                //   let i = 1;
+                                                //   i <=
+                                                //   eval(e.target.value) +
+                                                //     eval(
+                                                //       accommodation?.data
+                                                //         ?.number_of_children
+                                                //     );
+                                                //   i++
+                                                // ) {
+                                                // arr.push({
+                                                //   id: i,
+                                                //   data: {
+                                                //     is_employee: "Yes",
+                                                //     dob: new Date(),
+                                                //     // emp_id: {
+                                                //     //   label: "",
+                                                //     //   value: "",
+                                                //     // },
+                                                //   },
+                                                // });
+                                                // console.log("arr", arr);
+                                                // setRoomsData(arr);
+                                                // roomsData.splice(
+                                                //   roomsData.length,
+                                                //   1,
+                                                //   {
+                                                //     id: i,
+                                                //     data: {
+                                                //       is_employee: "Yes",
+                                                //       dob: new Date(),
+                                                //     },
+                                                //   }
+                                                // );
+
+                                                if (
                                                   eval(e.target.value) +
                                                     eval(
                                                       accommodation?.data
                                                         ?.number_of_children
-                                                    );
-                                                  i++
+                                                    ) >
+                                                  roomsData.length
                                                 ) {
                                                   setRoomsData(
                                                     roomsData.concat({
-                                                      id: i,
+                                                      id: roomsData.length + 1,
                                                       data: {
                                                         is_employee: "Yes",
                                                         dob: new Date(),
+                                                        emp_id: "",
                                                       },
                                                     })
                                                   );
+                                                } else {
+                                                  roomsData.pop();
                                                 }
+                                                // }
                                               }}
                                             />
                                             <label for="floatingPassword">
                                               Adults
                                             </label>
                                           </div>
+                                          {/* /////////////////////////////////////////////////// */}{" "}
                                           <div class="form-floating">
+                                            <div>
+                                              <label>Rooms</label>
+                                            </div>
+
                                             <input
                                               type="number"
                                               class="form-control  form-control-sm h-25"
@@ -2831,26 +3290,41 @@ const TravelRequestForm = () => {
                                                       e.target.value,
                                                   }
                                                 );
-                                                for (
-                                                  let i = 1;
-                                                  i <=
-                                                  eval(e.target.value) +
-                                                    eval(
-                                                      accommodation?.data
-                                                        ?.number_of_adults
-                                                    );
-                                                  i++
-                                                ) {
-                                                  setRoomsData(
-                                                    roomsData.concat({
-                                                      id: i,
-                                                      data: {
-                                                        is_employee: "Yes",
-                                                        dob: new Date(),
-                                                      },
-                                                    })
-                                                  );
-                                                }
+                                                // const arr = [];
+
+                                                // for (
+                                                //   let i = 1;
+                                                //   i <=
+                                                //   eval(e.target.value) +
+                                                //     eval(
+                                                //       accommodation?.data
+                                                //         ?.number_of_adults
+                                                //     );
+                                                //   i++
+                                                // ) {
+                                                //   arr.push({
+                                                //     id: i,
+                                                //     data: {
+                                                //       is_employee: "Yes",
+                                                //       dob: new Date(),
+                                                //       // emp_id: {
+                                                //       //   label: "",
+                                                //       //   value: "",
+                                                //       // },
+                                                //     },
+                                                //   });
+                                                //   // setRoomsData(arr);
+
+                                                //   setRoomsData(
+                                                //     roomsData.concat({
+                                                //       id: i,
+                                                //       data: {
+                                                //         is_employee: "Yes",
+                                                //         dob: new Date(),
+                                                //       },
+                                                //     })
+                                                //   );
+                                                // }
 
                                                 // const dd = [];
                                                 // for (let i = 1; i <= value; i++) {
@@ -2866,6 +3340,27 @@ const TravelRequestForm = () => {
                                                 // setRoomsData([...roomsData, hh]);
                                                 // //                                         const newRow = { id: 3, data: { is_employee: "Yes" } };
                                                 // // setRoomsData([...roomsData, newRow]);
+                                                if (
+                                                  eval(e.target.value) +
+                                                    eval(
+                                                      accommodation?.data
+                                                        ?.number_of_adults
+                                                    ) >
+                                                  roomsData.length
+                                                ) {
+                                                  setRoomsData(
+                                                    roomsData.concat({
+                                                      id: roomsData.length + 1,
+                                                      data: {
+                                                        is_employee: "Yes",
+                                                        dob: new Date(),
+                                                        emp_id: "",
+                                                      },
+                                                    })
+                                                  );
+                                                } else {
+                                                  roomsData.pop();
+                                                }
                                               }}
                                             />
                                             <label for="floatingPassword">
@@ -2991,7 +3486,7 @@ const TravelRequestForm = () => {
                                                   : "No",
                                               })
                                             }
-                                          />{" "}
+                                          />
                                           <i class="input-helper"></i>
                                         </label>
                                       </div>
@@ -3027,7 +3522,7 @@ const TravelRequestForm = () => {
                                         <option value="No">No</option>
                                       </select> */}
                                     </td>
-                                    <td>
+                                    <td style={{ width: "10%" }}>
                                       <select
                                         className="form-select form-select-md"
                                         name="room"
@@ -3058,7 +3553,7 @@ const TravelRequestForm = () => {
                                         ?.number_of_rooms
                                     } */}
                                     </td>
-                                    <td style={{ width: "25%" }}>
+                                    <td style={{ width: "15%" }}>
                                       <Select
                                         className={classNames(
                                           "form-select-select",
@@ -3260,6 +3755,7 @@ const TravelRequestForm = () => {
                                         </option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
+                                        <option value="Others">Others</option>
                                       </select>
                                       {/* )} */}
                                       <small className="isValidate">
@@ -3356,9 +3852,10 @@ const TravelRequestForm = () => {
                                       <DatePicker
                                         dateFormat="dd/MM/yyyy"
                                         maxDate={new Date()}
-                                        // isClearable={true}
-                                        // withPortal
-                                        // locale="en-US"
+                                        peekNextMonth
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
                                         showWeekNumbers
                                         selected={new Date(room?.data?.dob)}
                                         onChange={(e) =>
