@@ -12,9 +12,9 @@ import classNames from "classnames";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { travel_request_form_validation } from "../../Utils/Validation_Form";
-import { border } from "@mui/system";
+// import { border } from "@mui/system";
 
-import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
+// import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
 // testing
 
 // =====================Data=============
@@ -609,7 +609,7 @@ const Edit_Travel_Action = () => {
                               type="btn"
                               onClick={handleAddTraveller}
                             >
-                              <RiAddFill />
+                              {/* <RiAddFill /> */}
                             </p>
                           </div>
                           <table className="table table-bordered">
@@ -833,7 +833,7 @@ const Edit_Travel_Action = () => {
                                         handleTravellerDeleteRow(traveller.id)
                                       }
                                     >
-                                      <RiDeleteBin6Line />
+                                      {/* <RiDeleteBin6Line /> */}
                                     </button>
                                   </td>
                                 </tr>
@@ -850,7 +850,7 @@ const Edit_Travel_Action = () => {
                                 type="btn"
                                 onClick={handleAddRow}
                               >
-                                <RiAddFill />
+                                {/* <RiAddFill /> */}
                               </p>
                             </div>
                             {/* ===========Radio Box======= */}
@@ -1016,7 +1016,7 @@ const Edit_Travel_Action = () => {
                                       className="btn btn-danger btn-sm "
                                       onClick={() => handleDeleteRow(row.id)}
                                     >
-                                      <RiDeleteBin6Line />
+                                      {/* <RiDeleteBin6Line /> */}
                                     </button>
                                   </td>
                                 </tr>
@@ -1053,7 +1053,7 @@ const Edit_Travel_Action = () => {
                               type="btn"
                               onClick={handleAddAccommodation}
                             >
-                              <RiAddFill />
+                              {/* <RiAddFill /> */}
                             </p>
                           </div>
 
@@ -1291,7 +1291,7 @@ const Edit_Travel_Action = () => {
                                         )
                                       }
                                     >
-                                      <RiDeleteBin6Line />
+                                      {/* <RiDeleteBin6Line /> */}
                                     </button>
                                   </td>
                                 </tr>
@@ -1313,7 +1313,7 @@ const Edit_Travel_Action = () => {
                               type="btn"
                               onClick={handleAddRoom}
                             >
-                              <RiAddFill />
+                              {/* <RiAddFill /> */}
                             </p>
                           </div>
                           <table className="table table-bordered">
@@ -1522,7 +1522,7 @@ const Edit_Travel_Action = () => {
                                         handleRoomDeleteRow(room.id)
                                       }
                                     >
-                                      <RiDeleteBin6Line />
+                                      {/* <RiDeleteBin6Line /> */}
                                     </button>
                                   </td>
                                 </tr>

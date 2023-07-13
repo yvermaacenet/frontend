@@ -11,9 +11,9 @@ import classNames from "classnames";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { travel_request_form_validation } from "../../Utils/Validation_Form";
-import { border } from "@mui/system";
-import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
-import { Tooltip as ReactTooltip } from "react-tooltip";
+// import { border } from "@mui/system";
+// import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
+// import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import DatePicker from "react-datepicker";
 
@@ -976,19 +976,19 @@ const TravelRequestForm = () => {
       alert.success("Request Sent");
       navigate("/alltravelrequest");
 
-      // await axios.post("/email", {
-      //   user: LocalStorageData?.owner_name,
-      //   email: LocalStorageData?.email,
-      //   start_date: treavellerRadioButton
-      //     ? `new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")`
-      //     : `new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
-      //         "en-GB"
-      //       )`,
-      //   destination: treavellerRadioButton
-      //     ? rows[0]?.data?.travel_to_city?.label
-      //     : accommodationData[0]?.data?.city?.label,
-      //   reason_for_travel: basicDetails?.reason_for_travel,
-      // });
+      await axios.post("/email", {
+        user: LocalStorageData?.owner_name,
+        email: LocalStorageData?.email,
+        start_date: treavellerRadioButton
+          ? new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")
+          : new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
+              "en-GB"
+            ),
+        destination: treavellerRadioButton
+          ? rows[0]?.data?.travel_to_city?.label
+          : accommodationData[0]?.data?.city?.label,
+        reason_for_travel: basicDetails?.reason_for_travel,
+      });
     }
   };
   // console.log("rows[0]?.data?.departure",new Date( accommodationData[0]?.data?.checkIn).toLocaleDateString('en-GB'),new Date(rows[0]?.data?.departure).toLocaleDateString('en-GB') );
