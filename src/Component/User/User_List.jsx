@@ -6,7 +6,6 @@ import Navbar from "../../Partials/Navbar";
 import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import { useParams } from "react-router-dom";
-import MaterialReactTable from "material-react-table";
 import { Box, Button } from "@mui/material";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { ExportToCsv } from "export-to-csv";
@@ -602,94 +601,6 @@ const User_List = () => {
                           })}
                         </tbody>
                       </table>
-                      {/* <MaterialReactTable
-                        columns={columns}
-                        data={getUserList}
-                        enableRowSelection //showing checkbox
-                        positionToolbarAlertBanner="bottom"
-                        enableBottomToolbar={true}
-                        enableColumnResizing
-                        enableColumnVirtualization
-                        enableGlobalFilterModes
-                        enablePagination={true}
-                        enablePinning
-                        enableRowNumbers
-                        enableRowVirtualization
- 
-                        renderTopToolbarCustomActions={({ table }) => (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              gap: "1rem",
-                              p: "0.5rem",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            <div className="row">
-                              <div class="col-lg-12 grid-margin stretch-card">
-                                <button
-                                  type="button"
-                                  className="btn btn-sm btn-inverse-dark btn-fw ms-1"
-                                  onClick={handleExportData}
-                                >
-                                  Export All Data
-                                </button>
-                                 <button
-                                  type="button"
-                                  className="btn btn-sm btn-inverse-dark btn-fw ms-1"
-                                  disabled={
-                                    table.getPrePaginationRowModel().rows
-                                      .length === 0
-                                  }
-                                   onClick={() =>
-                                    handleExportRows(
-                                      table.getPrePaginationRowModel().rows
-                                    )
-                                  }
-                                 >
-                                  Export All Rows
-                                </button> 
-                                <button
-                                  type="button"
-                                  className="btn btn-sm btn-inverse-dark btn-fw ms-1"
-                                  disabled={
-                                    table.getRowModel().rows.length === 0
-                                  }
-                                  //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
-                                  onClick={() =>
-                                    handleExportRows(table.getRowModel().rows)
-                                  }
-                                >
-                                  Export Page Rows
-                                </button>
-                                <button
-                                  type="button"
-                                  className="btn btn-sm btn-inverse-dark btn-fw ms-1"
-                                  disabled={
-                                    !table.getIsSomeRowsSelected() &&
-                                    !table.getIsAllRowsSelected()
-                                  }
-                                  //only export selected rows
-                                  onClick={() =>
-                                    handleExportRows(
-                                      table.getSelectedRowModel().rows
-                                    )
-                                  }
-                                  startIcon={<FileDownloadIcon />}
-                                  variant="contained"
-                                >
-                                  Export Selected Rows
-                                </button>
-                                <Tooltip arrow title="Refresh Data">
-                                  <IconButton>
-                                    <RefreshIcon onClick={refreshData} />
-                                  </IconButton>
-                                </Tooltip>
-                              </div>
-                            </div>
-                          </Box>
-                        )}
-                      /> */}
                     </div>
                   </div>
                 </div>
