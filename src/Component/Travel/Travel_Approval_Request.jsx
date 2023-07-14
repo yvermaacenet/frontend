@@ -137,7 +137,7 @@ const TravelApprovalRequest = () => {
             </div>
             <div className="row">
               <div className="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
                       <span class="card-description">{getButtoncode}</span>

@@ -492,7 +492,7 @@ const Edit_Travel_Action = () => {
 
               <div className="row">
                 <div class="col-lg-12 grid-margin stretch-card">
-                  <div class="card">
+                  <div class="card" style={{ borderRadius: "20px" }}>
                     <div class="card-body">
                       <form action="" onSubmit={handleFormUpdate}>
                         <div className="row">

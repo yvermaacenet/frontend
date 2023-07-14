@@ -594,7 +594,7 @@ const Cabin_Slot_Booking = () => {
             )}
             <div className="row">
               <div class="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
                     <form className="forms-sample">
                       <div className="row">

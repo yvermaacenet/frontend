@@ -246,7 +246,7 @@ const Travel_Action = (props) => {
             )}
             <div className="row">
               <div className="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
                     <div
                       style={{

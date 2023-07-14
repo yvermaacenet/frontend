@@ -158,29 +158,36 @@ const Dashboard = () => {
         <Navbar />
         <div className="container-fluid page-body-wrapper">
           <Sidebar />
-          <div className="main-panel">
+          <div className="main-panel bg-light" style={{ borderRadius: "20px" }}>
             <div
               className="content-wrapper"
               style={{
                 display: "flex",
+                borderRadius: "20px",
                 color: "#6d4199",
-                fontSize: "24px",
+                margin: "2rem",
+                background: "#fff",
+                fontSize: "20px",
                 fontWeight: "600",
                 border: "none",
                 justifyContent: "center",
                 textAlign: "center !important",
               }}
             >
-              <div
-              // role="alert"
-              >
-                <div class="page-header" style={{ marginBottom: "1rem" }}>
+              <div class="d-lg-flex justify-content-center align-items-center">
+                <div class="page-header">
                   <div class="d-lg-flex w-100 justify-content-between align-items-center">
-                    <div class="d-lg-flex align-items-center">
-                      <h3 class="mb-0 font-weight-medium mr-3">
-                        Hi, Welcome {LocalStorageData?.name}!
-                      </h3>
-                    </div>
+                    <h3 class="mb-0 fs-1 font-weight-medium text-center">
+                      <img
+                        src={LocalStorageData?.photo}
+                        alt=""
+                        srcset=""
+                        style={{ mixBlendMode: "darken", borderRadius: "50%" }}
+                      />
+                      <br />
+                      Welcome back,
+                      <br /> {LocalStorageData?.name}!
+                    </h3>
                   </div>
                 </div>
               </div>

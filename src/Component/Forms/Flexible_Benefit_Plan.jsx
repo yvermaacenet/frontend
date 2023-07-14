@@ -271,7 +271,7 @@ const Flexible_Benefit_Plan = () => {
               )}
               <div class="row">
                 <div class="col-lg-12 grid-margin stretch-card">
-                  <div class="card">
+                  <div className="card" style={{ borderRadius: "20px" }}>
                     <div class="card-body">
                       <form
                         className="forms-sample"

@@ -344,7 +344,7 @@ const User_List = () => {
               </div> */}
               <div className="row">
                 <div class="col-lg-12 grid-margin stretch-card">
-                  <div className="card">
+                  <div className="card" style={{ borderRadius: "20px" }}>
                     <div
                       className="card-body"
                       style={{

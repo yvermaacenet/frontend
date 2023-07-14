@@ -48,10 +48,10 @@ const Sidebar = () => {
               </div>
               <div className="nav-profile-text d-flex flex-column">
                 <span className="font-weight-bold mb-2">
-                  {LocalStorageData?.name}
+                  {LocalStorageData?.owner_name}
                 </span>
                 <span className="text-secondary text-small">
-                  {LocalStorageData?.department}
+                  {LocalStorageData?.email}
                 </span>
               </div>
               <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
@@ -75,8 +75,12 @@ const Sidebar = () => {
                   aria-controls="ui-basic"
                 >
                   <span class="menu-title">Employee</span>
-                  <i class="menu-arrow"></i>
-                  <i class="mdi mdi-account-multiple-outline menu-icon"></i>
+                  <i class="menu-arrow" style={{ color: "#d14124" }}></i>
+
+                  <i
+                    class="mdi mdi-account-multiple menu-icon fs-3"
+                    style={{ color: "#d14124" }}
+                  ></i>
                 </a>
                 <div class="collapse" id="ui-basic">
                   <ul className="nav flex-column sub-menu">
@@ -147,8 +151,11 @@ const Sidebar = () => {
                 aria-controls="ui-basic"
               >
                 <span class="menu-title">Tax Forms</span>
-                <i class="menu-arrow"></i>
-                <i class="mdi mdi-book-plus menu-icon"></i>
+                <i class="menu-arrow" style={{ color: "#d14124" }}></i>
+                <i
+                  className="mdi mdi-file-document fs-3 ms-1"
+                  style={{ color: "#d14124" }}
+                />
               </a>
               <div class="collapse" id="ui-form">
                 <ul class="nav flex-column sub-menu">
@@ -194,8 +201,17 @@ const Sidebar = () => {
                 aria-controls="ui-basic"
               >
                 <span class="menu-title">Travel Request</span>
-                <i class="menu-arrow"></i>
-                <i class="mdi mdi-wallet-travel menu-icon"></i>
+                <i class="menu-arrow" style={{ color: "#d14124" }}></i>
+                {/* <i class="mdi mdi-wallet-travel menu-icon"></i> */}
+                {/* <i
+                                className="mdi mdi-airplane-takeoff fs-3 mx-3"
+                                style={{ color: "#d14124" }}
+                              /> */}
+                <img
+                  className="ms-1"
+                  src="assets/images/newicons/ico.svg"
+                  style={{ width: "30px" }}
+                />
               </a>
               <div class="collapse" id="ui-travel_request">
                 <ul class="nav flex-column sub-menu">
@@ -222,12 +238,33 @@ const Sidebar = () => {
                 </ul>
               </div>
             </li>
-            <li className="nav-item">
+            <li class="nav-item">
               <NavLink className="nav-link" to="/cabin_slot_booking">
                 <span className="menu-title">Cabin Booking</span>
-                <i className="mdi mdi-home-modern menu-icon"></i>
+
+                <i class="menu-arrow" style={{ color: "#d14124" }}></i>
+                <img
+                  className="ms-1"
+                  src="assets/images/newicons/meeting.svg"
+                  style={{ width: "30px" }}
+                />
               </NavLink>
             </li>
+
+            {/* <li className="nav-item ">
+              <NavLink
+                className="nav-link d-flex justify-content-between"
+                to="/cabin_slot_booking"
+              >
+                <span className="menu-title">Cabin Booking</span>
+
+                <img
+                  className="ms-1"
+                  src="assets/images/newicons/meeting.svg"
+                  style={{ width: "30px" }}
+                />
+              </NavLink>
+            </li> */}
           </>
         </ul>
       </nav>

@@ -143,7 +143,7 @@ const Navbar = () => {
                 content="Go Full Screen"
               />
             </li>
-            <li
+            {/* <li
               data-for="enrich"
               data-tip="sooooo cute"
               id="fullscreen_tooltip"
@@ -152,7 +152,7 @@ const Navbar = () => {
               <a className="nav-link">
                 <i className="mdi mdi-fullscreen" id="fullscreen-button"></i>
               </a>
-            </li>
+            </li> */}
             {/* <li className="nav-item dropdown">
               <a
                 className="nav-link count-indicator dropdown-toggle"
@@ -320,23 +320,23 @@ const Navbar = () => {
                 }}
                 to="/"
               >
-                <i className="mdi mdi-power"></i>
+                <i className="mdi mdi-logout"></i>
               </NavLink>
             </li>
 
-            <ReactTooltip
+            {/* <ReactTooltip
               anchorId="scrolltotop"
               place="bottom"
               content="Scroll To Top"
-            />
-            <li
+            /> */}
+            {/* <li
               id="scrolltotop"
               className="nav-item nav-settings d-none d-lg-block"
             >
               <a className="nav-link" href="#">
                 <i className="mdi mdi-format-line-spacing"></i>
               </a>
-            </li>
+            </li> */}
           </ul>
 
           <button

@@ -1069,14 +1069,14 @@ const TravelRequestForm = () => {
         <div className="container-fluid page-body-wrapper full-page-wrapper">
           <Sidebar />
           <div className="main-panel">
-            <div className="content-wrapper">
-              <Page_Header
+            <div className="content-wrapper" style={{ borderRadius: "20px" }}>
+              {/* <Page_Header
                 page_heading="Travel Request Form"
                 page_title="Travel Request Form"
                 page_title_icon="mdi-wallet-travel"
                 page_title_button="Create Travel Requests"
                 page_title_button_link="/alltravelrequest"
-              />
+              /> */}
 
               {loading && (
                 <div className="loader-container">
@@ -1094,9 +1094,10 @@ const TravelRequestForm = () => {
 
               <div className="row">
                 <div class="col-lg-12 grid-margin stretch-card">
-                  <div class="card">
-                    <div class="card-body">
+                  <div class="card" style={{ borderRadius: "20px" }}>
+                    <div class="card-body ">
                       <form
+                        className="travel_form"
                         action=""
                         // onClick={validateError}
                         // onSubmit={handleSubmit(handleFormSubmit)}
@@ -1104,10 +1105,12 @@ const TravelRequestForm = () => {
                         <div className="row">
                           <div className="col-12 col-lg-2">
                             <div className="form-group">
-                              <label>Booking For</label>
+                              <label className="Travel_form_label">
+                                Booking For
+                              </label>
 
                               <select
-                                className="form-select form-select-md"
+                                className="form-select form-select-sm"
                                 value={basicDetails?.booking_for}
                                 onChange={inputEvent}
                                 name="booking_for"
@@ -1130,13 +1133,13 @@ const TravelRequestForm = () => {
                               <select
                                 // required
                                 // className={classNames(
-                                //   "form-select form-select-md",
+                                //   "form-select form-select-sm",
                                 //   {
                                 //     "is-invalid": !validateForBadicDetailsDataRow?.billable,
                                 //   }
                                 // )}
                                 className={classNames(
-                                  "form-select form-select-md",
+                                  "form-select form-select-sm",
                                   {
                                     "is-invalid":
                                       !validateForBadicDetailsDataRow?.billable &&
@@ -1175,7 +1178,7 @@ const TravelRequestForm = () => {
                               <span className="astik"> *</span>
                               <select
                                 className={classNames(
-                                  "form-select form-select-md",
+                                  "form-select form-select-sm",
                                   {
                                     "is-invalid":
                                       !validateForBadicDetailsDataRow?.client_id &&
@@ -1210,7 +1213,7 @@ const TravelRequestForm = () => {
                               <span className="astik"> *</span>
                               <select
                                 className={classNames(
-                                  "form-select form-select-md",
+                                  "form-select form-select-sm",
                                   {
                                     "is-invalid":
                                       !validateForBadicDetailsDataRow?.project_id &&
@@ -1248,7 +1251,7 @@ const TravelRequestForm = () => {
                                 // required
                                 name="reason_for_travel"
                                 className={classNames(
-                                  "form-select form-select-md",
+                                  "form-select form-select-sm",
                                   {
                                     "is-invalid":
                                       !validateForBadicDetailsDataRow?.reason_for_travel &&
@@ -1281,207 +1284,193 @@ const TravelRequestForm = () => {
                           </div>
                         </div>
                         {/* ===============================Travellers==================== */}
-                        <div className="form-group row">
-                          <label className="col-sm-3 col-form-label">
-                            Travel Required
-                          </label>
+                        <div
+                          style={{
+                            fontSize: "0.1rem",
+                            border: "1px solid lightgrey",
+                            background: treavellerRadioButton
+                              ? "#fff"
+                              : "#d3d3d324",
+                            borderRadius: "10px",
+                          }}
+                        >
+                          <div className="form-group d-flex justify-content-start align-items-center m-0 p-0">
+                            <label className="col-sm-3 d-flex align-items-center col-form-label">
+                              <i
+                                className="mdi mdi-airplane-takeoff fs-3 mx-3"
+                                style={{ color: "#d14124" }}
+                              />
+                              Travel Required
+                            </label>
 
-                          <div className="col-sm-3">
-                            <div className="form-check form-check-info">
-                              <label className="form-check-label">
-                                <input
-                                  type="radio"
-                                  className="form-control form-control-md"
-                                  value={treavellerRadioButton}
-                                  checked={
-                                    treavellerRadioButton === true
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={(e) => {
-                                    return setTreavellerRadioButton(
-                                      !treavellerRadioButton
-                                    );
-                                  }}
-                                  name="travellers_required"
-                                />
-                                Yes <i className="input-helper"></i>
-                              </label>
+                            <div className="col-sm-3">
+                              <div className="form-check form-check-info">
+                                <label className="form-check-label">
+                                  <input
+                                    type="radio"
+                                    className="form-control form-control-sm"
+                                    value={treavellerRadioButton}
+                                    checked={
+                                      treavellerRadioButton === true
+                                        ? true
+                                        : false
+                                    }
+                                    onChange={(e) => {
+                                      return setTreavellerRadioButton(
+                                        !treavellerRadioButton
+                                      );
+                                    }}
+                                    name="travellers_required"
+                                  />
+                                  Yes <i className="input-helper"></i>
+                                </label>
+                              </div>
+                            </div>
+                            <div className="col-sm-3">
+                              <div className="form-check form-check-info">
+                                <label className="form-check-label">
+                                  <input
+                                    type="radio"
+                                    className="form-control form-control-sm"
+                                    value={treavellerRadioButton}
+                                    checked={
+                                      treavellerRadioButton === false
+                                        ? true
+                                        : false
+                                    }
+                                    onChange={(e) => {
+                                      return setTreavellerRadioButton(
+                                        !treavellerRadioButton
+                                      );
+                                    }}
+                                    name="travellers_required"
+                                  />
+                                  No <i className="input-helper"></i>
+                                </label>
+                              </div>
                             </div>
                           </div>
-                          <div className="col-sm-3">
-                            <div className="form-check form-check-info">
-                              <label className="form-check-label">
-                                <input
-                                  type="radio"
-                                  className="form-control form-control-md"
-                                  value={treavellerRadioButton}
-                                  checked={
-                                    treavellerRadioButton === false
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={(e) => {
-                                    return setTreavellerRadioButton(
-                                      !treavellerRadioButton
-                                    );
-                                  }}
-                                  name="travellers_required"
-                                />
-                                No <i className="input-helper"></i>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        {/* <div className="row mt-4">
-                          <div className="col-12 col-lg-3">
-                            <div className="form-group">
-                              <label>Travellers Required</label>
-                              <span className="astik"> *</span>
-                              <select
-                                className={classNames(
-                                  "form-select form-select-md",
-                                  {
-                                    "is-invalid": errors.travellers_required,
-                                  }
-                                )}
-                                {...register("travellers_required", {
-                                  value: basicDetails?.travellers_required,
-                                })}
-                                value={basicDetails?.travellers_required}
-                                onChange={inputEvent}
-                                name="travellers_required"
-                              >
-                                <option value="" selected disabled>
-                                  Select...
-                                </option>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                              </select>
-                              <small className="invalid-feedback">
-                                {errors.travellers_required?.message}
-                              </small>
-                            </div>
-                          </div>
-                        </div> */}
-                        {treavellerRadioButton && (
-                          <div
-                            style={{
-                              border: "1px solid lightgrey",
-                              padding: "1rem",
-                            }}
-                          >
-                            <div className="d-flex justify-content-between ">
-                              <h6 className="" style={{ color: "#d03e20" }}>
-                                Travellers
-                              </h6>
 
-                              {/* <small
+                          {treavellerRadioButton && (
+                            <div
+                              style={{
+                                padding: "1rem",
+                              }}
+                            >
+                              <div className="d-flex justify-content-between ">
+                                <h6 className="" style={{ color: "#d03e20" }}>
+                                  Travellers
+                                </h6>
+
+                                {/* <small
                               className="mx-2 btn btn-xs "
                               type="btn"
                               onClick={handleAddTraveller}
                             >
                               <RiAddFill />
                             </small> */}
-                              {basicDetails?.booking_for === "self" ? (
-                                ""
-                              ) : (
-                                <div
-                                  id="add_traveller"
-                                  class="Btn my-2"
-                                  onClick={handleAddTraveller}
-                                >
-                                  <div class="sign">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 24 24"
-                                      width="24px"
-                                      height="24px"
-                                      fill-rule="evenodd"
-                                    >
-                                      <path
+                                {basicDetails?.booking_for === "self" ? (
+                                  ""
+                                ) : (
+                                  <div
+                                    id="add_traveller"
+                                    class="Btn my-2"
+                                    onClick={handleAddTraveller}
+                                  >
+                                    <div class="sign">
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        width="24px"
+                                        height="24px"
                                         fill-rule="evenodd"
-                                        d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-                                      />
-                                    </svg>
+                                      >
+                                        <path
+                                          fill-rule="evenodd"
+                                          d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                        />
+                                      </svg>
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </div>
+                                )}
+                              </div>
 
-                            <table className="table table-bordered">
-                              <thead>
-                                <tr>
-                                  <th>Emp </th>
-                                  <th style={{ width: "15%" }}>
-                                    Emp ID
-                                    <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Full Name <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Gender <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Phone <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Email <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    DOB <span className="astik"> *</span>
-                                  </th>
-                                  <th colSpan={1}>
-                                    Preferred Time
-                                    {/* <span className="astik"> *</span> */}
-                                  </th>
-                                  {/* <th>Action</th> */}
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {travellersData?.map((traveller, index) => (
-                                  <tr key={traveller.id}>
-                                    <td>
-                                      <div class="form-check form-check-info">
-                                        <label class="form-check-label">
-                                          <input
-                                            type="checkbox"
-                                            class="form-check-input"
-                                            checked={
-                                              traveller?.data?.is_employee ===
-                                              "Yes"
-                                                ? true
-                                                : false
-                                            }
-                                            disabled={
-                                              basicDetails?.booking_for ===
-                                              "self"
-                                                ? true
-                                                : false
-                                            }
-                                            onChange={(e) =>
-                                              handleTravellerChange(
-                                                traveller.id,
-                                                {
-                                                  // ...traveller?.data,
-                                                  name: "",
-                                                  emp_id: "",
-                                                  email: "",
-                                                  phone: "",
-                                                  dob: new Date(),
-                                                  gender: "",
-                                                  is_employee: e.target.checked
-                                                    ? "Yes"
-                                                    : "No",
-                                                }
-                                              )
-                                            }
-                                          />
-                                          <i class="input-helper"></i>
-                                        </label>
-                                      </div>
-                                      {/* <select
+                              <table className="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Emp </th>
+                                    <th style={{ width: "15%" }}>
+                                      Emp ID
+                                      <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Full Name{" "}
+                                      <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Gender <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Phone <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Email <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      DOB <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Pref. Time{" "}
+                                      <i class="mdi mdi-arrow-down"></i>
+                                      {/* <span className="astik"> *</span> */}
+                                    </th>
+                                    {/* <th>Action</th> */}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {travellersData?.map((traveller, index) => (
+                                    <tr key={traveller.id}>
+                                      <td>
+                                        <div class="form-check form-check-info">
+                                          <label class="form-check-label">
+                                            <input
+                                              type="checkbox"
+                                              class="form-check-input"
+                                              checked={
+                                                traveller?.data?.is_employee ===
+                                                "Yes"
+                                                  ? true
+                                                  : false
+                                              }
+                                              disabled={
+                                                basicDetails?.booking_for ===
+                                                "self"
+                                                  ? true
+                                                  : false
+                                              }
+                                              onChange={(e) =>
+                                                handleTravellerChange(
+                                                  traveller.id,
+                                                  {
+                                                    // ...traveller?.data,
+                                                    name: "",
+                                                    emp_id: "",
+                                                    email: "",
+                                                    phone: "",
+                                                    dob: new Date(),
+                                                    gender: "",
+                                                    is_employee: e.target
+                                                      .checked
+                                                      ? "Yes"
+                                                      : "No",
+                                                  }
+                                                )
+                                              }
+                                            />
+                                            <i class="input-helper"></i>
+                                          </label>
+                                        </div>
+                                        {/* <select
                                         type="text"
                                         name="is_employee"
                                         className="form-select form-select-md"
@@ -1510,12 +1499,10 @@ const TravelRequestForm = () => {
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
                                       </select> */}
-                                    </td>
-                                    <td>
-                                      <Select
-                                        className={classNames(
-                                          "form-select-select",
-                                          {
+                                      </td>
+                                      <td>
+                                        <Select
+                                          className={classNames(" ", {
                                             "is-invalid":
                                               validateForTravellersDataRow[
                                                 index
@@ -1528,46 +1515,49 @@ const TravelRequestForm = () => {
                                                 validateForTravellersDataRow[
                                                   index
                                                 ]?.data?.empIdPattern),
+                                          })}
+                                          name="emp_id"
+                                          options={getEmployeeDataByStatusCode.map(
+                                            (val) => {
+                                              return {
+                                                ...val,
+                                                isDisabled: travellersData
+                                                  ?.map((item) => {
+                                                    return item?.data?.emp_id
+                                                      ?.value;
+                                                  })
+                                                  .includes(val?.value),
+                                              };
+                                            }
+                                          )}
+                                          defaultValue={
+                                            getEmployeeDefaultByStatusCode[0]
                                           }
-                                        )}
-                                        name="emp_id"
-                                        options={getEmployeeDataByStatusCode.map(
-                                          (val) => {
-                                            return {
-                                              ...val,
-                                              isDisabled: travellersData
-                                                ?.map((item) => {
-                                                  return item?.data?.emp_id
-                                                    ?.value;
-                                                })
-                                                .includes(val?.value),
-                                            };
+                                          value={
+                                            traveller?.data?.is_employee ===
+                                            "Yes"
+                                              ? traveller?.data?.emp_id
+                                              : ""
                                           }
-                                        )}
-                                        defaultValue={
-                                          getEmployeeDefaultByStatusCode[0]
-                                        }
-                                        value={
-                                          traveller?.data?.is_employee === "Yes"
-                                            ? traveller?.data?.emp_id
-                                            : ""
-                                        }
-                                        onChange={(selectedOption) =>
-                                          handleTravellerChange(traveller.id, {
-                                            ...traveller.data,
-                                            emp_id: selectedOption,
-                                          })
-                                        }
-                                        isDisabled={
-                                          traveller?.data?.is_employee ===
-                                            "Yes" &&
-                                          basicDetails?.booking_for !== "self"
-                                            ? false
-                                            : true
-                                        }
-                                      />
+                                          onChange={(selectedOption) =>
+                                            handleTravellerChange(
+                                              traveller.id,
+                                              {
+                                                ...traveller.data,
+                                                emp_id: selectedOption,
+                                              }
+                                            )
+                                          }
+                                          isDisabled={
+                                            traveller?.data?.is_employee ===
+                                              "Yes" &&
+                                            basicDetails?.booking_for !== "self"
+                                              ? false
+                                              : true
+                                          }
+                                        />
 
-                                      {/* <input
+                                        {/* <input
                                         type="text"
                                         disabled={
                                           traveller?.data?.is_employee ===
@@ -1608,71 +1598,75 @@ const TravelRequestForm = () => {
                                         placeholder="Enter Employee ID"
                                       /> */}
 
-                                      <small className="isValidate">
-                                        {validateForTravellersDataRow[index]
-                                          ?.data?.emp_id &&
-                                          "This field is required"}
-                                        {traveller?.data?.is_employee ===
-                                          "Yes" &&
-                                          !validateForTravellersDataRow[index]
+                                        <small className="isValidate">
+                                          {validateForTravellersDataRow[index]
                                             ?.data?.emp_id &&
-                                          validateForTravellersDataRow[index]
-                                            ?.data?.empIdPattern &&
-                                          "Please select others"}
-                                        {traveller?.data?.is_employee ===
-                                          "Yes" &&
-                                          !validateForTravellersDataRow[index]
-                                            ?.data?.emp_id &&
-                                          validateForTravellersDataRow[index]
-                                            ?.data
-                                            ?.validationForCheckingDuplicateValue &&
-                                          "Same Employee Id not allowed"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <input
-                                        // required
-                                        type="text"
-                                        value={traveller?.data?.name}
-                                        name="name"
-                                        className={classNames(
-                                          "form-control form-control-sm",
-                                          {
-                                            "is-invalid":
-                                              validateForTravellersDataRow[
-                                                index
-                                              ]?.data?.name,
+                                            "This field is required"}
+                                          {traveller?.data?.is_employee ===
+                                            "Yes" &&
+                                            !validateForTravellersDataRow[index]
+                                              ?.data?.emp_id &&
+                                            validateForTravellersDataRow[index]
+                                              ?.data?.empIdPattern &&
+                                            "Please select others"}
+                                          {traveller?.data?.is_employee ===
+                                            "Yes" &&
+                                            !validateForTravellersDataRow[index]
+                                              ?.data?.emp_id &&
+                                            validateForTravellersDataRow[index]
+                                              ?.data
+                                              ?.validationForCheckingDuplicateValue &&
+                                            "Same Employee Id not allowed"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <input
+                                          // required
+                                          type="text"
+                                          value={traveller?.data?.name}
+                                          name="name"
+                                          className={classNames(
+                                            " form-control  form-control-sm ",
+                                            {
+                                              "is-invalid":
+                                                validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.name,
+                                            }
+                                          )}
+                                          disabled={
+                                            traveller?.data?.is_employee ===
+                                            "Yes"
+                                              ? true
+                                              : false
                                           }
-                                        )}
-                                        disabled={
-                                          traveller?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        onChange={(e) =>
-                                          handleTravellerChange(traveller.id, {
-                                            ...traveller.data,
+                                          onChange={(e) =>
+                                            handleTravellerChange(
+                                              traveller.id,
+                                              {
+                                                ...traveller.data,
 
-                                            name: e.target.value,
-                                          })
-                                        }
-                                        placeholder="Enter Full Name"
-                                      />
-                                      <small className="isValidate">
-                                        {validateForTravellersDataRow[index]
-                                          ?.data?.name &&
-                                          "This field is required"}
-                                        {traveller?.data?.is_employee ===
-                                          "No" &&
-                                          !validateForTravellersDataRow[index]
+                                                name: e.target.value,
+                                              }
+                                            )
+                                          }
+                                          placeholder="Enter Full Name"
+                                        />
+                                        <small className="isValidate">
+                                          {validateForTravellersDataRow[index]
                                             ?.data?.name &&
-                                          validateForTravellersDataRow[index]
-                                            ?.data?.namePattern &&
-                                          "Fullname is not valid"}
-                                      </small>
-                                    </td>
-                                    <td style={{ width: "15%" }}>
-                                      {/* {traveller?.data?.is_employee ===
+                                            "This field is required"}
+                                          {traveller?.data?.is_employee ===
+                                            "No" &&
+                                            !validateForTravellersDataRow[index]
+                                              ?.data?.name &&
+                                            validateForTravellersDataRow[index]
+                                              ?.data?.namePattern &&
+                                            "Fullname is not valid"}
+                                        </small>
+                                      </td>
+                                      <td style={{ width: "10%" }}>
+                                        {/* {traveller?.data?.is_employee ===
                                       "Yes" ? (
                                         <input
                                           // required
@@ -1698,184 +1692,200 @@ const TravelRequestForm = () => {
                                           }
                                         />
                                       )  */}
-                                      {/* : ( */}
-                                      <select
-                                        className={classNames(
-                                          "form-select form-select-md",
-                                          {
-                                            "is-invalid":
-                                              validateForTravellersDataRow[
-                                                index
-                                              ]?.data?.gender,
+                                        {/* : ( */}
+                                        <select
+                                          className={classNames(
+                                            "form-select form-select-md",
+                                            {
+                                              "is-invalid":
+                                                validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.gender,
+                                            }
+                                          )}
+                                          disabled={
+                                            traveller?.data?.is_employee ===
+                                            "Yes"
+                                              ? true
+                                              : false
                                           }
-                                        )}
-                                        disabled={
-                                          traveller?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        value={traveller?.data?.gender}
-                                        placeholder="Select"
-                                        onChange={(e) =>
-                                          handleTravellerChange(traveller.id, {
-                                            ...traveller?.data,
-                                            gender: e.target.value,
-                                          })
-                                        }
-                                      >
-                                        <option value="" selected disabled>
-                                          Select...
-                                        </option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Others">Others</option>
-                                      </select>
-                                      {/* )} */}
-                                      <small className="isValidate">
-                                        {validateForTravellersDataRow[index]
-                                          ?.data?.gender &&
-                                          "This field is required"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <input
-                                        type={
-                                          "text"
-                                          // traveller?.data?.is_employee === "Yes"
-                                          //   ? "text"
-                                          //   : "number"
-                                        }
-                                        // pattern="\d*"
-                                        // maxlength="10"
-                                        disabled={
-                                          traveller?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        value={traveller?.data?.phone}
-                                        name="phone"
-                                        className={classNames(
-                                          "form-control form-control-sm",
-                                          {
-                                            "is-invalid":
-                                              validateForTravellersDataRow[
-                                                index
-                                              ]?.data?.phone,
+                                          value={traveller?.data?.gender}
+                                          placeholder="Select"
+                                          onChange={(e) =>
+                                            handleTravellerChange(
+                                              traveller.id,
+                                              {
+                                                ...traveller?.data,
+                                                gender: e.target.value,
+                                              }
+                                            )
                                           }
-                                        )}
-                                        placeholder="Enter Phone"
-                                        onChange={(e) => {
-                                          let { value } = e.target;
-
-                                          // Limit the number of digits to 6
-                                          if (value.length > 10) {
-                                            value = value.slice(0, 10);
+                                        >
+                                          <option value="" selected disabled>
+                                            Select...
+                                          </option>
+                                          <option value="Male">Male</option>
+                                          <option value="Female">Female</option>
+                                          <option value="Others">Others</option>
+                                        </select>
+                                        {/* )} */}
+                                        <small className="isValidate">
+                                          {validateForTravellersDataRow[index]
+                                            ?.data?.gender &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td style={{ width: "12%" }}>
+                                        <input
+                                          type={
+                                            "text"
+                                            // traveller?.data?.is_employee === "Yes"
+                                            //   ? "text"
+                                            //   : "number"
                                           }
+                                          // pattern="\d*"
+                                          // maxlength="10"
+                                          disabled={
+                                            traveller?.data?.is_employee ===
+                                            "Yes"
+                                              ? true
+                                              : false
+                                          }
+                                          value={traveller?.data?.phone}
+                                          name="phone"
+                                          className={classNames(
+                                            "form-control form-control-sm",
+                                            {
+                                              "is-invalid":
+                                                validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.phone,
+                                            }
+                                          )}
+                                          placeholder="Enter Phone"
+                                          onChange={(e) => {
+                                            let { value } = e.target;
 
-                                          handleTravellerChange(traveller.id, {
-                                            ...traveller?.data,
+                                            // Limit the number of digits to 6
+                                            if (value.length > 10) {
+                                              value = value.slice(0, 10);
+                                            }
 
-                                            phone: value,
-                                          });
-                                        }}
-                                      />
-                                      <small className="isValidate">
-                                        {validateForTravellersDataRow[index]
-                                          ?.data?.phone &&
-                                          "This field is required"}
-                                        {traveller?.data?.is_employee ===
-                                          "No" &&
-                                          !validateForTravellersDataRow[index]
+                                            handleTravellerChange(
+                                              traveller.id,
+                                              {
+                                                ...traveller?.data,
+
+                                                phone: value,
+                                              }
+                                            );
+                                          }}
+                                        />
+                                        <small className="isValidate">
+                                          {validateForTravellersDataRow[index]
                                             ?.data?.phone &&
-                                          validateForTravellersDataRow[index]
-                                            ?.data?.phonePattern &&
-                                          "Phone no is not valid"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <input
-                                        // required
-                                        type="email"
-                                        disabled={
-                                          traveller?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        value={traveller?.data?.email}
-                                        name="email"
-                                        className={classNames(
-                                          "form-control form-control-sm",
-                                          {
-                                            "is-invalid":
-                                              validateForTravellersDataRow[
-                                                index
-                                              ]?.data?.email,
+                                            "This field is required"}
+                                          {traveller?.data?.is_employee ===
+                                            "No" &&
+                                            !validateForTravellersDataRow[index]
+                                              ?.data?.phone &&
+                                            validateForTravellersDataRow[index]
+                                              ?.data?.phonePattern &&
+                                            "Phone no is not valid"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <input
+                                          // required
+                                          type="email"
+                                          disabled={
+                                            traveller?.data?.is_employee ===
+                                            "Yes"
+                                              ? true
+                                              : false
                                           }
-                                        )}
-                                        placeholder="Enter Email"
-                                        onChange={(e) =>
-                                          handleTravellerChange(traveller.id, {
-                                            ...traveller?.data,
+                                          value={traveller?.data?.email}
+                                          name="email"
+                                          className={classNames(
+                                            "form-control form-control-sm",
+                                            {
+                                              "is-invalid":
+                                                validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.email,
+                                            }
+                                          )}
+                                          placeholder="Enter Email"
+                                          onChange={(e) =>
+                                            handleTravellerChange(
+                                              traveller.id,
+                                              {
+                                                ...traveller?.data,
 
-                                            email: e.target.value,
-                                          })
-                                        }
-                                      />
-                                      <small className="isValidate">
-                                        {validateForTravellersDataRow[index]
-                                          ?.data?.email &&
-                                          "This field is required"}
-                                        {traveller?.data?.is_employee ===
-                                          "No" &&
-                                          !validateForTravellersDataRow[index]
+                                                email: e.target.value,
+                                              }
+                                            )
+                                          }
+                                        />
+                                        <small className="isValidate">
+                                          {validateForTravellersDataRow[index]
                                             ?.data?.email &&
-                                          validateForTravellersDataRow[index]
-                                            ?.data?.emailPattern &&
-                                          "Email ID is not valid"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <DatePicker
-                                        dateFormat="dd/MM/yyyy"
-                                        // withPortal
-                                        // locale="en-US"
-                                        maxDate={new Date()}
-                                        peekNextMonth
-                                        showMonthDropdown
-                                        showYearDropdown
-                                        dropdownMode="select"
-                                        showWeekNumbers
-                                        selected={
-                                          new Date(traveller?.data?.dob)
-                                        }
-                                        onChange={(e) =>
-                                          handleTravellerChange(traveller.id, {
-                                            ...traveller?.data,
-                                            dob: e,
-                                          })
-                                        }
-                                        disabled={
-                                          traveller?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        customInput={
-                                          <ExampleCustomInput
-                                            disabled={
-                                              traveller?.data?.is_employee ===
-                                              "Yes"
-                                                ? true
-                                                : false
-                                            }
-                                            validate={
-                                              validateForTravellersDataRow[
-                                                index
-                                              ]?.data?.dob
-                                            }
-                                          />
-                                        }
-                                      />
-                                      {/* <input
+                                            "This field is required"}
+                                          {traveller?.data?.is_employee ===
+                                            "No" &&
+                                            !validateForTravellersDataRow[index]
+                                              ?.data?.email &&
+                                            validateForTravellersDataRow[index]
+                                              ?.data?.emailPattern &&
+                                            "Email ID is not valid"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <DatePicker
+                                          dateFormat="dd/MM/yyyy"
+                                          // withPortal
+                                          // locale="en-US"
+                                          maxDate={new Date()}
+                                          peekNextMonth
+                                          showMonthDropdown
+                                          showYearDropdown
+                                          dropdownMode="select"
+                                          showWeekNumbers
+                                          selected={
+                                            new Date(traveller?.data?.dob)
+                                          }
+                                          onChange={(e) =>
+                                            handleTravellerChange(
+                                              traveller.id,
+                                              {
+                                                ...traveller?.data,
+                                                dob: e,
+                                              }
+                                            )
+                                          }
+                                          disabled={
+                                            traveller?.data?.is_employee ===
+                                            "Yes"
+                                              ? true
+                                              : false
+                                          }
+                                          customInput={
+                                            <ExampleCustomInput
+                                              disabled={
+                                                traveller?.data?.is_employee ===
+                                                "Yes"
+                                                  ? true
+                                                  : false
+                                              }
+                                              validate={
+                                                validateForTravellersDataRow[
+                                                  index
+                                                ]?.data?.dob
+                                              }
+                                            />
+                                          }
+                                        />
+                                        {/* <input
                                         // required
                                         type="date"
                                         placeholder="Select DOB"
@@ -1903,125 +1913,130 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       /> */}
-                                      <br />
-                                      <small className="isValidate">
-                                        {validateForTravellersDataRow[index]
-                                          ?.data?.dob &&
-                                          "This field is required"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <select
-                                        className="form-select form-select-md"
-                                        // className={classNames(
-                                        //   "form-select form-select-md",
-                                        //   {
-                                        //     "is-invalid":
-                                        //       validateForTravellersDataRow[
-                                        //         index
-                                        //       ]?.data?.preferred_time,
-                                        //   }
-                                        // )}
-                                        // disabled={
-                                        //   traveller?.data?.is_employee === "Yes"
-                                        //     ? true
-                                        //     : false
-                                        // }
-                                        name="preferred_time"
-                                        value={traveller?.data?.preferred_time}
-                                        placeholder="Select"
-                                        onChange={(e) =>
-                                          handleTravellerChange(traveller.id, {
-                                            ...traveller?.data,
-                                            preferred_time: e.target.value,
-                                          })
-                                        }
-                                      >
-                                        <option value="" selected disabled>
-                                          Select...
-                                        </option>
-                                        <option value="00:00-06:00">
-                                          00:00-06:00
-                                        </option>
-                                        <option value="06:00-12:00">
-                                          06:00-12:00
-                                        </option>
-                                        <option value="12:00-18:00">
-                                          12:00-18:00
-                                        </option>
-                                        <option value="18:00-00:00">
-                                          18:00-00:00
-                                        </option>
-                                      </select>
-                                      {/* <small className="isValidate">
+                                        <br />
+                                        <small className="isValidate">
+                                          {validateForTravellersDataRow[index]
+                                            ?.data?.dob &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td style={{ width: "10%" }}>
+                                        <select
+                                          className="form-control form-control-sm"
+                                          // className={classNames(
+                                          //   "form-select form-select-md",
+                                          //   {
+                                          //     "is-invalid":
+                                          //       validateForTravellersDataRow[
+                                          //         index
+                                          //       ]?.data?.preferred_time,
+                                          //   }
+                                          // )}
+                                          // disabled={
+                                          //   traveller?.data?.is_employee === "Yes"
+                                          //     ? true
+                                          //     : false
+                                          // }
+                                          name="preferred_time"
+                                          value={
+                                            traveller?.data?.preferred_time
+                                          }
+                                          placeholder="Select"
+                                          onChange={(e) =>
+                                            handleTravellerChange(
+                                              traveller.id,
+                                              {
+                                                ...traveller?.data,
+                                                preferred_time: e.target.value,
+                                              }
+                                            )
+                                          }
+                                        >
+                                          <option value="" selected>
+                                            <small>select...</small>
+                                          </option>
+                                          <option value="00:00-06:00">
+                                            00:00-06:00
+                                          </option>
+                                          <option value="06:00-12:00">
+                                            06:00-12:00
+                                          </option>
+                                          <option value="12:00-18:00">
+                                            12:00-18:00
+                                          </option>
+                                          <option value="18:00-00:00">
+                                            18:00-00:00
+                                          </option>
+                                        </select>
+                                        {/* <small className="isValidate">
                                         {validateForTravellersDataRow[index]
                                           ?.data?.preferred_time &&
                                           "This field is required"}
                                       </small> */}
-                                    </td>
-                                    {basicDetails?.booking_for !== "self" && (
-                                      <td>
-                                        <div
-                                          id="Delete_Traveller"
-                                          class="Btn my-2"
-                                          onClick={() =>
-                                            handleTravellerDeleteRow(
-                                              traveller.id
-                                            )
-                                          }
-                                        >
-                                          <div class="sign">
-                                            <svg
-                                              xmlns="http://www.w3.org/2000/svg"
-                                              viewBox="0 0 30 30"
-                                              width="30px"
-                                              height="30px"
-                                            >
-                                              <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                            </svg>
-                                          </div>
-                                        </div>
                                       </td>
-                                    )}
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
+                                      {basicDetails?.booking_for !== "self" && (
+                                        <td>
+                                          <div
+                                            id="Delete_Traveller"
+                                            class="Btn my-2"
+                                            onClick={() =>
+                                              handleTravellerDeleteRow(
+                                                traveller.id
+                                              )
+                                            }
+                                          >
+                                            <div class="sign">
+                                              <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 30 30"
+                                                width="30px"
+                                                height="30px"
+                                              >
+                                                <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                              </svg>
+                                            </div>
+                                          </div>
+                                        </td>
+                                      )}
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
 
-                            {/* ===================================Travel============================ */}
-                            <div className="mt-4">
-                              <div className="d-flex justify-content-between  ">
-                                <h6 className="text-primary">Travel</h6>
-                                {/* <small
+                              {/* ===================================Travel============================ */}
+                              <div className="mt-4">
+                                <div className="d-flex justify-content-between  ">
+                                  <h6 className="text-primary">Travel</h6>
+                                  {/* <small
                                 className="btn-sm btn  mx-2 btn-primary "
                                 type="btn"
                                 onClick={handleAddRow}
                               >
                                 <RiAddFill />
                               </small> */}
-                                <div
-                                  id="add_travel"
-                                  class="Btn my-2"
-                                  onClick={handleAddRow}
-                                >
-                                  <div class="sign" title="Add Travel">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 24 24"
-                                      width="24px"
-                                      height="24px"
-                                      fill-rule="evenodd"
-                                    >
-                                      <path
+                                  <div
+                                    id="add_travel"
+                                    class="Btn my-2"
+                                    onClick={handleAddRow}
+                                  >
+                                    <div class="sign" title="Add Travel">
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        width="24px"
+                                        height="24px"
                                         fill-rule="evenodd"
-                                        d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-                                      />
-                                    </svg>
+                                      >
+                                        <path
+                                          fill-rule="evenodd"
+                                          d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                        />
+                                      </svg>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              {/* ===========Radio Box======= */}
-                              {/* <div className="row my-2">
+                                {/* ===========Radio Box======= */}
+                                {/* <div className="row my-2">
                               <div className="col-12 col-lg-6">
                                 <div className="row">
                                   <div className="col-12 col-lg-4">
@@ -2069,173 +2084,186 @@ const TravelRequestForm = () => {
                                 </div>
                               </div>
                             </div> */}
-                            </div>
+                              </div>
 
-                            <table className="table table-bordered">
-                              <thead>
-                                <tr>
-                                  <th style={{ width: "12%" }}>
-                                    Mode <span className="astik"> *</span>
-                                  </th>
-                                  <th style={{ width: "20%" }}>Trip</th>
-                                  <th style={{ width: "20%" }}>
-                                    From (City)
-                                    <span className="astik"> *</span>
-                                  </th>
-                                  <th style={{ width: "20%" }}>
-                                    To (City) <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Departure <span className="astik"> *</span>
-                                  </th>
+                              <table className="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th style={{ width: "12%" }}>
+                                      Mode <span className="astik"> *</span>
+                                    </th>
+                                    <th style={{ width: "20%" }}>Trip</th>
+                                    <th style={{ width: "20%" }}>
+                                      From (City)
+                                      <span className="astik"> *</span>
+                                    </th>
+                                    <th style={{ width: "20%" }}>
+                                      To (City){" "}
+                                      <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Departure{" "}
+                                      <span className="astik"> *</span>
+                                    </th>
 
-                                  <th colSpan={2}>Return</th>
-                                  {/* <th>Action</th> */}
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {rows.map((row, index) => (
-                                  <tr key={row.id}>
-                                    <td>
-                                      <select
-                                        // required
-                                        className={classNames(
-                                          "form-select form-select-md",
-                                          {
-                                            "is-invalid":
-                                              validateForTravelDataRow[index]
-                                                ?.data?.travel_mode,
+                                    <th colSpan={2}>Return</th>
+                                    {/* <th>Action</th> */}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {rows.map((row, index) => (
+                                    <tr key={row.id}>
+                                      <td>
+                                        <select
+                                          // required
+                                          className={classNames(
+                                            "form-select form-select-md",
+                                            {
+                                              "is-invalid":
+                                                validateForTravelDataRow[index]
+                                                  ?.data?.travel_mode,
+                                            }
+                                          )}
+                                          value={row.data.travel_mode}
+                                          onChange={(e) =>
+                                            handleDataChange(row.id, {
+                                              ...row.data,
+                                              travel_mode: e.target.value,
+                                            })
                                           }
-                                        )}
-                                        value={row.data.travel_mode}
-                                        onChange={(e) =>
-                                          handleDataChange(row.id, {
-                                            ...row.data,
-                                            travel_mode: e.target.value,
-                                          })
-                                        }
-                                      >
-                                        <option value="" selected disabled>
-                                          Select
-                                        </option>
-                                        {travelMode.map((mode) => (
-                                          <option value={mode} key={mode}>
-                                            {mode}
+                                        >
+                                          <option value="" selected disabled>
+                                            Select
                                           </option>
-                                        ))}
-                                      </select>
-                                      <small className="isValidate">
-                                        {validateForTravelDataRow[index]?.data
-                                          ?.travel_mode &&
-                                          "This field is required"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <select
-                                        // required
-                                        name="trip_type"
-                                        className="form-select form-select-md"
-                                        value={row?.data?.trip_type}
-                                        onChange={(e) =>
-                                          handleDataChange(row.id, {
-                                            ...row.data,
-                                            trip_type: e.target.value,
-                                          })
-                                        }
-                                      >
-                                        <option value="" selected disabled>
-                                          Select
-                                        </option>
-                                        <option value="OneWay">One-Way</option>
-                                        <option value="Return">Return</option>
-                                      </select>
-                                    </td>
-                                    <td>
-                                      <Select
-                                        className={classNames(
-                                          "form-select-select",
-                                          {
+                                          {travelMode.map((mode) => (
+                                            <option value={mode} key={mode}>
+                                              {mode}
+                                            </option>
+                                          ))}
+                                        </select>
+                                        <small className="isValidate">
+                                          {validateForTravelDataRow[index]?.data
+                                            ?.travel_mode &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <select
+                                          // required
+                                          name="trip_type"
+                                          className="form-select form-select-md"
+                                          value={row?.data?.trip_type}
+                                          onChange={(e) =>
+                                            handleDataChange(row.id, {
+                                              ...row.data,
+                                              trip_type: e.target.value,
+                                            })
+                                          }
+                                        >
+                                          <option value="" selected disabled>
+                                            Select
+                                          </option>
+                                          <option value="OneWay">
+                                            One-Way
+                                          </option>
+                                          <option value="Return">Return</option>
+                                        </select>
+                                      </td>
+                                      <td>
+                                        <Select
+                                          className={classNames("form-select", {
                                             "is-invalid":
                                               validateForTravelDataRow[index]
                                                 ?.data?.travel_from_city,
+                                          })}
+                                          styles={{
+                                            control: (baseStyles, state) => ({
+                                              ...baseStyles,
+                                              fontSize: "0.7rem !important",
+                                            }),
+                                          }}
+                                          isClearable={true}
+                                          name="travel_from_city"
+                                          options={cityData}
+                                          // defaultValue={[cityData[0]]}
+                                          value={row.data.travel_from_city}
+                                          onChange={(selectedOption) =>
+                                            handleDataChange(row.id, {
+                                              ...row.data,
+                                              travel_from_city: selectedOption,
+                                            })
                                           }
-                                        )}
-                                        isClearable={true}
-                                        name="travel_from_city"
-                                        options={cityData}
-                                        // defaultValue={[cityData[0]]}
-                                        value={row.data.travel_from_city}
-                                        onChange={(selectedOption) =>
-                                          handleDataChange(row.id, {
-                                            ...row.data,
-                                            travel_from_city: selectedOption,
-                                          })
-                                        }
-                                      />
-                                      <small className="isValidate">
-                                        {validateForTravelDataRow[index]?.data
-                                          ?.travel_from_city &&
-                                          "This field is required"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <Select
-                                        // className="form-select-select"
-                                        className={classNames(
-                                          "form-select-select",
-                                          {
-                                            "is-invalid":
-                                              validateForTravelDataRow[index]
-                                                ?.data?.travel_to_city,
-                                          }
-                                        )}
-                                        isClearable={true}
-                                        name="travel_to_city"
-                                        // required
-                                        options={filterObjectByLabel(
-                                          cityData,
-                                          row.data.travel_from_city?.label
-                                        )}
-                                        // defaultValue={[cityData[0]]}
-                                        value={row?.data?.travel_to_city}
-                                        onChange={(selectedOption) =>
-                                          handleDataChange(row.id, {
-                                            ...row.data,
-                                            travel_to_city: selectedOption,
-                                          })
-                                        }
-                                      />
-                                      <small className="isValidate">
-                                        {validateForTravelDataRow[index]?.data
-                                          ?.travel_to_city &&
-                                          "This field is required"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <DatePicker
-                                        dateFormat="dd/MM/yyyy"
-                                        minDate={new Date()}
-                                        // isClearable={true}
-                                        // withPortal
-                                        // locale="en-US"
-                                        showWeekNumbers
-                                        selected={row?.data?.departure}
-                                        onChange={(e) =>
-                                          handleDataChange(row.id, {
-                                            ...row.data,
-                                            departure: e,
-                                          })
-                                        }
-                                        customInput={
-                                          <ExampleCustomInput
-                                            validate={
-                                              validateForTravelDataRow[index]
-                                                ?.data?.departure
+                                        />
+                                        <small className="isValidate">
+                                          {validateForTravelDataRow[index]?.data
+                                            ?.travel_from_city &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <Select
+                                          // className="form-select-select"
+                                          className={classNames(
+                                            "form-select-select",
+                                            {
+                                              "is-invalid":
+                                                validateForTravelDataRow[index]
+                                                  ?.data?.travel_to_city,
                                             }
-                                          />
-                                        }
-                                      />
-                                      {/* <input
+                                          )}
+                                          styles={{
+                                            control: (baseStyles, state) => ({
+                                              ...baseStyles,
+                                              fontSize: "0.7rem !important",
+                                            }),
+                                          }}
+                                          isClearable={true}
+                                          name="travel_to_city"
+                                          // required
+                                          options={filterObjectByLabel(
+                                            cityData,
+                                            row.data.travel_from_city?.label
+                                          )}
+                                          // defaultValue={[cityData[0]]}
+                                          value={row?.data?.travel_to_city}
+                                          onChange={(selectedOption) =>
+                                            handleDataChange(row.id, {
+                                              ...row.data,
+                                              travel_to_city: selectedOption,
+                                            })
+                                          }
+                                        />
+                                        <small className="isValidate">
+                                          {validateForTravelDataRow[index]?.data
+                                            ?.travel_to_city &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <DatePicker
+                                          dateFormat="dd/MM/yyyy"
+                                          minDate={new Date()}
+                                          // isClearable={true}
+                                          // withPortal
+                                          // locale="en-US"
+                                          showWeekNumbers
+                                          selected={row?.data?.departure}
+                                          onChange={(e) =>
+                                            handleDataChange(row.id, {
+                                              ...row.data,
+                                              departure: e,
+                                            })
+                                          }
+                                          customInput={
+                                            <ExampleCustomInput
+                                              validate={
+                                                validateForTravelDataRow[index]
+                                                  ?.data?.departure
+                                              }
+                                            />
+                                          }
+                                        />
+                                        {/* <input
                                         type="date"
                                         min={getCurrentDate()}
                                         name="departure"
@@ -2250,60 +2278,65 @@ const TravelRequestForm = () => {
                                           "fr-ca"
                                         )}
                                       /> */}
-                                      <br />
-                                      <small className="isValidate">
-                                        {validateForTravelDataRow[index]?.data
-                                          ?.departure &&
-                                          "This field is required"}
-                                      </small>
-                                    </td>
+                                        <br />
+                                        <small className="isValidate">
+                                          {validateForTravelDataRow[index]?.data
+                                            ?.departure &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
 
-                                    <td>
-                                      <DatePicker
-                                        dateFormat="dd/MM/yyyy"
-                                        minDate={new Date(row?.data?.departure)}
-                                        // isClearable={true}
-                                        // withPortal
-                                        // locale="en-US"
-                                        showWeekNumbers
-                                        selected={
-                                          row?.data?.departure === undefined ||
-                                          row?.data?.trip_type === "OneWay"
-                                            ? ""
-                                            : row?.data?.return
-                                        }
-                                        onChange={(e) =>
-                                          handleDataChange(row.id, {
-                                            ...row.data,
-                                            return:
-                                              row?.data?.departure ===
-                                                undefined ||
-                                              row?.data?.trip_type === "OneWay"
-                                                ? ""
-                                                : e,
-                                          })
-                                        }
-                                        disabled={
-                                          row?.data?.departure === undefined ||
-                                          row?.data?.trip_type === "OneWay"
-                                            ? true
-                                            : false
-                                        }
-                                        customInput={
-                                          <ExampleCustomInput
-                                            disabled={
-                                              row.data.trip_type === "OneWay"
-                                                ? true
-                                                : false
-                                            }
-                                            validate={
-                                              validateForTravelDataRow[index]
-                                                ?.data?.return
-                                            }
-                                          />
-                                        }
-                                      />
-                                      {/* <input
+                                      <td>
+                                        <DatePicker
+                                          dateFormat="dd/MM/yyyy"
+                                          minDate={
+                                            new Date(row?.data?.departure)
+                                          }
+                                          // isClearable={true}
+                                          // withPortal
+                                          // locale="en-US"
+                                          showWeekNumbers
+                                          selected={
+                                            row?.data?.departure ===
+                                              undefined ||
+                                            row?.data?.trip_type === "OneWay"
+                                              ? ""
+                                              : row?.data?.return
+                                          }
+                                          onChange={(e) =>
+                                            handleDataChange(row.id, {
+                                              ...row.data,
+                                              return:
+                                                row?.data?.departure ===
+                                                  undefined ||
+                                                row?.data?.trip_type ===
+                                                  "OneWay"
+                                                  ? ""
+                                                  : e,
+                                            })
+                                          }
+                                          disabled={
+                                            row?.data?.departure ===
+                                              undefined ||
+                                            row?.data?.trip_type === "OneWay"
+                                              ? true
+                                              : false
+                                          }
+                                          customInput={
+                                            <ExampleCustomInput
+                                              disabled={
+                                                row.data.trip_type === "OneWay"
+                                                  ? true
+                                                  : false
+                                              }
+                                              validate={
+                                                validateForTravelDataRow[index]
+                                                  ?.data?.return
+                                              }
+                                            />
+                                          }
+                                        />
+                                        {/* <input
                                         type="date"
                                         // required
                                         min={row?.data?.departure}
@@ -2322,94 +2355,111 @@ const TravelRequestForm = () => {
                                             : false
                                         }
                                       /> */}
-                                      <br />
-                                      <small className="isValidate">
-                                        {validateForTravelDataRow[index]?.data
-                                          ?.return && "This field is required"}
-                                      </small>
-                                    </td>
+                                        <br />
+                                        <small className="isValidate">
+                                          {validateForTravelDataRow[index]?.data
+                                            ?.return &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
 
-                                    <td>
-                                      {/* {index === 0 ? (
+                                      <td>
+                                        {/* {index === 0 ? (
                                         ""
                                       ) : ( */}
-                                      <div
-                                        id="Delete_Travel"
-                                        class="Btn my-2"
-                                        onClick={() => handleDeleteRow(row.id)}
-                                      >
-                                        <div class="sign">
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 30 30"
-                                            width="30px"
-                                            height="30px"
-                                          >
-                                            <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                          </svg>
+                                        <div
+                                          id="Delete_Travel"
+                                          class="Btn my-2"
+                                          onClick={() =>
+                                            handleDeleteRow(row.id)
+                                          }
+                                        >
+                                          <div class="sign">
+                                            <svg
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              viewBox="0 0 30 30"
+                                              width="30px"
+                                              height="30px"
+                                            >
+                                              <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                            </svg>
+                                          </div>
                                         </div>
-                                      </div>
-                                      {/* )} */}
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        )}
-
-                        {/* ===============================Accomendation====================== */}
-                        <div className="form-group row">
-                          <label className="col-sm-3 col-form-label">
-                            Accommodation Required
-                          </label>
-
-                          <div className="col-sm-3">
-                            <div className="form-check form-check-info">
-                              <label className="form-check-label">
-                                <input
-                                  type="radio"
-                                  className="form-control form-control-md"
-                                  value={accommodationRadioButton}
-                                  checked={
-                                    accommodationRadioButton === true
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={(e) => {
-                                    setAccommodationRadioButton(
-                                      !accommodationRadioButton
-                                    );
-                                  }}
-                                />
-                                Yes <i className="input-helper"></i>
-                              </label>
+                                        {/* )} */}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
                             </div>
-                          </div>
-                          <div className="col-sm-3">
-                            <div className="form-check form-check-info">
-                              <label className="form-check-label">
-                                <input
-                                  type="radio"
-                                  className="form-control form-control-md"
-                                  value={accommodationRadioButton}
-                                  checked={
-                                    accommodationRadioButton === false
-                                      ? true
-                                      : false
-                                  }
-                                  onChange={(e) => {
-                                    setAccommodationRadioButton(
-                                      !accommodationRadioButton
-                                    );
-                                  }}
-                                />
-                                No <i className="input-helper"></i>
-                              </label>
-                            </div>
-                          </div>
+                          )}
                         </div>
-                        {/* <div className="row mt-4">
+                        {/* ===============================Accomendation====================== */}
+                        <div
+                          style={{
+                            border: "1px solid lightgrey",
+                            marginTop: "1rem",
+                            borderRadius: "10px",
+                            background: accommodationRadioButton
+                              ? "#fff"
+                              : "#d3d3d324",
+                          }}
+                        >
+                          <div className="form-group d-flex justify-content-start align-items-center m-0 p-0">
+                            <label className="col-sm-3 d-flex align-items-center col-form-label">
+                              <i
+                                className="mdi mdi-hotel fs-3 mx-3"
+                                style={{ color: "#d14124" }}
+                              />
+                              Accommodation Required
+                            </label>
+
+                            <div className="col-sm-3">
+                              <div className="form-check form-check-info">
+                                <label className="form-check-label">
+                                  <input
+                                    type="radio"
+                                    className="form-control form-control-md"
+                                    value={accommodationRadioButton}
+                                    checked={
+                                      accommodationRadioButton === true
+                                        ? true
+                                        : false
+                                    }
+                                    onChange={(e) => {
+                                      setAccommodationRadioButton(
+                                        !accommodationRadioButton
+                                      );
+                                    }}
+                                  />
+                                  Yes <i className="input-helper"></i>
+                                </label>
+                              </div>
+                            </div>
+                            <div className="col-sm-3">
+                              <div className="form-check form-check-info">
+                                <label className="form-check-label">
+                                  <input
+                                    type="radio"
+                                    className="form-control form-control-md"
+                                    value={accommodationRadioButton}
+                                    checked={
+                                      accommodationRadioButton === false
+                                        ? true
+                                        : false
+                                    }
+                                    onChange={(e) => {
+                                      setAccommodationRadioButton(
+                                        !accommodationRadioButton
+                                      );
+                                    }}
+                                  />
+                                  No <i className="input-helper"></i>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                          {/* <div className="row mt-4">
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
                               <label>Accommodation Required</label>
@@ -2440,138 +2490,134 @@ const TravelRequestForm = () => {
                             </div>
                           </div>
                         </div> */}
-                        {accommodationRadioButton && (
-                          <div
-                            className="mt-2"
-                            style={{
-                              // overflow: "auto",
-                              border: "1px solid lightgrey",
-                              padding: "1rem",
-                            }}
-                          >
-                            <div className="d-flex justify-content-between">
-                              <h6 className="" style={{ color: "#d03e20" }}>
-                                Accommodation
-                              </h6>
-                              {/* <small
+                          {accommodationRadioButton && (
+                            <div className="mt-2" style={{ padding: "1rem" }}>
+                              <div className="d-flex justify-content-between">
+                                <h6 className="" style={{ color: "#d03e20" }}>
+                                  Accommodation
+                                </h6>
+                                {/* <small
                               className="btn-sm btn mx-2 btn-primary "
                               type="btn"
                               onClick={handleAddAccommodation}
                             >
                               <RiAddFill />
                             </small> */}
-                              {basicDetails?.booking_for !== "self" && (
-                                <div
-                                  id="add_accommodation"
-                                  class="Btn my-2"
-                                  onClick={handleAddAccommodation}
-                                >
-                                  <div class="sign">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 24 24"
-                                      width="24px"
-                                      height="24px"
-                                      fill-rule="evenodd"
-                                    >
-                                      <path
+                                {basicDetails?.booking_for !== "self" && (
+                                  <div
+                                    id="add_accommodation"
+                                    class="Btn my-2"
+                                    onClick={handleAddAccommodation}
+                                  >
+                                    <div class="sign">
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        width="24px"
+                                        height="24px"
                                         fill-rule="evenodd"
-                                        d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-                                      />
-                                    </svg>
+                                      >
+                                        <path
+                                          fill-rule="evenodd"
+                                          d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
+                                        />
+                                      </svg>
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </div>
+                                )}
+                              </div>
 
-                            <table className="table table-bordered">
-                              <thead>
-                                <tr>
-                                  <th style={{ width: "30%" }}>
-                                    City <span className="astik"> *</span>
-                                  </th>
-                                  <th style={{ width: "10%" }}>
-                                    Check-in <span className="astik"> *</span>
-                                  </th>
-                                  <th style={{ width: "10%" }}>
-                                    Check-out <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Breakfast Required
-                                    <span className="astik"> *</span>
-                                  </th>
-                                  <th colSpan={2}>
-                                    Rooms Required
-                                    <span className="astik"> *</span>
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {accommodationData?.map(
-                                  (accommodation, index) => (
-                                    <tr key={accommodation.id}>
-                                      <td>
-                                        <Select
-                                          className={classNames(
-                                            "form-select-select",
-                                            {
-                                              "is-invalid":
-                                                validateForAccommodationDataRow[
-                                                  index
-                                                ]?.data?.city,
+                              <table className="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th style={{ width: "25%" }}>
+                                      City <span className="astik"> *</span>
+                                    </th>
+                                    <th style={{ width: "10%" }}>
+                                      Check-in <span className="astik"> *</span>
+                                    </th>
+                                    <th style={{ width: "10%" }}>
+                                      Check-out{" "}
+                                      <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Breakfast Required
+                                      <span className="astik"> *</span>
+                                    </th>
+                                    <th colSpan={2}>
+                                      Rooms Required
+                                      <span className="astik"> *</span>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {accommodationData?.map(
+                                    (accommodation, index) => (
+                                      <tr key={accommodation.id}>
+                                        <td>
+                                          <Select
+                                            className={classNames(
+                                              "form-select-select",
+                                              {
+                                                "is-invalid":
+                                                  validateForAccommodationDataRow[
+                                                    index
+                                                  ]?.data?.city,
+                                              }
+                                            )}
+                                            isClearable={true}
+                                            name="city"
+                                            options={cityData}
+                                            value={
+                                              accommodationData?.data?.city
                                             }
-                                          )}
-                                          isClearable={true}
-                                          name="city"
-                                          options={cityData}
-                                          value={accommodationData?.data?.city}
-                                          onChange={(selectedOption) =>
-                                            handleAccommodationChange(
-                                              accommodation.id,
-                                              {
-                                                ...accommodation.data,
-                                                city: selectedOption,
-                                              }
-                                            )
-                                          }
-                                        />
-                                        <small className="isValidate">
-                                          {validateForAccommodationDataRow[
-                                            index
-                                          ]?.data?.city &&
-                                            "This field is required"}
-                                        </small>
-                                      </td>
-                                      <td>
-                                        <DatePicker
-                                          dateFormat="dd/MM/yyyy"
-                                          minDate={new Date()}
-                                          selected={
-                                            accommodation?.data?.checkIn ===
-                                            undefined
-                                              ? ""
-                                              : accommodation?.data?.checkIn
-                                          }
-                                          onChange={(e) =>
-                                            handleAccommodationChange(
-                                              accommodation.id,
-                                              {
-                                                checkIn: e,
-                                              }
-                                            )
-                                          }
-                                          customInput={
-                                            <ExampleCustomInput
-                                              validate={
-                                                validateForAccommodationDataRow[
-                                                  index
-                                                ]?.data?.checkIn
-                                              }
-                                            />
-                                          }
-                                        />
+                                            onChange={(selectedOption) =>
+                                              handleAccommodationChange(
+                                                accommodation.id,
+                                                {
+                                                  ...accommodation.data,
+                                                  city: selectedOption,
+                                                }
+                                              )
+                                            }
+                                          />
+                                          <small className="isValidate">
+                                            {validateForAccommodationDataRow[
+                                              index
+                                            ]?.data?.city &&
+                                              "This field is required"}
+                                          </small>
+                                        </td>
+                                        <td>
+                                          <DatePicker
+                                            dateFormat="dd/MM/yyyy"
+                                            minDate={new Date()}
+                                            selected={
+                                              accommodation?.data?.checkIn ===
+                                              undefined
+                                                ? ""
+                                                : accommodation?.data?.checkIn
+                                            }
+                                            onChange={(e) =>
+                                              handleAccommodationChange(
+                                                accommodation.id,
+                                                {
+                                                  checkIn: e,
+                                                }
+                                              )
+                                            }
+                                            customInput={
+                                              <ExampleCustomInput
+                                                validate={
+                                                  validateForAccommodationDataRow[
+                                                    index
+                                                  ]?.data?.checkIn
+                                                }
+                                              />
+                                            }
+                                          />
 
-                                        {/* <input
+                                          {/* <input
                                           type="date"
                                           // required
                                           min={getCurrentDate()}
@@ -2587,55 +2633,55 @@ const TravelRequestForm = () => {
                                             )
                                           }
                                         /> */}
-                                        <br />
-                                        <small className="isValidate">
-                                          {validateForAccommodationDataRow[
-                                            index
-                                          ]?.data?.checkIn &&
-                                            "This field is required"}
-                                        </small>
-                                      </td>
-                                      <td>
-                                        <DatePicker
-                                          dateFormat="dd/MM/yyyy"
-                                          minDate={
-                                            accommodation?.data?.checkIn ===
-                                            undefined
-                                              ? new Date()
-                                              : accommodation?.data?.checkIn
-                                          }
-                                          // locale="en-US"
-                                          showWeekNumbers
-                                          // selected={
-                                          //   new Date(
-                                          //     accommodation.data.checkOut
-                                          //   )
-                                          // }
-                                          selected={
-                                            accommodation?.data?.checkOut ===
-                                            undefined
-                                              ? ""
-                                              : accommodation?.data?.checkOut
-                                          }
-                                          onChange={(e) =>
-                                            handleAccommodationChange(
-                                              accommodation.id,
-                                              {
-                                                checkOut: e,
-                                              }
-                                            )
-                                          }
-                                          customInput={
-                                            <ExampleCustomInput
-                                              validate={
-                                                validateForAccommodationDataRow[
-                                                  index
-                                                ]?.data?.checkOut
-                                              }
-                                            />
-                                          }
-                                        />
-                                        {/* <input
+                                          <br />
+                                          <small className="isValidate">
+                                            {validateForAccommodationDataRow[
+                                              index
+                                            ]?.data?.checkIn &&
+                                              "This field is required"}
+                                          </small>
+                                        </td>
+                                        <td>
+                                          <DatePicker
+                                            dateFormat="dd/MM/yyyy"
+                                            minDate={
+                                              accommodation?.data?.checkIn ===
+                                              undefined
+                                                ? new Date()
+                                                : accommodation?.data?.checkIn
+                                            }
+                                            // locale="en-US"
+                                            showWeekNumbers
+                                            // selected={
+                                            //   new Date(
+                                            //     accommodation.data.checkOut
+                                            //   )
+                                            // }
+                                            selected={
+                                              accommodation?.data?.checkOut ===
+                                              undefined
+                                                ? ""
+                                                : accommodation?.data?.checkOut
+                                            }
+                                            onChange={(e) =>
+                                              handleAccommodationChange(
+                                                accommodation.id,
+                                                {
+                                                  checkOut: e,
+                                                }
+                                              )
+                                            }
+                                            customInput={
+                                              <ExampleCustomInput
+                                                validate={
+                                                  validateForAccommodationDataRow[
+                                                    index
+                                                  ]?.data?.checkOut
+                                                }
+                                              />
+                                            }
+                                          />
+                                          {/* <input
                                           type="date"
                                           // required
                                           value={accommodation.data.checkOut}
@@ -2651,400 +2697,408 @@ const TravelRequestForm = () => {
                                             )
                                           }
                                         /> */}
-                                        <br />
-                                        <small className="isValidate">
-                                          {validateForAccommodationDataRow[
-                                            index
-                                          ]?.data?.checkOut &&
-                                            "This field is required"}
-                                        </small>
-                                      </td>
-                                      <td>
-                                        <select
-                                          name="breakfastRequired"
-                                          // className="form-select form-select-md"
-                                          className={classNames(
-                                            "form-select form-select-md",
-                                            {
-                                              "is-invalid":
-                                                validateForAccommodationDataRow[
-                                                  index
-                                                ]?.data?.breakfastRequired,
-                                            }
-                                          )}
-                                          value={
-                                            accommodation.data.breakfastRequired
-                                          }
-                                          onChange={(e) =>
-                                            handleAccommodationChange(
-                                              accommodation.id,
+                                          <br />
+                                          <small className="isValidate">
+                                            {validateForAccommodationDataRow[
+                                              index
+                                            ]?.data?.checkOut &&
+                                              "This field is required"}
+                                          </small>
+                                        </td>
+                                        <td>
+                                          <select
+                                            name="breakfastRequired"
+                                            // className="form-select form-select-md"
+                                            className={classNames(
+                                              "form-select form-select-md",
                                               {
-                                                breakfastRequired:
-                                                  e.target.value,
+                                                "is-invalid":
+                                                  validateForAccommodationDataRow[
+                                                    index
+                                                  ]?.data?.breakfastRequired,
                                               }
-                                            )
-                                          }
-                                        >
-                                          <option value="" selected disabled>
-                                            Select
-                                          </option>
-                                          <option value="Yes">Yes</option>
-                                          <option value="No">No</option>
-                                        </select>
-                                        <small className="isValidate">
-                                          {validateForAccommodationDataRow[
-                                            index
-                                          ]?.data?.breakfastRequired &&
-                                            "This field is required"}
-                                        </small>
-                                      </td>
-                                      <td>
-                                        <div className="dropdowns">
-                                          <button
-                                            type="button"
-                                            class="btn btn-primary dropdown-toggle"
-                                            style={{ padding: "0.7rem 2.5rem" }}
-                                            onClick={toggleDropdown}
-                                            disabled={
-                                              basicDetails?.booking_for ===
-                                              "self"
-                                                ? true
-                                                : false
+                                            )}
+                                            value={
+                                              accommodation.data
+                                                .breakfastRequired
+                                            }
+                                            onChange={(e) =>
+                                              handleAccommodationChange(
+                                                accommodation.id,
+                                                {
+                                                  breakfastRequired:
+                                                    e.target.value,
+                                                }
+                                              )
                                             }
                                           >
-                                            Rooms :
-                                            {accommodation.data.number_of_rooms}
-                                            | Adults :
-                                            {
-                                              accommodation.data
-                                                .number_of_adults
-                                            }
-                                            | Children:
-                                            {
-                                              accommodation.data
-                                                .number_of_children
-                                            }
-                                          </button>
-                                          {isOpen && (
-                                            <>
-                                              <div className="dropdowns-content ">
-                                                <div className="d-flex justify-content-between">
-                                                  <label className="dropdowns-content-label">
-                                                    Rooms :
-                                                  </label>
-                                                  <div class="number">
-                                                    <span
-                                                      class="minus"
-                                                      type="button"
-                                                      onClick={(e) => {
-                                                        handleAccommodationChange(
-                                                          accommodation.id,
-                                                          {
-                                                            number_of_rooms:
-                                                              accommodation
-                                                                ?.data
-                                                                ?.number_of_rooms >
-                                                              1
-                                                                ? accommodation
-                                                                    ?.data
-                                                                    ?.number_of_rooms -
-                                                                  1
-                                                                : accommodation
-                                                                    ?.data
-                                                                    ?.number_of_rooms,
-                                                          }
-                                                        );
-                                                        // accommodation?.data
-                                                        //   ?.number_of_rooms >
-                                                        //   1 && roomsData.pop();
-                                                      }}
-                                                    >
-                                                      -
-                                                    </span>
-                                                    <input
-                                                      type="number"
-                                                      value={
-                                                        accommodation?.data
-                                                          ?.number_of_rooms
-                                                      }
-                                                      className="w-25 rounded text-align-center"
-                                                      style={{
-                                                        paddingLeft: "12px",
-                                                      }}
-                                                      disabled
-                                                    />
-                                                    <span
-                                                      class="plus"
-                                                      type="button"
-                                                      onClick={(e) => {
-                                                        handleAccommodationChange(
-                                                          accommodation.id,
-                                                          {
-                                                            number_of_rooms:
-                                                              accommodation
-                                                                ?.data
-                                                                ?.number_of_rooms <
-                                                              9
-                                                                ? accommodation
-                                                                    ?.data
-                                                                    ?.number_of_rooms +
-                                                                  1
-                                                                : accommodation
-                                                                    ?.data
-                                                                    ?.number_of_rooms,
-                                                            number_of_adults:
-                                                              accommodation
-                                                                ?.data
-                                                                ?.number_of_adults <
-                                                                9 &&
-                                                              accommodation
-                                                                ?.data
-                                                                ?.number_of_rooms >=
+                                            <option value="" selected disabled>
+                                              Select
+                                            </option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                          </select>
+                                          <small className="isValidate">
+                                            {validateForAccommodationDataRow[
+                                              index
+                                            ]?.data?.breakfastRequired &&
+                                              "This field is required"}
+                                          </small>
+                                        </td>
+                                        <td>
+                                          <div className="dropdowns">
+                                            <button
+                                              type="button"
+                                              class="btn btn-primary dropdown-toggle"
+                                              style={{
+                                                padding: "0.7rem 2.5rem",
+                                              }}
+                                              onClick={toggleDropdown}
+                                              disabled={
+                                                basicDetails?.booking_for ===
+                                                "self"
+                                                  ? true
+                                                  : false
+                                              }
+                                            >
+                                              Rooms :
+                                              {
+                                                accommodation.data
+                                                  .number_of_rooms
+                                              }
+                                              | Adults :
+                                              {
+                                                accommodation.data
+                                                  .number_of_adults
+                                              }
+                                              | Children:
+                                              {
+                                                accommodation.data
+                                                  .number_of_children
+                                              }
+                                            </button>
+                                            {isOpen && (
+                                              <>
+                                                <div className="dropdowns-content ">
+                                                  <div className="d-flex justify-content-between">
+                                                    <label className="dropdowns-content-label">
+                                                      Rooms :
+                                                    </label>
+                                                    <div class="number">
+                                                      <span
+                                                        class="minus"
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                          handleAccommodationChange(
+                                                            accommodation.id,
+                                                            {
+                                                              number_of_rooms:
                                                                 accommodation
                                                                   ?.data
-                                                                  ?.number_of_adults
-                                                                ? accommodation
-                                                                    ?.data
-                                                                    ?.number_of_adults +
-                                                                  1
-                                                                : accommodation
-                                                                    ?.data
-                                                                    ?.number_of_adults,
-                                                          }
-                                                        );
-                                                        accommodation?.data
-                                                          ?.number_of_rooms <
-                                                          9 &&
-                                                          accommodation?.data
-                                                            ?.number_of_rooms >=
-                                                            accommodation?.data
-                                                              ?.number_of_adults &&
-                                                          setRoomsData(
-                                                            roomsData.concat({
-                                                              id:
-                                                                roomsData.length +
-                                                                1,
-                                                              data: {
-                                                                is_employee:
-                                                                  "Yes",
-                                                                dob: new Date(),
-                                                                emp_id: "",
-                                                              },
-                                                            })
+                                                                  ?.number_of_rooms >
+                                                                1
+                                                                  ? accommodation
+                                                                      ?.data
+                                                                      ?.number_of_rooms -
+                                                                    1
+                                                                  : accommodation
+                                                                      ?.data
+                                                                      ?.number_of_rooms,
+                                                            }
                                                           );
-                                                      }}
-                                                    >
-                                                      +
-                                                    </span>
-                                                  </div>
-                                                </div>
-                                                <div class="dropdown-divider"></div>
-                                                <div className="d-flex justify-content-between">
-                                                  <label className="dropdowns-content-label">
-                                                    Adults :
-                                                  </label>
-                                                  <div class="number">
-                                                    <span
-                                                      class="minus"
-                                                      type="button"
-                                                      onClick={(e) => {
-                                                        handleAccommodationChange(
-                                                          accommodation.id,
-                                                          {
-                                                            number_of_adults:
-                                                              accommodation
-                                                                ?.data
-                                                                ?.number_of_adults >
-                                                                1 &&
-                                                              accommodation
-                                                                ?.data
-                                                                ?.number_of_adults >
+                                                          // accommodation?.data
+                                                          //   ?.number_of_rooms >
+                                                          //   1 && roomsData.pop();
+                                                        }}
+                                                      >
+                                                        -
+                                                      </span>
+                                                      <input
+                                                        type="number"
+                                                        value={
+                                                          accommodation?.data
+                                                            ?.number_of_rooms
+                                                        }
+                                                        className="w-25 rounded text-align-center"
+                                                        style={{
+                                                          paddingLeft: "12px",
+                                                        }}
+                                                        disabled
+                                                      />
+                                                      <span
+                                                        class="plus"
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                          handleAccommodationChange(
+                                                            accommodation.id,
+                                                            {
+                                                              number_of_rooms:
                                                                 accommodation
                                                                   ?.data
-                                                                  ?.number_of_rooms
-                                                                ? accommodation
-                                                                    ?.data
-                                                                    ?.number_of_adults -
-                                                                  1
-                                                                : accommodation
-                                                                    ?.data
-                                                                    ?.number_of_adults,
-                                                          }
-                                                        );
-                                                        accommodation?.data
-                                                          ?.number_of_adults >
-                                                          1 &&
-                                                          accommodation?.data
-                                                            ?.number_of_adults >
-                                                            accommodation?.data
-                                                              ?.number_of_rooms &&
-                                                          roomsData.pop();
-                                                      }}
-                                                    >
-                                                      -
-                                                    </span>
-                                                    <input
-                                                      type="number"
-                                                      value={
-                                                        accommodation?.data
-                                                          ?.number_of_adults
-                                                      }
-                                                      className="w-25 rounded text-align-center"
-                                                      style={{
-                                                        paddingLeft: "12px",
-                                                      }}
-                                                      disabled
-                                                    />
-                                                    <span
-                                                      class="plus"
-                                                      type="button"
-                                                      onClick={(e) => {
-                                                        handleAccommodationChange(
-                                                          accommodation.id,
-                                                          {
-                                                            number_of_adults:
-                                                              accommodation
-                                                                ?.data
-                                                                ?.number_of_adults <
-                                                              9
-                                                                ? accommodation
-                                                                    ?.data
-                                                                    ?.number_of_adults +
-                                                                  1
-                                                                : accommodation
-                                                                    ?.data
-                                                                    ?.number_of_adults,
-                                                          }
-                                                        );
-                                                        accommodation?.data
-                                                          ?.number_of_adults <
-                                                          9 &&
-                                                          setRoomsData(
-                                                            roomsData.concat({
-                                                              id:
-                                                                roomsData.length +
-                                                                1,
-                                                              data: {
-                                                                is_employee:
-                                                                  "Yes",
-                                                                dob: new Date(),
-                                                                emp_id: "",
-                                                              },
-                                                            })
-                                                          );
-                                                      }}
-                                                    >
-                                                      +
-                                                    </span>
-                                                  </div>
-                                                </div>
-                                                <div class="dropdown-divider"></div>
-                                                <div className="d-flex justify-content-between">
-                                                  <label className="dropdowns-content-label">
-                                                    Children :
-                                                  </label>
-                                                  <div class="number">
-                                                    <span
-                                                      class="minus"
-                                                      type="button"
-                                                      onClick={(e) => {
-                                                        handleAccommodationChange(
-                                                          accommodation.id,
-                                                          {
-                                                            number_of_children:
-                                                              accommodation
-                                                                ?.data
-                                                                ?.number_of_children >
-                                                              0
-                                                                ? //   &&
-                                                                  // accommodation
-                                                                  //   ?.data
-                                                                  //   ?.number_of_children >
-                                                                  //   accommodation
-                                                                  //     ?.data
-                                                                  //     ?.number_of_rooms
+                                                                  ?.number_of_rooms <
+                                                                9
+                                                                  ? accommodation
+                                                                      ?.data
+                                                                      ?.number_of_rooms +
+                                                                    1
+                                                                  : accommodation
+                                                                      ?.data
+                                                                      ?.number_of_rooms,
+                                                              number_of_adults:
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_adults <
+                                                                  9 &&
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_rooms >=
                                                                   accommodation
                                                                     ?.data
-                                                                    ?.number_of_children -
-                                                                  1
-                                                                : accommodation
-                                                                    ?.data
-                                                                    ?.number_of_children,
-                                                          }
-                                                        );
-                                                        accommodation?.data
-                                                          ?.number_of_children >
-                                                          0 &&
-                                                          // &&
-                                                          // accommodation?.data
-                                                          //   ?.number_of_children >
-                                                          //   accommodation?.data
-                                                          //     ?.number_of_rooms
-                                                          roomsData.pop();
-                                                      }}
-                                                    >
-                                                      -
-                                                    </span>
-                                                    <input
-                                                      type="number"
-                                                      value={
-                                                        accommodation?.data
-                                                          ?.number_of_children
-                                                      }
-                                                      className="w-25 rounded text-align-center"
-                                                      style={{
-                                                        paddingLeft: "12px",
-                                                      }}
-                                                      disabled
-                                                    />
-                                                    <span
-                                                      class="plus"
-                                                      type="button"
-                                                      onClick={(e) => {
-                                                        handleAccommodationChange(
-                                                          accommodation.id,
-                                                          {
-                                                            number_of_children:
+                                                                    ?.number_of_adults
+                                                                  ? accommodation
+                                                                      ?.data
+                                                                      ?.number_of_adults +
+                                                                    1
+                                                                  : accommodation
+                                                                      ?.data
+                                                                      ?.number_of_adults,
+                                                            }
+                                                          );
+                                                          accommodation?.data
+                                                            ?.number_of_rooms <
+                                                            9 &&
+                                                            accommodation?.data
+                                                              ?.number_of_rooms >=
                                                               accommodation
                                                                 ?.data
-                                                                ?.number_of_children <
-                                                              9
-                                                                ? accommodation
+                                                                ?.number_of_adults &&
+                                                            setRoomsData(
+                                                              roomsData.concat({
+                                                                id:
+                                                                  roomsData.length +
+                                                                  1,
+                                                                data: {
+                                                                  is_employee:
+                                                                    "Yes",
+                                                                  dob: new Date(),
+                                                                  emp_id: "",
+                                                                },
+                                                              })
+                                                            );
+                                                        }}
+                                                      >
+                                                        +
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div class="dropdown-divider"></div>
+                                                  <div className="d-flex justify-content-between">
+                                                    <label className="dropdowns-content-label">
+                                                      Adults :
+                                                    </label>
+                                                    <div class="number">
+                                                      <span
+                                                        class="minus"
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                          handleAccommodationChange(
+                                                            accommodation.id,
+                                                            {
+                                                              number_of_adults:
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_adults >
+                                                                  1 &&
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_adults >
+                                                                  accommodation
                                                                     ?.data
-                                                                    ?.number_of_children +
-                                                                  1
-                                                                : accommodation
-                                                                    ?.data
-                                                                    ?.number_of_children,
-                                                          }
-                                                        );
-                                                        accommodation?.data
-                                                          ?.number_of_children <
-                                                          9 &&
-                                                          setRoomsData(
-                                                            roomsData.concat({
-                                                              id:
-                                                                roomsData.length +
-                                                                1,
-                                                              data: {
-                                                                is_employee:
-                                                                  "Yes",
-                                                                dob: new Date(),
-                                                                emp_id: "",
-                                                              },
-                                                            })
+                                                                    ?.number_of_rooms
+                                                                  ? accommodation
+                                                                      ?.data
+                                                                      ?.number_of_adults -
+                                                                    1
+                                                                  : accommodation
+                                                                      ?.data
+                                                                      ?.number_of_adults,
+                                                            }
                                                           );
-                                                      }}
-                                                    >
-                                                      +
-                                                    </span>
+                                                          accommodation?.data
+                                                            ?.number_of_adults >
+                                                            1 &&
+                                                            accommodation?.data
+                                                              ?.number_of_adults >
+                                                              accommodation
+                                                                ?.data
+                                                                ?.number_of_rooms &&
+                                                            roomsData.pop();
+                                                        }}
+                                                      >
+                                                        -
+                                                      </span>
+                                                      <input
+                                                        type="number"
+                                                        value={
+                                                          accommodation?.data
+                                                            ?.number_of_adults
+                                                        }
+                                                        className="w-25 rounded text-align-center"
+                                                        style={{
+                                                          paddingLeft: "12px",
+                                                        }}
+                                                        disabled
+                                                      />
+                                                      <span
+                                                        class="plus"
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                          handleAccommodationChange(
+                                                            accommodation.id,
+                                                            {
+                                                              number_of_adults:
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_adults <
+                                                                9
+                                                                  ? accommodation
+                                                                      ?.data
+                                                                      ?.number_of_adults +
+                                                                    1
+                                                                  : accommodation
+                                                                      ?.data
+                                                                      ?.number_of_adults,
+                                                            }
+                                                          );
+                                                          accommodation?.data
+                                                            ?.number_of_adults <
+                                                            9 &&
+                                                            setRoomsData(
+                                                              roomsData.concat({
+                                                                id:
+                                                                  roomsData.length +
+                                                                  1,
+                                                                data: {
+                                                                  is_employee:
+                                                                    "Yes",
+                                                                  dob: new Date(),
+                                                                  emp_id: "",
+                                                                },
+                                                              })
+                                                            );
+                                                        }}
+                                                      >
+                                                        +
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div class="dropdown-divider"></div>
+                                                  <div className="d-flex justify-content-between">
+                                                    <label className="dropdowns-content-label">
+                                                      Children :
+                                                    </label>
+                                                    <div class="number">
+                                                      <span
+                                                        class="minus"
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                          handleAccommodationChange(
+                                                            accommodation.id,
+                                                            {
+                                                              number_of_children:
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_children >
+                                                                0
+                                                                  ? //   &&
+                                                                    // accommodation
+                                                                    //   ?.data
+                                                                    //   ?.number_of_children >
+                                                                    //   accommodation
+                                                                    //     ?.data
+                                                                    //     ?.number_of_rooms
+                                                                    accommodation
+                                                                      ?.data
+                                                                      ?.number_of_children -
+                                                                    1
+                                                                  : accommodation
+                                                                      ?.data
+                                                                      ?.number_of_children,
+                                                            }
+                                                          );
+                                                          accommodation?.data
+                                                            ?.number_of_children >
+                                                            0 &&
+                                                            // &&
+                                                            // accommodation?.data
+                                                            //   ?.number_of_children >
+                                                            //   accommodation?.data
+                                                            //     ?.number_of_rooms
+                                                            roomsData.pop();
+                                                        }}
+                                                      >
+                                                        -
+                                                      </span>
+                                                      <input
+                                                        type="number"
+                                                        value={
+                                                          accommodation?.data
+                                                            ?.number_of_children
+                                                        }
+                                                        className="w-25 rounded text-align-center"
+                                                        style={{
+                                                          paddingLeft: "12px",
+                                                        }}
+                                                        disabled
+                                                      />
+                                                      <span
+                                                        class="plus"
+                                                        type="button"
+                                                        onClick={(e) => {
+                                                          handleAccommodationChange(
+                                                            accommodation.id,
+                                                            {
+                                                              number_of_children:
+                                                                accommodation
+                                                                  ?.data
+                                                                  ?.number_of_children <
+                                                                9
+                                                                  ? accommodation
+                                                                      ?.data
+                                                                      ?.number_of_children +
+                                                                    1
+                                                                  : accommodation
+                                                                      ?.data
+                                                                      ?.number_of_children,
+                                                            }
+                                                          );
+                                                          accommodation?.data
+                                                            ?.number_of_children <
+                                                            9 &&
+                                                            setRoomsData(
+                                                              roomsData.concat({
+                                                                id:
+                                                                  roomsData.length +
+                                                                  1,
+                                                                data: {
+                                                                  is_employee:
+                                                                    "Yes",
+                                                                  dob: new Date(),
+                                                                  emp_id: "",
+                                                                },
+                                                              })
+                                                            );
+                                                        }}
+                                                      >
+                                                        +
+                                                      </span>
+                                                    </div>
                                                   </div>
                                                 </div>
-                                              </div>
-                                            </>
-                                          )}
-                                        </div>
-                                        {/* <button
+                                              </>
+                                            )}
+                                          </div>
+                                          {/* <button
                                           class="btn btn-primary  dropdown-toggle"
                                           type="button"
                                           data-bs-toggle="dropdown"
@@ -3067,311 +3121,314 @@ const TravelRequestForm = () => {
                                           }
                                         </button> */}
 
-                                        <div class="dropdown-menu form-floating ">
-                                          <div class="form-floating d-flex justify-content-between">
-                                            <input
-                                              type="number"
-                                              max={
-                                                9
-                                                // accommodation?.data
-                                                //   ?.number_of_adults
-                                              }
-                                              min={1}
-                                              class="form-control form-control-sm h-25"
-                                              id="floatingInput"
-                                              name="number_of_rooms"
-                                              value={
-                                                accommodation?.data
-                                                  ?.number_of_rooms
-                                              }
-                                              onChange={(e) => {
-                                                let { value } = e.target;
-
-                                                // Remove leading zeros
-                                                value = value.replace(
-                                                  /^0+/,
-                                                  ""
-                                                );
-
-                                                // Limit the number of digits to 2
-                                                if (value.length > 2) {
-                                                  value = value.slice(0, 2);
+                                          <div class="dropdown-menu form-floating ">
+                                            <div class="form-floating d-flex justify-content-between">
+                                              <input
+                                                type="number"
+                                                max={
+                                                  9
+                                                  // accommodation?.data
+                                                  //   ?.number_of_adults
                                                 }
+                                                min={1}
+                                                class="form-control form-control-sm h-25"
+                                                id="floatingInput"
+                                                name="number_of_rooms"
+                                                value={
+                                                  accommodation?.data
+                                                    ?.number_of_rooms
+                                                }
+                                                onChange={(e) => {
+                                                  let { value } = e.target;
 
-                                                // Validate the value to be less than 99
+                                                  // Remove leading zeros
+                                                  value = value.replace(
+                                                    /^0+/,
+                                                    ""
+                                                  );
 
-                                                handleAccommodationChange(
-                                                  accommodation.id,
-                                                  {
-                                                    number_of_rooms:
-                                                      e.target.value,
-                                                    number_of_adults:
-                                                      e.target.value <
-                                                      accommodation.data
-                                                        .number_of_adults
-                                                        ? accommodation.data
-                                                            .number_of_adults
-                                                        : e.target.value,
+                                                  // Limit the number of digits to 2
+                                                  if (value.length > 2) {
+                                                    value = value.slice(0, 2);
                                                   }
-                                                );
-                                                if (
-                                                  e.target.value >
-                                                  accommodation.data
-                                                    .number_of_adults
-                                                ) {
-                                                  for (
-                                                    let i = 0;
-                                                    i <=
-                                                    eval(
-                                                      accommodation?.data
-                                                        ?.number_of_adults
-                                                    ) +
+
+                                                  // Validate the value to be less than 99
+
+                                                  handleAccommodationChange(
+                                                    accommodation.id,
+                                                    {
+                                                      number_of_rooms:
+                                                        e.target.value,
+                                                      number_of_adults:
+                                                        e.target.value <
+                                                        accommodation.data
+                                                          .number_of_adults
+                                                          ? accommodation.data
+                                                              .number_of_adults
+                                                          : e.target.value,
+                                                    }
+                                                  );
+                                                  if (
+                                                    e.target.value >
+                                                    accommodation.data
+                                                      .number_of_adults
+                                                  ) {
+                                                    for (
+                                                      let i = 0;
+                                                      i <=
+                                                      eval(
+                                                        accommodation?.data
+                                                          ?.number_of_adults
+                                                      ) +
+                                                        eval(
+                                                          accommodation?.data
+                                                            ?.number_of_children
+                                                        );
+                                                      i++
+                                                    ) {
+                                                      setRoomsData(
+                                                        roomsData.concat({
+                                                          id: i,
+                                                          data: {
+                                                            is_employee: "Yes",
+                                                            dob: new Date(),
+                                                            emp_id: "",
+                                                            // emp_id: {
+                                                            //   label: "",
+                                                            //   value: "",
+                                                            // },
+                                                          },
+                                                        })
+                                                      );
+                                                    }
+                                                  }
+                                                }}
+                                              />
+                                              <label>Rooms</label>
+                                            </div>
+                                            {/* /////////////////////////////////////////////////// */}
+                                            <div class="form-floating">
+                                              <input
+                                                type="number"
+                                                max={99}
+                                                min={
+                                                  accommodation?.data
+                                                    ?.number_of_rooms
+                                                }
+                                                name="number_of_adults"
+                                                class="form-control form-control-sm h-25"
+                                                id="floatingInput"
+                                                value={
+                                                  accommodation?.data
+                                                    ?.number_of_adults
+                                                }
+                                                onChange={(e) => {
+                                                  let { value } = e.target;
+
+                                                  // Remove leading zeros
+                                                  value = value.replace(
+                                                    /^0+/,
+                                                    ""
+                                                  );
+
+                                                  // Limit the number of digits to 2
+                                                  if (value.length > 2) {
+                                                    value = value.slice(0, 2);
+                                                  }
+                                                  handleAccommodationChange(
+                                                    accommodation.id,
+                                                    {
+                                                      number_of_adults:
+                                                        e.target.value,
+                                                    }
+                                                  );
+
+                                                  const arr = [];
+                                                  // for (
+                                                  //   let i = 1;
+                                                  //   i <=
+                                                  //   eval(e.target.value) +
+                                                  //     eval(
+                                                  //       accommodation?.data
+                                                  //         ?.number_of_children
+                                                  //     );
+                                                  //   i++
+                                                  // ) {
+                                                  // arr.push({
+                                                  //   id: i,
+                                                  //   data: {
+                                                  //     is_employee: "Yes",
+                                                  //     dob: new Date(),
+                                                  //     // emp_id: {
+                                                  //     //   label: "",
+                                                  //     //   value: "",
+                                                  //     // },
+                                                  //   },
+                                                  // });
+                                                  // console.log("arr", arr);
+                                                  // setRoomsData(arr);
+                                                  // roomsData.splice(
+                                                  //   roomsData.length,
+                                                  //   1,
+                                                  //   {
+                                                  //     id: i,
+                                                  //     data: {
+                                                  //       is_employee: "Yes",
+                                                  //       dob: new Date(),
+                                                  //     },
+                                                  //   }
+                                                  // );
+
+                                                  if (
+                                                    eval(e.target.value) +
                                                       eval(
                                                         accommodation?.data
                                                           ?.number_of_children
-                                                      );
-                                                    i++
+                                                      ) >
+                                                    roomsData.length
                                                   ) {
                                                     setRoomsData(
                                                       roomsData.concat({
-                                                        id: i,
+                                                        id:
+                                                          roomsData.length + 1,
                                                         data: {
                                                           is_employee: "Yes",
                                                           dob: new Date(),
                                                           emp_id: "",
-                                                          // emp_id: {
-                                                          //   label: "",
-                                                          //   value: "",
-                                                          // },
                                                         },
                                                       })
                                                     );
+                                                  } else {
+                                                    roomsData.pop();
                                                   }
-                                                }
-                                              }}
-                                            />
-                                            <label>Rooms</label>
-                                          </div>
-                                          {/* /////////////////////////////////////////////////// */}
-                                          <div class="form-floating">
-                                            <input
-                                              type="number"
-                                              max={99}
-                                              min={
-                                                accommodation?.data
-                                                  ?.number_of_rooms
-                                              }
-                                              name="number_of_adults"
-                                              class="form-control form-control-sm h-25"
-                                              id="floatingInput"
-                                              value={
-                                                accommodation?.data
-                                                  ?.number_of_adults
-                                              }
-                                              onChange={(e) => {
-                                                let { value } = e.target;
-
-                                                // Remove leading zeros
-                                                value = value.replace(
-                                                  /^0+/,
-                                                  ""
-                                                );
-
-                                                // Limit the number of digits to 2
-                                                if (value.length > 2) {
-                                                  value = value.slice(0, 2);
-                                                }
-                                                handleAccommodationChange(
-                                                  accommodation.id,
-                                                  {
-                                                    number_of_adults:
-                                                      e.target.value,
-                                                  }
-                                                );
-
-                                                const arr = [];
-                                                // for (
-                                                //   let i = 1;
-                                                //   i <=
-                                                //   eval(e.target.value) +
-                                                //     eval(
-                                                //       accommodation?.data
-                                                //         ?.number_of_children
-                                                //     );
-                                                //   i++
-                                                // ) {
-                                                // arr.push({
-                                                //   id: i,
-                                                //   data: {
-                                                //     is_employee: "Yes",
-                                                //     dob: new Date(),
-                                                //     // emp_id: {
-                                                //     //   label: "",
-                                                //     //   value: "",
-                                                //     // },
-                                                //   },
-                                                // });
-                                                // console.log("arr", arr);
-                                                // setRoomsData(arr);
-                                                // roomsData.splice(
-                                                //   roomsData.length,
-                                                //   1,
-                                                //   {
-                                                //     id: i,
-                                                //     data: {
-                                                //       is_employee: "Yes",
-                                                //       dob: new Date(),
-                                                //     },
-                                                //   }
-                                                // );
-
-                                                if (
-                                                  eval(e.target.value) +
-                                                    eval(
-                                                      accommodation?.data
-                                                        ?.number_of_children
-                                                    ) >
-                                                  roomsData.length
-                                                ) {
-                                                  setRoomsData(
-                                                    roomsData.concat({
-                                                      id: roomsData.length + 1,
-                                                      data: {
-                                                        is_employee: "Yes",
-                                                        dob: new Date(),
-                                                        emp_id: "",
-                                                      },
-                                                    })
-                                                  );
-                                                } else {
-                                                  roomsData.pop();
-                                                }
-                                                // }
-                                              }}
-                                            />
-                                            <label for="floatingPassword">
-                                              Adults
-                                            </label>
-                                          </div>
-                                          {/* /////////////////////////////////////////////////// */}{" "}
-                                          <div class="form-floating">
-                                            <div>
-                                              <label>Rooms</label>
+                                                  // }
+                                                }}
+                                              />
+                                              <label for="floatingPassword">
+                                                Adults
+                                              </label>
                                             </div>
+                                            {/* /////////////////////////////////////////////////// */}{" "}
+                                            <div class="form-floating">
+                                              <div>
+                                                <label>Rooms</label>
+                                              </div>
 
-                                            <input
-                                              type="number"
-                                              class="form-control  form-control-sm h-25"
-                                              id="floatingInput"
-                                              name="number_of_children"
-                                              min={0}
-                                              value={
-                                                accommodation?.data
-                                                  ?.number_of_children
-                                              }
-                                              placeholder="No. of Children"
-                                              onChange={(e) => {
-                                                let { value } = e.target;
-
-                                                // Remove leading zeros
-                                                value = value.replace(
-                                                  /^0+/,
-                                                  ""
-                                                );
-
-                                                // Limit the number of digits to 2
-                                                if (value?.length > 2) {
-                                                  value = value.slice(0, 2);
+                                              <input
+                                                type="number"
+                                                class="form-control  form-control-sm h-25"
+                                                id="floatingInput"
+                                                name="number_of_children"
+                                                min={0}
+                                                value={
+                                                  accommodation?.data
+                                                    ?.number_of_children
                                                 }
-                                                handleAccommodationChange(
-                                                  accommodation.id,
-                                                  {
-                                                    number_of_children:
-                                                      e.target.value,
-                                                  }
-                                                );
-                                                // const arr = [];
+                                                placeholder="No. of Children"
+                                                onChange={(e) => {
+                                                  let { value } = e.target;
 
-                                                // for (
-                                                //   let i = 1;
-                                                //   i <=
-                                                //   eval(e.target.value) +
-                                                //     eval(
-                                                //       accommodation?.data
-                                                //         ?.number_of_adults
-                                                //     );
-                                                //   i++
-                                                // ) {
-                                                //   arr.push({
-                                                //     id: i,
-                                                //     data: {
-                                                //       is_employee: "Yes",
-                                                //       dob: new Date(),
-                                                //       // emp_id: {
-                                                //       //   label: "",
-                                                //       //   value: "",
-                                                //       // },
-                                                //     },
-                                                //   });
-                                                //   // setRoomsData(arr);
-
-                                                //   setRoomsData(
-                                                //     roomsData.concat({
-                                                //       id: i,
-                                                //       data: {
-                                                //         is_employee: "Yes",
-                                                //         dob: new Date(),
-                                                //       },
-                                                //     })
-                                                //   );
-                                                // }
-
-                                                // const dd = [];
-                                                // for (let i = 1; i <= value; i++) {
-                                                //   dd.push({
-                                                //     id: 1,
-                                                //     data: { is_employee: "Yes" },
-                                                //   });
-                                                // }
-                                                // const hh = {
-                                                //   id: 3,
-                                                //   data: { is_employee: "Yes" },
-                                                // };
-                                                // setRoomsData([...roomsData, hh]);
-                                                // //                                         const newRow = { id: 3, data: { is_employee: "Yes" } };
-                                                // // setRoomsData([...roomsData, newRow]);
-                                                if (
-                                                  eval(e.target.value) +
-                                                    eval(
-                                                      accommodation?.data
-                                                        ?.number_of_adults
-                                                    ) >
-                                                  roomsData.length
-                                                ) {
-                                                  setRoomsData(
-                                                    roomsData.concat({
-                                                      id: roomsData.length + 1,
-                                                      data: {
-                                                        is_employee: "Yes",
-                                                        dob: new Date(),
-                                                        emp_id: "",
-                                                      },
-                                                    })
+                                                  // Remove leading zeros
+                                                  value = value.replace(
+                                                    /^0+/,
+                                                    ""
                                                   );
-                                                } else {
-                                                  roomsData.pop();
-                                                }
-                                              }}
-                                            />
-                                            <label for="floatingPassword">
-                                              Children
-                                            </label>
+
+                                                  // Limit the number of digits to 2
+                                                  if (value?.length > 2) {
+                                                    value = value.slice(0, 2);
+                                                  }
+                                                  handleAccommodationChange(
+                                                    accommodation.id,
+                                                    {
+                                                      number_of_children:
+                                                        e.target.value,
+                                                    }
+                                                  );
+                                                  // const arr = [];
+
+                                                  // for (
+                                                  //   let i = 1;
+                                                  //   i <=
+                                                  //   eval(e.target.value) +
+                                                  //     eval(
+                                                  //       accommodation?.data
+                                                  //         ?.number_of_adults
+                                                  //     );
+                                                  //   i++
+                                                  // ) {
+                                                  //   arr.push({
+                                                  //     id: i,
+                                                  //     data: {
+                                                  //       is_employee: "Yes",
+                                                  //       dob: new Date(),
+                                                  //       // emp_id: {
+                                                  //       //   label: "",
+                                                  //       //   value: "",
+                                                  //       // },
+                                                  //     },
+                                                  //   });
+                                                  //   // setRoomsData(arr);
+
+                                                  //   setRoomsData(
+                                                  //     roomsData.concat({
+                                                  //       id: i,
+                                                  //       data: {
+                                                  //         is_employee: "Yes",
+                                                  //         dob: new Date(),
+                                                  //       },
+                                                  //     })
+                                                  //   );
+                                                  // }
+
+                                                  // const dd = [];
+                                                  // for (let i = 1; i <= value; i++) {
+                                                  //   dd.push({
+                                                  //     id: 1,
+                                                  //     data: { is_employee: "Yes" },
+                                                  //   });
+                                                  // }
+                                                  // const hh = {
+                                                  //   id: 3,
+                                                  //   data: { is_employee: "Yes" },
+                                                  // };
+                                                  // setRoomsData([...roomsData, hh]);
+                                                  // //                                         const newRow = { id: 3, data: { is_employee: "Yes" } };
+                                                  // // setRoomsData([...roomsData, newRow]);
+                                                  if (
+                                                    eval(e.target.value) +
+                                                      eval(
+                                                        accommodation?.data
+                                                          ?.number_of_adults
+                                                      ) >
+                                                    roomsData.length
+                                                  ) {
+                                                    setRoomsData(
+                                                      roomsData.concat({
+                                                        id:
+                                                          roomsData.length + 1,
+                                                        data: {
+                                                          is_employee: "Yes",
+                                                          dob: new Date(),
+                                                          emp_id: "",
+                                                        },
+                                                      })
+                                                    );
+                                                  } else {
+                                                    roomsData.pop();
+                                                  }
+                                                }}
+                                              />
+                                              <label for="floatingPassword">
+                                                Children
+                                              </label>
+                                            </div>
                                           </div>
-                                        </div>
-                                      </td>
-                                      {basicDetails?.booking_for !== "self" && (
-                                        <td>
-                                          {/* <button
+                                        </td>
+                                        {basicDetails?.booking_for !==
+                                          "self" && (
+                                          <td>
+                                            {/* <button
                                       className="btn btn-danger btn-sm"
                                       onClick={() =>
                                         handleAccommodationDeleteRow(
@@ -3381,116 +3438,117 @@ const TravelRequestForm = () => {
                                     >
                                       <RiDeleteBin6Line />
                                     </button> */}
-                                          {index === 0 ? (
-                                            ""
-                                          ) : (
-                                            <div
-                                              id="Delete_Accommodation"
-                                              class="Btn my-2"
-                                              onClick={() =>
-                                                handleAccommodationDeleteRow(
-                                                  accommodation.id
-                                                )
-                                              }
-                                            >
-                                              <div class="sign">
-                                                <svg
-                                                  xmlns="http://www.w3.org/2000/svg"
-                                                  viewBox="0 0 30 30"
-                                                  width="30px"
-                                                  height="30px"
-                                                >
-                                                  <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
-                                                </svg>
+                                            {index === 0 ? (
+                                              ""
+                                            ) : (
+                                              <div
+                                                id="Delete_Accommodation"
+                                                class="Btn my-2"
+                                                onClick={() =>
+                                                  handleAccommodationDeleteRow(
+                                                    accommodation.id
+                                                  )
+                                                }
+                                              >
+                                                <div class="sign">
+                                                  <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 30 30"
+                                                    width="30px"
+                                                    height="30px"
+                                                  >
+                                                    <path d="M 13 3 A 1.0001 1.0001 0 0 0 11.986328 4 L 6 4 A 1.0001 1.0001 0 1 0 6 6 L 24 6 A 1.0001 1.0001 0 1 0 24 4 L 18.013672 4 A 1.0001 1.0001 0 0 0 17 3 L 13 3 z M 6 8 L 6 24 C 6 25.105 6.895 26 8 26 L 22 26 C 23.105 26 24 25.105 24 24 L 24 8 L 6 8 z" />
+                                                  </svg>
+                                                </div>
                                               </div>
-                                            </div>
-                                          )}
-                                          ,
-                                        </td>
-                                      )}
-                                    </tr>
-                                  )
-                                )}
-                              </tbody>
-                            </table>
-                            {/* <button
+                                            )}
+                                            ,
+                                          </td>
+                                        )}
+                                      </tr>
+                                    )
+                                  )}
+                                </tbody>
+                              </table>
+                              {/* <button
                           className="btn btn-primary btn-sm"
                           onClick={handleAddAccommodation}
                         >
                           <RiAddFill />
                         </button> */}
-                            <div className="mt-4">
-                              <div className="d-flex justify-content-between  ">
-                                <h6 className="text-primary">Occupancy</h6>
+                              <div className="mt-4">
+                                <div className="d-flex justify-content-between  ">
+                                  <h6 className="text-primary">Occupancy</h6>
+                                </div>
                               </div>
-                            </div>
-                            <table className="table table-bordered">
-                              <thead>
-                                <tr>
-                                  <th>Emp </th>
-                                  <th>
-                                    Room <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Emp ID <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Name <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Gender <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Phone <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    Email <span className="astik"> *</span>
-                                  </th>
-                                  <th>
-                                    DOB <span className="astik"> *</span>
-                                  </th>
-                                  {/* <th>Action</th> */}
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {roomsData?.map((room, index) => (
-                                  <tr key={room.id}>
-                                    <td>
-                                      <div class="form-check form-check-info">
-                                        <label class="form-check-label">
-                                          <input
-                                            type="checkbox"
-                                            class="form-check-input"
-                                            checked={
-                                              room?.data?.is_employee === "Yes"
-                                                ? true
-                                                : false
-                                            }
-                                            disabled={
-                                              basicDetails?.booking_for ===
-                                              "self"
-                                                ? true
-                                                : false
-                                            }
-                                            onChange={(e) =>
-                                              handleRoomChange(room.id, {
-                                                // ...traveller?.data,
-                                                name: "",
-                                                emp_id: "",
-                                                email: "",
-                                                phone: "",
-                                                dob: new Date(),
-                                                gender: "",
-                                                is_employee: e.target.checked
-                                                  ? "Yes"
-                                                  : "No",
-                                              })
-                                            }
-                                          />
-                                          <i class="input-helper"></i>
-                                        </label>
-                                      </div>
-                                      {/* <select
+                              <table className="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Emp </th>
+                                    <th>
+                                      Room <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Emp ID <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Name <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Gender <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Phone <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      Email <span className="astik"> *</span>
+                                    </th>
+                                    <th>
+                                      DOB <span className="astik"> *</span>
+                                    </th>
+                                    {/* <th>Action</th> */}
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {roomsData?.map((room, index) => (
+                                    <tr key={room.id}>
+                                      <td>
+                                        <div class="form-check form-check-info">
+                                          <label class="form-check-label">
+                                            <input
+                                              type="checkbox"
+                                              class="form-check-input"
+                                              checked={
+                                                room?.data?.is_employee ===
+                                                "Yes"
+                                                  ? true
+                                                  : false
+                                              }
+                                              disabled={
+                                                basicDetails?.booking_for ===
+                                                "self"
+                                                  ? true
+                                                  : false
+                                              }
+                                              onChange={(e) =>
+                                                handleRoomChange(room.id, {
+                                                  // ...traveller?.data,
+                                                  name: "",
+                                                  emp_id: "",
+                                                  email: "",
+                                                  phone: "",
+                                                  dob: new Date(),
+                                                  gender: "",
+                                                  is_employee: e.target.checked
+                                                    ? "Yes"
+                                                    : "No",
+                                                })
+                                              }
+                                            />
+                                            <i class="input-helper"></i>
+                                          </label>
+                                        </div>
+                                        {/* <select
                                         required
                                         type="text"
                                         value={room?.data?.is_employee}
@@ -3521,97 +3579,98 @@ const TravelRequestForm = () => {
                                         </option>
                                         <option value="No">No</option>
                                       </select> */}
-                                    </td>
-                                    <td style={{ width: "10%" }}>
-                                      <select
-                                        className="form-select form-select-md"
-                                        name="room"
-                                        onChange={(e) =>
-                                          handleRoomChange(room.id, {
-                                            ...room.data,
-                                            room: e.target.value,
-                                          })
-                                        }
-                                        disabled={
-                                          basicDetails?.booking_for === "self"
-                                            ? true
-                                            : false
-                                        }
-                                        // value={
-                                        //   accommodationData[0]?.data
-                                        //     ?.number_of_rooms
-                                        // }
-                                      >
-                                        {renderOptions(
-                                          accommodationData[0]?.data
-                                            ?.number_of_rooms
-                                        )}
-                                      </select>
-                                      {/* Room - {index + 1} */}
-                                      {/* {
+                                      </td>
+                                      <td style={{ width: "10%" }}>
+                                        <select
+                                          className="form-select form-select-md"
+                                          name="room"
+                                          onChange={(e) =>
+                                            handleRoomChange(room.id, {
+                                              ...room.data,
+                                              room: e.target.value,
+                                            })
+                                          }
+                                          disabled={
+                                            basicDetails?.booking_for === "self"
+                                              ? true
+                                              : false
+                                          }
+                                          // value={
+                                          //   accommodationData[0]?.data
+                                          //     ?.number_of_rooms
+                                          // }
+                                        >
+                                          {renderOptions(
+                                            accommodationData[0]?.data
+                                              ?.number_of_rooms
+                                          )}
+                                        </select>
+                                        {/* Room - {index + 1} */}
+                                        {/* {
                                       accommodationData[0]?.data
                                         ?.number_of_rooms
                                     } */}
-                                    </td>
-                                    <td style={{ width: "15%" }}>
-                                      <Select
-                                        className={classNames(
-                                          "form-select-select",
-                                          {
-                                            "is-invalid":
-                                              validateForOccupancyDataRow[index]
-                                                ?.data?.emp_id ||
-                                              (room?.data?.is_employee ===
-                                                "Yes" &&
-                                                !validateForOccupancyDataRow[
-                                                  index
-                                                ]?.data?.emp_id &&
+                                      </td>
+                                      <td style={{ width: "15%" }}>
+                                        <Select
+                                          className={classNames(
+                                            "form-select-select",
+                                            {
+                                              "is-invalid":
                                                 validateForOccupancyDataRow[
                                                   index
-                                                ]?.data?.empIdPattern),
+                                                ]?.data?.emp_id ||
+                                                (room?.data?.is_employee ===
+                                                  "Yes" &&
+                                                  !validateForOccupancyDataRow[
+                                                    index
+                                                  ]?.data?.emp_id &&
+                                                  validateForOccupancyDataRow[
+                                                    index
+                                                  ]?.data?.empIdPattern),
+                                            }
+                                          )}
+                                          name="emp_id"
+                                          options={getEmployeeDataByStatusCode.map(
+                                            (val) => {
+                                              return {
+                                                ...val,
+                                                isDisabled: roomsData
+                                                  ?.map((item) => {
+                                                    return item?.data?.emp_id
+                                                      ?.value;
+                                                  })
+                                                  .includes(val?.value),
+                                              };
+                                            }
+                                          )}
+                                          defaultValue={
+                                            getEmployeeDefaultByStatusCode[0]
                                           }
-                                        )}
-                                        name="emp_id"
-                                        options={getEmployeeDataByStatusCode.map(
-                                          (val) => {
-                                            return {
-                                              ...val,
-                                              isDisabled: roomsData
-                                                ?.map((item) => {
-                                                  return item?.data?.emp_id
-                                                    ?.value;
-                                                })
-                                                .includes(val?.value),
-                                            };
+                                          value={
+                                            room?.data?.is_employee === "Yes"
+                                              ? room?.data?.emp_id
+                                              : ""
                                           }
-                                        )}
-                                        defaultValue={
-                                          getEmployeeDefaultByStatusCode[0]
-                                        }
-                                        value={
-                                          room?.data?.is_employee === "Yes"
-                                            ? room?.data?.emp_id
-                                            : ""
-                                        }
-                                        onChange={
-                                          (selectedOption) =>
-                                            handleRoomChange(room.id, {
-                                              ...room.data,
-                                              emp_id: selectedOption,
-                                            })
-                                          // handleRoomChange(room.id, {
-                                          //   ...room.data,
-                                          //   emp_id: e.target.value,
-                                          // })
-                                        }
-                                        isDisabled={
-                                          room?.data?.is_employee === "Yes" &&
-                                          basicDetails?.booking_for !== "self"
-                                            ? false
-                                            : true
-                                        }
-                                      />
-                                      {/* <input
+                                          onChange={
+                                            (selectedOption) =>
+                                              handleRoomChange(room.id, {
+                                                ...room.data,
+                                                emp_id: selectedOption,
+                                              })
+                                            // handleRoomChange(room.id, {
+                                            //   ...room.data,
+                                            //   emp_id: e.target.value,
+                                            // })
+                                          }
+                                          isDisabled={
+                                            room?.data?.is_employee === "Yes" &&
+                                            basicDetails?.booking_for !== "self"
+                                              ? false
+                                              : true
+                                          }
+                                        />
+                                        {/* <input
                                         // required
                                         type="text"
                                         disabled={
@@ -3647,66 +3706,67 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       /> */}
-                                      <small className="isValidate">
-                                        {validateForOccupancyDataRow[index]
-                                          ?.data?.emp_id &&
-                                          "This field is required"}
-                                        {room?.data?.is_employee === "Yes" &&
-                                          !validateForOccupancyDataRow[index]
+                                        <small className="isValidate">
+                                          {validateForOccupancyDataRow[index]
                                             ?.data?.emp_id &&
-                                          validateForOccupancyDataRow[index]
-                                            ?.data?.empIdPattern &&
-                                          "Please select others"}
-                                        {room?.data?.is_employee === "Yes" &&
-                                          !validateForOccupancyDataRow[index]
-                                            ?.data?.emp_id &&
-                                          validateForOccupancyDataRow[index]
-                                            ?.data
-                                            ?.validationForCheckingDuplicateValue &&
-                                          "Same Employee Id not allowed"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        // required
-                                        disabled={
-                                          room?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        placeholder="Enter Full Name"
-                                        value={room?.data?.name}
-                                        name="name"
-                                        className={classNames(
-                                          "form-control form-control-sm",
-                                          {
-                                            "is-invalid":
-                                              validateForOccupancyDataRow[index]
-                                                ?.data?.name,
+                                            "This field is required"}
+                                          {room?.data?.is_employee === "Yes" &&
+                                            !validateForOccupancyDataRow[index]
+                                              ?.data?.emp_id &&
+                                            validateForOccupancyDataRow[index]
+                                              ?.data?.empIdPattern &&
+                                            "Please select others"}
+                                          {room?.data?.is_employee === "Yes" &&
+                                            !validateForOccupancyDataRow[index]
+                                              ?.data?.emp_id &&
+                                            validateForOccupancyDataRow[index]
+                                              ?.data
+                                              ?.validationForCheckingDuplicateValue &&
+                                            "Same Employee Id not allowed"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <input
+                                          type="text"
+                                          // required
+                                          disabled={
+                                            room?.data?.is_employee === "Yes"
+                                              ? true
+                                              : false
                                           }
-                                        )}
-                                        onChange={(e) =>
-                                          handleRoomChange(room.id, {
-                                            ...room.data,
-                                            name: e.target.value,
-                                          })
-                                        }
-                                      />
-                                      <small className="isValidate">
-                                        {validateForOccupancyDataRow[index]
-                                          ?.data?.name &&
-                                          "This field is required"}
-                                        {room?.data?.is_employee === "No" &&
-                                          !validateForOccupancyDataRow[index]
+                                          placeholder="Enter Full Name"
+                                          value={room?.data?.name}
+                                          name="name"
+                                          className={classNames(
+                                            "form-control form-control-sm",
+                                            {
+                                              "is-invalid":
+                                                validateForOccupancyDataRow[
+                                                  index
+                                                ]?.data?.name,
+                                            }
+                                          )}
+                                          onChange={(e) =>
+                                            handleRoomChange(room.id, {
+                                              ...room.data,
+                                              name: e.target.value,
+                                            })
+                                          }
+                                        />
+                                        <small className="isValidate">
+                                          {validateForOccupancyDataRow[index]
                                             ?.data?.name &&
-                                          validateForOccupancyDataRow[index]
-                                            ?.data?.namePattern &&
-                                          "Fullname is not valid"}
-                                      </small>
-                                    </td>
-                                    <td style={{ width: "15%" }}>
-                                      {/* {room?.data?.is_employee === "Yes" ? (
+                                            "This field is required"}
+                                          {room?.data?.is_employee === "No" &&
+                                            !validateForOccupancyDataRow[index]
+                                              ?.data?.name &&
+                                            validateForOccupancyDataRow[index]
+                                              ?.data?.namePattern &&
+                                            "Fullname is not valid"}
+                                        </small>
+                                      </td>
+                                      <td style={{ width: "15%" }}>
+                                        {/* {room?.data?.is_employee === "Yes" ? (
                                         <input
                                           type="text"
                                           // required
@@ -3727,163 +3787,168 @@ const TravelRequestForm = () => {
                                           }
                                         />
                                       ) : ( */}
-                                      <select
-                                        className={classNames(
-                                          "form-select form-control-sm",
-                                          {
-                                            "is-invalid":
-                                              validateForOccupancyDataRow[index]
-                                                ?.data?.gender,
+                                        <select
+                                          className={classNames(
+                                            "form-select form-control-sm",
+                                            {
+                                              "is-invalid":
+                                                validateForOccupancyDataRow[
+                                                  index
+                                                ]?.data?.gender,
+                                            }
+                                          )}
+                                          disabled={
+                                            room?.data?.is_employee === "Yes"
+                                              ? true
+                                              : false
                                           }
-                                        )}
-                                        disabled={
-                                          room?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        placeholder="Enter Employee ID"
-                                        onChange={(e) =>
-                                          handleRoomChange(room.id, {
-                                            ...room.data,
-                                            gender: e.target.value,
-                                          })
-                                        }
-                                        value={room?.data?.gender}
-                                      >
-                                        <option value="" selected disabled>
-                                          Select...
-                                        </option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Others">Others</option>
-                                      </select>
-                                      {/* )} */}
-                                      <small className="isValidate">
-                                        {validateForOccupancyDataRow[index]
-                                          ?.data?.gender &&
-                                          "This field is required"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        // required
-                                        disabled={
-                                          room?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        value={room?.data?.phone}
-                                        name="phone"
-                                        className={classNames(
-                                          "form-control form-control-sm",
-                                          {
-                                            "is-invalid":
-                                              validateForOccupancyDataRow[index]
-                                                ?.data?.phone,
+                                          placeholder="Enter Employee ID"
+                                          onChange={(e) =>
+                                            handleRoomChange(room.id, {
+                                              ...room.data,
+                                              gender: e.target.value,
+                                            })
                                           }
-                                        )}
-                                        placeholder="Enter Phone"
-                                        onChange={(e) => {
-                                          let { value } = e.target;
+                                          value={room?.data?.gender}
+                                        >
+                                          <option value="" selected disabled>
+                                            Select...
+                                          </option>
+                                          <option value="Male">Male</option>
+                                          <option value="Female">Female</option>
+                                          <option value="Others">Others</option>
+                                        </select>
+                                        {/* )} */}
+                                        <small className="isValidate">
+                                          {validateForOccupancyDataRow[index]
+                                            ?.data?.gender &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <input
+                                          type="text"
+                                          // required
+                                          disabled={
+                                            room?.data?.is_employee === "Yes"
+                                              ? true
+                                              : false
+                                          }
+                                          value={room?.data?.phone}
+                                          name="phone"
+                                          className={classNames(
+                                            "form-control form-control-sm",
+                                            {
+                                              "is-invalid":
+                                                validateForOccupancyDataRow[
+                                                  index
+                                                ]?.data?.phone,
+                                            }
+                                          )}
+                                          placeholder="Enter Phone"
+                                          onChange={(e) => {
+                                            let { value } = e.target;
 
-                                          // Limit the number of digits to 6
-                                          if (value.length > 10) {
-                                            value = value.slice(0, 10);
-                                          }
-                                          handleRoomChange(room.id, {
-                                            ...room.data,
-                                            phone: value,
-                                          });
-                                        }}
-                                      />
-                                      <small className="isValidate">
-                                        {validateForOccupancyDataRow[index]
-                                          ?.data?.phone &&
-                                          "This field is required"}
-                                        {room?.data?.is_employee === "No" &&
-                                          !validateForOccupancyDataRow[index]
+                                            // Limit the number of digits to 6
+                                            if (value.length > 10) {
+                                              value = value.slice(0, 10);
+                                            }
+                                            handleRoomChange(room.id, {
+                                              ...room.data,
+                                              phone: value,
+                                            });
+                                          }}
+                                        />
+                                        <small className="isValidate">
+                                          {validateForOccupancyDataRow[index]
                                             ?.data?.phone &&
-                                          validateForOccupancyDataRow[index]
-                                            ?.data?.phonePattern &&
-                                          "Phone no is not valid"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="email"
-                                        // required
-                                        disabled={
-                                          room?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        value={room?.data?.email}
-                                        name="email"
-                                        placeholder="Enter Email ID"
-                                        className={classNames(
-                                          "form-control form-control-sm",
-                                          {
-                                            "is-invalid":
-                                              validateForOccupancyDataRow[index]
-                                                ?.data?.email,
+                                            "This field is required"}
+                                          {room?.data?.is_employee === "No" &&
+                                            !validateForOccupancyDataRow[index]
+                                              ?.data?.phone &&
+                                            validateForOccupancyDataRow[index]
+                                              ?.data?.phonePattern &&
+                                            "Phone no is not valid"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <input
+                                          type="email"
+                                          // required
+                                          disabled={
+                                            room?.data?.is_employee === "Yes"
+                                              ? true
+                                              : false
                                           }
-                                        )}
-                                        onChange={(e) =>
-                                          handleRoomChange(room.id, {
-                                            ...room?.data,
-                                            email: e.target.value,
-                                          })
-                                        }
-                                      />
-                                      <small className="isValidate">
-                                        {validateForOccupancyDataRow[index]
-                                          ?.data?.email &&
-                                          "This field is required"}
-                                        {room?.data?.is_employee === "No" &&
-                                          !validateForOccupancyDataRow[index]
+                                          value={room?.data?.email}
+                                          name="email"
+                                          placeholder="Enter Email ID"
+                                          className={classNames(
+                                            "form-control form-control-sm",
+                                            {
+                                              "is-invalid":
+                                                validateForOccupancyDataRow[
+                                                  index
+                                                ]?.data?.email,
+                                            }
+                                          )}
+                                          onChange={(e) =>
+                                            handleRoomChange(room.id, {
+                                              ...room?.data,
+                                              email: e.target.value,
+                                            })
+                                          }
+                                        />
+                                        <small className="isValidate">
+                                          {validateForOccupancyDataRow[index]
                                             ?.data?.email &&
-                                          validateForOccupancyDataRow[index]
-                                            ?.data?.emailPattern &&
-                                          "Email Id is not valid"}
-                                      </small>
-                                    </td>
-                                    <td>
-                                      <DatePicker
-                                        dateFormat="dd/MM/yyyy"
-                                        maxDate={new Date()}
-                                        peekNextMonth
-                                        showMonthDropdown
-                                        showYearDropdown
-                                        dropdownMode="select"
-                                        showWeekNumbers
-                                        selected={new Date(room?.data?.dob)}
-                                        onChange={(e) =>
-                                          handleRoomChange(room.id, {
-                                            ...room.data,
-                                            dob: e,
-                                          })
-                                        }
-                                        disabled={
-                                          room?.data?.is_employee === "Yes"
-                                            ? true
-                                            : false
-                                        }
-                                        customInput={
-                                          <ExampleCustomInput
-                                            disabled={
-                                              room?.data?.is_employee === "Yes"
-                                                ? true
-                                                : false
-                                            }
-                                            validate={
-                                              validateForOccupancyDataRow[index]
-                                                ?.data?.dob
-                                            }
-                                          />
-                                        }
-                                      />
-                                      {/* <input
+                                            "This field is required"}
+                                          {room?.data?.is_employee === "No" &&
+                                            !validateForOccupancyDataRow[index]
+                                              ?.data?.email &&
+                                            validateForOccupancyDataRow[index]
+                                              ?.data?.emailPattern &&
+                                            "Email Id is not valid"}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <DatePicker
+                                          dateFormat="dd/MM/yyyy"
+                                          maxDate={new Date()}
+                                          peekNextMonth
+                                          showMonthDropdown
+                                          showYearDropdown
+                                          dropdownMode="select"
+                                          showWeekNumbers
+                                          selected={new Date(room?.data?.dob)}
+                                          onChange={(e) =>
+                                            handleRoomChange(room.id, {
+                                              ...room.data,
+                                              dob: e,
+                                            })
+                                          }
+                                          disabled={
+                                            room?.data?.is_employee === "Yes"
+                                              ? true
+                                              : false
+                                          }
+                                          customInput={
+                                            <ExampleCustomInput
+                                              disabled={
+                                                room?.data?.is_employee ===
+                                                "Yes"
+                                                  ? true
+                                                  : false
+                                              }
+                                              validate={
+                                                validateForOccupancyDataRow[
+                                                  index
+                                                ]?.data?.dob
+                                              }
+                                            />
+                                          }
+                                        />
+                                        {/* <input
                                         type="date"
                                         // required
                                         disabled={
@@ -3901,29 +3966,41 @@ const TravelRequestForm = () => {
                                           })
                                         }
                                       /> */}
-                                      <br />
-                                      <small className="isValidate">
-                                        {validateForOccupancyDataRow[index]
-                                          ?.data?.dob &&
-                                          "This field is required"}
-                                      </small>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        )}
-                        <div className="row mt-2">
-                          <div className="col-12 col-lg-12">
-                            <div className="form-group">
-                              <label>Special Request:</label>
-                              <textarea
-                                name="special_request"
-                                className="form-control form-control-sm"
-                                placeholder="Seat preference, Food Preference...... "
-                                onChange={inputEvent}
-                              />
+                                        <br />
+                                        <small className="isValidate">
+                                          {validateForOccupancyDataRow[index]
+                                            ?.data?.dob &&
+                                            "This field is required"}
+                                        </small>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* ===================Special Request================ */}
+                        <div
+                          style={{
+                            border: "1px solid lightgrey",
+                            marginTop: "1rem",
+                            padding: "1rem",
+                            borderRadius: "20px",
+                          }}
+                        >
+                          <div className="row mt-2">
+                            <div className="col-12 col-lg-12">
+                              <div className="form-group">
+                                <label>Special Request:</label>
+                                <textarea
+                                  name="special_request"
+                                  className="form-control form-control-sm"
+                                  placeholder="Seat preference, Food Preference...... "
+                                  onChange={inputEvent}
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>

@@ -115,3 +115,16 @@
 .dropdowns-content {
   display: block;
 }
+
+.travel_form label,
+th,
+option,
+select,
+Select,
+input {
+  font-size: 0.7rem !important;
+}
+
+label[value] {
+  font-size: 0.7rem !important;
+}
