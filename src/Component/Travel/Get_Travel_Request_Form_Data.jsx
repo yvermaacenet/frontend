@@ -54,14 +54,14 @@ const GetTravelRequestForm_Data = () => {
       <div className="container-fluid page-body-wrapper">
         <Sidebar />
         <div className="main-panel">
-          <div className="content-wrapper">
-            <Page_Header
+          <div className="content-wrapper" style={{ borderRadius: "20px" }}>
+            {/* <Page_Header
               page_heading="Travel Requests List"
               page_title="Create new request"
               page_title_icon="mdi-wallet-travel"
               page_title_button=""
               page_title_button_link="/travelrequestform"
-            />
+            /> */}
             <div className="d-flex justify-content-end mb-3">
               {/* <NavLink to="/travelrequestform">
                 <button className="btn btn-sm btn-success mx-3">
@@ -81,8 +81,11 @@ const GetTravelRequestForm_Data = () => {
             )}
             <div className="row">
               <div className="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span class="card-description">MY REQUESTS</span>
+                    </div>
                     <table className="table table-striped">
                       <thead>
                         <tr>
@@ -94,54 +97,55 @@ const GetTravelRequestForm_Data = () => {
                           <th>Remarks</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        {getleaverequestdata?.map((val, index) => {
-                          return (
-                            <tr>
-                              <td>{index + 1}</td>
-                              <td>{val?.request_id}</td>
-                              <td>{val?.createdAt?.split("T")[0]}</td>
-                              {/* <td>{val?.basicDetails?.special_request}</td> */}
-                              <td>
-                                <label
-                                  class={`${
-                                    val?.managers_approval === "Approved"
-                                      ? "text-success fw-bold"
-                                      : val?.managers_approval === "Declined"
-                                      ? "text-danger fw-bold"
-                                      : "text-warning fw-bold"
-                                  }`}
-                                >
-                                  {val?.management_approval}
-                                </label>
-                              </td>
-
-                              {val?.remarks && (
+                      {getleaverequestdata?.length > 0 ? (
+                        <tbody>
+                          {getleaverequestdata?.map((val, index) => {
+                            return (
+                              <tr>
+                                <td>{index + 1}</td>
+                                <td>{val?.request_id}</td>
+                                <td>{val?.createdAt?.split("T")[0]}</td>
+                                {/* <td>{val?.basicDetails?.special_request}</td> */}
                                 <td>
-                                  <label>{val?.remarks}</label>
+                                  <label
+                                    class={`${
+                                      val?.managers_approval === "Approved"
+                                        ? "text-success fw-bold"
+                                        : val?.managers_approval === "Declined"
+                                        ? "text-danger fw-bold"
+                                        : "text-warning fw-bold"
+                                    }`}
+                                  >
+                                    {val?.management_approval}
+                                  </label>
                                 </td>
-                              )}
-                              <td>
-                                <td
-                                  className="btn btn-outline-primary btn-sm"
-                                  type="button"
-                                  // onClick={() => {
-                                  //   return (
-                                  //     setViewRequestModal(true),
-                                  //     setViewRequestData(val)
-                                  //   );
-                                  // }}
-                                  onClick={() => {
-                                    return (
-                                      // setModalData(val),
-                                      setId(val._id),
-                                      navigate(`/travelactionpage/${val._id}`)
-                                    );
-                                  }}
-                                >
-                                  View
-                                </td>
-                                {/* <td
+
+                                {val?.remarks && (
+                                  <td>
+                                    <label>{val?.remarks}</label>
+                                  </td>
+                                )}
+                                <td>
+                                  <td
+                                    className="btn btn-outline-primary btn-sm"
+                                    type="button"
+                                    // onClick={() => {
+                                    //   return (
+                                    //     setViewRequestModal(true),
+                                    //     setViewRequestData(val)
+                                    //   );
+                                    // }}
+                                    onClick={() => {
+                                      return (
+                                        // setModalData(val),
+                                        setId(val._id),
+                                        navigate(`/travelactionpage/${val._id}`)
+                                      );
+                                    }}
+                                  >
+                                    View
+                                  </td>
+                                  {/* <td
                                   className="btn btn-outline-primary btn-sm"
                                   type="button"
                                   // onClick={() => {
@@ -162,45 +166,56 @@ const GetTravelRequestForm_Data = () => {
                                 >
                                   Edit
                                 </td> */}
-                                <td
-                                  className="btn btn-sm btn-outline-danger mx-2"
-                                  style={{
-                                    visibility:
-                                      val?.management_approval === "Pending"
-                                        ? ""
-                                        : "hidden",
-                                  }}
-                                  type="button"
-                                  onClick={async () => {
-                                    let res = window.confirm(
-                                      "Do You Want To Revoke This Request"
-                                    );
-                                    if (res === true) {
-                                      const res2 = await axios.delete(
-                                        `/revoke_travel_request/${val?._id}`,
-                                        {
-                                          headers: {
-                                            Access_Token:
-                                              LocalStorageData?.generate_auth_token,
-                                          },
-                                        }
+                                  <td
+                                    className="btn btn-sm btn-outline-danger mx-2"
+                                    style={{
+                                      visibility:
+                                        val?.management_approval === "Pending"
+                                          ? ""
+                                          : "hidden",
+                                    }}
+                                    type="button"
+                                    onClick={async () => {
+                                      let res = window.confirm(
+                                        "Do You Want To Revoke This Request"
                                       );
-                                      if (res2.data === "Deleted Sucessfully") {
-                                        setRenderComponent(!renderComponent);
-                                        alert2.success("Deleted Successfully");
-                                      } else {
-                                        alert2.error("something went wrong");
+                                      if (res === true) {
+                                        const res2 = await axios.delete(
+                                          `/revoke_travel_request/${val?._id}`,
+                                          {
+                                            headers: {
+                                              Access_Token:
+                                                LocalStorageData?.generate_auth_token,
+                                            },
+                                          }
+                                        );
+                                        if (
+                                          res2.data === "Deleted Sucessfully"
+                                        ) {
+                                          setRenderComponent(!renderComponent);
+                                          alert2.success(
+                                            "Deleted Successfully"
+                                          );
+                                        } else {
+                                          alert2.error("something went wrong");
+                                        }
                                       }
-                                    }
-                                  }}
-                                >
-                                  Revoke
+                                    }}
+                                  >
+                                    Revoke
+                                  </td>
                                 </td>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      ) : (
+                        <div className=" w-100">
+                          <p className="my-3 fw-bold fs-4">
+                            No Request as of now
+                          </p>
+                        </div>
+                      )}
                     </table>
                   </div>
                 </div>
@@ -220,7 +235,7 @@ const GetTravelRequestForm_Data = () => {
           >
             <div className="row">
               <div className="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
                     <h6
                       className="card-title text-primary mt-2"

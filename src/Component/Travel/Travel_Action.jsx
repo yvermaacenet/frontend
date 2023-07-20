@@ -162,6 +162,16 @@ const Travel_Action = (props) => {
       });
 
       if (res.data === "Updated Sucessfully") {
+        await axios.post("/status_email", {
+          status: handleButtonType ? "Approved" : "Declined",
+          user: getData?.travellersData?.map((val) => val?.data?.name),
+          email: getData?.travellersData?.map((val) => val?.data?.email),
+          basicDetails: getData?.basicDetails,
+          rows: getData?.rows,
+          travellersData: getData?.travellersData,
+          accommodationData: getData?.accommodationData,
+          roomsData: getData?.roomsData,
+        });
         alert.show(
           `${handleButtonType ? "Approved" : "Declined"} Successfully`
         );
@@ -227,7 +237,7 @@ const Travel_Action = (props) => {
         <Sidebar />
         <div className="main-panel">
           <div className="content-wrapper">
-            <Page_Header
+            {/* <Page_Header
               page_heading="View Travel Request"
               page_title_icon="mdi-wallet-travel"
               page_title_button="Back"
@@ -238,7 +248,7 @@ const Travel_Action = (props) => {
               //     : "/alltravelrequest"
               // }`}
               page_title_button_link="/alltravelrequest"
-            />
+            /> */}
             {loading && (
               <div className="loader-container">
                 <div class="loader"></div>
@@ -246,7 +256,7 @@ const Travel_Action = (props) => {
             )}
             <div className="row">
               <div className="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
                     <div
                       style={{
@@ -256,6 +266,9 @@ const Travel_Action = (props) => {
                         // marginTop: "1rem",
                       }}
                     >
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span class="card-description">TRAVEL REQUEST</span>
+                      </div>
                       <p class="box_title text-primary">Information</p>
                       <table className="table table-bordered">
                         <thead>

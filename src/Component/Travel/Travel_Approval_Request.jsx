@@ -107,21 +107,21 @@ const TravelApprovalRequest = () => {
         <Sidebar />
         <div className="main-panel">
           <div className="content-wrapper">
-            <Page_Header
+            {/* <Page_Header
               page_heading="Travel Requests list for Approval"
               page_title_icon="mdi-wallet-travel"
               page_title_button=""
               page_title_button_link="#"
-            />
+            /> */}
             {loading && (
               <div className="loader-container">
                 <div class="loader"></div>
               </div>
             )}
-            <div className="d-flex justify-content-lg-end my-2 justify-content-center ">
+            {/* <div className="d-flex justify-content-lg-end my-2 justify-content-center ">
               {/* <button className="btn btn-sm btn-info" onClick={handleAllClick}>
                 All
-              </button> */}
+              </button> 
               <button
                 className="btn btn-sm btn-warning mx-2 "
                 onClick={handleActiveClick}
@@ -134,13 +134,33 @@ const TravelApprovalRequest = () => {
               >
                 History
               </button>
-            </div>
+            </div> */}
             <div className="row">
               <div className="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center">
                       <span class="card-description">{getButtoncode}</span>
+                    </div>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span class="card-description">TRAVEL REQUEST FORM</span>
+                      <div className="d-flex justify-content-lg-end my-2 justify-content-center ">
+                        {/* <button className="btn btn-sm btn-info" onClick={handleAllClick}>
+                All
+              </button> */}
+                        <button
+                          className="btn btn-sm btn-warning mx-2 "
+                          onClick={handleActiveClick}
+                        >
+                          Pending
+                        </button>
+                        <button
+                          className="btn btn-sm btn-success"
+                          onClick={handleHistoryClick}
+                        >
+                          History
+                        </button>
+                      </div>
                     </div>
                     <table class="table table-striped">
                       <thead>

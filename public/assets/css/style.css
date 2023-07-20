@@ -7399,6 +7399,7 @@ fieldset:disabled .btn {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  border-radius: 20px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
@@ -14868,7 +14869,7 @@ code {
 }
 
 .page-header {
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 1rem 0;
 }
 .page-header .breadcrumb {
   border: 0;
@@ -17689,14 +17690,8 @@ code {
   .form-check-label
   input[type="radio"]:checked
   + .input-helper:before {
-  background: -webkit-gradient(
-    linear,
-    left top,
-    right top,
-    from(#da8cff),
-    to(#9a55ff)
-  );
-  background: linear-gradient(to right, #da8cff, #9a55ff);
+  background: #3a5dae;
+  background: linear-gradient(to right, #3a5dae, #3a5dae);
   border-width: 0;
 }
 .form-check
@@ -19805,7 +19800,8 @@ dl li {
 .content-wrapper {
   background: #f2edf3;
   padding: 2.75rem 2.25rem;
-  width: 100%;
+  border-radius: 20px;
+  /* width: 100%; */
   -webkit-box-flex: 1;
   -ms-flex-positive: 1;
   flex-grow: 1;

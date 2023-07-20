@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import ImportScript from "../Utils/ImportScript";
 import axios from "axios";
-
+import { SiYourtraveldottv } from "react-icons/si";
+import { MdMeetingRoom } from "react-icons/md";
+import { FaFileSignature } from "react-icons/fa";
+import { BsFillPeopleFill } from "react-icons/bs";
 const Sidebar = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
@@ -38,7 +41,11 @@ const Sidebar = () => {
 
   return (
     <>
-      <nav className="sidebar sidebar-offcanvas" id="sidebar">
+      <nav
+        className="sidebar sidebar-offcanvas "
+        id="sidebar"
+        // style={{ position: "fixed" }}
+      >
         <ul className="nav">
           <li className="nav-item nav-profile">
             <NavLink className="nav-link" to="/">
@@ -48,13 +55,13 @@ const Sidebar = () => {
               </div>
               <div className="nav-profile-text d-flex flex-column">
                 <span className="font-weight-bold mb-2">
-                  {LocalStorageData?.name}
+                  {LocalStorageData?.owner_name}
                 </span>
                 <span className="text-secondary text-small">
-                  {LocalStorageData?.department}
+                  {LocalStorageData?.email}
                 </span>
               </div>
-              <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+              {/* <i className="mdi mdi-bookmark-check text-success nav-profile-badge"></i> */}
             </NavLink>
           </li>
           {/* <li className="nav-item">
@@ -75,8 +82,12 @@ const Sidebar = () => {
                   aria-controls="ui-basic"
                 >
                   <span class="menu-title">Employee</span>
-                  <i class="menu-arrow"></i>
-                  <i class="mdi mdi-account-multiple-outline menu-icon"></i>
+                  <i class="menu-arrow" style={{ color: "#d14124" }}></i>
+
+                  <BsFillPeopleFill
+                    className="fs-3"
+                    style={{ color: "#d14124" }}
+                  />
                 </a>
                 <div class="collapse" id="ui-basic">
                   <ul className="nav flex-column sub-menu">
@@ -147,8 +158,11 @@ const Sidebar = () => {
                 aria-controls="ui-basic"
               >
                 <span class="menu-title">Tax Forms</span>
-                <i class="menu-arrow"></i>
-                <i class="mdi mdi-book-plus menu-icon"></i>
+                <i class="menu-arrow" style={{ color: "#d14124" }}></i>
+                <FaFileSignature
+                  className="fs-3"
+                  style={{ color: "#d14124" }}
+                />
               </a>
               <div class="collapse" id="ui-form">
                 <ul class="nav flex-column sub-menu">
@@ -194,8 +208,16 @@ const Sidebar = () => {
                 aria-controls="ui-basic"
               >
                 <span class="menu-title">Travel Request</span>
-                <i class="menu-arrow"></i>
-                <i class="mdi mdi-wallet-travel menu-icon"></i>
+                <i class="menu-arrow" style={{ color: "#d14124" }}></i>
+                {/* <i class="mdi mdi-wallet-travel menu-icon"></i> */}
+                {/* <i
+                                className="mdi mdi-airplane-takeoff fs-3 mx-3"
+                                style={{ color: "#d14124" }}
+                              /> */}
+                <SiYourtraveldottv
+                  className="fs-3"
+                  style={{ color: "#d14124" }}
+                />
               </a>
               <div class="collapse" id="ui-travel_request">
                 <ul class="nav flex-column sub-menu">
@@ -222,12 +244,29 @@ const Sidebar = () => {
                 </ul>
               </div>
             </li>
-            <li className="nav-item">
+            <li class="nav-item">
               <NavLink className="nav-link" to="/cabin_slot_booking">
                 <span className="menu-title">Cabin Booking</span>
-                <i className="mdi mdi-home-modern menu-icon"></i>
+
+                <i class="menu-arrow"></i>
+                <MdMeetingRoom className="fs-3" style={{ color: "#d14124" }} />
               </NavLink>
             </li>
+
+            {/* <li className="nav-item ">
+              <NavLink
+                className="nav-link d-flex justify-content-between"
+                to="/cabin_slot_booking"
+              >
+                <span className="menu-title">Cabin Booking</span>
+
+                <img
+                  className="ms-1"
+                  src="assets/images/newicons/meeting.svg"
+                  style={{ width: "30px" }}
+                />
+              </NavLink>
+            </li> */}
           </>
         </ul>
       </nav>

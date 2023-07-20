@@ -257,13 +257,16 @@ const Flexible_Benefit_Plan = () => {
         <div className="container-fluid page-body-wrapper full-page-wrapper">
           <Sidebar />
           <div class="main-panel">
-            <div class="content-wrapper">
-              <Page_Header
+            <div
+              class="content-wrapper bg-light"
+              style={{ borderRadius: "20px" }}
+            >
+              {/* <Page_Header
                 page_heading="Declaration - Flexible Benefit Plan (See rule 26C)"
                 page_title_button=""
                 page_title_button_link="/dashboard"
                 page_title_icon="mdi-book-plus"
-              />
+              /> */}
               {loading && (
                 <div className="loader-container">
                   <div class="loader"></div>
@@ -271,12 +274,17 @@ const Flexible_Benefit_Plan = () => {
               )}
               <div class="row">
                 <div class="col-lg-12 grid-margin stretch-card">
-                  <div class="card">
+                  <div className="card" style={{ borderRadius: "20px" }}>
                     <div class="card-body">
                       <form
                         className="forms-sample"
                         onSubmit={handleSubmit(onSubmitButton)}
                       >
+                        <div className="d-flex justify-content-between align-items-center">
+                          <span class="card-description">
+                            FORM FLEXIBLE BENEFIT
+                          </span>
+                        </div>
                         <div className="row">
                           <div className="col-md-4">
                             <div className="form-group">

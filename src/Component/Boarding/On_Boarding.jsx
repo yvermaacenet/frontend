@@ -23,7 +23,10 @@ const On_Boarding = () => {
   const [inputData, setInputData] = useState({
     hr: {
       onboard_meet_and_greet_welcome_call: "NO",
-      verify_acenet_email_id_zoho_id_laptop_provision_to_employee: "NO",
+      // verify_acenet_email_id_zoho_id_laptop_provision_to_employee: "NO",
+      verify_acenet_email_id: "NO",
+      laptop_provision_to_employee: "NO",
+      verify_zoho_id: "NO",
       introduction_meeting_with_buddy: "NO",
       introduction_meeting_with_line_manager_respective_senior_manager: "NO",
       handover_to_project_complete: "NO",
@@ -365,12 +368,12 @@ const On_Boarding = () => {
         <Sidebar />
         <div class="main-panel">
           <div class="content-wrapper">
-            <Page_Header
+            {/* <Page_Header
               page_heading="Boarding"
               page_title_icon="mdi-view-dashboard"
               page_title_button="Back"
               page_title_button_link="/user_list/pending_onboarding_employee"
-            />
+            /> */}
             {loading && (
               <div className="loader-container">
                 <div class="loader"></div>
@@ -378,8 +381,11 @@ const On_Boarding = () => {
             )}
             <div class="row">
               <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
+                <div class="card" style={{ borderRadius: "20px" }}>
                   <div class="card-body overflow-auto">
+                    <div className=" d-flex justify-content-between align-items-center">
+                      <span class="card-description">Employee Information</span>
+                    </div>
                     <table class="table table-bordered">
                       <thead>
                         <tr>
@@ -432,7 +438,7 @@ const On_Boarding = () => {
             </div>
             <div className="row">
               <div class="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div class="card-body">
                     <div className=" d-flex justify-content-between align-items-center">
                       <span class="card-description">On Boarding Process</span>
@@ -698,22 +704,19 @@ const On_Boarding = () => {
                                 </td>
                               </tr>
                               <tr>
-                                <td className="w-75">
-                                  Verify AceNet email id /zoho id/ laptop
-                                  provision to employee
-                                </td>
+                                <td className="w-75">Verify AceNet email id</td>
 
                                 <td>
                                   <div class="form-check form-check-success mb-0 mt-0">
                                     <label class="form-check-label">
                                       <input
                                         type="radio"
-                                        name="verify_acenet_email_id_zoho_id_laptop_provision_to_employee"
+                                        name="verify_acenet_email_id"
                                         onChange={inputEventHr}
                                         value="YES"
                                         checked={
                                           inputData?.hr
-                                            ?.verify_acenet_email_id_zoho_id_laptop_provision_to_employee ===
+                                            ?.verify_acenet_email_id ===
                                             "YES" && true
                                         }
                                         disabled={
@@ -735,12 +738,95 @@ const On_Boarding = () => {
                                     <label class="form-check-label">
                                       <input
                                         type="radio"
-                                        name="verify_acenet_email_id_zoho_id_laptop_provision_to_employee"
+                                        name="verify_acenet_email_id"
                                         onChange={inputEventHr}
                                         value="NO"
                                         checked={
                                           inputData?.hr
-                                            ?.verify_acenet_email_id_zoho_id_laptop_provision_to_employee ===
+                                            ?.verify_acenet_email_id === "NO" &&
+                                          true
+                                        }
+                                        disabled={
+                                          (LocalStorageData?.zoho_role ===
+                                            "Hr" ||
+                                            LocalStorageData?.zoho_role ===
+                                              "Admin") &&
+                                          !inputData?.hr?.hr_on_boarding_status
+                                            ? false
+                                            : true
+                                        }
+                                      />
+                                      NO <i class="input-helper"></i>
+                                    </label>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="form-check form-check-info mb-0 mt-0">
+                                    <label class="form-check-label">
+                                      <input
+                                        type="radio"
+                                        name="verify_acenet_email_id"
+                                        onChange={inputEventHr}
+                                        value="NA"
+                                        checked={
+                                          inputData?.hr
+                                            ?.verify_acenet_email_id === "NA" &&
+                                          true
+                                        }
+                                        disabled={
+                                          (LocalStorageData?.zoho_role ===
+                                            "Hr" ||
+                                            LocalStorageData?.zoho_role ===
+                                              "Admin") &&
+                                          !inputData?.hr?.hr_on_boarding_status
+                                            ? false
+                                            : true
+                                        }
+                                      />
+                                      NA <i class="input-helper"></i>
+                                    </label>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="w-75">Verify zoho id</td>
+
+                                <td>
+                                  <div class="form-check form-check-success mb-0 mt-0">
+                                    <label class="form-check-label">
+                                      <input
+                                        type="radio"
+                                        name="verify_zoho_id"
+                                        onChange={inputEventHr}
+                                        value="YES"
+                                        checked={
+                                          inputData?.hr?.verify_zoho_id ===
+                                            "YES" && true
+                                        }
+                                        disabled={
+                                          (LocalStorageData?.zoho_role ===
+                                            "Hr" ||
+                                            LocalStorageData?.zoho_role ===
+                                              "Admin") &&
+                                          !inputData?.hr?.hr_on_boarding_status
+                                            ? false
+                                            : true
+                                        }
+                                      />
+                                      YES<i class="input-helper"></i>
+                                    </label>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="form-check form-check-danger mb-0 mt-0">
+                                    <label class="form-check-label">
+                                      <input
+                                        type="radio"
+                                        name="verify_zoho_id"
+                                        onChange={inputEventHr}
+                                        value="NO"
+                                        checked={
+                                          inputData?.hr?.verify_zoho_id ===
                                             "NO" && true
                                         }
                                         disabled={
@@ -762,12 +848,98 @@ const On_Boarding = () => {
                                     <label class="form-check-label">
                                       <input
                                         type="radio"
-                                        name="verify_acenet_email_id_zoho_id_laptop_provision_to_employee"
+                                        name="verify_zoho_id"
+                                        onChange={inputEventHr}
+                                        value="NA"
+                                        checked={
+                                          inputData?.hr?.verify_zoho_id ===
+                                            "NA" && true
+                                        }
+                                        disabled={
+                                          (LocalStorageData?.zoho_role ===
+                                            "Hr" ||
+                                            LocalStorageData?.zoho_role ===
+                                              "Admin") &&
+                                          !inputData?.hr?.hr_on_boarding_status
+                                            ? false
+                                            : true
+                                        }
+                                      />
+                                      NA <i class="input-helper"></i>
+                                    </label>
+                                  </div>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="w-75">
+                                  laptop provision to employee
+                                </td>
+
+                                <td>
+                                  <div class="form-check form-check-success mb-0 mt-0">
+                                    <label class="form-check-label">
+                                      <input
+                                        type="radio"
+                                        name="laptop_provision_to_employee"
+                                        onChange={inputEventHr}
+                                        value="YES"
+                                        checked={
+                                          inputData?.hr
+                                            ?.laptop_provision_to_employee ===
+                                            "YES" && true
+                                        }
+                                        disabled={
+                                          (LocalStorageData?.zoho_role ===
+                                            "Hr" ||
+                                            LocalStorageData?.zoho_role ===
+                                              "Admin") &&
+                                          !inputData?.hr?.hr_on_boarding_status
+                                            ? false
+                                            : true
+                                        }
+                                      />
+                                      YES<i class="input-helper"></i>
+                                    </label>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="form-check form-check-danger mb-0 mt-0">
+                                    <label class="form-check-label">
+                                      <input
+                                        type="radio"
+                                        name="laptop_provision_to_employee"
+                                        onChange={inputEventHr}
+                                        value="NO"
+                                        checked={
+                                          inputData?.hr
+                                            ?.laptop_provision_to_employee ===
+                                            "NO" && true
+                                        }
+                                        disabled={
+                                          (LocalStorageData?.zoho_role ===
+                                            "Hr" ||
+                                            LocalStorageData?.zoho_role ===
+                                              "Admin") &&
+                                          !inputData?.hr?.hr_on_boarding_status
+                                            ? false
+                                            : true
+                                        }
+                                      />
+                                      NO <i class="input-helper"></i>
+                                    </label>
+                                  </div>
+                                </td>
+                                <td>
+                                  <div class="form-check form-check-info mb-0 mt-0">
+                                    <label class="form-check-label">
+                                      <input
+                                        type="radio"
+                                        name="laptop_provision_to_employee"
                                         onChange={inputEventHr}
                                         value="NA"
                                         checked={
                                           inputData?.hr
-                                            ?.verify_acenet_email_id_zoho_id_laptop_provision_to_employee ===
+                                            ?.laptop_provision_to_employee ===
                                             "NA" && true
                                         }
                                         disabled={
@@ -4680,14 +4852,14 @@ const On_Boarding = () => {
                     >
                       <button
                         type="button"
-                        className="btn btn-sm btn-gradient-dark me-2"
+                        className="btn btn-sm btn-primary me-2"
                         onClick={() => onFinalSubmit("save")}
                       >
                         Save
                       </button>
                       <button
                         type="button"
-                        className="btn btn-sm btn-gradient-success me-2"
+                        className="btn btn-sm btn-primary me-2"
                         onClick={() =>
                           onFinalSubmit(
                             active == "1"

@@ -301,12 +301,12 @@ const Off_Boarding = () => {
         <Sidebar />
         <div className="main-panel">
           <div className="content-wrapper">
-            <Page_Header
+            {/* <Page_Header
               page_heading="Boarding"
               page_title_icon="mdi-view-dashboard"
               page_title_button="Back"
               page_title_button_link="/user_list/pending_offboarding_employee"
-            />
+            /> */}
             {loading && (
               <div className="loader-container">
                 <div className="loader"></div>
@@ -314,8 +314,11 @@ const Off_Boarding = () => {
             )}
             <div className="row">
               <div class="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
+                    <div className=" d-flex justify-content-between align-items-center">
+                      <span class="card-description">Employee Information</span>
+                    </div>
                     <table className="table table-bordered">
                       <thead>
                         <tr>
@@ -371,7 +374,7 @@ const Off_Boarding = () => {
             </div>
             <div className="row">
               <div class="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div class="card-body">
                     <div className=" d-flex justify-content-between align-items-center">
                       <span class="card-description">Off Boarding Process</span>
@@ -2844,7 +2847,7 @@ const Off_Boarding = () => {
                     >
                       <button
                         type="button"
-                        className="btn btn-sm btn-gradient-dark me-2"
+                        className="btn btn-sm btn-primary me-2"
                         onClick={() => onFinalSubmit("save")}
                       >
                         Save

@@ -579,14 +579,17 @@ const Cabin_Slot_Booking = () => {
       <div className="container-fluid page-body-wrapper">
         <Sidebar />
         <div className="main-panel">
-          <div className="content-wrapper">
-            <Page_Header
+          <div
+            className="content-wrapper bg-light"
+            style={{ borderRadius: "20px" }}
+          >
+            {/* <Page_Header
               page_heading="Cabin Booking"
               page_title="Cabin"
               page_title_icon="mdi-home-modern"
               page_title_button="Back"
               page_title_button_link="/dashboard"
-            />
+            /> */}
             {loading && (
               <div className="loader-container">
                 <div class="loader"></div>
@@ -594,7 +597,7 @@ const Cabin_Slot_Booking = () => {
             )}
             <div className="row">
               <div class="col-lg-12 grid-margin stretch-card">
-                <div className="card">
+                <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
                     <form className="forms-sample">
                       <div className="row">
