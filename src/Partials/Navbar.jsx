@@ -13,15 +13,15 @@ const Navbar = () => {
   const [isManager, setIsManager] = useState(false);
 
   useEffect(() => {
-    const getAllManagersList = async () => {
-      const resp = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/get_user_list_By_Role_Name`
-      );
-      const allManagersId = resp.data.Reporting_Manager;
-      const filtered = allManagersId.includes(LocalStorageData?.emp_id);
-      setIsManager(filtered);
-    };
-    getAllManagersList();
+    // const getAllManagersList = async () => {
+    //   const resp = await axios.get(
+    //     `${process.env.REACT_APP_BASE_URL}/get_user_list_By_Role_Name`
+    //   );
+    //   const allManagersId = resp.data.Reporting_Manager;
+    //   const filtered = allManagersId.includes(LocalStorageData?.emp_id);
+    //   setIsManager(filtered);
+    // };
+    // getAllManagersList();
 
     const get_notifications_counter = async () => {
       const res = await axios
