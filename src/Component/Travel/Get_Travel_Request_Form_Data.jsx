@@ -54,14 +54,14 @@ const GetTravelRequestForm_Data = () => {
       <div className="container-fluid page-body-wrapper">
         <Sidebar />
         <div className="main-panel">
-          <div className="content-wrapper">
-            <Page_Header
+          <div className="content-wrapper" style={{ borderRadius: "20px" }}>
+            {/* <Page_Header
               page_heading="Travel Requests List"
               page_title="Create new request"
               page_title_icon="mdi-wallet-travel"
               page_title_button=""
               page_title_button_link="/travelrequestform"
-            />
+            /> */}
             <div className="d-flex justify-content-end mb-3">
               {/* <NavLink to="/travelrequestform">
                 <button className="btn btn-sm btn-success mx-3">
@@ -83,6 +83,9 @@ const GetTravelRequestForm_Data = () => {
               <div className="col-lg-12 grid-margin stretch-card">
                 <div className="card" style={{ borderRadius: "20px" }}>
                   <div className="card-body">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span class="card-description">MY REQUESTS</span>
+                    </div>
                     <table className="table table-striped">
                       <thead>
                         <tr>

@@ -300,17 +300,20 @@ const User_List = () => {
     <>
       <div className="container-scroller">
         <Navbar />
-        <div className="container-fluid page-body-wrapper">
+        <div className="container-fluid page-body-wrapper full-page-wrapper">
           <Sidebar />
           <div className="main-panel">
-            <div className="content-wrapper">
-              <Page_Header
+            <div
+              className="content-wrapper bg-light"
+              style={{ borderRadius: "20px" }}
+            >
+              {/* <Page_Header
                 page_heading="Employee List"
                 // page_title="User"
                 page_title_icon="mdi-account-multiple-outline"
                 page_title_button=""
                 page_title_button_link="/dashboard"
-              />
+              /> */}
               {loading && (
                 <div className="loader-container">
                   <div className="loader"></div>
@@ -469,7 +472,7 @@ const User_List = () => {
                                         value?.on_boarding_status) && (
                                         <button
                                           type="button"
-                                          className={`btn btn-sm btn-inverse-info
+                                          className={`btn btn-sm btn-primary
                                         } ms-2`}
                                           title="Offboarding"
                                           onClick={() => {
@@ -532,7 +535,7 @@ const User_List = () => {
                                           )
                                         } */}
                                           <i
-                                            className="mdi mdi-dots-vertical"
+                                            className="mdi mdi-arrow-right-bold"
                                             title="Offboarding"
                                           ></i>
                                         </button>
@@ -548,7 +551,7 @@ const User_List = () => {
                                     ) === true && (
                                       <button
                                         type="button"
-                                        className={`btn btn-sm btn-inverse-info ms-2`}
+                                        className={`btn btn-sm btn-primary ms-2`}
                                         title="Onboarding"
                                         onClick={() => {
                                           navigate(

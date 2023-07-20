@@ -42,37 +42,8 @@ const Navbar = () => {
   }, []);
   return (
     <>
-      <nav className="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-        <div className="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          <NavLink to="/" className="navbar-brand brand-logo">
-            <img
-              src="../assets/images/aceAppsTitle.png"
-              alt="logo"
-              style={{ height: "100%" }}
-            />
-          </NavLink>
-          <NavLink to="/" className="navbar-brand brand-logo-mini">
-            <img
-              src="../assets/images/aceAppsLogo.png"
-              alt="logo"
-              style={{ height: "100%", width: "50%" }}
-            />
-          </NavLink>
-        </div>
-
-        <div className="navbar-menu-wrapper d-flex align-items-stretch">
-          <button
-            className="navbar-toggler navbar-toggler align-self-center"
-            type="button"
-            data-bs-toggle="minimize"
-            onClick={() =>
-              document
-                .getElementById("body")
-                .classList.toggle("sidebar-icon-only")
-            }
-          >
-            <span className="mdi mdi-menu"></span>
-          </button>
+      <nav className="navbar default-layout-navbar p-0 fixed-top d-flex flex-row">
+        <div className="navbar-menu-wrapper w-100 d-flex align-items-stretch">
           {/* <div className="search-field d-none d-md-block">
             <form className="d-flex align-items-center h-100" action="#">
               <div className="input-group">
@@ -87,28 +58,52 @@ const Navbar = () => {
               </div>
             </form>
           </div> */}
-          {/* <div className="d-flex justify-content-center w-100 align-items-center">
-            <h2>Employee Tracker</h2>
-          </div> */}
-          <ul className="navbar-nav navbar-nav-right">
-            <li className="nav-item nav-profile dropdown">
-              <a
-                // className="nav-link dropdown-toggle"
-                className="nav-link"
-                id="profileDropdown"
-                href="#"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <div className="nav-profile-img">
-                  <img src={LocalStorageData?.photo} alt="image" />
-                  <span className="availability-status online"></span>
-                </div>
-                <div className="nav-profile-text">
-                  <p className="mb-1 text-black">{LocalStorageData?.name}</p>
-                </div>
-              </a>
-              {/* <div
+          <div className="w-100 d-flex">
+            <div className="w-100 d-flex align-items-center justify-content-between">
+              <div>
+                <button
+                  className="navbar-toggler ms-4 navbar-toggler align-self-center"
+                  type="button"
+                  data-bs-toggle="minimize"
+                  onClick={() =>
+                    document
+                      .getElementById("body")
+                      .classList.toggle("sidebar-icon-only")
+                  }
+                >
+                  <span className="mdi mdi-menu"></span>
+                </button>
+              </div>
+              <div>
+                <NavLink to="/" style={{ textDecoration: "none" }}>
+                  {/* <img src="../assets/images/aceAppsTitle.png" alt="logo" /> */}
+                  <h1>
+                    A<span style={{ fontWeight: "200" }}>ce</span>Apps
+                  </h1>
+                </NavLink>
+              </div>
+              <div>
+                <ul className="navbar-nav navbar-nav-right">
+                  <li className="nav-item nav-profile dropdown">
+                    <a
+                      // className="nav-link dropdown-toggle"
+                      className="nav-link"
+                      id="profileDropdown"
+                      href="#"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <div className="nav-profile-img">
+                        <img src={LocalStorageData?.photo} alt="image" />
+                        <span className="availability-status online"></span>
+                      </div>
+                      <div className="nav-profile-text">
+                        <p className="mb-1 text-black">
+                          {LocalStorageData?.name}
+                        </p>
+                      </div>
+                    </a>
+                    {/* <div
                 className="dropdown-menu navbar-dropdown"
                 aria-labelledby="profileDropdown"
               >
@@ -137,13 +132,13 @@ const Navbar = () => {
                 <div className="dropdown-divider"></div>
               </div> */}
 
-              <ReactTooltip
-                anchorId="fullscreen_tooltip"
-                place="bottom"
-                content="Go Full Screen"
-              />
-            </li>
-            {/* <li
+                    <ReactTooltip
+                      anchorId="fullscreen_tooltip"
+                      place="bottom"
+                      content="Go Full Screen"
+                    />
+                  </li>
+                  {/* <li
               data-for="enrich"
               data-tip="sooooo cute"
               id="fullscreen_tooltip"
@@ -153,7 +148,7 @@ const Navbar = () => {
                 <i className="mdi mdi-fullscreen" id="fullscreen-button"></i>
               </a>
             </li> */}
-            {/* <li className="nav-item dropdown">
+                  {/* <li className="nav-item dropdown">
               <a
                 className="nav-link count-indicator dropdown-toggle"
                 id="messageDropdown"
@@ -221,7 +216,7 @@ const Navbar = () => {
                 <h6 className="p-3 mb-0 text-center">4 new messages</h6>
               </div>
             </li> */}
-            {/* {(isManager ||
+                  {/* {(isManager ||
               LocalStorageData?.zoho_role === "Management" ||
               LocalStorageData?.zoho_role === "Admin") && (
               <li className="nav-item dropdown">
@@ -268,7 +263,7 @@ const Navbar = () => {
                     </NavLink>
                   )}
                   <div className="dropdown-divider"></div> */}
-            {/* <a className="dropdown-item preview-item">
+                  {/* <a className="dropdown-item preview-item">
                   <div className="preview-thumbnail">
                     <div className="preview-icon bg-warning">
                       <i className="mdi mdi-settings"></i>
@@ -296,40 +291,43 @@ const Navbar = () => {
                   </div>
                 </a>
                 <div className="dropdown-divider"></div> */}
-            {/* <h6 className="p-3 mb-0 text-center">See all notifications</h6> */}
-            {/* </div>
+                  {/* <h6 className="p-3 mb-0 text-center">See all notifications</h6> */}
+                  {/* </div>
               </li>
             )} */}
-            <ReactTooltip
-              anchorId="logout_tooltip"
-              place="bottom"
-              content="Logout"
-            />
+                  <ReactTooltip
+                    anchorId="logout_tooltip"
+                    place="bottom"
+                    content="Logout"
+                  />
 
-            <li
-              id="logout_tooltip"
-              className="nav-item nav-logout d-none d-lg-block"
-            >
-              <NavLink
-                className="nav-link"
-                onClick={() => {
-                  return (
-                    localStorage.clear(), removeCookie(), navigate("/")
-                    // alert("");
-                  );
-                }}
-                to="/"
-              >
-                <i className="mdi mdi-logout"></i>
-              </NavLink>
-            </li>
+                  <li
+                    id="logout_tooltip"
+                    className="nav-item nav-logout d-none d-lg-block"
+                  >
+                    <NavLink
+                      className="nav-link"
+                      onClick={() => {
+                        return (
+                          localStorage.clear(), removeCookie(), navigate("/")
+                          // alert("");
+                        );
+                      }}
+                      to="/"
+                    >
+                      <i
+                        className="mdi mdi-logout"
+                        style={{ color: "#d14124" }}
+                      ></i>
+                    </NavLink>
+                  </li>
 
-            {/* <ReactTooltip
+                  {/* <ReactTooltip
               anchorId="scrolltotop"
               place="bottom"
               content="Scroll To Top"
             /> */}
-            {/* <li
+                  {/* <li
               id="scrolltotop"
               className="nav-item nav-settings d-none d-lg-block"
             >
@@ -337,7 +335,25 @@ const Navbar = () => {
                 <i className="mdi mdi-format-line-spacing"></i>
               </a>
             </li> */}
-          </ul>
+                </ul>
+              </div>
+              {/* <NavLink to="/">
+                <img
+                  src="../assets/images/aceAppsTitle.png"
+                  alt="logo"
+                  // style={{ height: "12rem" }}
+                />
+              </NavLink> */}
+              {/* <NavLink to="/" className="navbar-brand brand-logo-mini">
+                <img
+                  // src="../assets/images/aceAppsLogo.png"
+                  src="../assets/images/aceAppsTitle.png"
+                  alt="logo"
+                  style={{ height: "8rem", width: "8rem" }}
+                />
+              </NavLink> */}
+            </div>
+          </div>
 
           <button
             className="navbar-toggler navbar-toggler-right d-lg-none align-self-center"

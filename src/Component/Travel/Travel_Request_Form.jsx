@@ -11,7 +11,7 @@ import classNames from "classnames";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { travel_request_form_validation } from "../../Utils/Validation_Form";
-import { border } from "@mui/system";
+// import { border } from "@mui/system";
 import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
@@ -510,6 +510,51 @@ const TravelRequestForm = () => {
       };
     });
   };
+  function getUniqueEmailsFromArray(x, y, z) {
+    // Step 1: Flatten the arrays to get a single array containing all the objects
+    const combinedArray = [...x, { data: { email: y } }, ...z];
+
+    // Step 2: Extract the 'name' property from each object
+    const namesArray = combinedArray?.map((item) => item.data.email);
+
+    // Step 3: Use a Set to store the unique names
+    const uniqueNamesSet = new Set(namesArray);
+
+    // Step 4: Convert the Set back to an array to get the unique names
+    const uniqueNames = Array.from(uniqueNamesSet);
+
+    return uniqueNames;
+  }
+  function getUniqueNamesFromArray(x, y, z) {
+    // Step 1: Combine the arrays and filter out any undefined values
+    const combinedArray = [
+      ...(x || []),
+      { data: { name: y } },
+      ...(z || []),
+    ].filter(Boolean);
+
+    // Step 2: Extract the 'name' property from each object
+    const namesArray = combinedArray.map((item) => item.data.name);
+
+    // Step 3: Use a Set to store the unique names
+    const uniqueNamesSet = new Set(namesArray);
+
+    // Step 4: Convert the Set back to an array to get the unique names
+    const uniqueNames = Array.from(uniqueNamesSet);
+
+    return uniqueNames;
+  }
+  const uniqueEmails = getUniqueEmailsFromArray(
+    travellersData,
+    LocalStorageData?.email,
+    roomsData
+  );
+  const uniqueNames = getUniqueNamesFromArray(
+    travellersData,
+    LocalStorageData?.owner_name,
+    roomsData
+  );
+
   const validateError = (event) => {
     // console.log("Event", event);
     let basicDetailsDataObj = {
@@ -975,20 +1020,19 @@ const TravelRequestForm = () => {
     if (res?.data === "Created") {
       alert.success("Request Sent");
       navigate("/alltravelrequest");
-
-      // await axios.post("/email", {
-      //   user: LocalStorageData?.owner_name,
-      //   email: LocalStorageData?.email,
-      //   start_date: treavellerRadioButton
-      //     ? `new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")`
-      //     : `new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
-      //         "en-GB"
-      //       )`,
-      //   destination: treavellerRadioButton
-      //     ? rows[0]?.data?.travel_to_city?.label
-      //     : accommodationData[0]?.data?.city?.label,
-      //   reason_for_travel: basicDetails?.reason_for_travel,
-      // });
+      await axios.post("/email", {
+        user: uniqueNames,
+        email: uniqueEmails,
+        // rows: treavellerRadioButton
+        //   ? {...rows, dob:new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")}
+        //   : `new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
+        //       "en-GB"
+        //     )`,
+        basicDetails,
+        rows: treavellerRadioButton && rows,
+        travellersData: treavellerRadioButton && travellersData,
+        accommodationData: accommodationRadioButton && accommodationData,
+      });
     }
   };
   // console.log("rows[0]?.data?.departure",new Date( accommodationData[0]?.data?.checkIn).toLocaleDateString('en-GB'),new Date(rows[0]?.data?.departure).toLocaleDateString('en-GB') );
@@ -1068,8 +1112,20 @@ const TravelRequestForm = () => {
         <Navbar />
         <div className="container-fluid page-body-wrapper full-page-wrapper">
           <Sidebar />
-          <div className="main-panel">
-            <div className="content-wrapper" style={{ borderRadius: "20px" }}>
+          <div className="main-panel w-100">
+            <div
+              className="content-wrapper bg-light w-100"
+              style={{
+                display: "flex",
+                borderRadius: "20px",
+                margin: "2rem",
+                background: "#6d4199",
+                fontSize: "20px",
+                fontWeight: "600",
+                border: "none",
+                width: "100%",
+              }}
+            >
               {/* <Page_Header
                 page_heading="Travel Request Form"
                 page_title="Travel Request Form"
@@ -1092,10 +1148,18 @@ const TravelRequestForm = () => {
                 click me
               </button> */}
 
-              <div className="row">
-                <div class="col-lg-12 grid-margin stretch-card">
+              <div className="row fs-6 w-100">
+                <div class=" grid-margin stretch-card w-100">
                   <div class="card" style={{ borderRadius: "20px" }}>
-                    <div class="card-body ">
+                    <div
+                      class="card-body 
+                    "
+                    >
+                      <div className="d-flex justify-content-between align-items-center">
+                        <span class="card-description">
+                          TRAVEL REQUEST FORM
+                        </span>
+                      </div>
                       <form
                         className="travel_form"
                         action=""
@@ -1294,16 +1358,16 @@ const TravelRequestForm = () => {
                             borderRadius: "10px",
                           }}
                         >
-                          <div className="form-group d-flex justify-content-start align-items-center m-0 p-0">
-                            <label className="col-sm-3 d-flex align-items-center col-form-label">
+                          <div className="form-group w-100 d-flex justify-content-start align-items-center m-0 p-0">
+                            <label className="col-3 d-flex align-items-center col-form-label">
                               <i
-                                className="mdi mdi-airplane-takeoff fs-3 mx-3"
+                                className="mdi mdi-airplane-takeoff  mx-3"
                                 style={{ color: "#d14124" }}
                               />
                               Travel Required
                             </label>
 
-                            <div className="col-sm-3">
+                            <div className="col-3">
                               <div className="form-check form-check-info">
                                 <label className="form-check-label">
                                   <input
@@ -1326,7 +1390,7 @@ const TravelRequestForm = () => {
                                 </label>
                               </div>
                             </div>
-                            <div className="col-sm-3">
+                            <div className="col-3">
                               <div className="form-check form-check-info">
                                 <label className="form-check-label">
                                   <input
@@ -1419,11 +1483,11 @@ const TravelRequestForm = () => {
                                     <th>
                                       DOB <span className="astik"> *</span>
                                     </th>
-                                    <th>
+                                    {/* <th>
                                       Pref. Time{" "}
-                                      <i class="mdi mdi-arrow-down"></i>
-                                      {/* <span className="astik"> *</span> */}
-                                    </th>
+                                      <i class="mdi mdi-arrow-down"></i> */}
+                                    {/* <span className="astik"> *</span> */}
+                                    {/* </th> */}
                                     {/* <th>Action</th> */}
                                   </tr>
                                 </thead>
@@ -1920,7 +1984,7 @@ const TravelRequestForm = () => {
                                             "This field is required"}
                                         </small>
                                       </td>
-                                      <td style={{ width: "10%" }}>
+                                      {/* <td style={{ width: "10%" }}>
                                         <select
                                           className="form-control form-control-sm"
                                           // className={classNames(
@@ -1972,8 +2036,8 @@ const TravelRequestForm = () => {
                                         {validateForTravellersDataRow[index]
                                           ?.data?.preferred_time &&
                                           "This field is required"}
-                                      </small> */}
-                                      </td>
+                                      </small> 
+                                      </td> */}
                                       {basicDetails?.booking_for !== "self" && (
                                         <td>
                                           <div
@@ -2106,8 +2170,8 @@ const TravelRequestForm = () => {
                                       <span className="astik"> *</span>
                                     </th>
 
-                                    <th colSpan={2}>Return</th>
-                                    {/* <th>Action</th> */}
+                                    <th colSpan={1}>Return</th>
+                                    <th>Preferred Time</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -2362,7 +2426,55 @@ const TravelRequestForm = () => {
                                             "This field is required"}
                                         </small>
                                       </td>
-
+                                      <td style={{ width: "10%" }}>
+                                        <select
+                                          className="form-control form-control-sm"
+                                          // className={classNames(
+                                          //   "form-select form-select-md",
+                                          //   {
+                                          //     "is-invalid":
+                                          //       validateForTravellersDataRow[
+                                          //         index
+                                          //       ]?.data?.preferred_time,
+                                          //   }
+                                          // )}
+                                          // disabled={
+                                          //   traveller?.data?.is_employee === "Yes"
+                                          //     ? true
+                                          //     : false
+                                          // }
+                                          name="preferred_time"
+                                          value={row?.data?.preferred_time}
+                                          placeholder="Select"
+                                          onChange={(e) =>
+                                            handleDataChange(row.id, {
+                                              ...row.data,
+                                              preferred_time: e.target.value,
+                                            })
+                                          }
+                                        >
+                                          <option value="" selected>
+                                            <small>select...</small>
+                                          </option>
+                                          <option value="00:00-06:00">
+                                            00:00-06:00
+                                          </option>
+                                          <option value="06:00-12:00">
+                                            06:00-12:00
+                                          </option>
+                                          <option value="12:00-18:00">
+                                            12:00-18:00
+                                          </option>
+                                          <option value="18:00-00:00">
+                                            18:00-00:00
+                                          </option>
+                                        </select>
+                                        {/* <small className="isValidate">
+                                        {validateForTravellersDataRow[index]
+                                          ?.data?.preferred_time &&
+                                          "This field is required"}
+                                      </small> */}
+                                      </td>
                                       <td>
                                         {/* {index === 0 ? (
                                         ""
@@ -4087,15 +4199,3 @@ const TravelRequestForm = () => {
 };
 
 export default TravelRequestForm;
-{
-  /* <div>
-                                              <label>
-                                                Rooms 
-                                              </label>
-                                            </div>
-                                            <div class="number">
-                                              <span class="minus" type="button" onClick={()=>alert("d")}>-</span>
-                                              <input type="text" value="100" className="w-50 rounded" disabled/>
-                                              <span class="plus">+</span>
-                                            </div> */
-}
