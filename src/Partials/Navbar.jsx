@@ -12,36 +12,36 @@ const Navbar = () => {
   const [getData, setGetData] = useState({});
   const [isManager, setIsManager] = useState(false);
 
-  useEffect(() => {
-    // const getAllManagersList = async () => {
-    //   const resp = await axios.get(
-    //     `${process.env.REACT_APP_BASE_URL}/get_user_list_By_Role_Name`
-    //   );
-    //   const allManagersId = resp.data.Reporting_Manager;
-    //   const filtered = allManagersId.includes(LocalStorageData?.emp_id);
-    //   setIsManager(filtered);
-    // };
-    // getAllManagersList();
+  // useEffect(() => {
+  //   // const getAllManagersList = async () => {
+  //   //   const resp = await axios.get(
+  //   //     `${process.env.REACT_APP_BASE_URL}/get_user_list_By_Role_Name`
+  //   //   );
+  //   //   const allManagersId = resp.data.Reporting_Manager;
+  //   //   const filtered = allManagersId.includes(LocalStorageData?.emp_id);
+  //   //   setIsManager(filtered);
+  //   // };
+  //   // getAllManagersList();
 
-    const get_notifications_counter = async () => {
-      const res = await axios
-        .get(
-          `${process.env.REACT_APP_BASE_URL}/notifications_counter/${LocalStorageData?.reporting_manager}/${LocalStorageData?.zoho_role}`,
-          {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
-          }
-        )
-        .then((res) => setGetData(res.data))
-        .catch((err) => {
-          if (err.response.status === 500) {
-            navigate("/error_500");
-          } else {
-            navigate("/error_403");
-          }
-        });
-    };
-    get_notifications_counter();
-  }, []);
+  //   const get_notifications_counter = async () => {
+  //     const res = await axios
+  //       .get(
+  //         `${process.env.REACT_APP_BASE_URL}/notifications_counter/${LocalStorageData?.reporting_manager}/${LocalStorageData?.zoho_role}`,
+  //         {
+  //           headers: { Access_Token: LocalStorageData?.generate_auth_token },
+  //         }
+  //       )
+  //       .then((res) => setGetData(res.data))
+  //       .catch((err) => {
+  //         if (err.response.status === 500) {
+  //           navigate("/error_500");
+  //         } else {
+  //           navigate("/error_403");
+  //         }
+  //       });
+  //   };
+  //   get_notifications_counter();
+  // }, []);
   return (
     <>
       <nav className="navbar default-layout-navbar p-0 fixed-top d-flex flex-row">
