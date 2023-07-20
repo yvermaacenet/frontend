@@ -16,7 +16,7 @@ const Cabin_List = () => {
     setLoading(true);
     async function get_cabin_list() {
       await axios
-        .get("cabin_list", {
+        .get(`${process.env.REACT_APP_BASE_URL}cabin_list`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {

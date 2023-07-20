@@ -14,7 +14,9 @@ const Navbar = () => {
 
   useEffect(() => {
     const getAllManagersList = async () => {
-      const resp = await axios.get("/get_user_list_By_Role_Name");
+      const resp = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/get_user_list_By_Role_Name`
+      );
       const allManagersId = resp.data.Reporting_Manager;
       const filtered = allManagersId.includes(LocalStorageData?.emp_id);
       setIsManager(filtered);
@@ -24,7 +26,7 @@ const Navbar = () => {
     const get_notifications_counter = async () => {
       const res = await axios
         .get(
-          `/notifications_counter/${LocalStorageData?.reporting_manager}/${LocalStorageData?.zoho_role}`,
+          `${process.env.REACT_APP_BASE_URL}/notifications_counter/${LocalStorageData?.reporting_manager}/${LocalStorageData?.zoho_role}`,
           {
             headers: { Access_Token: LocalStorageData?.generate_auth_token },
           }

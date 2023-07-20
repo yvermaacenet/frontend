@@ -40,9 +40,12 @@ const Cabin_Update = () => {
   };
   useEffect(() => {
     const get_user_list = async () => {
-      const res = await axios.get("/get_location", {
-        headers: { Access_Token: LocalStorageData?.generate_auth_token },
-      });
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/get_location`,
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      );
       setLocation(res.data);
     };
     get_user_list();
@@ -51,7 +54,7 @@ const Cabin_Update = () => {
     setLoading(true);
     async function get_user_data() {
       await axios
-        .get(`/cabin_list_by_id/${_id}`, {
+        .get(`${process.env.REACT_APP_BASE_URL}/cabin_list_by_id/${_id}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
@@ -124,9 +127,13 @@ const Cabin_Update = () => {
     setLoading(true);
     async function add_cabin() {
       await axios
-        .put(`/cabin_update/${_id}`, inputData, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .put(
+          `${process.env.REACT_APP_BASE_URL}/cabin_update/${_id}`,
+          inputData,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((resp) => {
           return alert.success(resp.data.message), navigate("/cabin_list");
         })

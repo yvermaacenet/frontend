@@ -200,9 +200,12 @@ const Form12BB = () => {
     async function getData() {
       setLoading(true);
       const result = await axios
-        .get(`get_form_12_bb_controller_by_id/${LocalStorageData?.user_id}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/get_form_12_bb_controller_by_id/${LocalStorageData?.user_id}`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then(async (resp) => {
           resp?.data?.map((val) => {
             let entries = Object.entries(val);
@@ -288,9 +291,13 @@ const Form12BB = () => {
     async function putData() {
       setLoading(true);
       await axios
-        .post(`form_12_bb/${inputData?._id}`, jsonDate, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .post(
+          `${process.env.REACT_APP_BASE_URL}/form_12_bb/${inputData?._id}`,
+          jsonDate,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((resp) => {
           return (
             alert.success("Form has been saved"),
@@ -410,9 +417,13 @@ const Form12BB = () => {
     async function postData() {
       setLoading(true);
       await axios
-        .post(`form_12_bb/${inputData?._id}`, jsonDate, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .post(
+          `${process.env.REACT_APP_BASE_URL}/form_12_bb/${inputData?._id}`,
+          jsonDate,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((resp) => {
           return (
             alert.success("Form has been submitted"),

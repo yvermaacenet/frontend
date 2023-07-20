@@ -162,7 +162,7 @@ const Travel_Action = (props) => {
       });
 
       if (res.data === "Updated Sucessfully") {
-        await axios.post("/status_email", {
+        await axios.post(`${process.env.REACT_APP_BASE_URL}/status_email`, {
           status: handleButtonType ? "Approved" : "Declined",
           user: getData?.travellersData?.map((val) => val?.data?.name),
           email: getData?.travellersData?.map((val) => val?.data?.email),

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 
 const Sign_In = () => {
+  console.log("hello", process.env.REACT_APP_BASE_URL);
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ const Sign_In = () => {
       setLoading(true);
 
       await axios
-        .get(`sign_in_zoho`)
+        .get(`${process.env.REACT_APP_BASE_URL}/sign_in_zoho`)
         .then((result) => {
           const resp = result.data;
           return window.location.replace(resp);
@@ -31,7 +32,9 @@ const Sign_In = () => {
       const code = urlParams.get("code");
       if (code) {
         await axios
-          .post(`sign_in_zoho_get_access_token/${code}`)
+          .post(
+            `${process.env.REACT_APP_BASE_URL}/sign_in_zoho_get_access_token/${code}`
+          )
           .then((result) => {
             return (
               localStorage.setItem("loggedin", JSON.stringify(result.data)),

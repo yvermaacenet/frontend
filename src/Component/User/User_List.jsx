@@ -7,10 +7,7 @@ import Page_Header from "../../Partials/Page_Header";
 import Sidebar from "../../Partials/Sidebar";
 import { useParams } from "react-router-dom";
 import { Box, Button } from "@mui/material";
-import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { ExportToCsv } from "export-to-csv";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { IconButton, Tooltip } from "@mui/material";
 import { useAlert } from "react-alert";
 
 const User_List = () => {
@@ -27,12 +24,12 @@ const User_List = () => {
     setLoading(true);
     async function get_user_list() {
       await axios
-        .get(`/user_list/${status_code}`, {
+        .get(`${process.env.REACT_APP_BASE_URL}/user_list/${status_code}`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then(async (result_user_list) => {
           return await axios
-            .get(`/on_boarding`, {
+            .get(`${process.env.REACT_APP_BASE_URL}/on_boarding`, {
               headers: {
                 Access_Token: LocalStorageData?.generate_auth_token,
               },
@@ -44,7 +41,7 @@ const User_List = () => {
                 ...resp?.find((b) => b?.user_id === a?._id),
               }));
               return await axios
-                .get(`/off_boarding`, {
+                .get(`${process.env.REACT_APP_BASE_URL}/off_boarding`, {
                   headers: {
                     Access_Token: LocalStorageData?.generate_auth_token,
                   },
@@ -285,9 +282,12 @@ const User_List = () => {
     setLoading(true);
     async function loadZohoData() {
       await axios
-        .post(`/compare_data_between_zoho_and_database`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .post(
+          `${process.env.REACT_APP_BASE_URL}/compare_data_between_zoho_and_database`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((result) => {
           return setLoading(false), alert.success(result.data.message);
         });

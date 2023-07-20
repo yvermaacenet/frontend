@@ -137,7 +137,7 @@ const TravelRequestForm = () => {
     setLoading(true);
     async function get_user_list() {
       await axios
-        .get(`/user_list/active_employee`, {
+        .get(`${process.env.REACT_APP_BASE_URL}/user_list/active_employee`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then(async (result_user_list) => {
@@ -186,7 +186,7 @@ const TravelRequestForm = () => {
     const fetchEmployeeData = async () => {
       const res = await axios
         .get(
-          `/get_employee_details_for_travel/${
+          `${process.env.REACT_APP_BASE_URL}/get_employee_details_for_travel/${
             basicDetails?.booking_for === "others"
               ? 0
               : LocalStorageData?.emp_id
@@ -255,7 +255,7 @@ const TravelRequestForm = () => {
     async function getCountry() {
       setLoading(true);
       await axios
-        .get("airport")
+        .get(`${process.env.REACT_APP_BASE_URL}/airport`)
         .then((res) => {
           const citys = res.data.map((val) => ({
             value: val.city_name,
@@ -354,7 +354,7 @@ const TravelRequestForm = () => {
     if (newData.emp_id) {
       try {
         const response = await axios.get(
-          `/get_employee_details_for_travel/${newData.emp_id?.value}`
+          `${process.env.REACT_APP_BASE_URL}/get_employee_details_for_travel/${newData.emp_id?.value}`
         );
 
         const apiData = response.data;
@@ -459,7 +459,7 @@ const TravelRequestForm = () => {
     if (newData.emp_id) {
       try {
         const response = await axios.get(
-          `/get_employee_details_for_travel/${newData.emp_id?.value}`
+          `${process.env.REACT_APP_BASE_URL}/get_employee_details_for_travel/${newData.emp_id?.value}`
         );
 
         const apiData = response.data;
@@ -1008,15 +1008,18 @@ const TravelRequestForm = () => {
   // }, [error]);
   const handleFormSubmit = async (value) => {
     alert.success("Done");
-    const res = await axios.post("/all_travel_request_data", {
-      basicDetails,
-      rows: treavellerRadioButton ? rows : [],
-      travellersData: treavellerRadioButton ? travellersData : [],
-      accommodationData: accommodationRadioButton ? accommodationData : [],
-      roomsData: accommodationRadioButton ? roomsData : [],
-      management_approval: "Pending",
-      created_by: LocalStorageData?.email,
-    });
+    const res = await axios.post(
+      `${process.env.REACT_APP_BASE_URL}/all_travel_request_data`,
+      {
+        basicDetails,
+        rows: treavellerRadioButton ? rows : [],
+        travellersData: treavellerRadioButton ? travellersData : [],
+        accommodationData: accommodationRadioButton ? accommodationData : [],
+        roomsData: accommodationRadioButton ? roomsData : [],
+        management_approval: "Pending",
+        created_by: LocalStorageData?.email,
+      }
+    );
     if (res?.data === "Created") {
       alert.success("Request Sent");
       navigate("/alltravelrequest");

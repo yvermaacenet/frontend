@@ -32,9 +32,12 @@ const Cabin_Add = () => {
   });
   useEffect(() => {
     const get_user_list = async () => {
-      const res = await axios.get("/get_location", {
-        headers: { Access_Token: LocalStorageData?.generate_auth_token },
-      });
+      const res = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/get_location`,
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      );
       setLocation(res.data);
     };
     get_user_list();
@@ -100,7 +103,7 @@ const Cabin_Add = () => {
     async function add_cabin() {
       await axios
         .post(
-          `/cabin_add`,
+          `${process.env.REACT_APP_BASE_URL}/cabin_add`,
           {
             ...inputData,
             location: locationList.location,

@@ -26,9 +26,12 @@ const GetTravelRequestForm_Data = () => {
     async function getData() {
       setLoading(true);
       await axios
-        .get(`get_travel_request_by_email_id/${LocalStorageData?.email}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/get_travel_request_by_email_id/${LocalStorageData?.email}`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((result) => {
           const resp = result.data;
 
@@ -181,7 +184,7 @@ const GetTravelRequestForm_Data = () => {
                                       );
                                       if (res === true) {
                                         const res2 = await axios.delete(
-                                          `/revoke_travel_request/${val?._id}`,
+                                          `${process.env.REACT_APP_BASE_URL}/revoke_travel_request/${val?._id}`,
                                           {
                                             headers: {
                                               Access_Token:

@@ -79,9 +79,12 @@ const Flexible_Benefit_Plan = () => {
     async function getData() {
       setLoading(true);
       await axios
-        .get(`get_form_flexible_by_id/${LocalStorageData?.user_id}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/get_form_flexible_by_id/${LocalStorageData?.user_id}`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((resp) => {
           return (
             console.log("aas", resp.data),
@@ -168,9 +171,13 @@ const Flexible_Benefit_Plan = () => {
     async function postData() {
       setLoading(true);
       await axios
-        .post(`form_flexilble_benefit/${inputData?._id}`, jsonDate, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .post(
+          `${process.env.REACT_APP_BASE_URL}/form_flexilble_benefit/${inputData?._id}`,
+          jsonDate,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((resp) => {
           return (
             alert.success("Form has been saved"),
@@ -229,9 +236,13 @@ const Flexible_Benefit_Plan = () => {
     async function postData() {
       setLoading(true);
       await axios
-        .post(`form_flexilble_benefit/${inputData?._id}`, jsonDate, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .post(
+          `${process.env.REACT_APP_BASE_URL}/form_flexilble_benefit/${inputData?._id}`,
+          jsonDate,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((resp) => {
           return (
             alert.success("Form has been submitted"),

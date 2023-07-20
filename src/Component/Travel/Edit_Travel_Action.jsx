@@ -123,7 +123,7 @@ const Edit_Travel_Action = () => {
     async function getCountry() {
       setLoading(true);
       await axios
-        .get("/airport")
+        .get(`${process.env.REACT_APP_BASE_URL}/airport`)
         .then((res) => {
           const citys = res?.data?.map((val) => ({
             value: val.city_name,
@@ -146,9 +146,12 @@ const Edit_Travel_Action = () => {
     const get_travel_request_by_id = async () => {
       setLoading(true);
       const res = await axios
-        .get(`/get_travel_request_by_id/${_id}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/get_travel_request_by_id/${_id}`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((res) => {
           // const dd = res?.data?.rows?.map((val) => {
           //   console.log("res?.data?.rows.data.departure,", val.data.departure);
@@ -275,7 +278,7 @@ const Edit_Travel_Action = () => {
     if (newData.emp_id) {
       try {
         const response = await axios.get(
-          `/get_employee_details_for_travel/${newData.emp_id}`
+          `${process.env.REACT_APP_BASE_URL}/get_employee_details_for_travel/${newData.emp_id}`
         );
 
         const apiData = response.data;
@@ -366,7 +369,7 @@ const Edit_Travel_Action = () => {
     if (newData.emp_id.length > 0) {
       try {
         const response = await axios.get(
-          `/get_employee_details_for_travel/${newData.emp_id}`
+          `${process.env.REACT_APP_BASE_URL}/get_employee_details_for_travel/${newData.emp_id}`
         );
 
         const apiData = response.data;
@@ -417,15 +420,18 @@ const Edit_Travel_Action = () => {
   // ================================================================================================================
   const handleFormUpdate = async (e) => {
     e.preventDefault();
-    const res = await axios.put(`/update_travel_request/${_id}`, {
-      basicDetails,
-      rows,
-      travellersData,
-      accommodationData,
-      roomsData,
-      management_approval: "Pending",
-      created_by: LocalStorageData?.email,
-    });
+    const res = await axios.put(
+      `${process.env.REACT_APP_BASE_URL}/update_travel_request/${_id}`,
+      {
+        basicDetails,
+        rows,
+        travellersData,
+        accommodationData,
+        roomsData,
+        management_approval: "Pending",
+        created_by: LocalStorageData?.email,
+      }
+    );
     if (res?.data === "Updated Sucessfully") {
       alert.success(res?.data);
       navigate("/alltravelrequest");

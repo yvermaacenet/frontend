@@ -91,7 +91,7 @@ const Cabin_Slot_Booking = () => {
   //to get all the location ( gurgram, Pune)
   const fetch_Location = async () => {
     const res = await axios
-      .get("/get_location", {
+      .get(`${process.env.REACT_APP_BASE_URL}/get_location`, {
         headers: { Access_Token: LocalStorageData?.generate_auth_token },
       })
       .then((rr) => setLocation(rr?.data))
@@ -108,9 +108,12 @@ const Cabin_Slot_Booking = () => {
 
   const fetch_cabin_slot_booking_by_location = async (loc) => {
     const res = await axios
-      .get(`/cabin_slot_booking_by_location/${loc}`, {
-        headers: { Access_Token: LocalStorageData?.generate_auth_token },
-      })
+      .get(
+        `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking_by_location/${loc}`,
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      )
       .then((resp) => {
         const resp__get_cabin_slot_booking_list = resp?.data;
         const getAllEvents = resp__get_cabin_slot_booking_list?.map((val) => ({
@@ -133,7 +136,7 @@ const Cabin_Slot_Booking = () => {
     setLoading(true);
     async function get_cabin_list() {
       await axios
-        .get("cabin_list", {
+        .get(`${process.env.REACT_APP_BASE_URL}/cabin_list`, {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
@@ -155,9 +158,12 @@ const Cabin_Slot_Booking = () => {
   useEffect(() => {
     async function get_cabin_slot_booking_list() {
       await axios
-        .get(`cabin_slot_booking/${selectCabin_id}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking/${selectCabin_id}`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((resp) => {
           const resp__get_cabin_slot_booking_list = resp?.data;
           const getAllEvents = resp__get_cabin_slot_booking_list?.map(
@@ -297,7 +303,7 @@ const Cabin_Slot_Booking = () => {
       setLoading(true);
       await axios
         .post(
-          "cabin_slot_booking",
+          `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking`,
           {
             ...inputData,
             start:
@@ -351,9 +357,12 @@ const Cabin_Slot_Booking = () => {
     e.preventDefault();
     setLoading(true);
     const result = await axios
-      .delete(`cabin_slot_booking/${inputData?._id}`, {
-        headers: { Access_Token: LocalStorageData?.generate_auth_token },
-      })
+      .delete(
+        `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking/${inputData?._id}`,
+        {
+          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        }
+      )
       .then((res) => {
         return (
           alert?.show(res.data.message),
@@ -416,20 +425,23 @@ const Cabin_Slot_Booking = () => {
     } else if (timeCompare === "equal") {
       setInvalidText("Start time and End time can't be equal");
     } else {
-      const res = await axios.put(`/cabin_slot_booking/${bookingEvent?._id}`, {
-        title: timeValue?.title,
+      const res = await axios.put(
+        `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking/${bookingEvent?._id}`,
+        {
+          title: timeValue?.title,
 
-        start: convertDateTimeToDateObject(
-          timeValue?.manual_date,
-          timeValue?.start_manual_time
-        ),
-        end: convertDateTimeToDateObject(
-          timeValue?.manual_date,
-          timeValue?.end_manual_time
-        ),
+          start: convertDateTimeToDateObject(
+            timeValue?.manual_date,
+            timeValue?.start_manual_time
+          ),
+          end: convertDateTimeToDateObject(
+            timeValue?.manual_date,
+            timeValue?.end_manual_time
+          ),
 
-        // end: bookingEvent,
-      });
+          // end: bookingEvent,
+        }
+      );
       if (res.data.message === "updated") {
         setEditEventModal(false);
         setInvalidText("");
@@ -462,9 +474,15 @@ const Cabin_Slot_Booking = () => {
         setLoading(true);
         async function dragndrop() {
           await axios
-            .put(`cabin_slot_booking/${event?._id}`, lastObject, {
-              headers: { Access_Token: LocalStorageData?.generate_auth_token },
-            })
+            .put(
+              `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking/${event?._id}`,
+              lastObject,
+              {
+                headers: {
+                  Access_Token: LocalStorageData?.generate_auth_token,
+                },
+              }
+            )
             .then((res) => {
               return alert?.show(res.data.message), setRenderComponent(true);
             })
@@ -526,7 +544,7 @@ const Cabin_Slot_Booking = () => {
           async function dragndrop() {
             await axios
               .put(
-                `cabin_slot_booking/${event?._id}`,
+                `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking/${event?._id}`,
                 {
                   ...lastObject,
                   title: event?.title
