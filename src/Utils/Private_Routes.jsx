@@ -10,9 +10,9 @@ const Private_Routes = ({ allowedRoles, children }) => {
     if (!isAuthorized) {
       navigate("/error_404");
     }
-    if (!localStorage.getItem("loggedin")) {
-      navigate("/error_403");
-    }
+    // if (!localStorage.getItem("loggedin")) {
+    //   navigate("/error_403");
+    // }
   }, [navigate]);
   return children;
 };
