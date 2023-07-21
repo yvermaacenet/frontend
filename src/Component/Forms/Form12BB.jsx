@@ -198,6 +198,7 @@ const Form12BB = () => {
 
   useEffect(() => {
     async function getData() {
+      console.log("localstorage", LocalStorageData);
       setLoading(true);
       const result = await axios
         .get(
@@ -207,6 +208,7 @@ const Form12BB = () => {
           }
         )
         .then(async (resp) => {
+          console.log("res", resp);
           resp?.data?.map((val) => {
             let entries = Object.entries(val);
             return entries.map((result) => setValue(result[0], result[1]));
