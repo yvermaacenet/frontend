@@ -100,6 +100,7 @@ const On_Boarding = () => {
           headers: { Access_Token: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
+          console.log("result0", result);
           const resp = result.data[0];
           return (
             setInputData({ ...inputData, ...resp }), setRenderComponent(false)
@@ -280,6 +281,7 @@ const On_Boarding = () => {
   //       }
   //     });
   // };
+
   const onFinalSubmit = async (btn_value) => {
     const callAPI = async () => {
       // return;
@@ -340,6 +342,7 @@ const On_Boarding = () => {
           );
     confirmationButton === true && callAPI();
   };
+  console.log("isssssss", inputData);
 
   const setAllPropertiesToTrue = (e, obj) => {
     if (obj === "hr") {

@@ -15,29 +15,29 @@ const Sidebar = () => {
   const [isManager, setIsManager] = useState(false);
   const [counterList, setCounterList] = useState([]);
   //Akshay
-  // useEffect(() => {
-  //   async function get_counterList() {
-  //     await axios
-  //       .get(
-  //         `${process.env.REACT_APP_BASE_URL}/documents_counter/${LocalStorageData?.user_id}/${LocalStorageData?.emp_id}/${LocalStorageData?.zoho_role}/${LocalStorageData?.email}`,
-  //         {
-  //           headers: { Access_Token: LocalStorageData?.generate_auth_token },
-  //         }
-  //       )
-  //       .then((res) => {
-  //         return setCounterList(res?.data);
-  //       })
-  //       .catch((err) => {
-  //         if (err.response.status === 500) {
-  //           navigate("/error_500");
-  //         } else {
-  //           navigate("/error_403");
-  //         }
-  //       });
-  //   }
+  useEffect(() => {
+    async function get_counterList() {
+      await axios
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/documents_counter/${LocalStorageData?.user_id}/${LocalStorageData?.emp_id}/${LocalStorageData?.zoho_role}/${LocalStorageData?.email}`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
+        .then((res) => {
+          return setCounterList(res?.data);
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            navigate("/error_500");
+          } else {
+            navigate("/error_403");
+          }
+        });
+    }
 
-  //   get_counterList();
-  // }, []);
+    get_counterList();
+  }, []);
 
   return (
     <>
@@ -96,8 +96,7 @@ const Sidebar = () => {
                         className="nav-link"
                         to="/user_list/active_employee"
                       >
-                        Employee List (2)
-                        {/* ({counterList?.Active_Users}) */}
+                        Employee List ({counterList?.Active_Users})
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -105,8 +104,7 @@ const Sidebar = () => {
                         className="nav-link"
                         to="/user_list/pending_onboarding_employee"
                       >
-                        Pending Onboarding (2)
-                        {/* ({counterList?.Pending_Onboarding}) */}
+                        Pending Onboarding ({counterList?.Pending_Onboarding})
                       </NavLink>
                     </li>
                     <li className="nav-item">
@@ -114,8 +112,7 @@ const Sidebar = () => {
                         className="nav-link"
                         to="/user_list/pending_offboarding_employee"
                       >
-                        Pending Offboarding (2)
-                        {/* ({counterList?.Pending_Offboarding}) */}
+                        Pending Offboarding ({counterList?.Pending_Offboarding})
                       </NavLink>
                     </li>
                   </ul>
@@ -226,8 +223,7 @@ const Sidebar = () => {
                 <ul class="nav flex-column sub-menu">
                   <li className="nav-item">
                     <NavLink className="nav-link" to="/alltravelrequest">
-                      My Requests (0)
-                      {/* ({counterList?.Travel_Request_By_User_ID}) */}
+                      My Requests ({counterList?.Travel_Request_By_User_ID})
                     </NavLink>
                   </li>
                   <li className="nav-item">
@@ -240,8 +236,8 @@ const Sidebar = () => {
                     <li className="nav-item">
                       <NavLink className="nav-link" to="/travelrequestreceived">
                         Approval/Decline
-                        <br /> Request (2){" "}
-                        {/* {counterList?.Travel_Request_For_Approval_and_Decline}) */}
+                        <br /> Request
+                        {counterList?.Travel_Request_For_Approval_and_Decline}
                       </NavLink>
                     </li>
                   )}

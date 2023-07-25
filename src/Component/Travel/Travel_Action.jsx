@@ -51,9 +51,12 @@ const Travel_Action = (props) => {
     const get_travel_request_by_id = async () => {
       setLoading(true);
       const res = await axios
-        .get(`/get_travel_request_by_id/${_id}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
-        })
+        .get(
+          `${process.env.REACT_APP_BASE_URL}/get_travel_request_by_id/${_id}`,
+          {
+            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          }
+        )
         .then((res) => setGetData(res.data))
         .catch((err) => {
           if (err.response.status === 500) {

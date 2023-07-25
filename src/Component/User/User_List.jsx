@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import { ExportToCsv } from "export-to-csv";
 import { useAlert } from "react-alert";
-
+import { FaPowerOff } from "react-icons/fa";
 const User_List = () => {
   const alert = useAlert();
   const specificDate = "2023-05-01";
@@ -379,7 +379,7 @@ const User_List = () => {
                             )} */}
                             <th>Status</th>
 
-                            <th>Action </th>
+                            <th>Offboarding</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -533,10 +533,7 @@ const User_List = () => {
                                             ></i>
                                           )
                                         } */}
-                                          <i
-                                            className="mdi mdi-arrow-right-bold"
-                                            title="Offboarding"
-                                          ></i>
+                                          <FaPowerOff />
                                         </button>
                                       )}
                                     </>

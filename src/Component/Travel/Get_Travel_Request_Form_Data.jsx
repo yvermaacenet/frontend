@@ -20,7 +20,6 @@ const GetTravelRequestForm_Data = () => {
   const [gettravelrequestdata, setGettravelrequestdata] = useState([]);
   const [renderComponent, setRenderComponent] = useState(false);
   const [id, setId] = useState("");
-  const [isManager, setIsManager] = useState(false);
 
   useEffect(() => {
     async function getData() {
