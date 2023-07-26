@@ -25,13 +25,13 @@ const User_List = () => {
     async function get_user_list() {
       await axios
         .get(`${process.env.REACT_APP_BASE_URL}/user_list/${status_code}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then(async (result_user_list) => {
           return await axios
             .get(`${process.env.REACT_APP_BASE_URL}/on_boarding`, {
               headers: {
-                Access_Token: LocalStorageData?.generate_auth_token,
+                authorization: LocalStorageData?.generate_auth_token,
               },
             })
             .then(async (result) => {
@@ -43,7 +43,7 @@ const User_List = () => {
               return await axios
                 .get(`${process.env.REACT_APP_BASE_URL}/off_boarding`, {
                   headers: {
-                    Access_Token: LocalStorageData?.generate_auth_token,
+                    authorization: LocalStorageData?.generate_auth_token,
                   },
                 })
                 .then(async (result) => {
@@ -285,7 +285,7 @@ const User_List = () => {
         .post(
           `${process.env.REACT_APP_BASE_URL}/compare_data_between_zoho_and_database`,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((result) => {
