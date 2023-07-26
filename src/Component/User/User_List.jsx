@@ -21,6 +21,7 @@ const User_List = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     // setStatus_code(status_code);
+    console.log(LocalStorageData?.generate_auth_token);
     setLoading(true);
     async function get_user_list() {
       await axios
