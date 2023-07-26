@@ -138,7 +138,7 @@ const TravelRequestForm = () => {
     async function get_user_list() {
       await axios
         .get(`${process.env.REACT_APP_BASE_URL}/user_list/active_employee`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then(async (result_user_list) => {
           let employ = await result_user_list.data.map((val) => ({

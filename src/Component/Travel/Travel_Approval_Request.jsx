@@ -34,7 +34,7 @@ const TravelApprovalRequest = () => {
       setLoading(true);
       await axios
         .get(`${process.env.REACT_APP_BASE_URL}/all_travel_request`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
           const resp = result?.data;

@@ -6,14 +6,14 @@ const Private_Routes = ({ allowedRoles, children }) => {
   const role = LocalStorageData?.zoho_role;
   const isAuthorized = allowedRoles?.some((roles) => roles?.includes(role));
   // console.log("isAuthorized", isAuthorized);
-  // useEffect(() => {
-  //   if (!isAuthorized) {
-  //     navigate("/error_404");
-  //   }
-  //   // if (!localStorage.getItem("loggedin")) {
-  //   //   navigate("/error_403");
-  //   // }
-  // }, [navigate]);
+  useEffect(() => {
+    if (!isAuthorized) {
+      navigate("/error_404");
+    }
+    if (!localStorage.getItem("loggedin")) {
+      navigate("/error_403");
+    }
+  }, [navigate]);
   return children;
 };
 

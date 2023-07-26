@@ -92,7 +92,7 @@ const Cabin_Slot_Booking = () => {
   const fetch_Location = async () => {
     const res = await axios
       .get(`${process.env.REACT_APP_BASE_URL}/get_location`, {
-        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        headers: { authorization: LocalStorageData?.generate_auth_token },
       })
       .then((rr) => setLocation(rr?.data))
       .catch((err) => {
@@ -111,7 +111,7 @@ const Cabin_Slot_Booking = () => {
       .get(
         `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking_by_location/${loc}`,
         {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         }
       )
       .then((resp) => {
@@ -137,7 +137,7 @@ const Cabin_Slot_Booking = () => {
     async function get_cabin_list() {
       await axios
         .get(`${process.env.REACT_APP_BASE_URL}/cabin_list`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
           const filterdata = resp?.data?.filter((x) => x.status === true);
@@ -161,7 +161,7 @@ const Cabin_Slot_Booking = () => {
         .get(
           `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking/${selectCabin_id}`,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {
@@ -325,7 +325,7 @@ const Cabin_Slot_Booking = () => {
             owner: LocalStorageData?.name,
           },
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {
@@ -360,7 +360,7 @@ const Cabin_Slot_Booking = () => {
       .delete(
         `${process.env.REACT_APP_BASE_URL}/cabin_slot_booking/${inputData?._id}`,
         {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         }
       )
       .then((res) => {
@@ -479,7 +479,7 @@ const Cabin_Slot_Booking = () => {
               lastObject,
               {
                 headers: {
-                  Access_Token: LocalStorageData?.generate_auth_token,
+                  authorization: LocalStorageData?.generate_auth_token,
                 },
               }
             )
@@ -553,7 +553,7 @@ const Cabin_Slot_Booking = () => {
                 },
                 {
                   headers: {
-                    Access_Token: LocalStorageData?.generate_auth_token,
+                    authorization: LocalStorageData?.generate_auth_token,
                   },
                 }
               )

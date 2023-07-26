@@ -28,7 +28,7 @@ const Navbar = () => {
   //       .get(
   //         `${process.env.REACT_APP_BASE_URL}/notifications_counter/${LocalStorageData?.reporting_manager}/${LocalStorageData?.zoho_role}`,
   //         {
-  //           headers: { Access_Token: LocalStorageData?.generate_auth_token },
+  //           headers: { authorization: LocalStorageData?.generate_auth_token },
   //         }
   //       )
   //       .then((res) => setGetData(res.data))

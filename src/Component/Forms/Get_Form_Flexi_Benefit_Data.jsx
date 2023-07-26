@@ -18,7 +18,7 @@ const Get_Form_Flexi_Benefit_Data = () => {
       setLoading(true);
       await axios
         .get(`${process.env.REACT_APP_BASE_URL}/form_flexi`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
           const resp = result.data;
@@ -39,7 +39,7 @@ const Get_Form_Flexi_Benefit_Data = () => {
     setLoading(true);
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/form_flexi`, {
-        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        headers: { authorization: LocalStorageData?.generate_auth_token },
       })
       .then((result) => {
         const resp = result.data;
@@ -90,7 +90,7 @@ const Get_Form_Flexi_Benefit_Data = () => {
     setLoading(true);
     const result = await axios
       .get(`get_form_flexible_by_id/${id}`, {
-        headers: { Access_Token: LocalStorageData?.generate_auth_token },
+        headers: { authorization: LocalStorageData?.generate_auth_token },
       })
       .then((result) => {
         const resp = result.data[0];

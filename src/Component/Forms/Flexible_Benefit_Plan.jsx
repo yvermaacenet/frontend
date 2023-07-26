@@ -82,7 +82,7 @@ const Flexible_Benefit_Plan = () => {
         .get(
           `${process.env.REACT_APP_BASE_URL}/get_form_flexible_by_id/${LocalStorageData?.user_id}`,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {
@@ -175,7 +175,7 @@ const Flexible_Benefit_Plan = () => {
           `${process.env.REACT_APP_BASE_URL}/form_flexilble_benefit/${inputData?._id}`,
           jsonDate,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {
@@ -240,7 +240,7 @@ const Flexible_Benefit_Plan = () => {
           `${process.env.REACT_APP_BASE_URL}/form_flexilble_benefit/${inputData?._id}`,
           jsonDate,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {

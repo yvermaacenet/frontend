@@ -21,7 +21,7 @@ const Sidebar = () => {
         .get(
           `${process.env.REACT_APP_BASE_URL}/documents_counter/${LocalStorageData?.user_id}/${LocalStorageData?.emp_id}/${LocalStorageData?.zoho_role}/${LocalStorageData?.email}`,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((res) => {

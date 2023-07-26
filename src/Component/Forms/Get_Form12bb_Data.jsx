@@ -18,7 +18,7 @@ const Get_Form12bb_Data = () => {
       setLoading(true);
       await axios
         .get(`${process.env.REACT_APP_BASE_URL}/form_12_bb`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
           const resp = result.data;
@@ -41,7 +41,7 @@ const Get_Form12bb_Data = () => {
       .get(
         `${process.env.REACT_APP_BASE_URL}/get_form_12_bb_controller_by_id/${id}`,
         {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         }
       )
       .then((result) => {

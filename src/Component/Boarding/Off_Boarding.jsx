@@ -90,7 +90,7 @@ const Off_Boarding = () => {
     async function get_off_boarding_list() {
       await axios
         .get(`${process.env.REACT_APP_BASE_URL}/off_boarding/${_id}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
           const resp = result.data[0];
@@ -119,7 +119,7 @@ const Off_Boarding = () => {
     async function get_user_list_by_role_name() {
       const result = await axios
         .get(`${process.env.REACT_APP_BASE_URL}/get_user_list_by_role_name`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
           return (
@@ -153,7 +153,7 @@ const Off_Boarding = () => {
         .get(
           `${process.env.REACT_APP_BASE_URL}/get_user_details_By_Id/${_id}`,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {
@@ -228,7 +228,7 @@ const Off_Boarding = () => {
             ],
           },
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then(async (res) => {

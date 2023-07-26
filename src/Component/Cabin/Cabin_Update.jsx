@@ -43,7 +43,7 @@ const Cabin_Update = () => {
       const res = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/get_location`,
         {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         }
       );
       setLocation(res.data);
@@ -55,7 +55,7 @@ const Cabin_Update = () => {
     async function get_user_data() {
       await axios
         .get(`${process.env.REACT_APP_BASE_URL}/cabin_list_by_id/${_id}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
           return (
@@ -131,7 +131,7 @@ const Cabin_Update = () => {
           `${process.env.REACT_APP_BASE_URL}/cabin_update/${_id}`,
           inputData,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {

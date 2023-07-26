@@ -35,7 +35,7 @@ const Cabin_Add = () => {
       const res = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/get_location`,
         {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         }
       );
       setLocation(res.data);
@@ -110,7 +110,7 @@ const Cabin_Add = () => {
             color_code: getChooseColor?.color,
           },
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {
@@ -141,7 +141,7 @@ const Cabin_Add = () => {
   const add_location_submit = async (e) => {
     e.preventDefault();
     const res = await axios.post("/location_add", locationList, {
-      headers: { Access_Token: LocalStorageData?.generate_auth_token },
+      headers: { authorization: LocalStorageData?.generate_auth_token },
     });
     alert?.success(res.data.message);
     setLocationList("");

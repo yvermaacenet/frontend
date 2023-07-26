@@ -204,7 +204,7 @@ const Form12BB = () => {
         .get(
           `${process.env.REACT_APP_BASE_URL}/get_form_12_bb_controller_by_id/${LocalStorageData?.user_id}`,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then(async (resp) => {
@@ -297,7 +297,7 @@ const Form12BB = () => {
           `${process.env.REACT_APP_BASE_URL}/form_12_bb/${inputData?._id}`,
           jsonDate,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {
@@ -423,7 +423,7 @@ const Form12BB = () => {
           `${process.env.REACT_APP_BASE_URL}/form_12_bb/${inputData?._id}`,
           jsonDate,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {

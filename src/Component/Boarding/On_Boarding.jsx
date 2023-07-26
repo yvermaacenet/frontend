@@ -97,7 +97,7 @@ const On_Boarding = () => {
     async function get_on_boarding_list() {
       await axios
         .get(`${process.env.REACT_APP_BASE_URL}/on_boarding/${_id}`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then((result) => {
           console.log("result0", result);
@@ -118,7 +118,7 @@ const On_Boarding = () => {
     async function get_user_list_by_role_name() {
       const result = await axios
         .get(`${process.env.REACT_APP_BASE_URL}/get_user_list_by_role_name`, {
-          headers: { Access_Token: LocalStorageData?.generate_auth_token },
+          headers: { authorization: LocalStorageData?.generate_auth_token },
         })
         .then((resp) => {
           return (
@@ -150,7 +150,7 @@ const On_Boarding = () => {
         .get(
           `${process.env.REACT_APP_BASE_URL}/get_user_details_By_Id/${_id}`,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((resp) => {
@@ -214,7 +214,7 @@ const On_Boarding = () => {
   //         ],
   //       },
   //       {
-  //         headers: { Access_Token: LocalStorageData?.generate_auth_token },
+  //         headers: { authorization: LocalStorageData?.generate_auth_token },
   //       }
   //     )
   //     .then(async (res) => {
@@ -262,7 +262,7 @@ const On_Boarding = () => {
   //         ],
   //       },
   //       {
-  //         headers: { Access_Token: LocalStorageData?.generate_auth_token },
+  //         headers: { authorization: LocalStorageData?.generate_auth_token },
   //       }
   //     )
   //     .then(async (res) => {
@@ -313,7 +313,7 @@ const On_Boarding = () => {
             ],
           },
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then(async (res) => {

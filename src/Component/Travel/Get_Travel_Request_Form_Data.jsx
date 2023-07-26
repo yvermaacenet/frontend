@@ -28,7 +28,7 @@ const GetTravelRequestForm_Data = () => {
         .get(
           `${process.env.REACT_APP_BASE_URL}/get_travel_request_by_email_id/${LocalStorageData?.email}`,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((result) => {
@@ -186,7 +186,7 @@ const GetTravelRequestForm_Data = () => {
                                           `${process.env.REACT_APP_BASE_URL}/revoke_travel_request/${val?._id}`,
                                           {
                                             headers: {
-                                              Access_Token:
+                                              authorization:
                                                 LocalStorageData?.generate_auth_token,
                                             },
                                           }
