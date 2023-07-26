@@ -6,6 +6,7 @@ import Navbar from "../Partials/Navbar";
 import Sidebar from "../Partials/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FaWpforms, FaLuggageCart, FaDoorOpen } from "react-icons/fa";
 const Dashboard = () => {
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
@@ -166,18 +167,18 @@ const Dashboard = () => {
             page_title_button=""
             page_title_button_link="/travelrequestform"
           /> */}
-            <div className="d-flex justify-content-end mb-3">
-              {/* <NavLink to="/travelrequestform">
+            {/* <div className="d-flex  justify-content-end mb-3"> */}
+            {/* <NavLink to="/travelrequestform">
               <button className="btn btn-sm btn-success mx-3">
                 Raise Request
               </button>
             </NavLink> */}
-              {/* {isManager && ( */}
-              {/* <NavLink to="/travelrequestreceived">
+            {/* {isManager && ( */}
+            {/* <NavLink to="/travelrequestreceived">
               <button className="btn btn-sm btn-dark">Take Action</button>
             </NavLink> */}
-              {/* )} */}
-            </div>
+            {/* )} */}
+            {/* </div> */}
             {loading && (
               <div className="loader-container">
                 <div className="loader"></div>
@@ -186,19 +187,98 @@ const Dashboard = () => {
             <div className="row h-100">
               <div className="col-lg-12 grid-margin stretch-card">
                 <div className="card" style={{ borderRadius: "20px" }}>
-                  <div className="card-body d-flex align-items-center justify-content-center">
+                  <div className="card-body d-flex align-items-center flex-column justify-content-center">
                     <>
-                      <h3 class="mb-0 fs-1 font-weight-medium text-center">
-                        <img
-                          src={LocalStorageData?.photo}
-                          alt=""
-                          srcset=""
-                          style={{ borderRadius: "50%" }}
-                        />
-                        <br />
-                        Welcome back,
-                        <br /> {LocalStorageData?.name}!
-                      </h3>
+                      <div className="row g-4 w-100">
+                        <div className="col-12">
+                          <div className="w-100">
+                            <h3 class="mb-0 fs-1 font-weight-medium text-center">
+                              <img
+                                src={LocalStorageData?.photo}
+                                alt=""
+                                srcset=""
+                                style={{ borderRadius: "50%" }}
+                              />
+                              <br />
+                              Welcome back,
+                              <br /> {LocalStorageData?.name}!
+                            </h3>
+                          </div>
+                        </div>
+                        <div className="col-12">
+                          <div className="d-flex justify-content-around align-items-center">
+                            <div
+                              className=" d-flex justify-content-center border"
+                              style={{
+                                boxShadow: "rgba(0, 0, 0, 0.2) 0px 20px 30px",
+                                borderRadius: "30px",
+                                height: "8rem",
+                                width: "30%",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <FaWpforms
+                                className="fs-1 mx-3"
+                                style={{ color: "#d14124" }}
+                              />
+                              <NavLink className="nav-link" to="/form12bb">
+                                <h4>Forms</h4>
+                              </NavLink>
+                            </div>
+                            <div
+                              className=" d-flex justify-content-center border"
+                              style={{
+                                boxShadow: "rgba(0, 0, 0, 0.2) 0px 20px 30px",
+                                borderRadius: "30px",
+                                height: "8rem",
+                                width: "30%",
+
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <FaLuggageCart
+                                className="fs-1 mx-3"
+                                style={{ color: "#d14124" }}
+                              />
+                              <NavLink
+                                className="nav-link"
+                                to="/travelrequestform"
+                              >
+                                <h4>Travel Request</h4>
+                              </NavLink>
+                            </div>
+                            <div
+                              className=" d-flex justify-content-center border"
+                              style={{
+                                boxShadow: "rgba(0, 0, 0, 0.2) 0px 20px 30px",
+                                borderRadius: "30px",
+                                height: "8rem",
+                                display: "flex",
+                                width: "30%",
+
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <FaDoorOpen
+                                className="fs-1 mx-3"
+                                style={{ color: "#d14124" }}
+                              />
+                              <NavLink
+                                className="nav-link"
+                                to="/cabin_slot_booking"
+                              >
+                                <h4>Cabin Booking</h4>
+                              </NavLink>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* <div>
                    <ToastContainer
                     position="top-center"
@@ -212,53 +292,6 @@ const Dashboard = () => {
                     pauseOnHover
                     theme="light"
                   />
-                </div> */}
-
-                      {/* <div className="row">
-                  {cardArray?.map(
-                    (result) =>
-                      result?.card_allowed_access.includes(
-                        LocalStorageData?.zoho_role
-                      ) && (
-                        <div
-                          className="col-md-3 stretch-card grid-margin "
-                          style={{ display: result?.display_none }}
-                        >
-                          <div
-                            className={`card ${result?.card_background} card-img-holder text-white`}
-                          >
-                            <NavLink
-                              to={result?.path}
-                              style={{
-                                color: "#f8f8f8",
-                                textDecoration: "none",
-                              }}
-                            >
-                              <div className="card-body">
-                                <div>
-                                  <img
-                                    src="assets/images/dashboard/circle.svg"
-                                    className="card-img-absolute"
-                                    alt="circle-image"
-                                  />
-                                  <h4 className="font-weight-normal mb-3 mt-2">
-                                    <span className="me-4">
-                                      {result?.card_title}
-                                    </span>
-                                    <i
-                                      className={`mdi ${result?.card_icon} mdi-24px float-right`}
-                                    ></i>
-                                  </h4>
-                                  <h1 className="mb-4 text-center">
-                                    {result?.card_counter_data}
-                                  </h1>
-                                </div>
-                              </div>
-                            </NavLink>
-                          </div>
-                        </div>
-                      )
-                  )}
                 </div> */}
 
                       {/* <div className="row">

@@ -1008,7 +1008,7 @@ const TravelRequestForm = () => {
   //   fetchData();
   // }, [error]);
   const handleFormSubmit = async (value) => {
-    alert.success("Done");
+    // alert.success("Done");
     const res = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/all_travel_request_data`,
       {
@@ -1024,20 +1024,19 @@ const TravelRequestForm = () => {
     if (res?.data === "Created") {
       alert.success("Request Sent");
       navigate("/alltravelrequest");
-
-      // await axios.post("/email", {
-      //   user: LocalStorageData?.owner_name,
-      //   email: LocalStorageData?.email,
-      //   start_date: treavellerRadioButton
-      //     ? `new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")`
-      //     : `new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
-      //         "en-GB"
-      //       )`,
-      //   destination: treavellerRadioButton
-      //     ? rows[0]?.data?.travel_to_city?.label
-      //     : accommodationData[0]?.data?.city?.label,
-      //   reason_for_travel: basicDetails?.reason_for_travel,
-      // });
+      await axios.post(`${process.env.REACT_APP_BASE_URL}/email`, {
+        user: uniqueNames,
+        email: uniqueEmails,
+        // rows: treavellerRadioButton
+        //   ? {...rows, dob:new Date(rows[0]?.data?.departure).toLocaleDateString("en-GB")}
+        //   : `new Date(accommodationData[0]?.data?.checkIn).toLocaleDateString(
+        //       "en-GB"
+        //     )`,
+        basicDetails,
+        rows: treavellerRadioButton && rows,
+        travellersData: treavellerRadioButton && travellersData,
+        accommodationData: accommodationRadioButton && accommodationData,
+      });
     }
   };
   // console.log("rows[0]?.data?.departure",new Date( accommodationData[0]?.data?.checkIn).toLocaleDateString('en-GB'),new Date(rows[0]?.data?.departure).toLocaleDateString('en-GB') );
