@@ -193,6 +193,7 @@ const TravelRequestForm = () => {
           }`
         )
         .then((res) => {
+          console.log("ressss", res);
           const resObj = {
             data: {
               is_employee: "Yes",
@@ -212,7 +213,7 @@ const TravelRequestForm = () => {
               gender:
                 (res.data.length > 0 && treavellerRadioButton) ||
                 (res.data.length > 0 && accommodationRadioButton)
-                  ? res?.data[0]?.Tags
+                  ? res?.data[0]?.Gender
                   : "",
               phone:
                 (res.data.length > 0 && treavellerRadioButton) ||
@@ -369,7 +370,7 @@ const TravelRequestForm = () => {
             },
             is_employee: "Yes",
             name: apiData[0]["ownerName"],
-            gender: apiData[0].Tags,
+            gender: apiData[0]["Gender"],
             phone: apiData[0]["Personal Mobile Number"],
             email: apiData[0]["Email address"],
             dob: formatBirthdate(apiData[0]["Date of Birth"]),
@@ -474,7 +475,7 @@ const TravelRequestForm = () => {
               label: `${apiData[0]["Employee ID"]}`,
             },
             name: apiData[0]["ownerName"],
-            gender: apiData[0]["Tags"],
+            gender: apiData[0]["Gender"],
             phone: apiData[0]["Personal Mobile Number"],
             email: apiData[0]["Email address"],
             dob: formatBirthdate(apiData[0]["Date of Birth"]),
