@@ -342,7 +342,6 @@ const On_Boarding = () => {
           );
     confirmationButton === true && callAPI();
   };
-  console.log("isssssss", inputData);
 
   const setAllPropertiesToTrue = (e, obj) => {
     if (obj === "hr") {
@@ -536,7 +535,7 @@ const On_Boarding = () => {
                           tabindex="-1"
                           onClick={() => setActive(1)}
                         >
-                          HR
+                          RECRUITER
                         </button>
                       </li>
                       <li class="nav-item flex-fill" role="presentation">
@@ -551,7 +550,7 @@ const On_Boarding = () => {
                           aria-selected="true"
                           onClick={() => setActive(2)}
                         >
-                          FINANCE
+                          HR
                         </button>
                       </li>
                     </ul>

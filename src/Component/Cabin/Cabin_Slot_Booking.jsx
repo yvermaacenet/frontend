@@ -678,6 +678,12 @@ const Cabin_Slot_Booking = () => {
                         resourceTitleAccessor="resourceTitle"
                         startAccessor="start"
                         endAccessor="end"
+                        views={{
+                          month: false,
+                          week: true,
+                          day: true,
+                          agenda: true,
+                        }}
                         defaultView={"week"}
                         // min={minDate_time}
                         // max={maxDate_time}
@@ -794,7 +800,7 @@ const Cabin_Slot_Booking = () => {
                                 </div>
                               </div>
                             </div>
-                            <div className="form-check form-check-flat form-check-primary">
+                            {/* <div className="form-check form-check-flat form-check-primary">
                               <label className="form-check-label">
                                 <input
                                   type="checkbox"
@@ -806,7 +812,7 @@ const Cabin_Slot_Booking = () => {
                                 Booking all days{" "}
                                 <i className="input-helper"></i>
                               </label>
-                            </div>
+                            </div> */}
                             <button
                               type="submit"
                               className="btn btn-sm btn-gradient-primary me-2"

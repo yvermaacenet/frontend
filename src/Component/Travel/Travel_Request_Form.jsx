@@ -1,7 +1,6 @@
 import React, { useState, forwardRef } from "react";
 import Navbar from "../../Partials/Navbar";
 import Sidebar from "../../Partials/Sidebar";
-import Page_Header from "../../Partials/Page_Header";
 import { useAlert } from "react-alert";
 import axios from "axios";
 import Select from "react-select";
@@ -12,31 +11,35 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { travel_request_form_validation } from "../../Utils/Validation_Form";
 // import { border } from "@mui/system";
-import { RiDeleteBin6Line, RiAddFill } from "react-icons/ri";
-import { Tooltip as ReactTooltip } from "react-tooltip";
+
 import "react-tooltip/dist/react-tooltip.css";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 // testint
 
-// =====================Data=============
-const projectId = [
-  "ACENET-12345",
-  "ACENET-67890",
-  "ACENET-24680",
-  "ACENET-13579",
-  "WADHWANI9876",
-  "WADHWANI5432",
-  "MASTER2468",
-  "MASTER1357",
-];
-const clientId = ["ACENET", "WADHWANI", "MASTER MARINE"];
+// // =====================Data=============
+// const projectId = [
+//   "ACENET-12345",
+//   "ACENET-67890",
+//   "ACENET-24680",
+//   "ACENET-13579",
+//   "WADHWANI9876",
+//   "WADHWANI5432",
+//   "MASTER2468",
+//   "MASTER1357",
+// ];
+// const clientId = ["ACENET", "WADHWANI", "MASTER MARINE"];
 
 const travelMode = ["Flight", "Train", "Intercity Cab"];
 
 // =====================Data End=============
 const TravelRequestForm = () => {
+  const [projects, setProjects] = useState([]);
+
+  const [selectedClient, setSelectedClient] = useState([]);
+  const [selectedProjectId, setSelectedProjectId] = useState([]);
+  const [projectDetails, setProjectDetails] = useState([]);
   const navigate = useNavigate();
   const LocalStorageData = JSON.parse(localStorage.getItem("loggedin"));
   const alert = useAlert();
@@ -107,20 +110,12 @@ const TravelRequestForm = () => {
   // console.log("testData", testData);
   const [showDropdown, setShowDropdown] = useState(false);
   const [filterText, setFilterText] = useState("");
-  const handleClientChange = (e) => {
-    const selectedClient = e.target.value;
-    setSelectedClientId(selectedClient);
-    setBasicDetails({ ...basicDetails, client_id: selectedClient });
-    const filteredProjects = projectId.filter((project) =>
-      project.startsWith(selectedClient.slice(0, 3))
-    );
-    setFilteredProjectIds(filteredProjects);
-  };
+
   // ================================================================================================================
   // ==========For Top Level Details==============
   const [basicDetails, setBasicDetails] = useState({
     billable: "",
-    client_id: selectedClientId,
+    client_id: "",
     project_id: "",
     reason_for_travel: "",
     special_request: "",
@@ -132,6 +127,43 @@ const TravelRequestForm = () => {
 
     return formattedDate;
   }
+
+  //Fetching Project Codes and IDS
+
+  const fetchProjectDetails = async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_BASE_URL}/client_project`,
+      {
+        headers: { authorization: LocalStorageData?.generate_auth_token },
+      }
+    );
+    setProjectDetails(res?.data);
+  };
+  const fetchClientsData = async () => {
+    const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/clients`, {
+      headers: { authorization: LocalStorageData?.generate_auth_token },
+    });
+    setProjects(res?.data);
+  };
+  const handleClientChange = (event) => {
+    const clientName = event.target.value;
+    // setBasicDetails(basicDetails?.client_id = clientName)
+    const updatedStateObject = { ...basicDetails, client_id: clientName };
+    setBasicDetails(updatedStateObject);
+
+    // basicDetails?.client_id(clientName);
+    // Filter the projects based on the selected client name
+    const filteredProjects = projectDetails.filter(
+      (project) => project.client_name === clientName
+    );
+
+    // Do something with the filteredProjects if needed
+
+    // Assuming you want to set the first project from the filtered list as the selected project
+    setFilteredProjectIds(filteredProjects);
+    console.log(filteredProjects);
+  };
+
   useEffect(() => {
     // setStatus_code(status_code);
     setLoading(true);
@@ -170,6 +202,8 @@ const TravelRequestForm = () => {
       setLoading(false);
     }
     get_user_list();
+    fetchClientsData();
+    fetchProjectDetails();
     setAccommodationData([
       {
         id: 1,
@@ -1242,7 +1276,7 @@ const TravelRequestForm = () => {
 
                           <div className="col-12 col-lg-3">
                             <div className="form-group">
-                              <label>Client Id</label>
+                              <label>Client Name</label>
                               <span className="astik"> *</span>
                               <select
                                 className={classNames(
@@ -1256,14 +1290,17 @@ const TravelRequestForm = () => {
                                         : false,
                                   }
                                 )}
-                                value={selectedClientId}
+                                value={basicDetails?.client_id}
                                 name="client_id"
                                 onChange={handleClientChange}
                               >
                                 <option value="">Select Client</option>
-                                {clientId.map((client) => (
-                                  <option key={client} value={client}>
-                                    {client}
+                                {projects?.map((project) => (
+                                  <option
+                                    key={project?._id}
+                                    value={project?.client_name}
+                                  >
+                                    {project?.client_name}
                                   </option>
                                 ))}
                               </select>
@@ -1297,8 +1334,11 @@ const TravelRequestForm = () => {
                               >
                                 <option value="">Select Project</option>
                                 {filteredProjectIds.map((project) => (
-                                  <option key={project} value={project}>
-                                    {project}
+                                  <option
+                                    key={project?._id}
+                                    value={project?.project_code}
+                                  >
+                                    {`${project?.project_code}- ${project?.Description}`}
                                   </option>
                                 ))}
                               </select>

@@ -42,6 +42,9 @@ const Navbar = () => {
   //   };
   //   get_notifications_counter();
   // }, []);
+  useEffect(() => {
+    document.getElementById("body").classList.add("sidebar-icon-only");
+  }, []);
   return (
     <>
       <nav className="navbar default-layout-navbar p-0 fixed-top d-flex flex-row">
