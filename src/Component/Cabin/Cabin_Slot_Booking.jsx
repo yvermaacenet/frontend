@@ -220,7 +220,7 @@ const Cabin_Slot_Booking = () => {
     });
     const currentDate = new Date();
     if (start < currentDate) {
-      alert?.show("please select a valid date");
+      alert?.show("please select a valid Date/Time");
     } else if (selectCabin_id === "all") {
       alert?.show("Please select cabin");
     } else if (overlap) {

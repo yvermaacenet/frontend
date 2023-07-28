@@ -54,7 +54,7 @@ const Travel_Action = (props) => {
         .get(
           `${process.env.REACT_APP_BASE_URL}/get_travel_request_by_id/${_id}`,
           {
-            headers: { Access_Token: LocalStorageData?.generate_auth_token },
+            headers: { authorization: LocalStorageData?.generate_auth_token },
           }
         )
         .then((res) => setGetData(res.data))
