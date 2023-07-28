@@ -36,6 +36,7 @@ const travelMode = ["Flight", "Train", "Intercity Cab"];
 // =====================Data End=============
 const TravelRequestForm = () => {
   const [projects, setProjects] = useState([]);
+  const [rows, setRows] = useState([{ id: 1, data: { trip_type: "OneWay" } }]);
 
   const [selectedClient, setSelectedClient] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState([]);
@@ -344,7 +345,6 @@ const TravelRequestForm = () => {
   //
   //
   // ========For Travel Request========
-  const [rows, setRows] = useState([{ id: 1, data: { trip_type: "OneWay" } }]);
 
   const handleAddRow = () => {
     const newRow = { id: rows.length + 1, data: { trip_type: "OneWay" } };
@@ -538,6 +538,35 @@ const TravelRequestForm = () => {
 
   const inputEvent = (event) => {
     const { name, value } = event.target;
+    if (name === "booking_for") {
+      setRows([
+        {
+          id: 1,
+          data: {
+            travel_mode: "",
+            travel_from_city: "",
+            travel_to_city: "",
+            departure: "",
+            return: "",
+            preferred_time: "",
+            trip_type: "OneWay",
+          },
+        },
+      ]);
+      setBasicDetails((preValue) => {
+        return {
+          ...preValue,
+          [name]: value,
+        };
+      });
+    } else {
+      setBasicDetails((preValue) => {
+        return {
+          ...preValue,
+          [name]: value,
+        };
+      });
+    }
     setBasicDetails((preValue) => {
       return {
         ...preValue,
@@ -1144,6 +1173,20 @@ const TravelRequestForm = () => {
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  //Handle Reset
+  const handleReset = () => {
+    setTreavellerRadioButton(false);
+    setAccommodationRadioButton(false);
+    setBasicDetails({
+      booking_for: "self",
+      billable: "",
+      client_id: "",
+      project_id: "",
+      reason_for_travel: "",
+      special_request: "",
+    });
+  };
   return (
     <>
       <div className="container-scroller">
@@ -1328,7 +1371,7 @@ const TravelRequestForm = () => {
                                         : false,
                                   }
                                 )}
-                                value={setBasicDetails?.project_id}
+                                value={basicDetails?.project_id}
                                 onChange={inputEvent}
                                 name="project_id"
                               >
@@ -1405,10 +1448,10 @@ const TravelRequestForm = () => {
                           <div className="form-group w-100 d-flex justify-content-start align-items-center m-0 p-0">
                             <label className="col-3 d-flex align-items-center col-form-label">
                               <i
-                                className="mdi mdi-airplane-takeoff  mx-3"
+                                className="mdi mdi-airplane-takeoff fs-3  mx-3"
                                 style={{ color: "#d14124" }}
                               />
-                              Travel Required
+                              Transport Required
                             </label>
 
                             <div className="col-3">
@@ -4171,6 +4214,17 @@ const TravelRequestForm = () => {
                         </div> */}
                         <div className="row my-4 text-center">
                           <div className="col-12">
+                            <button
+                              id="res"
+                              type="button"
+                              className="btn text-white mx-2 btn-sm"
+                              style={{
+                                background: "rgb(209, 65, 36)",
+                              }}
+                              onClick={() => handleReset()}
+                            >
+                              Reset
+                            </button>
                             <button
                               id="res"
                               type="button"
